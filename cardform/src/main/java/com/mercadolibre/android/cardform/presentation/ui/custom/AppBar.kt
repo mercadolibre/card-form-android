@@ -2,6 +2,7 @@ package com.mercadolibre.android.cardform.presentation.ui.custom
 
 import android.content.Context
 import android.support.constraint.ConstraintLayout
+import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.View
 import com.mercadolibre.android.cardform.R
@@ -24,6 +25,10 @@ class AppBar(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 
     fun setTitle(value: CharSequence) {
         title.text = value
+    }
+
+    fun setTitle(value: Int) {
+        title.text = context.resources.getString(value)
     }
 
     fun setOnBackListener(listener: (v: View) -> Unit) {

@@ -140,10 +140,15 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
                 appBar.updateProgress(it)
             }
 
-            cardDrawerLiveData.observe(viewLifecycleOwner, Observer {
-                val cardDrawerData = if (it != null && context != null) {
-                    CardDrawerData(context!!, it)
-                } else defaultCardDrawerConfiguration
+            cardLiveData.observe(viewLifecycleOwner, Observer {
+                val cardDrawerData = it?.run {
+                    FragmentNavigationController.setAdditionalSteps(it.additionalSteps)
+                    appBar.setTitle(TitleBar.fromType(it.paymentTypeId).getTitle())
+                    CardDrawerData(context!!, it.cardUi!!)
+                } ?: run {
+                    appBar.setTitle(TitleBar.NONE_TITLE.getTitle())
+                    defaultCardDrawerConfiguration
+                }
 
                 cardDrawer.show(cardDrawerData)
                 numberLiveData.value = ObjectStepFactory
@@ -153,10 +158,6 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
                         cardDrawerData.cardNumberPattern
                     )
             })
-
-            additionalStepsLiveData.nonNullObserve(viewLifecycleOwner) {
-                FragmentNavigationController.setAdditionalSteps(it)
-            }
 
             stateUiLiveData.nonNullObserve(viewLifecycleOwner) {
                 when (it) {

@@ -3,7 +3,6 @@ package com.mercadolibre.android.cardform.presentation.viewmodel
 import android.arch.lifecycle.MutableLiveData
 import android.os.Bundle
 import com.mercadolibre.android.cardform.base.BaseViewModel
-import com.mercadolibre.android.cardform.data.model.response.CardUi
 import com.mercadolibre.android.cardform.data.model.response.Issuer
 import com.mercadolibre.android.cardform.data.model.response.PaymentMethod
 import com.mercadolibre.android.cardform.data.model.response.RegisterCard
@@ -34,7 +33,7 @@ class InputFormViewModel(
     val stateUiLiveData: MutableLiveData<StateUi> = MutableLiveData()
     val stateCardLiveData: MutableLiveData<CardState> = MutableLiveData()
     val issuersLiveData: MutableLiveData<ArrayList<Issuer>> = MutableLiveData()
-    val cardDataLiveData: MutableLiveData<CardData> = MutableLiveData()
+    val cardLiveData: MutableLiveData<CardData> = MutableLiveData()
     var cardStepInfo = CardStepInfo()
     private var binValidator = BinValidator()
     private var issuer: Issuer? = null
@@ -52,7 +51,7 @@ class InputFormViewModel(
         issuer = bundle.getParcelable(EXTRA_ISSUER_DATA)
         paymentMethod = bundle.getParcelable(EXTRA_PAYMENT_METHOD_DATA)
         cardStepInfo = bundle.getParcelable(EXTRA_CARD_STEP_DATA)!!
-        cardDataLiveData.value = bundle.getParcelable(EXTRA_CARD_DATA)
+        cardLiveData.value = bundle.getParcelable(EXTRA_CARD_DATA)
     }
 
     override fun storeInBundle(bundle: Bundle) {
@@ -67,7 +66,7 @@ class InputFormViewModel(
         bundle.putParcelable(EXTRA_PAYMENT_METHOD_DATA, paymentMethod)
         bundle.putParcelable(EXTRA_ISSUER_DATA, issuer)
         bundle.putParcelable(EXTRA_CARD_STEP_DATA, cardStepInfo)
-        cardDataLiveData.value?.let { bundle.putParcelable(EXTRA_CARD_DATA, it) }
+        cardLiveData.value?.let { bundle.putParcelable(EXTRA_CARD_DATA, it) }
     }
 
     fun updateInputData(cardFilledData: CardFilledData) {
@@ -82,8 +81,8 @@ class InputFormViewModel(
         binValidator.update(cardNumber)
         if (binValidator.hasChanged()) {
             if (binValidator.bin == null) {
-                cardDataLiveData.value?.apply {
-                    cardDataLiveData.value = null
+                cardLiveData.value?.apply {
+                    cardLiveData.value = null
                 }
             } else {
                 fetchCard(binValidator.bin!!)
@@ -98,7 +97,7 @@ class InputFormViewModel(
                     setIssuer(it.issuers[0])
                     paymentMethod = it.paymentMethod
 
-                    cardDataLiveData.postValue(CardDataMapper.map(it))
+                    cardLiveData.postValue(CardDataMapper.map(it))
 
                     issuersLiveData.postValue(ArrayList(it.issuers))
                     loadInputData(it)
