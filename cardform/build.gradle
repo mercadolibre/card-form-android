@@ -1,0 +1,73 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+def user_agent = "PX/Android/" + Versions.versionToDeploy
+
+android {
+    compileSdkVersion Versions.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion Versions.minSdkVersion
+        targetSdkVersion Versions.targetSdkVersion
+        versionCode 1
+        versionName Versions.versionToDeploy
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+
+        buildConfigField "String", "USER_AGENT", "\"$user_agent\""
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField "String", "API_ENVIRONMENT", "\"beta\""
+            buildConfigField "boolean", "HTTP_CLIENT_LOG", "true"
+        }
+
+        release {
+            buildConfigField "String", "API_ENVIRONMENT", "\"production\""
+            buildConfigField "boolean", "HTTP_CLIENT_LOG", "false"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation Dependencies.kotlinStdlib
+    implementation Dependencies.kotlinCoroutinesCore
+    implementation Dependencies.constraintLayout
+    implementation Dependencies.appCompat
+    implementation Dependencies.support
+    implementation Dependencies.design
+
+    implementation Dependencies.gson
+    implementation Dependencies.retrofit
+    implementation Dependencies.retrofitCoroutines
+    implementation(Dependencies.retrofitGsonConverter) {
+        exclude group: "com.google.code.gson", module: "gson"
+    }
+
+    implementation Dependencies.loggingInterceptor
+
+    implementation Dependencies.meliUI
+    implementation Dependencies.carddrawer
+    implementation Dependencies.picassoDiskCache
+    implementation Dependencies.extensions
+    implementation Dependencies.livedataCore
+    implementation Dependencies.viewmodel
+
+    testImplementation Dependencies.junit
+    androidTestImplementation Dependencies.runner
+}

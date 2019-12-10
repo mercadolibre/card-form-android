@@ -1,0 +1,162 @@
+import org.gradle.internal.jvm.Jvm
+
+apply plugin:'maven'
+apply plugin:'signing'
+apply plugin:'maven-publish'
+apply plugin:'com.jfrog.bintray'
+apply plugin:'com.github.dcendents.android-maven'
+
+def versionToDeploy = version_to_deploy as String
+versionToDeploy = project.hasProperty('production') ? versionToDeploy : 'EXPERIMENTAL-' + versionToDeploy + '-' + dateNow
+version = versionToDeploy
+
+task javadoc(type:Javadoc) {
+    failOnError = false
+    options.encoding = 'UTF-8'
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    // JDK 1.8 is more strict than 1.7. This makes JDK 1.8 behave like 1.7 for javadoc
+    if (Jvm.current().getJavaVersion().isJava8Compatible()) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
+    exclude '**/BuildConfig.java'
+    exclude '**/R.java'
+    exclude '**/internal/**'
+}
+
+task androidJavadocsJar(type:Jar, dependsOn:javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+task androidSourcesJar(type:Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.sourceFiles
+}
+
+task publishAar(dependsOn: bintrayUpload) {
+    doLast {
+        println "Deployed ${project.name} version: ${versionToDeploy}"
+    }
+}
+
+task publishLocal(dependsOn: publishToMavenLocal) {
+    doLast {
+        println "Deployed ${project.name} version: ${versionToDeploy}"
+    }
+}
+
+afterEvaluate {
+    javadoc.classpath += project.android.libraryVariants.toList().first().javaCompile.classpath
+}
+
+artifacts {
+    archives androidSourcesJar
+    archives androidJavadocsJar
+}
+
+def localProperties = new Properties()
+
+if (project.rootProject.file('local.properties').exists()) {
+    localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
+}
+
+install {
+    group = groupName
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                groupId group
+                artifactId artifactLib
+
+                // Add your description here
+                name libraryName
+                description libraryDescription
+                url siteUrl
+
+                // Set your license
+                licenses {
+                    license {
+                        name licenseName
+                        url licenseUrl
+                    }
+                }
+                developers {
+                    developer {
+                        id 'agustin.mantuano'
+                        name 'Agustin Mantuano'
+                        email 'agustin.mantuano@mercadolibre.com'
+                    }developer {
+                        id 'hernan.bosqued'
+                        name 'Hernan Bosqued'
+                        email 'hernan.bosqued@mercadolibre.com'
+                    }
+                    developer {
+                        id 'jorge.gonzalez'
+                        name 'Jorge Gonzalez'
+                        email 'jorge.gonzalez@mercadolibre.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+bintray {
+    version = versionToDeploy
+    user = "$System.env.BINTRAY_USER"
+    key = "$System.env.BINTRAY_API_KEY"
+
+    override = true
+
+    configurations = ['archives']
+    pkg {
+        repo = project.hasProperty('production') ? 'android' : 'android-experimental'
+        name = libraryName
+        desc = libraryDescription
+        userOrg = 'mercadopago'
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+        publicDownloadNumbers = true
+        version {
+            name = versionToDeploy
+            desc = libraryDescription
+            vcsTag = versionToDeploy
+            released = project.hasProperty('production') ? new Date() : null
+        }
+    }
+}
+
+// Local m2 repo publication
+publishing {
+    publications {
+        aar(MavenPublication) {
+            groupId group
+            version = versionToDeploy
+            artifactId artifactLib
+            artifact("$buildDir/outputs/aar/${artifactLib}-release.aar") {
+                builtBy assemble
+            }
+
+            // Necessary to include dependencies
+            pom.withXml {
+                def dependencies = asNode().appendNode('dependencies')
+                configurations.getByName("releaseCompileClasspath").getResolvedConfiguration().getFirstLevelModuleDependencies().each {
+                    def dependency = dependencies.appendNode('dependency')
+                    dependency.appendNode('groupId', it.moduleGroup)
+                    dependency.appendNode('artifactId', it.moduleName)
+                    dependency.appendNode('version', it.moduleVersion)
+                }
+            }
+        }
+    }
+}

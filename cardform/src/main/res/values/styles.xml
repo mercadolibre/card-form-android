@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="InputFormTheme">
+        <item name="colorControlNormal">@color/cf_hint_input_text</item>
+        <item name="colorControlActivated">@color/cf_button_navigation_text</item>
+        <item name="colorControlHighlight">@color/cf_button_navigation_text</item>
+        <item name="android:textSize">@dimen/ui_fontsize_medium</item>
+        <item name="android:textColor">@color/ui_fullscreenmodal_toolbar_text_color</item>
+    </style>
+
+    <style name="InputFormHintTheme" parent="TextAppearance.Design.Hint">
+        <item name="android:textColorHint">@color/cf_hint_input_text</item>
+        <item name="android:textColor">@color/cf_hint_input_text</item>
+        <item name="android:textSize">@dimen/ui_fontsize_xsmall</item>
+    </style>
+
+    <style name="ProgressBar" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:indeterminate">false</item>
+    </style>
+
+</resources>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:parentTag="android.support.constraint.ConstraintLayout">
+
+    <View
+        android:id="@+id/bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/card_form_app_bar_height"
+        android:background="@color/ui_components_actionModeBackground"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/backButtonContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@color/ui_transparent"
+        android:paddingStart="@dimen/ui_1_5m"
+        android:paddingEnd="@dimen/ui_1_5m"
+        app:layout_constraintStart_toStartOf="@id/bar"
+        app:layout_constraintEnd_toStartOf="@id/title"
+        app:layout_constraintTop_toTopOf="@id/bar"
+        app:layout_constraintBottom_toBottomOf="@id/bar">
+
+        <ImageButton
+            android:id="@+id/backButton"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/ui_050m"
+            android:src="@drawable/back"
+            android:tint="@color/ui_components_action_bar_text_color"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/ui_2m"
+        android:text="@string/cf_title"
+        android:textColor="@color/ui_components_action_bar_text_color"
+        style="@style/MLFont.Bold.Semi"
+        android:layout_marginEnd="@dimen/ui_2m"
+        app:layout_constraintTop_toTopOf="@id/bar"
+        app:layout_constraintBottom_toBottomOf="@id/bar"
+        app:layout_constraintStart_toEndOf="@id/backButtonContainer"
+        app:layout_constraintEnd_toEndOf="@id/bar" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="@style/ProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:max="100"
+        android:progress="20"
+        android:progressDrawable="@drawable/progress_drawable"
+        app:layout_constraintTop_toBottomOf="@id/bar" />
+
+</merge>

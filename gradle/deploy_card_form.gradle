@@ -1,0 +1,15 @@
+ext {
+    artifactLib = 'cardform'
+    libraryName = 'com.mercadolibre.android.cardform'
+    libraryDescription = 'MercadoLibre Android Card Form'
+    siteUrl = 'https://github.com/mercadolibre/fury_card-form-android.git'
+    gitUrl = 'https://github.com/mercadolibre/fury_card-form-android.git'
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    groupName = "com.mercadolibre.android.cardform"
+}
+
+group = groupName
+archivesBaseName = artifactLib
+
+apply from:"$rootDir/gradle/base_deploy.gradle"

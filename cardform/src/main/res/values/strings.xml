@@ -1,0 +1,13 @@
+<resources>
+    <string name="cf_card_number_hint">Card number</string>
+    <string name="cf_card_number_info_hint">Invalid Card Number</string>
+    <string name="cf_card_name_hint">Name of owner</string>
+    <string name="cf_card_expiration_hint">Expiration</string>
+    <string name="cf_card_expiration_info_hint">As it appears on the card</string>
+    <string name="cf_card_cvv_hint">Security code</string>
+    <string name="cf_card_cvv_info_hint">CVV</string>
+    <string name="cf_card_identification_number_hint">Document</string>
+    <string name="cf_card_date_hint">MM/YY</string>
+    <string name="cf_title">New credit or debit card</string>
+    <string name="cf_issuers_header_title">Who issued your card?</string>
+</resources>
