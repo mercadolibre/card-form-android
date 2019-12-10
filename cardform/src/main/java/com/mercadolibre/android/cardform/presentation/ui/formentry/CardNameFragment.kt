@@ -7,7 +7,7 @@ import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.di.Dependencies
 import com.mercadolibre.android.cardform.di.preferences.NameOwnerPreferences
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
-import com.mercadolibre.android.cardform.presentation.model.CardData
+import com.mercadolibre.android.cardform.presentation.model.CardFilledData
 import kotlinx.android.synthetic.main.fragment_name_card.*
 
 /**
@@ -27,7 +27,7 @@ class CardNameFragment : InputFragment() {
         viewModel.nameLiveData.nonNullObserve(viewLifecycleOwner) { data ->
             nameCardEditText.configure(data) {
 
-                viewModel.updateInputData(CardData.CardName(it))
+                viewModel.updateInputData(CardFilledData.Name(it))
                 isInputValid = nameCardEditText.validate()
 
                 if (nameCardEditText.hasError()) {

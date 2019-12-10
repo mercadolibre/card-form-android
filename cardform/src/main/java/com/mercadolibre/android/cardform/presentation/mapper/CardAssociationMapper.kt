@@ -1,13 +1,13 @@
 package com.mercadolibre.android.cardform.presentation.mapper
 
 import com.mercadolibre.android.cardform.base.Mapper
-import com.mercadolibre.android.cardform.presentation.model.AssociatedCardInfo
 import com.mercadolibre.android.cardform.data.model.body.AssociatedCardBody
 import com.mercadolibre.android.cardform.data.model.body.IssuerBody
 import com.mercadolibre.android.cardform.data.model.body.PaymentMethodBody
+import com.mercadolibre.android.cardform.data.model.response.PaymentMethod
 
-object CardAssociationMapper: Mapper<AssociatedCardBody, AssociatedCardInfo> {
-    override fun map(model: AssociatedCardInfo): AssociatedCardBody {
+object CardAssociationMapper: Mapper<AssociatedCardBody, CardAssociationMapper.Model> {
+    override fun map(model: Model): AssociatedCardBody {
         return AssociatedCardBody(
             model.cardTokenId,
             PaymentMethodBody(
@@ -18,4 +18,10 @@ object CardAssociationMapper: Mapper<AssociatedCardBody, AssociatedCardInfo> {
             IssuerBody(model.issuerId.toString())
         )
     }
+
+    data class Model(
+        val cardTokenId: String,
+        val paymentMethod: PaymentMethod,
+        val issuerId: Int
+    )
 }

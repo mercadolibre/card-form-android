@@ -3,7 +3,6 @@ package com.mercadolibre.android.cardform.presentation.viewmodel
 import android.arch.lifecycle.MutableLiveData
 import android.os.Bundle
 import com.mercadolibre.android.cardform.base.BaseViewModel
-import com.mercadolibre.android.cardform.presentation.model.AssociatedCardInfo
 import com.mercadolibre.android.cardform.data.model.response.CardUi
 import com.mercadolibre.android.cardform.data.model.response.Issuer
 import com.mercadolibre.android.cardform.data.model.response.PaymentMethod
@@ -28,7 +27,7 @@ class InputFormViewModel(
     private val cardAssociationRepository: CardAssociationRepository
 ) : BaseViewModel() {
 
-    val cardLiveData: MutableLiveData<CardData> = MutableLiveData()
+    val cardLiveFilledData: MutableLiveData<CardFilledData> = MutableLiveData()
     val progressLiveData: MutableLiveData<Int> = MutableLiveData()
     val cardDrawerLiveData: MutableLiveData<CardUi?> = MutableLiveData()
     val additionalStepsLiveData: MutableLiveData<List<String>> = MutableLiveData()
@@ -47,7 +46,7 @@ class InputFormViewModel(
 
     override fun recoverFromBundle(bundle: Bundle) {
         super.recoverFromBundle(bundle)
-        binValidator = bundle.getParcelable(EXTRA_BIN_VALIDATOR)?: BinValidator()
+        binValidator = bundle.getParcelable(EXTRA_BIN_VALIDATOR) ?: BinValidator()
         cardDrawerLiveData.value = bundle.getParcelable(EXTRA_CARD_DRAWER)
         identificationTypesLiveData.value = bundle.getParcelable(EXTRA_IDENTIFICATIONS_DATA)
         expirationLiveData.value = bundle.getParcelable(EXTRA_EXPIRATION_DATA)
@@ -64,7 +63,12 @@ class InputFormViewModel(
         super.storeInBundle(bundle)
         bundle.putParcelable(EXTRA_BIN_VALIDATOR, binValidator)
         cardDrawerLiveData.value?.let { bundle.putParcelable(EXTRA_CARD_DRAWER, it) }
-        identificationTypesLiveData.value?.let { bundle.putParcelable(EXTRA_IDENTIFICATIONS_DATA, it) }
+        identificationTypesLiveData.value?.let {
+            bundle.putParcelable(
+                EXTRA_IDENTIFICATIONS_DATA,
+                it
+            )
+        }
         expirationLiveData.value?.let { bundle.putParcelable(EXTRA_EXPIRATION_DATA, it) }
         codeLiveData.value?.let { bundle.putParcelable(EXTRA_CODE_DATA, it) }
         nameLiveData.value?.let { bundle.putParcelable(EXTRA_NAME_DATA, it) }
@@ -75,8 +79,8 @@ class InputFormViewModel(
         bundle.putParcelable(EXTRA_CARD_STEP_DATA, cardStepInfo)
     }
 
-    fun updateInputData(cardData: CardData) {
-        cardLiveData.value = cardData
+    fun updateInputData(cardFilledData: CardFilledData) {
+        cardLiveFilledData.value = cardFilledData
     }
 
     fun updateProgressData(progress: Int) {
@@ -134,8 +138,9 @@ class InputFormViewModel(
 
                 if (cardToken != null) {
                     val cardAssociated = cardAssociationRepository
-                        .associateCard(CardAssociationMapper.map(
-                                AssociatedCardInfo(
+                        .associateCard(
+                            CardAssociationMapper.map(
+                                CardAssociationMapper.Model(
                                     cardToken.id,
                                     paymentMethod!!,
                                     issuer!!.id

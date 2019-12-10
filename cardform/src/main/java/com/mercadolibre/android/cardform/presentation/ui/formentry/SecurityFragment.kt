@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
-import com.mercadolibre.android.cardform.presentation.model.ObjectStepFactory
-import com.mercadolibre.android.cardform.presentation.model.CardData
+import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
+import com.mercadolibre.android.cardform.presentation.model.CardFilledData
 import com.mercadolibre.android.cardform.presentation.model.CardState
 import kotlinx.android.synthetic.main.fragment_security.*
 import java.util.*
@@ -41,7 +41,7 @@ class SecurityFragment : InputFragment() {
 
         viewModel.expirationLiveData.nonNullObserve(viewLifecycleOwner) { data ->
             expirationEditText.configure(data) {
-                viewModel.updateInputData(CardData.CardExpiration(it))
+                viewModel.updateInputData(CardFilledData.ExpirationDate(it))
 
                 if (it.isNotEmpty() && it.last().isDigit()) {
                     if (!isValidDate()) {
@@ -55,7 +55,7 @@ class SecurityFragment : InputFragment() {
 
         viewModel.codeLiveData.nonNullObserve(viewLifecycleOwner) { data ->
             cvvCodeEditText.configure(data) {
-                viewModel.updateInputData(CardData.CardEscCode(it))
+                viewModel.updateInputData(CardFilledData.Cvv(it))
 
                 if (cvvCodeEditText.hasError()) {
                     cvvCodeEditText.clearError()
