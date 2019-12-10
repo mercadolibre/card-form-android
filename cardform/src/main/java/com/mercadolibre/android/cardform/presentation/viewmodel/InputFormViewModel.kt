@@ -10,10 +10,7 @@ import com.mercadolibre.android.cardform.data.model.response.RegisterCard
 import com.mercadolibre.android.cardform.data.repository.CardAssociationRepository
 import com.mercadolibre.android.cardform.data.repository.CardRepository
 import com.mercadolibre.android.cardform.data.repository.TokenizeRepository
-import com.mercadolibre.android.cardform.presentation.mapper.CardAssociationMapper
-import com.mercadolibre.android.cardform.presentation.mapper.CardInfoMapper
-import com.mercadolibre.android.cardform.presentation.mapper.IdentificationMapper
-import com.mercadolibre.android.cardform.presentation.mapper.InputMapper
+import com.mercadolibre.android.cardform.presentation.mapper.*
 import com.mercadolibre.android.cardform.presentation.model.*
 import com.mercadolibre.android.cardform.presentation.ui.formentry.FormType
 import kotlinx.coroutines.CoroutineScope
@@ -29,8 +26,6 @@ class InputFormViewModel(
 
     val cardLiveFilledData: MutableLiveData<CardFilledData> = MutableLiveData()
     val progressLiveData: MutableLiveData<Int> = MutableLiveData()
-    val cardDrawerLiveData: MutableLiveData<CardUi?> = MutableLiveData()
-    val additionalStepsLiveData: MutableLiveData<List<String>> = MutableLiveData()
     val identificationTypesLiveData: MutableLiveData<IdentificationData?> = MutableLiveData()
     val expirationLiveData: MutableLiveData<StepData> = MutableLiveData()
     val codeLiveData: MutableLiveData<StepData> = MutableLiveData()
@@ -39,6 +34,7 @@ class InputFormViewModel(
     val stateUiLiveData: MutableLiveData<StateUi> = MutableLiveData()
     val stateCardLiveData: MutableLiveData<CardState> = MutableLiveData()
     val issuersLiveData: MutableLiveData<ArrayList<Issuer>> = MutableLiveData()
+    val cardDataLiveData: MutableLiveData<CardData> = MutableLiveData()
     var cardStepInfo = CardStepInfo()
     private var binValidator = BinValidator()
     private var issuer: Issuer? = null
@@ -46,8 +42,7 @@ class InputFormViewModel(
 
     override fun recoverFromBundle(bundle: Bundle) {
         super.recoverFromBundle(bundle)
-        binValidator = bundle.getParcelable(EXTRA_BIN_VALIDATOR) ?: BinValidator()
-        cardDrawerLiveData.value = bundle.getParcelable(EXTRA_CARD_DRAWER)
+        binValidator = bundle.getParcelable(EXTRA_BIN_VALIDATOR)?: BinValidator()
         identificationTypesLiveData.value = bundle.getParcelable(EXTRA_IDENTIFICATIONS_DATA)
         expirationLiveData.value = bundle.getParcelable(EXTRA_EXPIRATION_DATA)
         codeLiveData.value = bundle.getParcelable(EXTRA_CODE_DATA)
@@ -57,18 +52,13 @@ class InputFormViewModel(
         issuer = bundle.getParcelable(EXTRA_ISSUER_DATA)
         paymentMethod = bundle.getParcelable(EXTRA_PAYMENT_METHOD_DATA)
         cardStepInfo = bundle.getParcelable(EXTRA_CARD_STEP_DATA)!!
+        cardDataLiveData.value = bundle.getParcelable(EXTRA_CARD_DATA)
     }
 
     override fun storeInBundle(bundle: Bundle) {
         super.storeInBundle(bundle)
         bundle.putParcelable(EXTRA_BIN_VALIDATOR, binValidator)
-        cardDrawerLiveData.value?.let { bundle.putParcelable(EXTRA_CARD_DRAWER, it) }
-        identificationTypesLiveData.value?.let {
-            bundle.putParcelable(
-                EXTRA_IDENTIFICATIONS_DATA,
-                it
-            )
-        }
+        identificationTypesLiveData.value?.let { bundle.putParcelable(EXTRA_IDENTIFICATIONS_DATA, it) }
         expirationLiveData.value?.let { bundle.putParcelable(EXTRA_EXPIRATION_DATA, it) }
         codeLiveData.value?.let { bundle.putParcelable(EXTRA_CODE_DATA, it) }
         nameLiveData.value?.let { bundle.putParcelable(EXTRA_NAME_DATA, it) }
@@ -77,6 +67,7 @@ class InputFormViewModel(
         bundle.putParcelable(EXTRA_PAYMENT_METHOD_DATA, paymentMethod)
         bundle.putParcelable(EXTRA_ISSUER_DATA, issuer)
         bundle.putParcelable(EXTRA_CARD_STEP_DATA, cardStepInfo)
+        cardDataLiveData.value?.let { bundle.putParcelable(EXTRA_CARD_DATA, it) }
     }
 
     fun updateInputData(cardFilledData: CardFilledData) {
@@ -91,8 +82,8 @@ class InputFormViewModel(
         binValidator.update(cardNumber)
         if (binValidator.hasChanged()) {
             if (binValidator.bin == null) {
-                cardDrawerLiveData.value?.apply {
-                    cardDrawerLiveData.value = null
+                cardDataLiveData.value?.apply {
+                    cardDataLiveData.value = null
                 }
             } else {
                 fetchCard(binValidator.bin!!)
@@ -106,8 +97,9 @@ class InputFormViewModel(
                 cardRepository.getCardInfo(bin)?.let {
                     setIssuer(it.issuers[0])
                     paymentMethod = it.paymentMethod
-                    cardDrawerLiveData.postValue(it.cardUi)
-                    additionalStepsLiveData.postValue(it.additionalSteps)
+
+                    cardDataLiveData.postValue(CardDataMapper.map(it))
+
                     issuersLiveData.postValue(ArrayList(it.issuers))
                     loadInputData(it)
                 }
@@ -204,5 +196,6 @@ class InputFormViewModel(
         private const val EXTRA_PAYMENT_METHOD_DATA = "payment_method_data"
         private const val EXTRA_CARD_STEP_DATA = "card_step_data"
         private const val EXTRA_ISSUER_LIST_DATA = "issuer_list_data"
+        private const val EXTRA_CARD_DATA = "card_data"
     }
 }
