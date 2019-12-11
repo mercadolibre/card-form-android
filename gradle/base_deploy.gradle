@@ -8,6 +8,7 @@ def dateNow = project.hasProperty('production') ? "" : new Date().format("ddMMyy
 def versionToDeploy = Versions.versionToDeploy
 versionToDeploy = project.hasProperty('production') ? versionToDeploy : 'EXPERIMENTAL-' + versionToDeploy + '-' + dateNow
 version = versionToDeploy
+def versionLocation = "build/last_deployed_version.txt"
 
 task androidSourcesJar(type:Jar) {
     classifier = 'sources'
@@ -17,12 +18,20 @@ task androidSourcesJar(type:Jar) {
 task publishAar(dependsOn: bintrayUpload) {
     doLast {
         println "Deployed ${project.name} version: ${versionToDeploy}"
+        file(versionLocation).text = versionToDeploy
     }
 }
 
 task publishLocal(dependsOn: publishToMavenLocal) {
     doLast {
         println "Deployed ${project.name} version: ${versionToDeploy}"
+        file(versionLocation).text = versionToDeploy
+    }
+}
+
+task printLastVersion {
+    doLast {
+        println file(versionLocation).text
     }
 }
 
