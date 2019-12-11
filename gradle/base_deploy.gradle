@@ -1,33 +1,13 @@
-import org.gradle.internal.jvm.Jvm
-
 apply plugin:'maven'
 apply plugin:'signing'
 apply plugin:'maven-publish'
 apply plugin:'com.jfrog.bintray'
 apply plugin:'com.github.dcendents.android-maven'
 
-def versionToDeploy = version_to_deploy as String
+def dateNow = project.hasProperty('production') ? "" : new Date().format("ddMMyyyyHHmmssS")
+def versionToDeploy = Versions.versionToDeploy
 versionToDeploy = project.hasProperty('production') ? versionToDeploy : 'EXPERIMENTAL-' + versionToDeploy + '-' + dateNow
 version = versionToDeploy
-
-task javadoc(type:Javadoc) {
-    failOnError = false
-    options.encoding = 'UTF-8'
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    // JDK 1.8 is more strict than 1.7. This makes JDK 1.8 behave like 1.7 for javadoc
-    if (Jvm.current().getJavaVersion().isJava8Compatible()) {
-        options.addStringOption('Xdoclint:none', '-quiet')
-    }
-    exclude '**/BuildConfig.java'
-    exclude '**/R.java'
-    exclude '**/internal/**'
-}
-
-task androidJavadocsJar(type:Jar, dependsOn:javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
 
 task androidSourcesJar(type:Jar) {
     classifier = 'sources'
@@ -46,13 +26,8 @@ task publishLocal(dependsOn: publishToMavenLocal) {
     }
 }
 
-afterEvaluate {
-    javadoc.classpath += project.android.libraryVariants.toList().first().javaCompile.classpath
-}
-
 artifacts {
     archives androidSourcesJar
-    archives androidJavadocsJar
 }
 
 def localProperties = new Properties()
@@ -88,10 +63,6 @@ install {
                         id 'agustin.mantuano'
                         name 'Agustin Mantuano'
                         email 'agustin.mantuano@mercadolibre.com'
-                    }developer {
-                        id 'hernan.bosqued'
-                        name 'Hernan Bosqued'
-                        email 'hernan.bosqued@mercadolibre.com'
                     }
                     developer {
                         id 'jorge.gonzalez'
