@@ -96,9 +96,7 @@ class InputFormViewModel(
                 cardRepository.getCardInfo(bin)?.let {
                     setIssuer(it.issuers[0])
                     paymentMethod = it.paymentMethod
-
                     cardLiveData.postValue(CardDataMapper.map(it))
-
                     issuersLiveData.postValue(ArrayList(it.issuers))
                     loadInputData(it)
                 }
@@ -185,7 +183,6 @@ class InputFormViewModel(
 
     companion object {
         private const val EXTRA_BIN_VALIDATOR = "bin_validator"
-        private const val EXTRA_CARD_DRAWER = "card_drawer"
         private const val EXTRA_IDENTIFICATIONS_DATA = "identifications_data"
         private const val EXTRA_EXPIRATION_DATA = "expiration_data"
         private const val EXTRA_CODE_DATA = "code_data"

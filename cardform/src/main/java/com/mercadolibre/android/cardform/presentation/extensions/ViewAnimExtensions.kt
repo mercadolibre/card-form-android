@@ -247,7 +247,7 @@ fun Fragment.addKeyBoardListener(
             getWindowVisibleDisplayFrame(r)
 
             val heightDiff = rootView.height - (r.bottom - r.top)
-            if (heightDiff > 500) {
+            if (heightDiff > rootView.height * 0.15) {
                 onKeyBoardOpen?.invoke()
             } else {
                 onKeyBoardClose?.invoke()

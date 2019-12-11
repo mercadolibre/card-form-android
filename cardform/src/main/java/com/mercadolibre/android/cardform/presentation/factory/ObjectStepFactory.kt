@@ -42,7 +42,7 @@ object ObjectStepFactory : StepFactory {
                     0,
                     TypeInput.NUMBER.getType(),
                     resources.getString(R.string.cf_card_expiration_hint),
-                    resources.getString(R.string.cf_card_cvv_info_hint),
+                    resources.getString(R.string.cf_card_date_hint),
                     null,
                     "",
                     null
