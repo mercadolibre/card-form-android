@@ -141,11 +141,12 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
             }
 
             cardLiveData.observe(viewLifecycleOwner, Observer {
-                val cardDrawerData = it?.run {
-                    FragmentNavigationController.setAdditionalSteps(additionalSteps)
-                    appBar.setTitle(TitleBar.fromType(paymentTypeId).getTitle())
-                    CardDrawerData(context!!, cardUi!!)
-                } ?: run {
+
+                val cardDrawerData = if (it != null) {
+                    FragmentNavigationController.setAdditionalSteps(it.additionalSteps)
+                    appBar.setTitle(TitleBar.fromType(it.paymentTypeId).getTitle())
+                    CardDrawerData(context!!, it.cardUi!!)
+                } else {
                     appBar.setTitle(TitleBar.NONE_TITLE.getTitle())
                     defaultCardDrawerConfiguration
                 }
