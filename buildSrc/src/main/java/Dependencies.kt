@@ -4,6 +4,10 @@ object Dependencies {
     const val gradle = "com.android.tools.build:gradle:${Versions.gradle}"
     const val gradleKotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.gradleKotlin}"
 
+    // Deploy
+    const val bintray = "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4"
+    const val maven = "com.github.dcendents:android-maven-gradle-plugin:2.1"
+
     // Kotlin
     const val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.gradleKotlin}"
     const val kotlinCoroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlinCoroutines}"
