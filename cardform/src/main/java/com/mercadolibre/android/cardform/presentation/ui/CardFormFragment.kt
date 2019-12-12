@@ -15,6 +15,7 @@ import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.base.RootFragment
 import com.mercadolibre.android.cardform.presentation.extensions.*
+import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
 import com.mercadolibre.android.cardform.presentation.model.*
 import com.mercadolibre.android.cardform.presentation.ui.formentry.FormType
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
@@ -118,18 +119,18 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
 
     override fun bindViewModel() {
         with(viewModel) {
-            cardLiveData.nonNullObserve(viewLifecycleOwner) {
+            cardLiveFilledData.nonNullObserve(viewLifecycleOwner) {
                 when (it) {
-                    is CardData.CardNumber -> {
+                    is CardFilledData.Number -> {
                         cardDrawer.card.number = it.input
                     }
-                    is CardData.CardName -> {
+                    is CardFilledData.Name -> {
                         cardDrawer.card.name = it.input
                     }
-                    is CardData.CardExpiration -> {
+                    is CardFilledData.ExpirationDate -> {
                         cardDrawer.card.expiration = it.input
                     }
-                    is CardData.CardEscCode -> {
+                    is CardFilledData.Cvv -> {
                         cardDrawer.card.secCode = it.input
                     }
                 }
@@ -139,10 +140,16 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
                 appBar.updateProgress(it)
             }
 
-            cardDrawerLiveData.observe(viewLifecycleOwner, Observer {
-                val cardDrawerData = if (it != null && context != null) {
-                    CardDrawerData(context!!, it)
-                } else defaultCardDrawerConfiguration
+            cardLiveData.observe(viewLifecycleOwner, Observer {
+
+                val cardDrawerData = if (it != null) {
+                    FragmentNavigationController.setAdditionalSteps(it.additionalSteps)
+                    appBar.setTitle(TitleBar.fromType(it.paymentTypeId).getTitle())
+                    CardDrawerData(context!!, it.cardUi!!)
+                } else {
+                    appBar.setTitle(TitleBar.NONE_TITLE.getTitle())
+                    defaultCardDrawerConfiguration
+                }
 
                 cardDrawer.show(cardDrawerData)
                 numberLiveData.value = ObjectStepFactory
@@ -152,10 +159,6 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
                         cardDrawerData.cardNumberPattern
                     )
             })
-
-            additionalStepsLiveData.nonNullObserve(viewLifecycleOwner) {
-                FragmentNavigationController.setAdditionalSteps(it)
-            }
 
             stateUiLiveData.nonNullObserve(viewLifecycleOwner) {
                 when (it) {

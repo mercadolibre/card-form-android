@@ -6,7 +6,6 @@ import android.text.InputFilter
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.di.Dependencies
 import com.mercadolibre.android.cardform.di.preferences.IdentificationPreferences

@@ -26,6 +26,10 @@ class AppBar(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
         title.text = value
     }
 
+    fun setTitle(value: Int) {
+        title.text = context.resources.getString(value)
+    }
+
     fun setOnBackListener(listener: (v: View) -> Unit) {
         backButton.setOnClickListener(listener)
     }

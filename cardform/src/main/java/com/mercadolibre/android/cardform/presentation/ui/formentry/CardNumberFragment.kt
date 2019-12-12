@@ -6,8 +6,8 @@ import android.view.View
 
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
-import com.mercadolibre.android.cardform.presentation.model.ObjectStepFactory
-import com.mercadolibre.android.cardform.presentation.model.CardData
+import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
+import com.mercadolibre.android.cardform.presentation.model.CardFilledData
 import com.mercadolibre.android.cardform.presentation.ui.custom.Luhn
 import kotlinx.android.synthetic.main.fragment_number_card.*
 
@@ -38,7 +38,7 @@ class CardNumberFragment: InputFragment() {
                         numberCardEditText.clearError()
                     }
 
-                    updateInputData(CardData.CardNumber(it))
+                    updateInputData(CardFilledData.Number(it))
                     onCardNumberChange(it.replace("\\s+".toRegex(), ""))
 
                     isInputValid = if (numberCardEditText.validatePattern()) {

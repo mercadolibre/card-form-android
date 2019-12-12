@@ -60,9 +60,8 @@ object FragmentNavigationController {
 
             currentFragment = if (currentFragment is IssuersFragment) {
                 getCurrentInput()?.run {
-                    fromRight()
                     focusableInTouchMode(false)
-                    showKeyboard(this)
+                    showKeyboard(currentFragment)
                     this
                 }
             } else {
@@ -84,7 +83,6 @@ object FragmentNavigationController {
                     notFinished = false
                 } else {
                     currentFragment?.apply {
-                        hideKeyboard(this)
                         focusableInTouchMode(true)
                         showIssuerFragment(fragmentManager)
                     }
@@ -112,8 +110,7 @@ object FragmentNavigationController {
     }
 
     private fun calculateProgress() {
-        val defaultSize = FormType.getValues().size
-        progressByStep = PROGRESS_DEFAULT / if (!showIssuers) defaultSize else (defaultSize + 1)
+        progressByStep = PROGRESS_DEFAULT / FormType.getValues().size
     }
 
     private fun showIssuerFragment(manager: FragmentManager?) {
@@ -127,9 +124,9 @@ object FragmentNavigationController {
             addToBackStack(IssuersFragment.TAG)
             commitAllowingStateLoss()
             manager.executePendingTransactions()
-            issuerFragment.fromLeft()
         }
         currentFragment = issuerFragment
+        hideKeyboard(currentFragment)
     }
 
     private fun getCurrentInput() = (formViewPager.adapter as FormInputViewPagerAdapter)

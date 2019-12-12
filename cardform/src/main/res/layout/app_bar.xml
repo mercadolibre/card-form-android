@@ -42,7 +42,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="@dimen/ui_2m"
-        android:text="@string/cf_title"
+        android:text="@string/cf_generic_title_app_bar"
         android:textColor="@color/ui_components_action_bar_text_color"
         style="@style/MLFont.Bold.Semi"
         android:layout_marginEnd="@dimen/ui_2m"
