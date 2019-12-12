@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_number_card.*
 /**
  * A simple [Fragment] subclass.
  */
-class CardNumberFragment: InputFragment() {
+class CardNumberFragment : InputFragment() {
 
     override val rootLayout = R.layout.fragment_number_card
 
@@ -58,9 +58,15 @@ class CardNumberFragment: InputFragment() {
     }
 
     override fun toNext(position: Int, move: MoveTo) {
-        super.toNext(position, move)
         if (isInputValid) {
-            viewModel.cardStepInfo.cardNumber = numberCardEditText.getText()
+            if (viewModel.cardLiveData.value != null) {
+                move.invoke(position)
+                viewModel.cardStepInfo.cardNumber = numberCardEditText.getText()
+            } else {
+                viewModel.retryFetchCard(context)
+            }
+        } else {
+            showError()
         }
     }
 

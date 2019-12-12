@@ -41,7 +41,7 @@ class OneTapFragment : Fragment() {
             activity?.apply {
                 isFirstTime = true
                 startAnim.pushDownOut()
-                CardForm.Builder.withAccessToken("", "MLA").build()
+                CardForm.Builder.withAccessToken("APP_USR-6519316523937252-070516-964fafa7e2c91a2c740155fcb5474280__LA_LD__-261748045", "MLA").build()
                     .start(supportFragmentManager, REQUEST_CODE, R.id.container)
             }
         }

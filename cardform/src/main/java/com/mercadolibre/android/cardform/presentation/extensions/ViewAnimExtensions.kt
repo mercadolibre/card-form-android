@@ -4,12 +4,14 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Rect
 import android.support.annotation.AnimRes
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodManager.*
+import android.widget.TextView
 import com.mercadolibre.android.cardform.R
 
 

@@ -26,7 +26,6 @@ class IssuersFragment : InputFragment() {
         issuerList.layoutManager = LinearLayoutManager(context)
         issuerList.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         issuerBack.setOnClickListener {
-            FragmentNavigationController.toBack()
             onBack()
         }
     }
@@ -39,6 +38,7 @@ class IssuersFragment : InputFragment() {
     }
 
     private fun onBack() {
+        FragmentNavigationController.toBack()
         activity?.onBackPressed()
     }
 
