@@ -3,9 +3,12 @@ package com.mercadolibre.android.cardform.presentation.ui.formentry
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.View
+import android.view.animation.Animation
 import com.mercadolibre.android.cardform.base.BaseFragment
 import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationController
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
+import android.view.animation.AlphaAnimation
+import com.mercadolibre.android.cardform.R
 
 typealias MoveTo = ((position: Int) -> Unit)
 
@@ -16,6 +19,22 @@ typealias MoveTo = ((position: Int) -> Unit)
 abstract class InputFragment : BaseFragment<InputFormViewModel>() {
     override val viewModelClass = InputFormViewModel::class.java
     protected var isInputValid = false
+
+    override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
+        val parent = parentFragment
+        // Apply the workaround only if this is a child fragment, and the parent
+        // is being removed.
+        return if (!enter && parent != null && parent.isRemoving) {
+            // This is a workaround for the bug where child fragments disappear when
+            // the parent is removed (as all children are first removed from the parent)
+            // See https://code.google.com/p/android/issues/detail?id=55228
+            val doNothingAnim = AlphaAnimation(1f, 1f)
+            doNothingAnim.duration = resources.getInteger(R.integer.cf_animation_duration).toLong()
+            doNothingAnim
+        } else {
+            super.onCreateAnimation(transit, enter, nextAnim)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
