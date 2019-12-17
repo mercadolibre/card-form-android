@@ -6,7 +6,7 @@
 
     <application>
         <activity android:name=".presentation.ui.CardFormActivity"
-            android:theme="@style/Theme.MLTheme"
+            android:theme="@style/Theme.Base"
             android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="adjustResize">
         </activity>

@@ -48,11 +48,7 @@ class CardForm : Parcelable {
 
             FragmentNavigationController.reset()
 
-            setCustomAnimations(
-                0,
-                R.anim.fade_out, 0,
-                R.anim.fade_out
-            )
+            setCustomAnimations(0, R.anim.fake, 0, R.anim.fake)
 
             // Added from card form fragment
             replace(

@@ -19,4 +19,11 @@
         <item name="android:indeterminate">false</item>
     </style>
 
+    <style name="ToolBar" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorPrimary">@color/ui_components_action_bar_text_color</item>
+        <item name="android:textColor">@color/ui_components_action_bar_text_color</item>
+        <item name="android:textColorPrimaryInverse">@color/ui_components_action_bar_text_color</item>
+        <item name="android:background">@color/ui_components_actionModeBackground</item>
+    </style>
+
 </resources>

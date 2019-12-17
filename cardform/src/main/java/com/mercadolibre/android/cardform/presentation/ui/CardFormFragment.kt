@@ -8,7 +8,9 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.view.animation.Animation
 import com.meli.android.carddrawer.configuration.DefaultCardConfiguration
 import com.meli.android.carddrawer.model.CardUI
 import com.mercadolibre.android.cardform.CardForm
@@ -53,6 +55,26 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
         }
     }
 
+    override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
+        if (fromFragment) {
+            if (enter) {
+                cardDrawer.pushUpIn()
+                back.fadeIn()
+                next.fadeIn()
+                inputViewPager.slideInRight(onFinish = {
+                    animationEnded = true
+                    FragmentNavigationController.showKeyboard(this)
+                })
+            } else {
+                cardDrawer.pushDownOut()
+                back.fadeOut()
+                next.fadeOut()
+                inputViewPager.slideOutRight()
+            }
+        }
+        return super.onCreateAnimation(transit, enter, nextAnim)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -60,21 +82,12 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
             cardDrawer.show(defaultCardDrawerConfiguration)
         }
 
-        FragmentNavigationController.init(activity?.supportFragmentManager, inputViewPager)
+        FragmentNavigationController.init(childFragmentManager, inputViewPager)
         FragmentNavigationController.addKeyBoardListener(this@CardFormFragment)
 
         animationEnded = savedInstanceState?.getBoolean(EXTRA_ANIMATION, false) ?: false
 
-        if (fromFragment) {
-            if (!animationEnded) {
-                appBar.fadeIn()
-                cardDrawer.pushUpIn()
-                inputViewPager.slideInRight(onFinish = {
-                    animationEnded = true
-                    FragmentNavigationController.showKeyboard(this)
-                })
-            }
-        } else {
+        if (!fromFragment) {
             FragmentNavigationController.showKeyboard(this)
         }
 
@@ -94,6 +107,7 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
                 enableBackButton()
             }
 
+            appBar.configureToolbar(this as AppCompatActivity)
             appBar.setOnBackListener {
                 onBackPressed()
             }
@@ -189,15 +203,6 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
                 }
             }
         }
-    }
-
-    override fun onDestroyView() {
-        if (fromFragment) {
-            appBar.fadeOut()
-            cardDrawer.pushDownOut()
-            inputViewPager.slideOutRight()
-        }
-        super.onDestroyView()
     }
 
     private fun returnResult(data: String, resultCode: Int) {
