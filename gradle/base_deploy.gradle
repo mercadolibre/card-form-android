@@ -5,27 +5,37 @@ apply plugin:'com.jfrog.bintray'
 apply plugin:'com.github.dcendents.android-maven'
 
 def dateNow = project.hasProperty('production') ? "" : new Date().format("ddMMyyyyHHmmssS")
-def versionToDeploy = Versions.versionToDeploy
-versionToDeploy = project.hasProperty('production') ? versionToDeploy : 'EXPERIMENTAL-' + versionToDeploy + '-' + dateNow
-version = versionToDeploy
 def versionLocation = "build/last_deployed_version.txt"
+version = project.hasProperty('production') ? Versions.versionToDeploy :
+        "EXPERIMENTAL-${Versions.versionToDeploy}-${dateNow}"
 
 task androidSourcesJar(type:Jar) {
     classifier = 'sources'
     from android.sourceSets.main.java.sourceFiles
 }
 
-task publishAar(dependsOn: bintrayUpload) {
+task publishAar {
+    dependsOn bintrayUpload
+
     doLast {
-        println "Deployed ${project.name} version: ${versionToDeploy}"
-        file(versionLocation).text = versionToDeploy
+        println "Deployed ${project.name} version: ${version}"
+        file(versionLocation).text = version
     }
 }
 
-task publishLocal(dependsOn: publishToMavenLocal) {
+task publishLocalInit {
     doLast {
-        println "Deployed ${project.name} version: ${versionToDeploy}"
-        file(versionLocation).text = versionToDeploy
+        version = "LOCAL-${Versions.versionToDeploy}-${dateNow}"
+    }
+}
+
+task publishLocal {
+    publishToMavenLocal.mustRunAfter(publishLocalInit)
+    dependsOn publishToMavenLocal, publishLocalInit
+
+    doLast {
+        println "Deployed ${project.name} version: ${version}"
+        file(versionLocation).text = version
     }
 }
 
@@ -90,7 +100,6 @@ install {
 }
 
 bintray {
-    version = versionToDeploy
     user = "$System.env.BINTRAY_USER"
     key = "$System.env.BINTRAY_API_KEY"
 
@@ -108,9 +117,9 @@ bintray {
         publish = true
         publicDownloadNumbers = true
         version {
-            name = versionToDeploy
+            name = this.version
             desc = libraryDescription
-            vcsTag = versionToDeploy
+            vcsTag = this.version
             released = project.hasProperty('production') ? new Date() : null
         }
     }
@@ -121,7 +130,6 @@ publishing {
     publications {
         aar(MavenPublication) {
             groupId group
-            version = versionToDeploy
             artifactId artifactLib
             artifact("$buildDir/outputs/aar/${artifactLib}-release.aar") {
                 builtBy assemble
