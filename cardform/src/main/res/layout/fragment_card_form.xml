@@ -69,22 +69,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/back" />
 
-    <FrameLayout
-        android:id="@+id/progressLoading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0.66"
-        android:background="#000000"
-        android:animateLayoutChanges="true"
-        android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen"
-        android:visibility="gone">
-
-        <ProgressBar
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-
-    </FrameLayout>
-
 </android.support.constraint.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.os.Bundle
 import com.mercadolibre.android.cardform.base.BaseViewModel
+import com.mercadolibre.android.cardform.data.model.response.CardUi
 import com.mercadolibre.android.cardform.data.model.response.Issuer
 import com.mercadolibre.android.cardform.data.model.response.PaymentMethod
 import com.mercadolibre.android.cardform.data.model.response.RegisterCard
@@ -39,6 +40,7 @@ class InputFormViewModel(
     val stateCardLiveData: MutableLiveData<CardState> = MutableLiveData()
     val issuersLiveData: MutableLiveData<ArrayList<Issuer>> = MutableLiveData()
     val cardLiveData: MutableLiveData<CardData> = MutableLiveData()
+    val updateCardData:  MutableLiveData<CardUi> = MutableLiveData()
     var cardStepInfo = CardStepInfo()
     private var binValidator = BinValidator()
     private var issuer: Issuer? = null
@@ -122,10 +124,16 @@ class InputFormViewModel(
     private fun fetchCard(bin: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                cardRepository.getCardInfo(bin)?.let { loadRegisterCard(it) }
+                cardRepository.getCardInfo(bin)?.let {
+                    loadRegisterCard(it)
+                    stateUiLiveData.postValue(UiResult.EmptyResult)
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
-                stateUiLiveData.postValue(ErrorUtil.createError(e))
+                with(ErrorUtil.createError(e)) {
+                    showError = false
+                    stateUiLiveData.postValue(this)
+                }
             }
         }
     }
@@ -140,8 +148,15 @@ class InputFormViewModel(
         }
     }
 
-    fun setIssuer(issuer: Issuer) {
+    private fun setIssuer(issuer: Issuer) {
         this.issuer = issuer
+    }
+
+    fun updateIssuer(issuer: Issuer) {
+        val cardData = cardLiveData.value?.cardUi
+        cardData?.issuerImageUrl = issuer.imageUrl
+        updateCardData.value = cardData
+        setIssuer(issuer)
     }
 
     fun associateCard() {

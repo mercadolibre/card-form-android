@@ -40,6 +40,7 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
     private var requestCode = 0
     private lateinit var defaultCardDrawerConfiguration: CardUI
     private var animationEnded = false
+    private var progressFragment: ProgressFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -180,7 +181,7 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
                 when (it) {
 
                     is UiLoading -> {
-                        progressLoading.visible()
+                        showProgress()
                     }
 
                     is UiError -> {
@@ -191,6 +192,10 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
                         resolveResult(it)
                     }
                 }
+            }
+
+            updateCardData.nonNullObserve(viewLifecycleOwner) {
+                cardDrawer.update(CardDrawerData(context!!, it))
             }
 
             stateCardLiveData.nonNullObserve(viewLifecycleOwner) {
@@ -207,13 +212,28 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
         }
     }
 
+    private fun showProgress() {
+        if (progressFragment == null) {
+            progressFragment = ProgressFragment.newInstance()
+        }
+        progressFragment?.show(childFragmentManager, ProgressFragment.TAG)
+    }
+
+    private fun hideProgress() {
+        progressFragment?.dismiss()
+    }
+
     private fun resolveError(error: UiError) {
-        progressLoading.gone()
-        ErrorUtil.resolveError(rootCardForm, error)
+        if(progressFragment?.isVisible == true) {
+            hideProgress()
+        }
+        if (error.showError) {
+            ErrorUtil.resolveError(rootCardForm, error)
+        }
     }
 
     private fun resolveResult(result: UiResult) {
-        progressLoading.gone()
+        hideProgress()
         if (result is UiResult.CardResult) {
             returnResult(result.data, Activity.RESULT_OK)
         }

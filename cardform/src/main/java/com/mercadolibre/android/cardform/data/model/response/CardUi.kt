@@ -11,7 +11,7 @@ data class CardUi (
     val securityCodeLocation : String,
     val securityCodeLength : Int,
     val paymentMethodImageUrl : String?,
-    val issuerImageUrl : String?,
+    var issuerImageUrl : String?,
     val cardPattern : IntArray
 ) : Parcelable {
     constructor(parcel: Parcel) : this(

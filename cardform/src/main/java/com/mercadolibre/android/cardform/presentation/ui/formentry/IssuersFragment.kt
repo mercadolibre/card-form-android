@@ -76,8 +76,8 @@ class IssuersFragment : InputFragment() {
 
                 holder.itemView.setOnClickListener {
                     with(viewModel) {
+                        updateIssuer(issuer)
                         onBack()
-                        setIssuer(issuer)
                         associateCard()
                     }
                 }
