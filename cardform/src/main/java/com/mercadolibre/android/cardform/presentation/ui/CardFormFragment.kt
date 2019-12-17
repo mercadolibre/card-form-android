@@ -217,11 +217,20 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
         if (progressFragment == null) {
             progressFragment = ProgressFragment.newInstance()
         }
-        progressFragment?.show(childFragmentManager, ProgressFragment.TAG)
+        progressFragment?.apply {
+            if (!isVisible) {
+                progressFragment?.show(this@CardFormFragment.childFragmentManager, ProgressFragment.TAG)
+
+            }
+        }
     }
 
     private fun hideProgress() {
-        progressFragment?.dismiss()
+        progressFragment?.apply {
+            if (isVisible) {
+                dismiss()
+            }
+        }
     }
 
     private fun resolveError(error: UiError) {

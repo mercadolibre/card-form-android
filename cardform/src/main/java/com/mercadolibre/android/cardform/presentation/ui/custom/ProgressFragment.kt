@@ -18,7 +18,9 @@ class ProgressFragment: DialogFragment() {
     ): View? {
          val view = inflater.inflate(R.layout.cf_progress_fragment, container, false)
         dialog?.apply {
+            retainInstance = false
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setCanceledOnTouchOutside(false)
             setCancelable(false)
         }
         return view
