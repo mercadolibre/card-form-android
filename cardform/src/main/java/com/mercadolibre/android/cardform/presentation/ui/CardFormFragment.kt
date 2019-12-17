@@ -24,6 +24,7 @@ import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewMod
 import com.mercadolibre.android.cardform.presentation.model.StateUi.UiLoading
 import com.mercadolibre.android.cardform.presentation.model.UiError
 import com.mercadolibre.android.cardform.presentation.model.UiResult
+import com.mercadolibre.android.cardform.presentation.ui.custom.ProgressFragment
 import kotlinx.android.synthetic.main.fragment_card_form.*
 
 /**

@@ -1,4 +1,4 @@
-package com.mercadolibre.android.cardform.presentation.ui
+package com.mercadolibre.android.cardform.presentation.ui.custom
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -26,6 +26,7 @@ class ProgressFragment: DialogFragment() {
 
     companion object {
         const val TAG = "progress_fragment"
-        fun newInstance() = ProgressFragment()
+        fun newInstance() =
+            ProgressFragment()
     }
 }
