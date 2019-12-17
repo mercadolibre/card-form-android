@@ -34,9 +34,9 @@
         android:id="@+id/progress"
         style="@style/ProgressBar"
         android:layout_width="match_parent"
-        android:layout_marginStart="-1.5dp"
-        android:layout_marginEnd="-1.5dp"
-        android:layout_height="3.1dp"
+        android:layout_marginStart="-2dp"
+        android:layout_marginEnd="-2dp"
+        android:layout_height="4dp"
         android:max="100"
         android:progress="20"
         android:progressDrawable="@drawable/progress_drawable" />
