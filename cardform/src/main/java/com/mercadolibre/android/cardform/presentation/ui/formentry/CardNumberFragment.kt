@@ -59,11 +59,13 @@ class CardNumberFragment : InputFragment() {
 
     override fun toNext(position: Int, move: MoveTo) {
         if (isInputValid) {
-            if (viewModel.cardLiveData.value != null) {
-                move.invoke(position)
-                viewModel.cardStepInfo.cardNumber = numberCardEditText.getText()
-            } else {
-                viewModel.retryFetchCard(context)
+            with(viewModel) {
+                if (cardLiveData.value != null) {
+                    move.invoke(position)
+                    cardStepInfo.cardNumber = numberCardEditText.getText()
+                } else {
+                    retryFetchCard(context)
+                }
             }
         } else {
             showError()
