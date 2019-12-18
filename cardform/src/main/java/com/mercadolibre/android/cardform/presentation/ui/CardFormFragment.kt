@@ -220,7 +220,6 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
         progressFragment?.apply {
             if (!isVisible) {
                 progressFragment?.show(this@CardFormFragment.childFragmentManager, ProgressFragment.TAG)
-
             }
         }
     }
