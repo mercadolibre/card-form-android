@@ -56,4 +56,8 @@ class CardNameFragment : InputFragment() {
     }
 
     override fun showError() = nameCardEditText.showError()
+
+    override fun refreshData() {
+        nameCardEditText.setText("")
+    }
 }
