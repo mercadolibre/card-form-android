@@ -173,6 +173,10 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
                     CardDrawerData(context!!, it.cardUi!!)
                 } else {
                     appBar.setTitle(TitleBar.NONE_TITLE.getTitle())
+                    with(cardDrawer.card) {
+                        secCode = ""
+                        expiration = ""
+                    }
                     defaultCardDrawerConfiguration
                 }
 
