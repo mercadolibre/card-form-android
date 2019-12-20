@@ -79,9 +79,10 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
                     title.fadeIn(longDuration, longDuration * 2)
                 }
             } else {
+                FragmentNavigationController.hideKeyboard(this)
                 cardDrawer.pushDownOut()
-                back.fadeOut()
-                next.fadeOut()
+                back.pushDownOut()
+                next.pushDownOut()
                 inputViewPager.slideRightOut()
                 progress.fadeOut()
                 title.fadeOut()
