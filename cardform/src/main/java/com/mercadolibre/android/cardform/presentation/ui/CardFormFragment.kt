@@ -63,27 +63,24 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
 
     override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
         if (fromFragment) {
-            val longDuration = resources.getInteger(R.integer.cf_anim_duration_long).toLong()
+            val duration = resources.getInteger(R.integer.cf_anim_duration).toLong()
             if (enter) {
                 if (!animationEnded) {
-                    postDelayed(longDuration) {
-                        FragmentNavigationController.showKeyboard(this)
-                    }
-                    cardDrawer.pushUpIn(longDuration)
-                    back.fadeIn(longDuration, longDuration)
-                    next.fadeIn(longDuration, longDuration)
-                    inputViewPager.slideLeftIn(longDuration, onFinish = {
+                    FragmentNavigationController.showKeyboard(this)
+                    cardDrawer.pushUpIn(onFinish = {
                         animationEnded = true
                     })
-                    progress.slideRightIn(longDuration * 2)
-                    title.fadeIn(longDuration, longDuration * 2)
+                    back.fadeIn()
+                    next.fadeIn()
+                    inputViewPager.slideLeftIn((duration * 0.5).toLong())
+                    progress.slideRightIn(duration)
+                    title.fadeIn(duration)
                 }
             } else {
-                FragmentNavigationController.hideKeyboard(this)
                 cardDrawer.pushDownOut()
-                back.pushDownOut()
-                next.pushDownOut()
                 inputViewPager.slideRightOut()
+                back.goneDuringAnimation()
+                next.goneDuringAnimation()
                 progress.fadeOut()
                 title.fadeOut()
             }
@@ -125,7 +122,10 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
 
             appBar.configureToolbar(this as AppCompatActivity)
             appBar.setOnBackListener {
-                onBackPressed()
+                FragmentNavigationController.hideKeyboard(this@CardFormFragment)
+                postDelayed(100) {
+                    onBackPressed()
+                }
             }
         }
     }

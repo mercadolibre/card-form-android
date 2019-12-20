@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="cf_anim_duration_short">300</integer>
-    <integer name="cf_anim_duration">600</integer>
-    <integer name="cf_anim_duration_long">900</integer>
+    <integer name="cf_anim_duration">700</integer>
 </resources>
