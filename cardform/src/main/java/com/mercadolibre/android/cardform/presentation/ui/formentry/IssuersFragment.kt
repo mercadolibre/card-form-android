@@ -25,7 +25,6 @@ class IssuersFragment : InputFragment() {
 
     private lateinit var issuerAdapter: IssuerAdapter
     private var issuerSelected = false
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         issuerList.layoutManager = LinearLayoutManager(context)
@@ -118,8 +117,9 @@ class IssuersFragment : InputFragment() {
         val issuerImage: ImageView = itemView.findViewById(R.id.issuerImage)
     }
 
+    override fun getInputTag() = "issuers"
+
     companion object {
-        const val TAG = "issuers"
         private const val HEADER_TYPE = -2
         private const val ISSUER_TYPE = -1
     }

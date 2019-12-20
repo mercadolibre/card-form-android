@@ -1,6 +1,5 @@
 package com.mercadolibre.android.cardform.presentation.ui
 
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.view.ViewPager
 import com.mercadolibre.android.cardform.R
@@ -98,17 +97,20 @@ object FragmentNavigationController {
         progressByStep = PROGRESS_DEFAULT / FormType.getFromPager().size
     }
 
-    private fun addNextFragment(manager: FragmentManager?, fragment: Fragment): InputFragment? {
+    private fun addNextFragment(
+        manager: FragmentManager?,
+        fragment: InputFragment
+    ): InputFragment? {
         return manager?.beginTransaction()?.run {
             setCustomAnimations(R.anim.push_up_in_fast, 0, 0, R.anim.push_down_out_fast)
             replace(
                 R.id.rootCardForm, fragment,
-                IssuersFragment.TAG
+                fragment.getInputTag()
             )
-            addToBackStack(IssuersFragment.TAG)
+            addToBackStack(fragment.getInputTag())
             commitAllowingStateLoss()
             manager.executePendingTransactions()
-            fragment as InputFragment
+            fragment
         }
     }
 

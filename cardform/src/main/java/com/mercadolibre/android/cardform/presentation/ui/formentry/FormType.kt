@@ -1,7 +1,5 @@
 package com.mercadolibre.android.cardform.presentation.ui.formentry
 
-import android.support.v4.app.Fragment
-
 enum class FormType(private val type: String) {
 
     CARD_NUMBER("card_number") {
@@ -27,7 +25,7 @@ enum class FormType(private val type: String) {
     protected open var exclude = false
     protected open var optional = true
     open var fromPager = true
-    abstract fun getFragment(): Fragment
+    abstract fun getFragment(): InputFragment
     fun getType() = type
 
     companion object {
