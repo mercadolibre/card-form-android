@@ -66,6 +66,8 @@ abstract class InputFragment : BaseFragment<InputFormViewModel>() {
         showError()
     }
 
+    open fun refreshData() = Unit
+
     companion object {
         private const val INPUT_VALID = "input_valid"
     }

@@ -4,16 +4,11 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.view.ViewPager
 import com.mercadolibre.android.cardform.R
-import com.mercadolibre.android.cardform.presentation.extensions.addKeyBoardListener
-import com.mercadolibre.android.cardform.presentation.extensions.hideKeyboard
-import com.mercadolibre.android.cardform.presentation.extensions.showKeyboard
 import com.mercadolibre.android.cardform.presentation.ui.formentry.*
 
 object FragmentNavigationController {
     private lateinit var formViewPager: InputFormViewPager
     private var currentFragment: InputFragment? = null
-    private var showIssuers = false
-    private var keyboardShowing = false
     private var localCurrentItem = 0
     private var progressByStep = 0
     private const val PROGRESS_DEFAULT = 80
@@ -31,19 +26,18 @@ object FragmentNavigationController {
                 override fun onPageScrolled(position: Int, p1: Float, p2: Int) = Unit
 
                 override fun onPageSelected(position: Int) {
-                    getCurrentInput()
-                        ?.apply {
-                            if (localCurrentItem < position)
-                                fromLeft()
-                            else if (localCurrentItem > position)
-                                fromRight()
+                    getCurrentInput()?.apply {
+                        if (localCurrentItem < position) {
+                            fromLeft()
+                        } else if (localCurrentItem > position) {
+                            fromRight()
                         }
-                    localCurrentItem = position
+                    }
                 }
             })
 
             post {
-                if (currentFragment !is IssuersFragment) {
+                if (FormType.getValue(localCurrentItem).fromPager) {
                     currentFragment = getCurrentInput()
                 }
                 calculateProgress()
@@ -52,44 +46,42 @@ object FragmentNavigationController {
     }
 
     fun toBack(): Boolean {
-        val previousPosition = formViewPager.currentItem - 1
+        val previousPosition = localCurrentItem - 1
 
         if (previousPosition < 0) return false
 
         currentFragment?.toBack(previousPosition) {
 
-            currentFragment = if (currentFragment is IssuersFragment) {
-                getCurrentInput()?.run {
-                    focusableInTouchMode(false)
-                    showKeyboard(currentFragment)
-                    this
-                }
-            } else {
+            currentFragment = if (FormType.getValue(localCurrentItem).fromPager) {
                 formViewPager.currentItem = it
                 getCurrentInput()
+            } else {
+                getCurrentInput()?.apply { focusableInTouchMode(false) }
             }
+            localCurrentItem = it
         }
 
         return true
     }
 
     fun toNext(): Boolean {
-        val nextPosition = formViewPager.currentItem + 1
+        val nextPosition = localCurrentItem + 1
         var notFinished = true
 
         currentFragment?.toNext(nextPosition, move = {
-            if (it >= FormType.getValues().size) {
-                if (!showIssuers) {
-                    notFinished = false
+            if (it < FormType.getValues().size) {
+                currentFragment = if (FormType.getValue(it).fromPager) {
+                    formViewPager.currentItem = it
+                    getCurrentInput()
                 } else {
-                    currentFragment?.apply {
+                    currentFragment?.run {
                         focusableInTouchMode(true)
-                        showIssuerFragment(fragmentManager)
+                        addNextFragment(fragmentManager, FormType.getValue(it).getFragment())
                     }
                 }
+                localCurrentItem = it
             } else {
-                formViewPager.currentItem = it
-                currentFragment = getCurrentInput()
+                notFinished = false
             }
         })
 
@@ -97,62 +89,33 @@ object FragmentNavigationController {
     }
 
     fun setAdditionalSteps(steps: List<String>) {
-        var newSteps = steps
-        if (steps.contains("issuers")) {
-            showIssuers = true
-            newSteps = steps.filter { it != "issuers" }
-        } else {
-            showIssuers = false
-        }
-        FormType.setAdditionalSteps(newSteps)
+        FormType.setAdditionalSteps(steps)
         calculateProgress()
         formViewPager.adapter?.notifyDataSetChanged()
     }
 
     private fun calculateProgress() {
-        progressByStep = PROGRESS_DEFAULT / FormType.getValues().size
+        progressByStep = PROGRESS_DEFAULT / FormType.getFromPager().size
     }
 
-    private fun showIssuerFragment(manager: FragmentManager?) {
-        val issuerFragment = IssuersFragment()
-        manager?.beginTransaction()?.apply {
+    private fun addNextFragment(manager: FragmentManager?, fragment: Fragment): InputFragment? {
+        return manager?.beginTransaction()?.run {
             setCustomAnimations(R.anim.push_up_in_fast, 0, 0, R.anim.push_down_out_fast)
             replace(
-                R.id.rootCardForm, issuerFragment,
+                R.id.rootCardForm, fragment,
                 IssuersFragment.TAG
             )
             addToBackStack(IssuersFragment.TAG)
             commitAllowingStateLoss()
             manager.executePendingTransactions()
+            fragment as InputFragment
         }
-        currentFragment = issuerFragment
-        hideKeyboard(currentFragment)
     }
 
     private fun getCurrentInput() = (formViewPager.adapter as FormInputViewPagerAdapter)
-        .currentFragment as InputFragment?
+        .getCurrentStep() as InputFragment?
 
-    fun addKeyBoardListener(rootFragment: Fragment) {
-        rootFragment.addKeyBoardListener(
-            onKeyBoardOpen = { keyboardShowing = true },
-            onKeyBoardClose = { keyboardShowing = false }
-        )
-    }
-
-    fun hideKeyboard(fragment: Fragment?) {
-        if (keyboardShowing) {
-            fragment?.hideKeyboard()
-        }
-    }
-
-    fun showKeyboard(fragment: Fragment?) {
-        if (!keyboardShowing) {
-            fragment?.showKeyboard()
-        }
-    }
-
-    fun getProgress() =
-        progressByStep
+    fun getProgress() = progressByStep
 
     fun reset() {
         currentFragment = null

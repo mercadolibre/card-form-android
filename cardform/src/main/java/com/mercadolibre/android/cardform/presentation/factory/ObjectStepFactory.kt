@@ -36,6 +36,19 @@ object ObjectStepFactory : StepFactory {
                 )
             }
 
+            FormType.CARD_NAME.getType() -> {
+                StepData(
+                    "name",
+                    40,
+                    TypeInput.TEXT.getType(),
+                    resources.getString(R.string.cf_card_expiration_info_hint),
+                    resources.getString(R.string.cf_card_name_hint),
+                    null,
+                    "",
+                    null
+                )
+            }
+
             FormType.EXPIRATION_TYPE -> {
                 StepData(
                     "expiration",
@@ -45,7 +58,7 @@ object ObjectStepFactory : StepFactory {
                     resources.getString(R.string.cf_card_date_hint),
                     null,
                     "",
-                    null
+                    "$$/$$"
                 )
             }
 

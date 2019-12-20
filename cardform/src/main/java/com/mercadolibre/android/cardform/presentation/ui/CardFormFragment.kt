@@ -18,6 +18,7 @@ import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.base.RootFragment
 import com.mercadolibre.android.cardform.presentation.extensions.*
 import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
+import com.mercadolibre.android.cardform.presentation.helpers.KeyboardHelper
 import com.mercadolibre.android.cardform.presentation.model.*
 import com.mercadolibre.android.cardform.presentation.ui.formentry.FormType
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
@@ -61,21 +62,21 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
     }
 
     override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
-        if (fromFragment) {
-            if (enter) {
+        if (enter) {
+            if (fromFragment && !animationEnded) {
                 cardDrawer.pushUpIn()
                 back.fadeIn()
                 next.fadeIn()
                 inputViewPager.slideInRight(onFinish = {
                     animationEnded = true
-                    FragmentNavigationController.showKeyboard(this)
+                    KeyboardHelper.showKeyboard(this)
                 })
-            } else {
-                cardDrawer.pushDownOut()
-                back.fadeOut()
-                next.fadeOut()
-                inputViewPager.slideOutRight()
             }
+        } else {
+            cardDrawer.pushDownOut()
+            back.fadeOut()
+            next.fadeOut()
+            inputViewPager.slideOutRight()
         }
         return super.onCreateAnimation(transit, enter, nextAnim)
     }
@@ -87,13 +88,13 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
             cardDrawer.show(defaultCardDrawerConfiguration)
         }
 
-        FragmentNavigationController.init(childFragmentManager, inputViewPager)
-        FragmentNavigationController.addKeyBoardListener(this@CardFormFragment)
+        FragmentNavigationController.init(fragmentManager, inputViewPager)
+        KeyboardHelper.addKeyBoardListener(this@CardFormFragment)
 
         animationEnded = savedInstanceState?.getBoolean(EXTRA_ANIMATION, false) ?: false
 
         if (!fromFragment) {
-            FragmentNavigationController.showKeyboard(this)
+            KeyboardHelper.showKeyboard(this)
         }
 
         cardDrawer.hideSecCircle()
@@ -121,13 +122,19 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
 
     private fun enableBackButton() {
         with(back) {
-            isEnabled = inputViewPager.currentItem != 0
-            setTextColor(
-                ContextCompat.getColor(
-                    context!!,
-                    if (isEnabled) R.color.cf_button_navigation_text else R.color.card_drawer_gray_light
+            inputViewPager.post {
+                isEnabled = inputViewPager.currentItem != 0
+                setTextColor(
+                    ContextCompat.getColor(
+                        context!!,
+                        if (isEnabled) {
+                            R.color.cf_button_navigation_text
+                        } else {
+                            R.color.card_drawer_gray_light
+                        }
+                    )
                 )
-            )
+            }
         }
     }
 
