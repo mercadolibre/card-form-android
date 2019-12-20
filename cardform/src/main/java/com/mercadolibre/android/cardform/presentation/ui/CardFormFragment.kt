@@ -76,10 +76,11 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
                     animationEnded = true
                 })
             } else {
+                FragmentNavigationController.hideKeyboard(this)
                 cardDrawer.pushDownOut()
-                back.fadeOut()
-                next.fadeOut()
                 inputViewPager.slideOutRight()
+                back.pushDownOut()
+                next.pushDownOut()
             }
         }
         return super.onCreateAnimation(transit, enter, nextAnim)

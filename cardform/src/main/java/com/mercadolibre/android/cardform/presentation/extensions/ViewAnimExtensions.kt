@@ -206,7 +206,7 @@ fun <T : View> T.slideInLeft(
 }
 
 fun Fragment.hideKeyboard() {
-    view?.let { activity?.hideKeyboard() }
+    activity?.hideKeyboard()
 }
 
 fun Activity.hideKeyboard() {
@@ -215,7 +215,7 @@ fun Activity.hideKeyboard() {
 }
 
 fun Fragment.showKeyboard() {
-    view?.let { activity?.showKeyboard() }
+    activity?.showKeyboard()
 }
 
 fun Activity.showKeyboard() {
