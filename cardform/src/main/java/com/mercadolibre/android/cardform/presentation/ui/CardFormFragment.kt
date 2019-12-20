@@ -21,6 +21,10 @@ import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
 import com.mercadolibre.android.cardform.presentation.model.*
 import com.mercadolibre.android.cardform.presentation.ui.formentry.FormType
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
+import com.mercadolibre.android.cardform.presentation.model.StateUi.UiLoading
+import com.mercadolibre.android.cardform.presentation.model.UiError
+import com.mercadolibre.android.cardform.presentation.model.UiResult
+import com.mercadolibre.android.cardform.presentation.ui.custom.ProgressFragment
 import kotlinx.android.synthetic.main.fragment_card_form.*
 
 /**
@@ -37,6 +41,7 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
     private var requestCode = 0
     private lateinit var defaultCardDrawerConfiguration: CardUI
     private var animationEnded = false
+    private var progressFragment: ProgressFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -160,7 +165,6 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
             }
 
             cardLiveData.observe(viewLifecycleOwner, Observer {
-
                 val cardDrawerData = if (it != null) {
                     FragmentNavigationController.setAdditionalSteps(it.additionalSteps)
                     appBar.setTitle(TitleBar.fromType(it.paymentTypeId).getTitle())
@@ -181,19 +185,23 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
 
             stateUiLiveData.nonNullObserve(viewLifecycleOwner) {
                 when (it) {
-                    StateUi.Loading -> {
-                        FragmentNavigationController.hideKeyboard(this@CardFormFragment)
-                        progressLoading.visible()
+
+                    is UiLoading -> {
+                        showProgress()
                     }
-                    StateUi.Error -> {
-                        FragmentNavigationController.showKeyboard(this@CardFormFragment)
-                        progressLoading.gone()
+
+                    is UiError -> {
+                        resolveError(it)
                     }
-                    StateUi.Result -> {
-                        progressLoading.gone()
-                        returnResult("Result Ok", Activity.RESULT_OK)
+
+                    is UiResult -> {
+                        resolveResult(it)
                     }
                 }
+            }
+
+            updateCardData.nonNullObserve(viewLifecycleOwner) {
+                cardDrawer.update(CardDrawerData(context!!, it))
             }
 
             stateCardLiveData.nonNullObserve(viewLifecycleOwner) {
@@ -207,6 +215,41 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
                     }
                 }
             }
+        }
+    }
+
+    private fun showProgress() {
+        if (progressFragment == null) {
+            progressFragment = ProgressFragment.newInstance()
+        }
+        progressFragment?.apply {
+            if (!isVisible) {
+                progressFragment?.show(this@CardFormFragment.childFragmentManager, ProgressFragment.TAG)
+            }
+        }
+    }
+
+    private fun hideProgress() {
+        progressFragment?.apply {
+            if (isVisible) {
+                dismiss()
+            }
+        }
+    }
+
+    private fun resolveError(error: UiError) {
+        if(progressFragment?.isVisible == true) {
+            hideProgress()
+        }
+        if (error.showError) {
+            ErrorUtil.resolveError(rootCardForm, error)
+        }
+    }
+
+    private fun resolveResult(result: UiResult) {
+        hideProgress()
+        if (result is UiResult.CardResult) {
+            returnResult(result.data, Activity.RESULT_OK)
         }
     }
 

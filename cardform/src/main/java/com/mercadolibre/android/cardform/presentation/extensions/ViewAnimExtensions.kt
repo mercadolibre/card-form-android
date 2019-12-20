@@ -12,7 +12,6 @@ import android.view.inputmethod.InputMethodManager.HIDE_IMPLICIT_ONLY
 import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
 import com.mercadolibre.android.cardform.R
 
-
 private fun loadAnimation(context: Context, @AnimRes id: Int): Animation {
     return AnimationUtils.loadAnimation(context, id)
 }
@@ -123,20 +122,6 @@ fun <T : View> T.slideInRight(
         startAnimation(this)
     }
 }
-
-private fun <T : View> T.fade(fromAlpha: Float, toAlpha: Float, duration: Long? = null,
-    startOffset: Long? = null, interpolator:Interpolator = DecelerateInterpolator(),
-    onRepeat: (() -> Unit)? = null, onFinish: (() -> Unit)? = null, onStart: (() -> Unit)? = null
-) = startAnimation(AlphaAnimation(fromAlpha, toAlpha).apply {
-    this.interpolator = interpolator
-    duration?.let {
-        setDuration(it)
-    }
-    startOffset?.let {
-        setStartOffset(it)
-    }
-    setAnimationListener(getAnimationListener(onRepeat, onFinish, onStart))
-})
 
 fun <T : View> T.fadeOut(duration: Long? = null, startOffset: Long? = null,
     onRepeat: (() -> Unit)? = null, onFinish: (() -> Unit)? = null, onStart: (() -> Unit)? = null

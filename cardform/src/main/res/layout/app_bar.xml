@@ -39,6 +39,6 @@
         android:layout_height="4dp"
         android:max="100"
         android:progress="20"
-        android:progressDrawable="@drawable/progress_drawable" />
+        android:progressDrawable="@drawable/horizontal_progress_drawable" />
 
 </merge>
