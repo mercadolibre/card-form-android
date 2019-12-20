@@ -99,7 +99,7 @@ fun <T : View> T.pushDownOut(
     }
 }
 
-fun <T : View> T.slideInRight(
+fun <T : View> T.slideLeftIn(
     startOffset: Long? = null,
     onRepeat: (() -> Unit)? = null,
     onFinish: (() -> Unit)? = null,
@@ -107,7 +107,7 @@ fun <T : View> T.slideInRight(
 ) = context?.let {context ->
     loadAnimation(
         context.applicationContext,
-        R.anim.cf_slide_right_in
+        R.anim.cf_slide_left_in
     ).apply {
         startOffset?.let {
             setStartOffset(it)
@@ -165,7 +165,7 @@ fun <T : View> T.slideLeftOut(
     }
 }
 
-fun <T : View> T.slideOutRight(
+fun <T : View> T.slideRightOut(
     onRepeat: (() -> Unit)? = null,
     onFinish: (() -> Unit)? = null,
     onStart: (() -> Unit)? = null
@@ -185,15 +185,17 @@ fun <T : View> T.slideOutRight(
     }
 }
 
-fun <T : View> T.slideInLeft(
+fun <T : View> T.slideRightIn(
+    startOffset: Long? = null,
     onRepeat: (() -> Unit)? = null,
     onFinish: (() -> Unit)? = null,
     onStart: (() -> Unit)? = null
-) = context?.let {
+) = context?.let {context ->
     loadAnimation(
-        it.applicationContext,
-        R.anim.cf_slide_left_in
+        context,
+        R.anim.cf_slide_right_in
     ).apply {
+        startOffset?.let { setStartOffset(it) }
         setAnimationListener(
             getAnimationListener(
                 onRepeat,

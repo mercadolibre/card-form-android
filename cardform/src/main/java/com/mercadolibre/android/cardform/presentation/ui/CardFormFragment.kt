@@ -25,6 +25,7 @@ import com.mercadolibre.android.cardform.presentation.model.StateUi.UiLoading
 import com.mercadolibre.android.cardform.presentation.model.UiError
 import com.mercadolibre.android.cardform.presentation.model.UiResult
 import com.mercadolibre.android.cardform.presentation.ui.custom.ProgressFragment
+import kotlinx.android.synthetic.main.app_bar.*
 import kotlinx.android.synthetic.main.fragment_card_form.*
 
 /**
@@ -62,24 +63,28 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
 
     override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
         if (fromFragment) {
-            val shortDuration = resources.getInteger(R.integer.cf_anim_duration_short).toLong()
-            val normalDuration = resources.getInteger(R.integer.cf_anim_duration).toLong()
             val longDuration = resources.getInteger(R.integer.cf_anim_duration_long).toLong()
             if (enter) {
-                postDelayed(shortDuration) {
-                    FragmentNavigationController.showKeyboard(this)
+                if (!animationEnded) {
+                    postDelayed(longDuration) {
+                        FragmentNavigationController.showKeyboard(this)
+                    }
+                    cardDrawer.pushUpIn(longDuration)
+                    back.fadeIn(longDuration, longDuration)
+                    next.fadeIn(longDuration, longDuration)
+                    inputViewPager.slideLeftIn(longDuration, onFinish = {
+                        animationEnded = true
+                    })
+                    progress.slideRightIn(longDuration * 2)
+                    title.fadeIn(longDuration, longDuration * 2)
                 }
-                cardDrawer.pushUpIn(shortDuration)
-                back.fadeIn(longDuration, shortDuration)
-                next.fadeIn(longDuration, shortDuration)
-                inputViewPager.slideInRight(shortDuration, onFinish = {
-                    animationEnded = true
-                })
             } else {
                 cardDrawer.pushDownOut()
                 back.fadeOut()
                 next.fadeOut()
-                inputViewPager.slideOutRight()
+                inputViewPager.slideRightOut()
+                progress.fadeOut()
+                title.fadeOut()
             }
         }
         return super.onCreateAnimation(transit, enter, nextAnim)
