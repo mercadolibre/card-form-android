@@ -57,13 +57,18 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
 
     override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
         if (fromFragment) {
+            val shortDuration = resources.getInteger(R.integer.cf_anim_duration_short).toLong()
+            val normalDuration = resources.getInteger(R.integer.cf_anim_duration).toLong()
+            val longDuration = resources.getInteger(R.integer.cf_anim_duration_long).toLong()
             if (enter) {
-                cardDrawer.pushUpIn()
-                back.fadeIn()
-                next.fadeIn()
-                inputViewPager.slideInRight(onFinish = {
-                    animationEnded = true
+                postDelayed(shortDuration) {
                     FragmentNavigationController.showKeyboard(this)
+                }
+                cardDrawer.pushUpIn(shortDuration)
+                back.fadeIn(longDuration, shortDuration)
+                next.fadeIn(longDuration, shortDuration)
+                inputViewPager.slideInRight(shortDuration, onFinish = {
+                    animationEnded = true
                 })
             } else {
                 cardDrawer.pushDownOut()

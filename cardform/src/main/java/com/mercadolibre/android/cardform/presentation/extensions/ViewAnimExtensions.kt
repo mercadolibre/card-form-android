@@ -6,10 +6,10 @@ import android.graphics.Rect
 import android.support.annotation.AnimRes
 import android.support.v4.app.Fragment
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
+import android.view.animation.*
 import android.view.inputmethod.InputMethodManager
-import android.view.inputmethod.InputMethodManager.*
+import android.view.inputmethod.InputMethodManager.HIDE_IMPLICIT_ONLY
+import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
 import com.mercadolibre.android.cardform.R
 
 
@@ -17,11 +17,8 @@ private fun loadAnimation(context: Context, @AnimRes id: Int): Animation {
     return AnimationUtils.loadAnimation(context, id)
 }
 
-private fun <T : View> T.getAnimationListener(
-    onRepeat: (() -> Unit)? = null,
-    onFinish: (() -> Unit)? = null,
-    onStart: (() -> Unit)? = null
-): Animation.AnimationListener {
+private fun getAnimationListener(onRepeat: (() -> Unit)? = null, onFinish: (() -> Unit)? = null,
+    onStart: (() -> Unit)? = null): Animation.AnimationListener {
     return object : Animation.AnimationListener {
         override fun onAnimationRepeat(animation: Animation?) {
             onRepeat?.invoke()
@@ -38,14 +35,18 @@ private fun <T : View> T.getAnimationListener(
 }
 
 fun <T : View> T.pushUpIn(
+    startOffset: Long? = null,
     onRepeat: (() -> Unit)? = null,
     onFinish: (() -> Unit)? = null,
     onStart: (() -> Unit)? = null
-) = context?.let {
+) = context?.let {context ->
     loadAnimation(
-        it.applicationContext,
-        R.anim.push_up_in
+        context.applicationContext,
+        R.anim.cf_push_up_in
     ).apply {
+        startOffset?.let {
+            setStartOffset(it)
+        }
         setAnimationListener(
             getAnimationListener(
                 onRepeat,
@@ -57,6 +58,8 @@ fun <T : View> T.pushUpIn(
     }
 }
 
+fun Fragment.postDelayed(delay: Long, runnable: (() -> Unit)) = view?.postDelayed(runnable, delay)
+
 fun <T : View> T.pushDownIn(
     onRepeat: (() -> Unit)? = null,
     onFinish: (() -> Unit)? = null,
@@ -64,7 +67,7 @@ fun <T : View> T.pushDownIn(
 ) = context?.let {
     loadAnimation(
         it.applicationContext,
-        R.anim.push_down_in
+        R.anim.cf_push_down_in
     ).apply {
         setAnimationListener(
             getAnimationListener(
@@ -84,7 +87,7 @@ fun <T : View> T.pushDownOut(
 ) = context?.let {
     loadAnimation(
         it.applicationContext,
-        R.anim.push_down_out
+        R.anim.cf_push_down_out
     ).apply {
         setAnimationListener(
             getAnimationListener(
@@ -98,14 +101,18 @@ fun <T : View> T.pushDownOut(
 }
 
 fun <T : View> T.slideInRight(
+    startOffset: Long? = null,
     onRepeat: (() -> Unit)? = null,
     onFinish: (() -> Unit)? = null,
     onStart: (() -> Unit)? = null
-) = context?.let {
+) = context?.let {context ->
     loadAnimation(
-        it.applicationContext,
-        R.anim.slide_in_right
+        context.applicationContext,
+        R.anim.cf_slide_right_in
     ).apply {
+        startOffset?.let {
+            setStartOffset(it)
+        }
         setAnimationListener(
             getAnimationListener(
                 onRepeat,
@@ -117,54 +124,50 @@ fun <T : View> T.slideInRight(
     }
 }
 
-fun <T : View> T.fadeIn(
-    onRepeat: (() -> Unit)? = null,
-    onFinish: (() -> Unit)? = null,
-    onStart: (() -> Unit)? = null
-) = context?.let {
-    loadAnimation(
-        it.applicationContext,
-        R.anim.fade_in
-    ).apply {
-        setAnimationListener(
-            getAnimationListener(
-                onRepeat,
-                onFinish,
-                onStart
-            )
-        )
+private fun <T : View> T.fade(fromAlpha: Float, toAlpha: Float, duration: Long? = null,
+    startOffset: Long? = null, interpolator:Interpolator = DecelerateInterpolator(),
+    onRepeat: (() -> Unit)? = null, onFinish: (() -> Unit)? = null, onStart: (() -> Unit)? = null
+) = startAnimation(AlphaAnimation(fromAlpha, toAlpha).apply {
+    this.interpolator = interpolator
+    duration?.let {
+        setDuration(it)
+    }
+    startOffset?.let {
+        setStartOffset(it)
+    }
+    setAnimationListener(getAnimationListener(onRepeat, onFinish, onStart))
+})
+
+fun <T : View> T.fadeOut(duration: Long? = null, startOffset: Long? = null,
+    onRepeat: (() -> Unit)? = null, onFinish: (() -> Unit)? = null, onStart: (() -> Unit)? = null
+) = context?.let {context ->
+    loadAnimation(context, R.anim.cf_fade_out).apply {
+        duration?.let { setDuration(it) }
+        startOffset?.let { setStartOffset(it) }
+        setAnimationListener(getAnimationListener(onRepeat, onFinish, onStart))
         startAnimation(this)
     }
 }
 
-fun <T : View> T.fadeOut(
-    onRepeat: (() -> Unit)? = null,
-    onFinish: (() -> Unit)? = null,
-    onStart: (() -> Unit)? = null
-) = context?.let {
-    loadAnimation(
-        it.applicationContext,
-        R.anim.fade_out
-    ).apply {
-        setAnimationListener(
-            getAnimationListener(
-                onRepeat,
-                onFinish,
-                onStart
-            )
-        )
+fun <T : View> T.fadeIn(duration: Long? = null, startOffset: Long? = null,
+    onRepeat: (() -> Unit)? = null, onFinish: (() -> Unit)? = null, onStart: (() -> Unit)? = null
+) = context?.let {context ->
+    loadAnimation(context, R.anim.cf_fade_in).apply {
+        duration?.let { setDuration(it) }
+        startOffset?.let { setStartOffset(it) }
+        setAnimationListener(getAnimationListener(onRepeat, onFinish, onStart))
         startAnimation(this)
     }
 }
 
-fun <T : View> T.slideOutLeft(
+fun <T : View> T.slideLeftOut(
     onRepeat: (() -> Unit)? = null,
     onFinish: (() -> Unit)? = null,
     onStart: (() -> Unit)? = null
 ) = context?.let {
     loadAnimation(
         it.applicationContext,
-        R.anim.slide_out_left
+        R.anim.cf_slide_left_out
     ).apply {
         setAnimationListener(
             getAnimationListener(
@@ -184,7 +187,7 @@ fun <T : View> T.slideOutRight(
 ) = context?.let {
     loadAnimation(
         it.applicationContext,
-        R.anim.slide_out_right
+        R.anim.cf_slide_right_out
     ).apply {
         setAnimationListener(
             getAnimationListener(
@@ -204,7 +207,7 @@ fun <T : View> T.slideInLeft(
 ) = context?.let {
     loadAnimation(
         it.applicationContext,
-        R.anim.slide_in_left
+        R.anim.cf_slide_left_in
     ).apply {
         setAnimationListener(
             getAnimationListener(

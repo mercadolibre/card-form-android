@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fillAfter="true"
+    android:duration="@integer/cf_anim_duration_short"
+    android:interpolator="@android:anim/decelerate_interpolator">
+    <translate android:fromXDelta="0%p" android:toXDelta="-20%p" />
+</set>
