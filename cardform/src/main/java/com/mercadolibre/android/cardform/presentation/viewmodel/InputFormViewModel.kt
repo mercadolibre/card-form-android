@@ -148,13 +148,13 @@ class InputFormViewModel(
         }
     }
 
-    private fun setIssuer(issuer: Issuer) {
+    private fun setIssuer(issuer: Issuer?) {
         this.issuer = issuer
     }
 
-    fun updateIssuer(issuer: Issuer) {
+    fun updateIssuer(issuer: Issuer?) {
         val cardData = cardLiveData.value?.cardUi
-        cardData?.issuerImageUrl = issuer.imageUrl
+        cardData?.issuerImageUrl = issuer?.imageUrl
         updateCardData.value = cardData
         setIssuer(issuer)
     }

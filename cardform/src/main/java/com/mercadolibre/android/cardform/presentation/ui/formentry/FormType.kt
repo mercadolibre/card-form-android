@@ -16,7 +16,6 @@ enum class FormType(private val type: String) {
     CARD_IDENTIFICATION("identification_types") {
         override fun getFragment() = IdentificationFragment()
     },
-
     ISSUERS("issuers") {
         override var fromPager = false
         override fun getFragment() = IssuersFragment()

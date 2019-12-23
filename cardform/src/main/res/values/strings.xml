@@ -14,4 +14,5 @@
     <string name="cf_issuers_header_title">Who issued your card?</string>
     <string name="cf_without_connection">Without connection</string>
     <string name="cf_generic_error">Something went wrong</string>
+    <string name="cf_selected_issuer_text">Pay</string>
 </resources>
