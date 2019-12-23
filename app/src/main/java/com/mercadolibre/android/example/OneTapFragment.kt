@@ -6,11 +6,12 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.widget.Button
 import android.widget.Toast
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.presentation.extensions.pushDownOut
 import com.mercadolibre.android.cardform.presentation.extensions.pushUpIn
-import kotlinx.android.synthetic.main.fragment_one_tap.*
 
 /**
  * A simple [Fragment] subclass.
@@ -19,12 +20,7 @@ import kotlinx.android.synthetic.main.fragment_one_tap.*
  */
 class OneTapFragment : Fragment() {
 
-    private var isFirstTime = true
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        isFirstTime = false
-    }
+    private lateinit var button: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,14 +29,21 @@ class OneTapFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_one_tap, container, false)
     }
 
+    override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
+        if (enter) {
+            button.pushUpIn()
+        } else {
+            button.pushDownOut()
+        }
+        return super.onCreateAnimation(transit, enter, nextAnim)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (isFirstTime) startAnim.pushUpIn()
 
-        startAnim.setOnClickListener {
+        button = view.findViewById(R.id.startAnim)
+        button.setOnClickListener {
             activity?.apply {
-                isFirstTime = true
-                startAnim.pushDownOut()
                 CardForm.Builder.withAccessToken("", "MLA").build()
                     .start(supportFragmentManager, REQUEST_CODE, R.id.container)
             }
