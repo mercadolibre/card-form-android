@@ -22,10 +22,32 @@ class IdentificationFragment : InputFragment() {
 
     override val rootLayout = R.layout.fragment_identification
     private lateinit var preferences: IdentificationPreferences
+    private var lastPositionSelected = 0
+    private var isFirstTime = false
+    private val onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+        override fun onItemSelected(
+            parent: AdapterView<*>?, view: View?, position: Int,
+            id: Long
+        ) {
+            (identificationTypes.adapter.getItem(position) as Identification?)?.let {
+                if (position != lastPositionSelected) {
+                    identificationEditText.setText("")
+                }
+                configureInput(it)
+            }
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         preferences = Dependencies.instance.localPreferences!!.identificationPreferences
+        if (savedInstanceState == null) {
+            isFirstTime = true
+        } else {
+            lastPositionSelected = savedInstanceState.getInt(LAST_POSITION_EXTRA)
+            isFirstTime = false
+        }
     }
 
     override fun bindViewModel() {
@@ -42,29 +64,25 @@ class IdentificationFragment : InputFragment() {
                 R.id.identificationText,
                 listIdentification
             )
-
             identificationAdapter.setDropDownViewResource(R.layout.cf_custom_drop_down_spinner)
-
             identificationTypes.adapter = identificationAdapter
-            identificationTypes.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onNothingSelected(parent: AdapterView<*>?) = Unit
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?, view: View?, position: Int,
-                        id: Long
-                    ) {
-                        identificationAdapter.getItem(position)?.let { configureInput(it) }
-                    }
-                }
+            identificationTypes.onItemSelectedListener = onItemSelectedListener
 
-            if (identificationEditText.getText().isEmpty()) {
+            if (isFirstTime) {
                 with(preferences) {
                     if (getIdentificationId().isNotEmpty() && getIdentificationNumber().isNotEmpty()) {
                         selectSpinnerItemByValue(getIdentificationId(), getIdentificationNumber())
                     }
                 }
+            } else {
+                identificationTypes.setSelection(lastPositionSelected)
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(LAST_POSITION_EXTRA, identificationTypes.selectedItemPosition)
     }
 
     private fun selectSpinnerItemByValue(id: String, number: String) {
@@ -72,7 +90,8 @@ class IdentificationFragment : InputFragment() {
         for (position in 0 until adapter.count) {
             if ((adapter.getItem(position) as Identification).id == id) {
                 with(identificationEditText) {
-                    identificationTypes.setSelection(position)
+                    lastPositionSelected = position
+                    identificationTypes.setSelection(lastPositionSelected)
                     setText(number)
                     setMaxLength(number.length)
                     isInputValid = validate()
@@ -127,12 +146,20 @@ class IdentificationFragment : InputFragment() {
             }
 
             addMaskWatcher(mask) {
-                isInputValid = identificationEditText.validate()
+                isInputValid = validate()
 
-                if (identificationEditText.hasError()) {
-                    identificationEditText.clearError()
+                if (hasError()) {
+                    clearError()
                 }
             }
         }
+    }
+
+    override fun refreshData() {
+        identificationEditText.setText("")
+    }
+
+    companion object {
+        private const val LAST_POSITION_EXTRA = "last_position"
     }
 }
