@@ -24,6 +24,9 @@ class SecurityFragment : InputFragment() {
             cvvCodeEditText.setText(getString(EXTRA_CODE_TEXT, ""))
         }
 
+        expirationEditText.showIconActions(false)
+        cvvCodeEditText.showIconActions(false)
+
         if (savedInstanceState == null) {
             viewModel.expirationLiveData.value =
                 ObjectStepFactory.createDefaultStepFrom(resources, FormType.EXPIRATION_TYPE)
@@ -33,6 +36,15 @@ class SecurityFragment : InputFragment() {
             savedInstanceState.apply {
                 expirationEditText.setText(getString(EXTRA_EXPIRATION_TEXT, ""))
                 cvvCodeEditText.setText(getString(EXTRA_CODE_TEXT, ""))
+            }
+        }
+
+        cvvCodeEditText.addOnFocusChangeListener { hasFocus ->
+            if (hasFocus && !validateExpirationDate()) {
+                with(expirationEditText) {
+                    requestFocus()
+                    showError()
+                }
             }
         }
     }
@@ -94,7 +106,7 @@ class SecurityFragment : InputFragment() {
 
     private fun isValidDate(): Boolean {
 
-        val expiration = expirationEditText.getText().split('/')
+        val expiration = expirationEditText.getText().trim().split('/')
 
         if (expiration.size == 1) {
             return expiration[0].toInt() in 1..12
@@ -132,7 +144,7 @@ class SecurityFragment : InputFragment() {
                 expirationEditText.showError()
             }
 
-        } else if (validateCvvCode()) {
+        } else if (validateExpirationDate() && validateCvvCode()) {
             viewModel.stateCardLiveData.value = CardState.HideCode
             move(position)
         } else {

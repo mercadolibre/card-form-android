@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
 import android.support.annotation.DrawableRes
-import android.support.annotation.StringRes
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.text.*
@@ -16,7 +15,6 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
 import com.mercadolibre.android.cardform.R
-import com.mercadolibre.android.cardform.presentation.extensions.getStringOrEmpty
 import com.mercadolibre.android.cardform.presentation.model.InputData
 import com.mercadolibre.android.cardform.presentation.model.TypeInput
 import com.mercadolibre.android.ui.font.Font
@@ -38,6 +36,8 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
     private var hasError: Boolean = false
     private var maskWatcher: MaskWatcher? = null
     private var icon: Icon = Icon.EMPTY
+    private var showIcons = true
+    private var focusFunction: (hasFocus: Boolean) -> Unit = {}
 
     init {
         configureView(context)
@@ -52,6 +52,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         input.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
 
         input.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
+            focusFunction(hasFocus)
             if (hasFocus) {
                 input.setSelection(getText().length)
             }
@@ -70,17 +71,8 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         inputLayout.hint = hint
     }
 
-    fun setHint(@StringRes hint: Int) {
-        this.hint = getStringOrEmpty(hint)
-        inputLayout.hint = this.hint
-    }
-
     fun setInfoHint(info: String) {
         infoHint = info
-    }
-
-    fun setInfoHint(@StringRes info: Int) {
-        infoHint = getStringOrEmpty(info)
     }
 
     fun setFilters(filters: Array<InputFilter>) {
@@ -92,7 +84,6 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
     }
 
     fun hasError() = hasError
-
 
     private fun getColorStateUnderLine(color: Int) = ColorStateList(
         arrayOf(
@@ -119,6 +110,9 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         }
         hasError = true
     }
+    fun showIconActions(show: Boolean) {
+        showIcons = show
+    }
 
     fun clearError() {
         infoInput.text = infoHint
@@ -126,7 +120,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         TypefaceHelper.setTypeface(infoInput, Font.REGULAR)
         ViewCompat.setBackgroundTintList(
             input,
-            getColorStateUnderLine(R.color.cf_button_navigation_text)
+            getColorStateUnderLine(R.color.ui_meli_blue)
         )
         hasError = false
     }
@@ -136,7 +130,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
     }
 
     fun getText(): String {
-        return input.text.toString()
+        return input.text.toString().trim()
     }
 
     fun setText(text: String) {
@@ -156,7 +150,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
     }
 
     fun isComplete(): Boolean {
-        return input.text?.length == maxLength
+        return input.text?.trim()?.length == maxLength
     }
 
     private fun resetMask(newMask: String) {
@@ -187,7 +181,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
                 count: Int
             ) {
                 charSequence?.let {
-                    configureInternalInput(it.toString(), textChanged)
+                    configureInternalInput(getText(), textChanged)
                 } ?: addRightCancelDrawable(0)
             }
         }
@@ -252,7 +246,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
     }
 
     private fun configureInternalInput(text: String, textChanged: (s: String) -> Unit) {
-        if (text.isNotEmpty()) {
+        if (showIcons && text.isNotEmpty()) {
             addRightCancelDrawable(R.drawable.cf_icon_close)
         } else {
             addRightCancelDrawable(0)
@@ -288,17 +282,20 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         super.onRestoreInstanceState(savedState.superState)
         rootInput.isFocusableInTouchMode = savedState.getIsFocusableInTouchMode()
         hasError = savedState.hasError()
-        when (savedState.getIcon()) {
-            Icon.EMPTY -> {
-                addRightCancelDrawable(0)
-            }
+        showIcons = savedState.showIcon()
+        if (showIcons) {
+            when (savedState.getIcon()) {
+                Icon.EMPTY -> {
+                    addRightCancelDrawable(0)
+                }
 
-            Icon.CLEAR -> {
-                addRightCancelDrawable(R.drawable.cf_icon_close)
-            }
+                Icon.CLEAR -> {
+                    addRightCancelDrawable(R.drawable.cf_icon_close)
+                }
 
-            Icon.CHECK -> {
-                addRightCheckDrawable(R.drawable.cf_icon_check)
+                Icon.CHECK -> {
+                    addRightCheckDrawable(R.drawable.cf_icon_check)
+                }
             }
         }
     }
@@ -308,32 +305,41 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
             super.onSaveInstanceState(),
             rootInput.isFocusableInTouchMode,
             hasError,
-            icon
+            icon,
+            showIcons
         )
+    }
+
+    fun addOnFocusChangeListener(focusListener: (hasFocus: Boolean) -> Unit) {
+        this.focusFunction = focusListener
     }
 
     internal class InputSavedState : BaseSavedState {
         private var isFocusable: Boolean
         private var hasError: Boolean
         private var icon: Icon
+        private var showIcon: Boolean
 
         constructor(source: Parcel?) : super(source) {
             isFocusable = source?.readByte() != 0.toByte()
             hasError = source?.readByte() != 0.toByte()
             icon = Icon.fromType(source?.readInt() ?: 0)
+            showIcon = source?.readByte() != 0.toByte()
         }
 
         constructor(
             superState: Parcelable?,
             isFocusable: Boolean,
             hasError: Boolean,
-            drawable: Icon
+            drawable: Icon,
+            showIcon: Boolean
         ) : super(
             superState
         ) {
             this.isFocusable = isFocusable
             this.hasError = hasError
             this.icon = drawable
+            this.showIcon = showIcon
         }
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -341,11 +347,13 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
             parcel.writeByte(if (isFocusable) 1 else 0)
             parcel.writeByte(if (hasError) 1 else 0)
             parcel.writeInt(icon.ordinal)
+            parcel.writeByte(if (showIcon) 1 else 0)
         }
 
         fun getIsFocusableInTouchMode() = isFocusable
         fun hasError() = hasError
         fun getIcon() = icon
+        fun showIcon() = showIcon
 
         override fun describeContents() = 0
 

@@ -26,7 +26,6 @@ import com.mercadolibre.android.cardform.presentation.model.StateUi.UiLoading
 import com.mercadolibre.android.cardform.presentation.model.UiError
 import com.mercadolibre.android.cardform.presentation.model.UiResult
 import com.mercadolibre.android.cardform.presentation.ui.custom.ProgressFragment
-import kotlinx.android.synthetic.main.cf_card.*
 import kotlinx.android.synthetic.main.cf_card.inputViewPager
 import kotlinx.android.synthetic.main.fragment_card_form.*
 
@@ -90,7 +89,7 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
         cardDrawer = view.findViewById(R.id.cardDrawer)
 
         if (savedInstanceState == null) {
-            cardDrawer?.show(defaultCardDrawerConfiguration)
+            cardDrawer.show(defaultCardDrawerConfiguration)
         }
 
         FragmentNavigationController.init(childFragmentManager, inputViewPager)
@@ -102,7 +101,7 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
             FragmentNavigationController.showKeyboard(this)
         }
 
-        cardDrawer?.hideSecCircle()
+        cardDrawer.hideSecCircle()
         enableBackButton()
 
         activity?.apply {
