@@ -26,6 +26,7 @@ import com.mercadolibre.android.cardform.presentation.model.StateUi.UiLoading
 import com.mercadolibre.android.cardform.presentation.model.UiError
 import com.mercadolibre.android.cardform.presentation.model.UiResult
 import com.mercadolibre.android.cardform.presentation.ui.custom.ProgressFragment
+import kotlinx.android.synthetic.main.app_bar.*
 import kotlinx.android.synthetic.main.fragment_card_form.*
 
 /**
@@ -62,22 +63,28 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
     }
 
     override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
-        if (enter) {
-            if (fromFragment && !animationEnded) {
-                cardDrawer.pushUpIn()
-                back.fadeIn()
-                next.fadeIn()
-                inputViewPager.slideInRight(onFinish = {
-                    animationEnded = true
+        if (fromFragment) {
+            val duration = resources.getInteger(R.integer.cf_anim_duration).toLong()
+            if (enter) {
+                if (!animationEnded) {
                     KeyboardHelper.showKeyboard(this)
-                })
+                    cardDrawer.pushUpIn(onFinish = {
+                        animationEnded = true
+                    })
+                    back.fadeIn()
+                    next.fadeIn()
+                    inputViewPager.slideLeftIn((duration * 0.5).toLong())
+                    progress.slideRightIn(duration)
+                    title.fadeIn(duration)
+                }
+            } else {
+                cardDrawer.pushDownOut()
+                inputViewPager.slideRightOut()
+                back.goneDuringAnimation()
+                next.goneDuringAnimation()
+                progress.fadeOut()
+                title.fadeOut()
             }
-        } else {
-            KeyboardHelper.hideKeyboard(this@CardFormFragment)
-            cardDrawer.pushDownOut()
-            back.fadeOut()
-            next.fadeOut()
-            inputViewPager.slideOutRight()
         }
         return super.onCreateAnimation(transit, enter, nextAnim)
     }
@@ -117,7 +124,10 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
         (activity as AppCompatActivity?)?.apply {
             appBar.configureToolbar(this)
             appBar.setOnBackListener {
-                onBackPressed()
+                KeyboardHelper.hideKeyboard(this@CardFormFragment)
+                postDelayed(100) {
+                    onBackPressed()
+                }
             }
         }
     }

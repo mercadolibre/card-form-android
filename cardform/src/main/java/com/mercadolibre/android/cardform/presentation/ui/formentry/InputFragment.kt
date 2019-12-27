@@ -28,7 +28,7 @@ abstract class InputFragment : BaseFragment<InputFormViewModel>() {
             // the parent is removed (as all children are first removed from the parent)
             // See https://code.google.com/p/android/issues/detail?id=55228
             val doNothingAnim = AlphaAnimation(1f, 1f)
-            doNothingAnim.duration = resources.getInteger(R.integer.cf_animation_duration).toLong()
+            doNothingAnim.duration = resources.getInteger(R.integer.cf_anim_duration).toLong()
             doNothingAnim
         } else {
             super.onCreateAnimation(transit, enter, nextAnim)
