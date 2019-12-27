@@ -3,6 +3,7 @@ package com.mercadolibre.android.cardform.presentation.viewmodel
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.os.Bundle
+import com.mercadolibre.android.cardform.LifecycleListener
 import com.mercadolibre.android.cardform.base.BaseViewModel
 import com.mercadolibre.android.cardform.data.model.response.CardUi
 import com.mercadolibre.android.cardform.data.model.response.Issuer
@@ -15,7 +16,6 @@ import com.mercadolibre.android.cardform.presentation.extensions.hasConnection
 import com.mercadolibre.android.cardform.presentation.mapper.*
 import com.mercadolibre.android.cardform.presentation.model.*
 import com.mercadolibre.android.cardform.presentation.model.StateUi.UiLoading
-import com.mercadolibre.android.cardform.presentation.model.UiResult
 import com.mercadolibre.android.cardform.presentation.ui.ErrorUtil
 import com.mercadolibre.android.cardform.presentation.ui.formentry.FormType
 import kotlinx.coroutines.CoroutineScope
@@ -181,7 +181,18 @@ class InputFormViewModel(
                             )
                         )
                     if (cardAssociated != null) {
-                        stateUiLiveData.postValue(UiResult.CardResult("UiResult Ok"))
+                        val onSuccess = {
+                            stateUiLiveData.postValue(UiResult.CardResult("UiResult Ok"))
+                        }
+                        lifecycleListener?.onCardAdded(cardAssociated.id, object : LifecycleListener.Callback {
+                            override fun onSuccess() {
+                                onSuccess()
+                            }
+
+                            override fun onError() {
+                                sendGenericError()
+                            }
+                        }) ?: onSuccess()
                     } else {
                         sendGenericError()
                     }
