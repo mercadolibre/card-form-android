@@ -102,7 +102,7 @@ object FragmentNavigationController {
         fragment: InputFragment
     ): InputFragment? {
         return manager?.beginTransaction()?.run {
-            setCustomAnimations(R.anim.push_up_in_fast, 0, 0, R.anim.push_down_out_fast)
+            setCustomAnimations(R.anim.cf_push_up_in, 0, 0, R.anim.cf_push_down_out)
             replace(
                 R.id.rootCardForm, fragment,
                 fragment.getInputTag()

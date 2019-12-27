@@ -26,6 +26,7 @@
         android:clipToPadding="false"
         app:card_header_behaviour="responsive"
         app:card_header_internal_padding="@dimen/ui_3m"
+        app:layout_constraintVertical_bias="0"
         app:layout_constraintDimensionRatio="256:158"
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintBottom_toTopOf="@+id/inputViewPager"
