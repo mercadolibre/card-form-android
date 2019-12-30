@@ -1,5 +1,5 @@
 app_name: card-form-android
-project_name: card-form
+project_name: add-card
 
 source_directories:
   - module: cardform
