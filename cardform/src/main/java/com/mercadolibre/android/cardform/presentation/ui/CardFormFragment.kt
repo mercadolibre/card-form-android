@@ -274,20 +274,22 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
         activity?.apply {
             val intent = Intent()
             intent.data = Uri.parse(data)
-            if (fromFragment)
-                getCurrentFragment(supportFragmentManager)?.let { fragment ->
-                    fragment.onActivityResult(requestCode, resultCode, intent)
-                    supportFragmentManager.popBackStack()
-                } else {
+            if (fromFragment) {
+                supportFragmentManager.popBackStackImmediate()
+                getCurrentFragment(supportFragmentManager)?.onActivityResult(requestCode, resultCode, intent)
+            } else {
                 setResult(resultCode, intent)
                 finish()
             }
         }
     }
 
-    private fun getCurrentFragment(manager: FragmentManager): Fragment? {
-        val fragmentTag = manager.getBackStackEntryAt(0).name
-        return manager.findFragmentByTag(fragmentTag)
+    private fun getCurrentFragment(manager: FragmentManager): Fragment? = try {
+        manager.fragments.run {
+            get(size-1)
+        }
+    } catch (e: Exception) {
+        null
     }
 
     companion object {
