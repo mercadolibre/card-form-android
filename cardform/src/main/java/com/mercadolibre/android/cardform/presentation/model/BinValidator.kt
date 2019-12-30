@@ -11,6 +11,7 @@ class BinValidator() : Parcelable {
 
     constructor(parcel: Parcel) : this() {
         previousBin = parcel.readString()
+        bin = parcel.readString()
     }
 
     fun update(cardNumber: String) {
@@ -26,6 +27,7 @@ class BinValidator() : Parcelable {
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(previousBin)
+        parcel.writeString(bin)
     }
 
     override fun describeContents() = 0

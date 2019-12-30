@@ -15,7 +15,9 @@ class SampleActivity : AppCompatActivity() {
         setContentView(R.layout.activity_sample)
 
         fromCardAssociation.setOnClickListener {
-            CardForm.Builder.withAccessToken("", "MLA").build()
+            CardForm.Builder.withAccessToken(
+                "APP_USR-7092-122619-fc2376471063df48cf0c9fcd26e00729-506902649",
+                "MLA").build()
                 .start(this, REQUEST_CODE)
         }
 
@@ -23,7 +25,6 @@ class SampleActivity : AppCompatActivity() {
             OneTapActivity.start(this)
         }
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

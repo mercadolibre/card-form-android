@@ -1,21 +1,27 @@
 package com.mercadolibre.android.cardform.presentation.viewmodel
 
 import android.arch.lifecycle.MutableLiveData
+import android.content.Context
 import android.os.Bundle
+import com.mercadolibre.android.cardform.LifecycleListener
 import com.mercadolibre.android.cardform.base.BaseViewModel
+import com.mercadolibre.android.cardform.data.model.response.CardUi
 import com.mercadolibre.android.cardform.data.model.response.Issuer
 import com.mercadolibre.android.cardform.data.model.response.PaymentMethod
 import com.mercadolibre.android.cardform.data.model.response.RegisterCard
 import com.mercadolibre.android.cardform.data.repository.CardAssociationRepository
 import com.mercadolibre.android.cardform.data.repository.CardRepository
 import com.mercadolibre.android.cardform.data.repository.TokenizeRepository
+import com.mercadolibre.android.cardform.presentation.extensions.hasConnection
 import com.mercadolibre.android.cardform.presentation.mapper.*
 import com.mercadolibre.android.cardform.presentation.model.*
+import com.mercadolibre.android.cardform.presentation.model.StateUi.UiLoading
+import com.mercadolibre.android.cardform.presentation.ui.ErrorUtil
 import com.mercadolibre.android.cardform.presentation.ui.formentry.FormType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.IllegalArgumentException
+import java.net.UnknownHostException
 
 class InputFormViewModel(
     private val cardRepository: CardRepository,
@@ -34,6 +40,7 @@ class InputFormViewModel(
     val stateCardLiveData: MutableLiveData<CardState> = MutableLiveData()
     val issuersLiveData: MutableLiveData<ArrayList<Issuer>> = MutableLiveData()
     val cardLiveData: MutableLiveData<CardData> = MutableLiveData()
+    val updateCardData:  MutableLiveData<CardUi> = MutableLiveData()
     var cardStepInfo = CardStepInfo()
     private var binValidator = BinValidator()
     private var issuer: Issuer? = null
@@ -41,7 +48,7 @@ class InputFormViewModel(
 
     override fun recoverFromBundle(bundle: Bundle) {
         super.recoverFromBundle(bundle)
-        binValidator = bundle.getParcelable(EXTRA_BIN_VALIDATOR)?: BinValidator()
+        binValidator = bundle.getParcelable(EXTRA_BIN_VALIDATOR) ?: BinValidator()
         identificationTypesLiveData.value = bundle.getParcelable(EXTRA_IDENTIFICATIONS_DATA)
         expirationLiveData.value = bundle.getParcelable(EXTRA_EXPIRATION_DATA)
         codeLiveData.value = bundle.getParcelable(EXTRA_CODE_DATA)
@@ -57,7 +64,12 @@ class InputFormViewModel(
     override fun storeInBundle(bundle: Bundle) {
         super.storeInBundle(bundle)
         bundle.putParcelable(EXTRA_BIN_VALIDATOR, binValidator)
-        identificationTypesLiveData.value?.let { bundle.putParcelable(EXTRA_IDENTIFICATIONS_DATA, it) }
+        identificationTypesLiveData.value?.let {
+            bundle.putParcelable(
+                EXTRA_IDENTIFICATIONS_DATA,
+                it
+            )
+        }
         expirationLiveData.value?.let { bundle.putParcelable(EXTRA_EXPIRATION_DATA, it) }
         codeLiveData.value?.let { bundle.putParcelable(EXTRA_CODE_DATA, it) }
         nameLiveData.value?.let { bundle.putParcelable(EXTRA_NAME_DATA, it) }
@@ -90,34 +102,66 @@ class InputFormViewModel(
         }
     }
 
+    fun retryFetchCard(context: Context?) {
+        if (context.hasConnection()) {
+            stateUiLiveData.value = UiLoading
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    cardRepository.getCardInfo(binValidator.bin!!)?.let {
+                        loadRegisterCard(it)
+                        stateUiLiveData.postValue(UiResult.EmptyResult)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    stateUiLiveData.postValue(ErrorUtil.createError(e))
+                }
+            }
+        } else {
+            stateUiLiveData.value = ErrorUtil.createError(UnknownHostException())
+        }
+    }
+
     private fun fetchCard(bin: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 cardRepository.getCardInfo(bin)?.let {
-                    setIssuer(it.issuers[0])
-                    paymentMethod = it.paymentMethod
-                    cardLiveData.postValue(CardDataMapper.map(it))
-                    issuersLiveData.postValue(ArrayList(it.issuers))
-                    loadInputData(it)
+                    loadRegisterCard(it)
+                    stateUiLiveData.postValue(UiResult.EmptyResult)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                with(ErrorUtil.createError(e)) {
+                    showError = false
+                    stateUiLiveData.postValue(this)
+                }
             }
         }
     }
 
-    fun setIssuer(issuer: Issuer) {
+    private fun loadRegisterCard(registerCard: RegisterCard) {
+        with(registerCard) {
+            setIssuer(issuers[0])
+            this@InputFormViewModel.paymentMethod = paymentMethod
+            cardLiveData.postValue(CardDataMapper.map(this))
+            issuersLiveData.postValue(ArrayList(issuers))
+            loadInputData(this)
+        }
+    }
+
+    private fun setIssuer(issuer: Issuer) {
         this.issuer = issuer
     }
 
+    fun updateIssuer(issuer: Issuer) {
+        val cardData = cardLiveData.value?.cardUi
+        cardData?.issuerImageUrl = issuer.imageUrl
+        updateCardData.value = cardData
+        setIssuer(issuer)
+    }
+
     fun associateCard() {
-        stateUiLiveData.value = StateUi.Loading
-        try {
-            tokenizeAndAddNewCard()
-        } catch (e: IllegalArgumentException) {
-            e.printStackTrace()
-            stateUiLiveData.postValue(StateUi.Error)
-        }
+        stateUiLiveData.value = UiLoading
+        tokenizeAndAddNewCard()
     }
 
     private fun tokenizeAndAddNewCard() {
@@ -137,20 +181,34 @@ class InputFormViewModel(
                             )
                         )
                     if (cardAssociated != null) {
-                        stateUiLiveData.postValue(StateUi.Result)
+                        val onSuccess = {
+                            stateUiLiveData.postValue(UiResult.CardResult("UiResult Ok"))
+                        }
+                        lifecycleListener?.onCardAdded(cardAssociated.id, object : LifecycleListener.Callback {
+                            override fun onSuccess() {
+                                onSuccess()
+                            }
+
+                            override fun onError() {
+                                sendGenericError()
+                            }
+                        }) ?: onSuccess()
                     } else {
-                        stateUiLiveData.postValue(StateUi.Error)
+                        sendGenericError()
                     }
                 } else {
-                    stateUiLiveData.postValue(StateUi.Error)
+                    sendGenericError()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                stateUiLiveData.postValue(StateUi.Error)
+                stateUiLiveData.postValue(ErrorUtil.createError(e))
             }
         }
     }
 
+    private fun sendGenericError() {
+        stateUiLiveData.postValue(ErrorUtil.createError())
+    }
 
     private fun loadInputData(registerCard: RegisterCard) {
         CoroutineScope(Dispatchers.Default).launch {

@@ -16,8 +16,12 @@ class CardRepositoryImpl(private val cardService: CardService, private val siteI
 
     @Synchronized override suspend fun getCardInfo(bin: String):
             RegisterCard? {
-        if (queue.contains(bin)) return null
-        cache[bin]?.let { return it }
+        if (queue.contains(bin)) {
+            return null
+        }
+        cache[bin]?.let {
+            return it
+        }
         queue.add(bin)
         return CoroutineScope(Dispatchers.IO).async {
             try {

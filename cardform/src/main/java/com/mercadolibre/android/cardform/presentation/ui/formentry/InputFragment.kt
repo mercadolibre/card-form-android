@@ -19,7 +19,6 @@ typealias MoveTo = ((position: Int) -> Unit)
 abstract class InputFragment : BaseFragment<InputFormViewModel>() {
     override val viewModelClass = InputFormViewModel::class.java
     protected var isInputValid = false
-
     override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
         val parent = parentFragment
         // Apply the workaround only if this is a child fragment, and the parent
@@ -29,7 +28,7 @@ abstract class InputFragment : BaseFragment<InputFormViewModel>() {
             // the parent is removed (as all children are first removed from the parent)
             // See https://code.google.com/p/android/issues/detail?id=55228
             val doNothingAnim = AlphaAnimation(1f, 1f)
-            doNothingAnim.duration = resources.getInteger(R.integer.cf_animation_duration).toLong()
+            doNothingAnim.duration = resources.getInteger(R.integer.cf_anim_duration).toLong()
             doNothingAnim
         } else {
             super.onCreateAnimation(transit, enter, nextAnim)
@@ -65,6 +64,9 @@ abstract class InputFragment : BaseFragment<InputFormViewModel>() {
     } else {
         showError()
     }
+
+    open fun getInputTag(): String = InputFragment::class.java.name
+    open fun refreshData() = Unit
 
     companion object {
         private const val INPUT_VALID = "input_valid"

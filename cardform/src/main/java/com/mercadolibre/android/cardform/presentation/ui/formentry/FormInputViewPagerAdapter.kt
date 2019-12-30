@@ -9,22 +9,22 @@ import android.view.ViewGroup
 class FormInputViewPagerAdapter(
     manager: FragmentManager?
 ) : FragmentStatePagerAdapter(manager) {
-    var currentFragment: Fragment? = null
 
-    override fun getItem(position: Int): Fragment? {
-        return FormType.getValues()[position].getFragment()
-    }
+    private var currentFragment: Fragment? = null
+
+    override fun getItem(position: Int) = FormType.getFromPager()[position].getFragment()
 
     override fun getItemPosition(fragment: Any): Int {
-        return if(fragment is CardNumberFragment) {
+        return if (fragment is CardNumberFragment) {
             PagerAdapter.POSITION_UNCHANGED
-        }
-        else {
+        } else {
+            (fragment as InputFragment).refreshData()
             PagerAdapter.POSITION_NONE
         }
     }
 
-    override fun getCount() = FormType.getValues().size
+    override fun getCount() = FormType.getFromPager().size
+    fun getCurrentStep() = currentFragment
 
     override fun setPrimaryItem(container: ViewGroup, position: Int, `object`: Any) {
         if (currentFragment != `object`) {

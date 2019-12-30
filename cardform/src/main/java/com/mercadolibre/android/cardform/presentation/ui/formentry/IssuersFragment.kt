@@ -7,10 +7,14 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.data.model.response.Issuer
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
+import com.mercadolibre.android.cardform.presentation.extensions.setAnimationListener
+import com.mercadolibre.android.cardform.presentation.helpers.KeyboardHelper
 import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationController
 import com.mercadolibre.android.picassodiskcache.PicassoDiskLoader
 import kotlinx.android.synthetic.main.fragment_issuers.*
@@ -20,13 +24,12 @@ class IssuersFragment : InputFragment() {
     override val rootLayout = R.layout.fragment_issuers
 
     private lateinit var issuerAdapter: IssuerAdapter
-
+    private var issuerSelected = false
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         issuerList.layoutManager = LinearLayoutManager(context)
         issuerList.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         issuerBack.setOnClickListener {
-            FragmentNavigationController.toBack()
             onBack()
         }
     }
@@ -38,7 +41,30 @@ class IssuersFragment : InputFragment() {
         }
     }
 
+    override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
+        return nextAnim.takeIf { it != 0 }?.let {
+            AnimationUtils.loadAnimation(activity, it)
+        }?.apply {
+            when {
+                enter -> {
+                    setAnimationListener(start = {
+                        KeyboardHelper.hideKeyboard(this@IssuersFragment)
+                    })
+                }
+                issuerSelected -> {
+                    setAnimationListener(finish = { viewModel.associateCard() })
+                }
+                else -> {
+                    setAnimationListener(finish = {
+                        KeyboardHelper.showKeyboard(this@IssuersFragment)
+                    })
+                }
+            }
+        }
+    }
+
     private fun onBack() {
+        FragmentNavigationController.toBack()
         activity?.onBackPressed()
     }
 
@@ -76,9 +102,9 @@ class IssuersFragment : InputFragment() {
 
                 holder.itemView.setOnClickListener {
                     with(viewModel) {
+                        issuerSelected = true
+                        updateIssuer(issuer)
                         onBack()
-                        setIssuer(issuer)
-                        associateCard()
                     }
                 }
             }
@@ -91,8 +117,9 @@ class IssuersFragment : InputFragment() {
         val issuerImage: ImageView = itemView.findViewById(R.id.issuerImage)
     }
 
+    override fun getInputTag() = "issuers"
+
     companion object {
-        const val TAG = "issuers"
         private const val HEADER_TYPE = -2
         private const val ISSUER_TYPE = -1
     }
