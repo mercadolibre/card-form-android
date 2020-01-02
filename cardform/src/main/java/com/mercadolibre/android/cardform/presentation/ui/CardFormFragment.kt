@@ -108,20 +108,21 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
         cardDrawer.hideSecCircle()
         enableBackButton()
 
-        activity?.apply {
-            next.setOnClickListener {
-                if (!FragmentNavigationController.toNext()) {
-                    viewModel.associateCard()
-                }
-                enableBackButton()
-            }
 
-            back.setOnClickListener {
-                FragmentNavigationController.toBack()
-                enableBackButton()
+        next.setOnClickListener {
+            if (!FragmentNavigationController.toNext()) {
+                viewModel.associateCard()
             }
+            enableBackButton()
+        }
 
-            appBar.configureToolbar(this as AppCompatActivity)
+        back.setOnClickListener {
+            FragmentNavigationController.toBack()
+            enableBackButton()
+        }
+
+        (activity as AppCompatActivity?)?.apply {
+            appBar.configureToolbar(this)
             appBar.setOnBackListener {
                 KeyboardHelper.hideKeyboard(this@CardFormFragment)
                 postDelayed(100) {
@@ -241,7 +242,10 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
         }
         progressFragment?.apply {
             if (!isVisible) {
-                progressFragment?.show(this@CardFormFragment.childFragmentManager, ProgressFragment.TAG)
+                progressFragment?.show(
+                    this@CardFormFragment.childFragmentManager,
+                    ProgressFragment.TAG
+                )
             }
         }
     }
@@ -255,7 +259,7 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
     }
 
     private fun resolveError(error: UiError) {
-        if(progressFragment?.isVisible == true) {
+        if (progressFragment?.isVisible == true) {
             hideProgress()
         }
         if (error.showError) {
