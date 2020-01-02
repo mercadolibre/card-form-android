@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/ui_dialog_title_height"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?selectableItemBackground"
     android:paddingTop="24dp"
     android:paddingBottom="24dp"
@@ -15,6 +16,7 @@
         android:layout_centerVertical="true"
         android:layout_marginStart="@dimen/ui_2m"
         android:layout_marginEnd="@dimen/ui_2m"
+        app:buttonTint="@color/cf_radio_button_selector"
         android:clickable="false" />
 
     <ImageView

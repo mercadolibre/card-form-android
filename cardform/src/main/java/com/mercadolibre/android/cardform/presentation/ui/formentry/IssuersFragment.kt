@@ -1,10 +1,7 @@
 package com.mercadolibre.android.cardform.presentation.ui.formentry
 
 import android.annotation.SuppressLint
-import android.content.res.ColorStateList
 import android.os.Bundle
-import android.support.annotation.ColorInt
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatRadioButton
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -40,7 +37,6 @@ class IssuersFragment : InputFragment() {
         select.setOnClickListener {
             isIssuerSelected = true
             viewModel.updateIssuer(issuerSelected)
-            FragmentNavigationController.toBack()
             activity?.onBackPressed()
         }
     }
@@ -56,23 +52,17 @@ class IssuersFragment : InputFragment() {
         return nextAnim.takeIf { it != 0 }?.let {
             AnimationUtils.loadAnimation(activity, it)
         }?.apply {
-            when {
-                enter -> {
-                    setAnimationListener(start = {
-                        KeyboardHelper.hideKeyboard(this@IssuersFragment)
-                    })
-                }
-                isIssuerSelected -> {
-                    setAnimationListener(finish = {
-                        viewModel.associateCard()
-                    })
-                }
-                else -> {
-                    setAnimationListener(finish = {
-                        FragmentNavigationController.toBack()
+            if (enter) {
+                setAnimationListener(start = {
+                    KeyboardHelper.hideKeyboard(this@IssuersFragment)
+                })
+            } else {
+                setAnimationListener(finish = {
+                    FragmentNavigationController.toBack()
+                    if (!isIssuerSelected) {
                         KeyboardHelper.showKeyboard(this@IssuersFragment)
-                    })
-                }
+                    }
+                })
             }
         }
     }
@@ -129,11 +119,6 @@ class IssuersFragment : InputFragment() {
                         select.state = MeliButton.State.NORMAL
                         holder.radioButton.isChecked = true
                         issuerSelected = issuer
-                    } else {
-                        lastIssuerSelected = null
-                        lastPositionSelected = null
-                        select.state = MeliButton.State.DISABLED
-                        holder.radioButton.isChecked = false
                     }
                 }
             }
@@ -146,27 +131,17 @@ class IssuersFragment : InputFragment() {
     inner class IssuerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val radioButton: AppCompatRadioButton = itemView.findViewById(R.id.radioButton)
         val issuerImage: ImageView = itemView.findViewById(R.id.issuerImage)
-
-        init {
-            val colorStateList = ColorStateList(
-                arrayOf(
-                    intArrayOf(-android.R.attr.state_checked),
-                    intArrayOf(android.R.attr.state_checked)
-                ),
-                intArrayOf(
-                    getColor(R.color.cf_radio_button_disable),
-                    getColor(R.color.ui_components_android_color_accent)
-                )
-            )
-
-            radioButton.supportButtonTintList = colorStateList
-        }
-
-        @ColorInt
-        private fun getColor(color: Int) = ContextCompat.getColor(context!!, color)
     }
 
     override fun getInputTag() = "issuers"
+
+
+    override fun onDetach() {
+        super.onDetach()
+        if (isIssuerSelected) {
+            viewModel.associateCard()
+        }
+    }
 
     companion object {
         private const val HEADER_TYPE = -2
