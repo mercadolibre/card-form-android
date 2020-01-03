@@ -7,4 +7,8 @@ source_directories:
     translations:
       - cardform/src/main/res/values-es-rAR/strings.xml
       - cardform/src/main/res/values-es-rMX/strings.xml
-      - cardform/src/main/res/values-pt-rBR/strings.xml
+      - cardform/src/main/res/values-es-rPE/strings.xml
+      - cardform/src/main/res/values-es-rCL/strings.xml
+      - cardform/src/main/res/values-es-rCO/strings.xml
+      - cardform/src/main/res/values-es-rVE/strings.xml
+      - cardform/src/main/res/values-pt/strings.xml

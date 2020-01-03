@@ -72,5 +72,8 @@ class CardNumberFragment : InputFragment() {
         }
     }
 
-    override fun showError() = numberCardEditText.showError()
+    override fun showError() {
+        val text = numberCardEditText.getText()
+        numberCardEditText.showError(if (text.isEmpty()) getString(R.string.cf_complete_field) else text)
+    }
 }

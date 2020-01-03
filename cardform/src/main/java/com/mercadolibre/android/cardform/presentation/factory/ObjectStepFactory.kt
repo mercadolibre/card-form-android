@@ -54,8 +54,8 @@ object ObjectStepFactory : StepFactory {
                     "expiration",
                     0,
                     TypeInput.NUMBER.getType(),
-                    resources.getString(R.string.cf_card_expiration_hint),
-                    resources.getString(R.string.cf_card_date_hint),
+                    "",
+                    "",
                     null,
                     "",
                     "$$/$$"
@@ -67,8 +67,8 @@ object ObjectStepFactory : StepFactory {
                     "security_code",
                     0,
                     TypeInput.NUMBER.getType(),
-                    resources.getString(R.string.cf_card_cvv_hint),
-                    resources.getString(R.string.cf_card_cvv_info_hint),
+                    "",
+                    "",
                     null,
                     "",
                     null

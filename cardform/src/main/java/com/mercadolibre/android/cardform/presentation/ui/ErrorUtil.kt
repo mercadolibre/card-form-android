@@ -34,12 +34,16 @@ object ErrorUtil {
     }
 
     @SuppressLint("Range")
-    fun resolveError(rootView: View, uiError: UiError) {
+    fun resolveError(rootView: View, uiError: UiError, action: View.OnClickListener? = null) {
         MeliSnackbar
             .make(rootView,
                 uiError.message,
                 Snackbar.LENGTH_LONG,
-                MeliSnackbar.SnackbarType.ERROR)
+                MeliSnackbar.SnackbarType.ERROR).apply {
+                if(action != null) {
+                    setAction(R.string.cf_retry, action)
+                }
+            }
             .show()
     }
 }
