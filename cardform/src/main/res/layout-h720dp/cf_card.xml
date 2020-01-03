@@ -10,15 +10,11 @@
         android:id="@+id/cardDrawer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="13dp"
-        android:layout_marginTop="@dimen/ui_3m"
-        android:layout_marginEnd="13dp"
-        android:layout_marginBottom="@dimen/ui_3m"
         android:clipToPadding="false"
-        android:paddingStart="39dp"
-        android:paddingEnd="39dp"
+        android:paddingStart="52dp"
+        android:paddingEnd="52dp"
         app:card_header_behaviour="responsive"
-        app:card_header_internal_padding="@dimen/ui_3m"
+        app:card_header_internal_padding="@dimen/ui_6m"
         tools:layout_height="200dp" />
 
     <com.mercadolibre.android.cardform.presentation.ui.formentry.InputFormViewPager

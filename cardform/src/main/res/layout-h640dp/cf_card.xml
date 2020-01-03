@@ -10,11 +10,9 @@
         android:id="@+id/cardDrawer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="53dp"
-        android:layout_marginEnd="53dp"
         android:clipToPadding="false"
-        android:paddingStart="39dp"
-        android:paddingEnd="39dp"
+        android:paddingStart="92dp"
+        android:paddingEnd="92dp"
         app:card_header_behaviour="responsive"
         app:card_header_internal_padding="@dimen/ui_3m"
         tools:layout_height="200dp" />
