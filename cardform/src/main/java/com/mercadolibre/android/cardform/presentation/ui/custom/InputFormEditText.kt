@@ -37,7 +37,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
     private var maskWatcher: MaskWatcher? = null
     private var icon: Icon = Icon.EMPTY
     private var showIcons = true
-    private var focusFunction: (hasFocus: Boolean) -> Unit = {}
+    private var focusListener: (hasFocus: Boolean) -> Unit = {}
 
     init {
         configureView(context)
@@ -52,7 +52,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         input.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
 
         input.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
-            focusFunction(hasFocus)
+            focusListener(hasFocus)
             if (hasFocus) {
                 input.setSelection(getText().length)
             }
@@ -311,7 +311,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
     }
 
     fun addOnFocusChangeListener(focusListener: (hasFocus: Boolean) -> Unit) {
-        this.focusFunction = focusListener
+        this.focusListener = focusListener
     }
 
     internal class InputSavedState : BaseSavedState {

@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <com.meli.android.carddrawer.model.CardDrawerView
         android:id="@+id/cardDrawer"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginEnd="52dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="53dp"
+        android:layout_marginEnd="53dp"
         android:clipToPadding="false"
-        android:paddingStart="40dp"
-        android:paddingEnd="40dp"
+        android:paddingStart="39dp"
+        android:paddingEnd="39dp"
         app:card_header_behaviour="responsive"
         app:card_header_internal_padding="@dimen/ui_3m"
-        app:layout_constraintBottom_toTopOf="@id/inputViewPager"
-        app:layout_constraintDimensionRatio="256:158"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:layout_height="200dp" />
 
     <com.mercadolibre.android.cardform.presentation.ui.formentry.InputFormViewPager
@@ -33,4 +29,4 @@
         app:layout_constraintTop_toBottomOf="@id/cardDrawer"
         tools:layout_height="60dp" />
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
