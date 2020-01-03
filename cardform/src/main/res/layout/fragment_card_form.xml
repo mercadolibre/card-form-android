@@ -11,63 +11,57 @@
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/cardContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
 
-    <com.meli.android.carddrawer.model.CardDrawerView
-        android:id="@+id/cardDrawer"
-        android:layout_width="0dp"
+    <FrameLayout
+        android:id="@+id/cardContainer"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginEnd="14dp"
-        android:paddingStart="38dp"
-        android:paddingEnd="38dp"
-        android:clipToPadding="false"
-        app:card_header_behaviour="responsive"
-        app:card_header_internal_padding="@dimen/ui_3m"
-        app:layout_constraintVertical_bias="0"
-        app:layout_constraintDimensionRatio="256:158"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:layout_constraintBottom_toTopOf="@+id/inputViewPager"
+        app:layout_constraintBottom_toTopOf="@+id/buttonContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBar" />
+        app:layout_constraintTop_toBottomOf="@id/appBar">
 
-    <com.mercadolibre.android.cardform.presentation.ui.formentry.InputFormViewPager
-        android:id="@+id/inputViewPager"
+        <include layout="@layout/cf_card" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/ui_3m"
-        app:layout_constraintBottom_toTopOf="@id/back"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardDrawer" />
-
-    <Button
-        android:id="@+id/back"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/ui_button_height"
-        android:background="@color/cf_button_navigation_background"
-        android:text="Back"
-        android:textAllCaps="false"
-        android:textColor="@color/cf_button_navigation_text"
-        android:textSize="@dimen/ui_fontsize_xsmall"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/next"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/next"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/ui_button_height"
-        android:background="@color/cf_button_navigation_background"
-        android:text="Next"
-        android:textAllCaps="false"
-        android:textColor="@color/cf_button_navigation_text"
-        android:textSize="@dimen/ui_fontsize_xsmall"
+        android:weightSum="2"
+        app:layout_constraintTop_toBottomOf="@id/cardContainer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/back" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/back"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/ui_button_height"
+            android:layout_weight="1"
+            android:background="@color/cf_button_navigation_background"
+            android:text="Back"
+            android:textAllCaps="false"
+            android:textColor="@color/cf_button_navigation_text"
+            android:textSize="@dimen/ui_fontsize_xsmall" />
+
+        <Button
+            android:id="@+id/next"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/ui_button_height"
+            android:layout_weight="1"
+            android:background="@color/cf_button_navigation_background"
+            android:text="Next"
+            android:textAllCaps="false"
+            android:textColor="@color/cf_button_navigation_text"
+            android:textSize="@dimen/ui_fontsize_xsmall" />
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

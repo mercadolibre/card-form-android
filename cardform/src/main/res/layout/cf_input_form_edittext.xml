@@ -18,6 +18,7 @@
             android:id="@+id/input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:imeOptions="flagNoEnterAction"
             android:importantForAutofill="no" />
 
     </android.support.design.widget.TextInputLayout>
@@ -28,6 +29,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/cf_hint_input_text"
         android:textSize="@dimen/ui_fontsize_xsmall"
+        android:lines="1"
         android:layout_marginStart="4dp"
         tools:text="As it appears on the card" />
 

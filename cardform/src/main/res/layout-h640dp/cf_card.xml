@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.meli.android.carddrawer.model.CardDrawerView
+        android:id="@+id/cardDrawer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingStart="92dp"
+        android:paddingEnd="92dp"
+        app:card_header_behaviour="responsive"
+        app:card_header_internal_padding="@dimen/ui_3m"
+        tools:layout_height="200dp" />
+
+    <com.mercadolibre.android.cardform.presentation.ui.formentry.InputFormViewPager
+        android:id="@+id/inputViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardDrawer"
+        tools:layout_height="60dp" />
+
+</LinearLayout>
