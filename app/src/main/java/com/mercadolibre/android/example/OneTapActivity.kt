@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 
-
 class OneTapActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,7 +11,7 @@ class OneTapActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_one_tap)
         if (supportFragmentManager.findFragmentByTag(OneTapFragment.TAG) == null) {
-            supportFragmentManager.beginTransaction().run {
+            with(supportFragmentManager.beginTransaction()) {
                 replace(R.id.container, OneTapFragment.newInstance(), OneTapFragment.TAG)
                 addToBackStack(OneTapFragment.TAG)
                 commitAllowingStateLoss()

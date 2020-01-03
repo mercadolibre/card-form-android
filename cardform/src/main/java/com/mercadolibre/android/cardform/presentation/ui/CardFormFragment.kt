@@ -19,6 +19,7 @@ import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.base.RootFragment
 import com.mercadolibre.android.cardform.presentation.extensions.*
 import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
+import com.mercadolibre.android.cardform.presentation.helpers.KeyboardHelper
 import com.mercadolibre.android.cardform.presentation.model.*
 import com.mercadolibre.android.cardform.presentation.ui.formentry.FormType
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
@@ -27,6 +28,7 @@ import com.mercadolibre.android.cardform.presentation.model.UiError
 import com.mercadolibre.android.cardform.presentation.model.UiResult
 import com.mercadolibre.android.cardform.presentation.ui.custom.ProgressFragment
 import kotlinx.android.synthetic.main.cf_card.inputViewPager
+import kotlinx.android.synthetic.main.app_bar.*
 import kotlinx.android.synthetic.main.fragment_card_form.*
 
 /**
@@ -65,19 +67,26 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
 
     override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
         if (fromFragment) {
+            val duration = resources.getInteger(R.integer.cf_anim_duration).toLong()
             if (enter) {
-                cardDrawer.pushUpIn()
-                back.fadeIn()
-                next.fadeIn()
-                inputViewPager.slideInRight(onFinish = {
-                    animationEnded = true
-                    FragmentNavigationController.showKeyboard(this)
-                })
+                if (!animationEnded) {
+                    KeyboardHelper.showKeyboard(this)
+                    cardDrawer.pushUpIn(onFinish = {
+                        animationEnded = true
+                    })
+                    back.fadeIn()
+                    next.fadeIn()
+                    inputViewPager.slideLeftIn((duration * 0.5).toLong())
+                    progress.slideRightIn(duration)
+                    title.fadeIn(duration)
+                }
             } else {
                 cardDrawer.pushDownOut()
-                back.fadeOut()
-                next.fadeOut()
-                inputViewPager.slideOutRight()
+                inputViewPager.slideRightOut()
+                back.goneDuringAnimation()
+                next.goneDuringAnimation()
+                progress.fadeOut()
+                title.fadeOut()
             }
         }
         return super.onCreateAnimation(transit, enter, nextAnim)
@@ -92,47 +101,57 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
             cardDrawer.show(defaultCardDrawerConfiguration)
         }
 
-        FragmentNavigationController.init(childFragmentManager, inputViewPager)
-        FragmentNavigationController.addKeyBoardListener(this@CardFormFragment)
+        FragmentNavigationController.init(fragmentManager, inputViewPager)
+        KeyboardHelper.addKeyBoardListener(this@CardFormFragment)
 
         animationEnded = savedInstanceState?.getBoolean(EXTRA_ANIMATION, false) ?: false
 
         if (!fromFragment) {
-            FragmentNavigationController.showKeyboard(this)
+            KeyboardHelper.showKeyboard(this)
         }
 
         cardDrawer.hideSecCircle()
         enableBackButton()
 
-        activity?.apply {
-            next.setOnClickListener {
-                if (!FragmentNavigationController.toNext()) {
-                    viewModel.associateCard()
-                }
-                enableBackButton()
-            }
 
-            back.setOnClickListener {
-                FragmentNavigationController.toBack()
-                enableBackButton()
+        next.setOnClickListener {
+            if (!FragmentNavigationController.toNext()) {
+                viewModel.associateCard()
             }
+            enableBackButton()
+        }
 
-            appBar.configureToolbar(this as AppCompatActivity)
+        back.setOnClickListener {
+            FragmentNavigationController.toBack()
+            enableBackButton()
+        }
+
+        (activity as AppCompatActivity?)?.apply {
+            appBar.configureToolbar(this)
             appBar.setOnBackListener {
-                onBackPressed()
+                KeyboardHelper.hideKeyboard(this@CardFormFragment)
+                postDelayed(100) {
+                    onBackPressed()
+                }
             }
         }
     }
 
     private fun enableBackButton() {
         with(back) {
-            isEnabled = inputViewPager.currentItem != 0
-            setTextColor(
-                ContextCompat.getColor(
-                    context!!,
-                    if (isEnabled) R.color.cf_button_navigation_text else R.color.card_drawer_gray_light
+            inputViewPager.post {
+                isEnabled = inputViewPager.currentItem != 0
+                setTextColor(
+                    ContextCompat.getColor(
+                        context!!,
+                        if (isEnabled) {
+                            R.color.cf_button_navigation_text
+                        } else {
+                            R.color.card_drawer_gray_light
+                        }
+                    )
                 )
-            )
+            }
         }
     }
 
@@ -171,6 +190,10 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
                     CardDrawerData(context!!, it.cardUi!!)
                 } else {
                     appBar.setTitle(TitleBar.NONE_TITLE.getTitle())
+                    with(cardDrawer.card) {
+                        secCode = ""
+                        expiration = ""
+                    }
                     defaultCardDrawerConfiguration
                 }
 
@@ -224,7 +247,10 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
         }
         progressFragment?.apply {
             if (!isVisible) {
-                progressFragment?.show(this@CardFormFragment.childFragmentManager, ProgressFragment.TAG)
+                progressFragment?.show(
+                    this@CardFormFragment.childFragmentManager,
+                    ProgressFragment.TAG
+                )
             }
         }
     }
@@ -238,7 +264,7 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
     }
 
     private fun resolveError(error: UiError) {
-        if(progressFragment?.isVisible == true) {
+        if (progressFragment?.isVisible == true) {
             hideProgress()
         }
         if (error.showError) {
@@ -257,20 +283,22 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
         activity?.apply {
             val intent = Intent()
             intent.data = Uri.parse(data)
-            if (fromFragment)
-                getCurrentFragment(supportFragmentManager)?.let { fragment ->
-                    fragment.onActivityResult(requestCode, resultCode, intent)
-                    supportFragmentManager.popBackStack()
-                } else {
+            if (fromFragment) {
+                supportFragmentManager.popBackStackImmediate()
+                getCurrentFragment(supportFragmentManager)?.onActivityResult(requestCode, resultCode, intent)
+            } else {
                 setResult(resultCode, intent)
                 finish()
             }
         }
     }
 
-    private fun getCurrentFragment(manager: FragmentManager): Fragment? {
-        val fragmentTag = manager.getBackStackEntryAt(0).name
-        return manager.findFragmentByTag(fragmentTag)
+    private fun getCurrentFragment(manager: FragmentManager): Fragment? = try {
+        manager.fragments.run {
+            get(size-1)
+        }
+    } catch (e: Exception) {
+        null
     }
 
     companion object {

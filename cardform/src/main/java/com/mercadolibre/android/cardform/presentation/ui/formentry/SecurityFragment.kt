@@ -20,10 +20,6 @@ class SecurityFragment : InputFragment() {
         super.onViewCreated(view, savedInstanceState)
         expirationEditText.saveState(false)
         cvvCodeEditText.saveState(false)
-        savedInstanceState?.apply {
-            expirationEditText.setText(getString(EXTRA_EXPIRATION_TEXT, ""))
-            cvvCodeEditText.setText(getString(EXTRA_CODE_TEXT, ""))
-        }
 
         expirationEditText.showIconActions(false)
         cvvCodeEditText.showIconActions(false)
@@ -152,6 +148,11 @@ class SecurityFragment : InputFragment() {
         } else {
             move(position)
         }
+    }
+
+    override fun refreshData() {
+        expirationEditText.setText("")
+        cvvCodeEditText.setText("")
     }
 
     private fun cvvCodeHasFocus(): Boolean = cvvCodeEditText.hasFocus()

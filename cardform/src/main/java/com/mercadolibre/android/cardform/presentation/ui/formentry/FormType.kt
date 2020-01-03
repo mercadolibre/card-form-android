@@ -1,40 +1,31 @@
 package com.mercadolibre.android.cardform.presentation.ui.formentry
 
-import android.support.v4.app.Fragment
-import java.lang.IllegalArgumentException
-
 enum class FormType(private val type: String) {
 
     CARD_NUMBER("card_number") {
-        override var exclude = false
-        override fun getFragment(): Fragment {
-            return CardNumberFragment()
-        }
+        override var optional = false
+        override fun getFragment() = CardNumberFragment()
     },
     CARD_NAME("name") {
-        override var exclude = true
-        override fun getFragment(): Fragment {
-            return CardNameFragment()
-        }
+        override fun getFragment() = CardNameFragment()
     },
     CARD_SECURITY("card_security") {
-        override var exclude = false
-        override fun getFragment(): Fragment {
-            return SecurityFragment()
-        }
+        override var optional = false
+        override fun getFragment() = SecurityFragment()
     },
     CARD_IDENTIFICATION("identification_types") {
-        override var exclude = true
-        override fun getFragment(): Fragment {
-            return IdentificationFragment()
-        }
+        override fun getFragment() = IdentificationFragment()
+    },
+    ISSUERS("issuers") {
+        override var fromPager = false
+        override fun getFragment() = IssuersFragment()
     };
 
-    abstract var exclude: Boolean
-    abstract fun getFragment(): Fragment
-    fun getType(): String {
-        return type
-    }
+    protected open var exclude = false
+    protected open var optional = true
+    open var fromPager = true
+    abstract fun getFragment(): InputFragment
+    fun getType() = type
 
     companion object {
 
@@ -42,39 +33,29 @@ enum class FormType(private val type: String) {
         const val SECURITY_CODE_TYPE = "security_code"
         private val additionalSteps = mutableListOf<String>()
 
-        private fun fromType(type: String): FormType {
-            for (b in values()) {
-                if (b.type == type) {
-                    return b
+        fun reset() {
+            additionalSteps.clear()
+            getOptionalSteps().forEach {
+                if (it.exclude) {
+                    it.exclude = false
                 }
             }
-            throw IllegalArgumentException("$type is not valid argument")
-        }
-
-        fun reset() {
-            additionalSteps.forEach {
-                fromType(it).exclude = true
-            }
-            additionalSteps.clear()
         }
 
         fun setAdditionalSteps(steps: List<String>) {
             additionalSteps.clear()
             additionalSteps.addAll(steps)
-            additionalSteps.forEach {
-                val formType = fromType(it)
-                if (formType.exclude) {
-                    formType.exclude = false
-                }
+            getOptionalSteps().forEach {
+                it.exclude = !additionalSteps.contains(it.getType())
             }
         }
 
-        fun getValue(position: Int): FormType {
-            return getValues()[position]
-        }
+        private fun getOptionalSteps() = values().filter { it.optional }.toTypedArray()
 
-        fun getValues(): Array<FormType> {
-            return values().filter { !it.exclude }.toTypedArray()
-        }
+        fun getValue(position: Int) = getValues()[position]
+
+        fun getValues() = values().filter { !it.exclude }.toTypedArray()
+
+        fun getFromPager() = values().filter { it.fromPager && !it.exclude}.toTypedArray()
     }
 }

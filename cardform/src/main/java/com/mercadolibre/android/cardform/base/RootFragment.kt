@@ -2,6 +2,7 @@ package com.mercadolibre.android.cardform.base
 
 import android.os.Bundle
 import android.view.View
+import com.mercadolibre.android.cardform.LifecycleListener
 import com.mercadolibre.android.cardform.di.Dependencies
 
 abstract class RootFragment<T : BaseViewModel> : BaseFragment<T>() {
@@ -15,6 +16,7 @@ abstract class RootFragment<T : BaseViewModel> : BaseFragment<T>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.lifecycleListener = getListener()
         savedInstanceState?.let { viewModel.recoverFromBundle(savedInstanceState) }
     }
 
@@ -26,6 +28,16 @@ abstract class RootFragment<T : BaseViewModel> : BaseFragment<T>() {
     override fun onDestroy() {
         super.onDestroy()
         Dependencies.instance.clean()
+    }
+
+    private fun getListener() : LifecycleListener? = try {
+        parentFragment as LifecycleListener
+    } catch (e: Exception) {
+        try {
+            activity as LifecycleListener
+        } catch (e: Exception) {
+            null
+        }
     }
 
     companion object {

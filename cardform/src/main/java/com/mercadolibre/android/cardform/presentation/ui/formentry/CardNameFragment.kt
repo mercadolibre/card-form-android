@@ -7,6 +7,7 @@ import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.di.Dependencies
 import com.mercadolibre.android.cardform.di.preferences.NameOwnerPreferences
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
+import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
 import com.mercadolibre.android.cardform.presentation.model.CardFilledData
 import kotlinx.android.synthetic.main.fragment_name_card.*
 
@@ -21,6 +22,11 @@ class CardNameFragment : InputFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         preferences = Dependencies.instance.localPreferences!!.nameOwnerPreferences
+
+        if (savedInstanceState == null) {
+            viewModel.nameLiveData.value =
+                ObjectStepFactory.createDefaultStepFrom(resources, FormType.CARD_NAME.getType())
+        }
     }
 
     override fun bindViewModel() {
@@ -50,4 +56,8 @@ class CardNameFragment : InputFragment() {
     }
 
     override fun showError() = nameCardEditText.showError()
+
+    override fun refreshData() {
+        nameCardEditText.setText("")
+    }
 }
