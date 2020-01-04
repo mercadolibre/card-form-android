@@ -25,8 +25,6 @@ class SecurityFragment : InputFragment() {
         cvvCodeEditText.showIconActions(false)
 
         if (savedInstanceState == null) {
-            viewModel.expirationLiveData.value =
-                ObjectStepFactory.createDefaultStepFrom(resources, FormType.EXPIRATION_TYPE)
             viewModel.codeLiveData.value =
                 ObjectStepFactory.createDefaultStepFrom(resources, FormType.SECURITY_CODE_TYPE)
         } else {

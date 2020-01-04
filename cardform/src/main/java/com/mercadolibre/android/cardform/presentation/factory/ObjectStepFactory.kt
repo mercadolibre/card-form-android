@@ -13,8 +13,7 @@ object ObjectStepFactory : StepFactory {
         name: String,
         cardPattern: IntArray?
     ): StepData {
-        return when (name) {
-            FormType.CARD_NUMBER.getType() -> {
+        return if (name == FormType.CARD_NUMBER.getType()) {
                 val pattern = cardPattern ?: arrayOf(4,4,4,4).toIntArray()
                 return StepData(
                     "card_number",
@@ -34,40 +33,12 @@ object ObjectStepFactory : StepFactory {
                         builder
                     }
                 )
-            }
-
-            FormType.CARD_NAME.getType() -> {
+            } else {
                 StepData(
                     "name",
                     40,
                     TypeInput.TEXT.getType(),
                     resources.getString(R.string.cf_card_name_hint),
-                    "",
-                    null,
-                    "",
-                    null
-                )
-            }
-
-            FormType.EXPIRATION_TYPE -> {
-                StepData(
-                    "expiration",
-                    0,
-                    TypeInput.NUMBER.getType(),
-                    "",
-                    "",
-                    null,
-                    "",
-                    "$$/$$"
-                )
-            }
-
-            else -> {
-                StepData(
-                    "security_code",
-                    0,
-                    TypeInput.NUMBER.getType(),
-                    "",
                     "",
                     null,
                     "",
@@ -84,4 +55,3 @@ object ObjectStepFactory : StepFactory {
         }
         return builder.toString().trimEnd().trimEnd('\\')
     }
-}
