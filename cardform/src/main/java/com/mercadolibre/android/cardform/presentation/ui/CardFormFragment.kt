@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.animation.Animation
 import com.meli.android.carddrawer.configuration.DefaultCardConfiguration
+import com.meli.android.carddrawer.model.CardDrawerView
 import com.meli.android.carddrawer.model.CardUI
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.R
@@ -26,6 +27,7 @@ import com.mercadolibre.android.cardform.presentation.model.StateUi.UiLoading
 import com.mercadolibre.android.cardform.presentation.model.UiError
 import com.mercadolibre.android.cardform.presentation.model.UiResult
 import com.mercadolibre.android.cardform.presentation.ui.custom.ProgressFragment
+import kotlinx.android.synthetic.main.cf_card.inputViewPager
 import kotlinx.android.synthetic.main.app_bar.*
 import kotlinx.android.synthetic.main.fragment_card_form.*
 
@@ -44,6 +46,7 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
     private lateinit var defaultCardDrawerConfiguration: CardUI
     private var animationEnded = false
     private var progressFragment: ProgressFragment? = null
+    private lateinit var cardDrawer: CardDrawerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,6 +95,8 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        cardDrawer = view.findViewById(R.id.cardDrawer)
+
         if (savedInstanceState == null) {
             cardDrawer.show(defaultCardDrawerConfiguration)
         }
@@ -108,20 +113,21 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
         cardDrawer.hideSecCircle()
         enableBackButton()
 
-        activity?.apply {
-            next.setOnClickListener {
-                if (!FragmentNavigationController.toNext()) {
-                    viewModel.associateCard()
-                }
-                enableBackButton()
-            }
 
-            back.setOnClickListener {
-                FragmentNavigationController.toBack()
-                enableBackButton()
+        next.setOnClickListener {
+            if (!FragmentNavigationController.toNext()) {
+                viewModel.associateCard()
             }
+            enableBackButton()
+        }
 
-            appBar.configureToolbar(this as AppCompatActivity)
+        back.setOnClickListener {
+            FragmentNavigationController.toBack()
+            enableBackButton()
+        }
+
+        (activity as AppCompatActivity?)?.apply {
+            appBar.configureToolbar(this)
             appBar.setOnBackListener {
                 KeyboardHelper.hideKeyboard(this@CardFormFragment)
                 postDelayed(100) {

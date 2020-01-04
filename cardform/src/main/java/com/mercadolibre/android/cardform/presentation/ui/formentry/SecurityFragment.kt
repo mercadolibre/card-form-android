@@ -9,6 +9,7 @@ import com.mercadolibre.android.cardform.presentation.model.CardFilledData
 import com.mercadolibre.android.cardform.presentation.model.CardState
 import kotlinx.android.synthetic.main.fragment_security.*
 import java.util.*
+import kotlin.math.pow
 
 
 class SecurityFragment : InputFragment() {
@@ -19,6 +20,9 @@ class SecurityFragment : InputFragment() {
         super.onViewCreated(view, savedInstanceState)
         expirationEditText.saveState(false)
         cvvCodeEditText.saveState(false)
+
+        expirationEditText.showIconActions(false)
+        cvvCodeEditText.showIconActions(false)
 
         if (savedInstanceState == null) {
             viewModel.expirationLiveData.value =
@@ -31,6 +35,15 @@ class SecurityFragment : InputFragment() {
                 cvvCodeEditText.setText(getString(EXTRA_CODE_TEXT, ""))
             }
         }
+
+        cvvCodeEditText.addOnFocusChangeListener { hasFocus ->
+            if (hasFocus && !validateExpirationDate()) {
+                with(expirationEditText) {
+                    requestFocus()
+                    showError()
+                }
+            }
+        }
     }
 
     override fun bindViewModel() {
@@ -38,13 +51,8 @@ class SecurityFragment : InputFragment() {
         viewModel.expirationLiveData.nonNullObserve(viewLifecycleOwner) { data ->
             expirationEditText.configure(data) {
                 viewModel.updateInputData(CardFilledData.ExpirationDate(it))
-
-                if (it.isNotEmpty() && it.last().isDigit()) {
-                    if (!isValidDate()) {
-                        expirationEditText.showError()
-                    } else {
-                        expirationEditText.clearError()
-                    }
+                if (expirationEditText.hasError()) {
+                    expirationEditText.clearError()
                 }
             }
         }
@@ -89,30 +97,26 @@ class SecurityFragment : InputFragment() {
     }
 
     private fun isValidDate(): Boolean {
+        val expirationText = expirationEditText.getText()
 
-        val expiration = expirationEditText.getText().split('/')
-
-        if (expiration.size == 1) {
-            return expiration[0].toInt() in 1..12
+        if (expirationText.isEmpty()) {
+            return false
         }
 
+        val expiration = expirationText.trim().split('/')
+
         if (expiration[0].toInt() in 1..12 && expiration[1].matches(Regex("[0-9]{2}"))) {
-            val monthExpiration = expiration[0].toInt()
-            val yearExpiration = "20${expiration[1]}".toInt()
             val date = Date()
             val cal = Calendar.getInstance(TimeZone.getTimeZone(TimeZone.getDefault().id))
             cal.time = date
             val year = cal.get(Calendar.YEAR)
             val month = cal.get(Calendar.MONTH) + 1
-
-            if (yearExpiration >= year) {
-                return if (yearExpiration == year) {
-                    monthExpiration >= month
-                } else {
-                    true
-                }
+            val monthExpiration = expiration[0].toInt()
+            val yearExpiration = 10.0.pow(2.0).toInt().let {
+                ((year / it) * it) + expiration[1].toInt()
             }
-            return false
+
+            return yearExpiration > year || (yearExpiration == year && monthExpiration >= month )
         }
         return false
     }
@@ -128,7 +132,7 @@ class SecurityFragment : InputFragment() {
                 expirationEditText.showError()
             }
 
-        } else if (validateCvvCode()) {
+        } else if (validateExpirationDate() && validateCvvCode()) {
             viewModel.stateCardLiveData.value = CardState.HideCode
             move(position)
         } else {

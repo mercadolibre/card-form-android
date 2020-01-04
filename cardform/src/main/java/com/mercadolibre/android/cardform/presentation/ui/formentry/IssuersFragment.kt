@@ -1,6 +1,8 @@
 package com.mercadolibre.android.cardform.presentation.ui.formentry
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.support.v7.widget.AppCompatRadioButton
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -17,6 +19,7 @@ import com.mercadolibre.android.cardform.presentation.extensions.setAnimationLis
 import com.mercadolibre.android.cardform.presentation.helpers.KeyboardHelper
 import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationController
 import com.mercadolibre.android.picassodiskcache.PicassoDiskLoader
+import com.mercadolibre.android.ui.widgets.MeliButton
 import kotlinx.android.synthetic.main.fragment_issuers.*
 
 
@@ -24,19 +27,23 @@ class IssuersFragment : InputFragment() {
     override val rootLayout = R.layout.fragment_issuers
 
     private lateinit var issuerAdapter: IssuerAdapter
-    private var issuerSelected = false
+    private var isIssuerSelected = false
+    private var issuerSelected: Issuer? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         issuerList.layoutManager = LinearLayoutManager(context)
         issuerList.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-        issuerBack.setOnClickListener {
-            onBack()
+        select.setOnClickListener {
+            isIssuerSelected = true
+            viewModel.updateIssuer(issuerSelected)
+            activity?.onBackPressed()
         }
     }
 
     override fun bindViewModel() {
-        viewModel.issuersLiveData.nonNullObserve(viewLifecycleOwner) {
-            issuerAdapter = IssuerAdapter(it)
+        viewModel.issuersLiveData.nonNullObserve(viewLifecycleOwner) { list ->
+            issuerAdapter = IssuerAdapter(list.filter { !it.imageUrl.isNullOrEmpty() })
             issuerList.adapter = issuerAdapter
         }
     }
@@ -45,31 +52,25 @@ class IssuersFragment : InputFragment() {
         return nextAnim.takeIf { it != 0 }?.let {
             AnimationUtils.loadAnimation(activity, it)
         }?.apply {
-            when {
-                enter -> {
-                    setAnimationListener(start = {
-                        KeyboardHelper.hideKeyboard(this@IssuersFragment)
-                    })
-                }
-                issuerSelected -> {
-                    setAnimationListener(finish = { viewModel.associateCard() })
-                }
-                else -> {
-                    setAnimationListener(finish = {
+            if (enter) {
+                setAnimationListener(start = {
+                    KeyboardHelper.hideKeyboard(this@IssuersFragment)
+                })
+            } else {
+                setAnimationListener(finish = {
+                    FragmentNavigationController.toBack()
+                    if (!isIssuerSelected) {
                         KeyboardHelper.showKeyboard(this@IssuersFragment)
-                    })
-                }
+                    }
+                })
             }
         }
     }
 
-    private fun onBack() {
-        FragmentNavigationController.toBack()
-        activity?.onBackPressed()
-    }
-
     inner class IssuerAdapter(private val issuers: List<Issuer>) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        private var lastIssuerSelected: IssuerViewHolder? = null
+        private var lastPositionSelected: Int? = null
         override fun onCreateViewHolder(parent: ViewGroup, position: Int): RecyclerView.ViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             return if (position == HEADER_TYPE) {
@@ -91,7 +92,12 @@ class IssuersFragment : InputFragment() {
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             if (holder is IssuerViewHolder) {
-                val issuer = issuers[position - 1]
+                val validPosition = position - 1
+                val issuer = issuers[validPosition]
+
+                holder.radioButton.isChecked =
+                    lastPositionSelected != null && lastPositionSelected == validPosition
+
 
                 with(holder.issuerImage) {
                     PicassoDiskLoader
@@ -101,10 +107,18 @@ class IssuersFragment : InputFragment() {
                 }
 
                 holder.itemView.setOnClickListener {
-                    with(viewModel) {
-                        issuerSelected = true
-                        updateIssuer(issuer)
-                        onBack()
+
+                    if (!holder.radioButton.isChecked) {
+                        lastIssuerSelected
+                            ?.takeIf { it.radioButton.isChecked }
+                            ?.radioButton
+                            ?.isChecked = false
+
+                        lastIssuerSelected = holder
+                        lastPositionSelected = validPosition
+                        select.state = MeliButton.State.NORMAL
+                        holder.radioButton.isChecked = true
+                        issuerSelected = issuer
                     }
                 }
             }
@@ -113,11 +127,21 @@ class IssuersFragment : InputFragment() {
 
     inner class HeaderIssuerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
+    @SuppressLint("RestrictedApi")
     inner class IssuerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val radioButton: AppCompatRadioButton = itemView.findViewById(R.id.radioButton)
         val issuerImage: ImageView = itemView.findViewById(R.id.issuerImage)
     }
 
     override fun getInputTag() = "issuers"
+
+
+    override fun onDetach() {
+        super.onDetach()
+        if (isIssuerSelected) {
+            viewModel.associateCard()
+        }
+    }
 
     companion object {
         private const val HEADER_TYPE = -2

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/ui_meli_white"
     tools:context=".presentation.ui.formentry.IssuersFragment">
 
@@ -11,16 +11,35 @@
         android:id="@+id/issuerList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.90"/>
+        app:layout_constraintBottom_toTopOf="@+id/actionContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
-    <Button
-        android:id="@+id/issuerBack"
+    <FrameLayout
+        android:id="@+id/actionContainer"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.10"
-        android:text="Back"
-        android:textSize="@dimen/ui_fontsize_small"
-        android:textColor="@color/cf_button_navigation_text"
-        android:textAllCaps="false"
-        android:background="@null"/>
-</LinearLayout>
+        android:layout_height="@dimen/cf_footer_height"
+        android:paddingEnd="@dimen/ui_3m"
+        android:background="@drawable/cf_top_shadow"
+        android:paddingStart="@dimen/ui_3m"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/issuerList">
+
+        <com.mercadolibre.android.ui.widgets.MeliButton
+            android:id="@+id/select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/cf_confirm"
+            android:textAllCaps="false"
+            android:textSize="@dimen/ui_fontsize_small"
+            app:state="disable"
+            app:type="actionPrimary"
+            tools:text="@string/cf_confirm" />
+
+    </FrameLayout>
+
+</android.support.constraint.ConstraintLayout>

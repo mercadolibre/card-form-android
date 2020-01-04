@@ -27,6 +27,7 @@ class CardNumberFragment : InputFragment() {
             viewModel.numberLiveData.value =
                 ObjectStepFactory.createDefaultStepFrom(resources, FormType.CARD_NUMBER.getType())
         }
+        numberCardEditText.showIconActions(false)
     }
 
     override fun bindViewModel() {
