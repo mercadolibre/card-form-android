@@ -42,7 +42,7 @@ object ObjectStepFactory : StepFactory {
                     40,
                     TypeInput.TEXT.getType(),
                     resources.getString(R.string.cf_card_name_hint),
-                    resources.getString(R.string.cf_card_name_info_hint),
+                    "",
                     null,
                     "",
                     null
