@@ -36,12 +36,18 @@ class SecurityFragment : InputFragment() {
             }
         }
 
-        cvvCodeEditText.addOnFocusChangeListener { hasFocus ->
-            if (hasFocus && !validateExpirationDate()) {
+        expirationEditText.addOnTouchListener {
+            super.fromRight()
+        }
+
+        cvvCodeEditText.addOnTouchListener {
+            if (!validateExpirationDate()) {
                 with(expirationEditText) {
                     requestFocus()
                     showError()
                 }
+            } else {
+                super.fromLeft()
             }
         }
     }

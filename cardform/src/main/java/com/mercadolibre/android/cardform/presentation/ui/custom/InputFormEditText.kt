@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.text.*
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
 import com.mercadolibre.android.cardform.R
@@ -37,7 +38,8 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
     private var maskWatcher: MaskWatcher? = null
     private var icon: Icon = Icon.EMPTY
     private var showIcons = true
-    private var focusListener: (hasFocus: Boolean) -> Unit = {}
+    private var touchListener: () -> Unit = {}
+    private var isTouched = false
 
     init {
         configureView(context)
@@ -52,11 +54,21 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         input.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
 
         input.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
-            focusListener(hasFocus)
+            if (isTouched) {
+                isTouched = false
+                touchListener()
+            }
             if (hasFocus) {
                 input.setSelection(getText().length)
             }
         }
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (!hasFocus()) {
+            isTouched = true
+        }
+        return super.dispatchTouchEvent(ev)
     }
 
     fun setInputType(inputType: Int) {
@@ -269,12 +281,12 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         icon = if (iconCancel > 0) {
             cancel = ContextCompat.getDrawable(context, iconCancel)
             cancel?.setBounds(0, 0, cancel.intrinsicWidth, cancel.intrinsicHeight)
+            input.addRightDrawableClicked { it.setText("") }
             Icon.CLEAR
         } else {
             Icon.EMPTY
         }
         input.setCompoundDrawables(null, null, cancel, null)
-        input.addRightDrawableClicked { it.setText("") }
     }
 
     override fun onRestoreInstanceState(state: Parcelable?) {
@@ -310,8 +322,8 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         )
     }
 
-    fun addOnFocusChangeListener(focusListener: (hasFocus: Boolean) -> Unit) {
-        this.focusListener = focusListener
+    fun addOnTouchListener(focusListener: () -> Unit) {
+        this.touchListener = focusListener
     }
 
     internal class InputSavedState : BaseSavedState {
