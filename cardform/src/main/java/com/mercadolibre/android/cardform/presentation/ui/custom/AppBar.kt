@@ -1,5 +1,6 @@
 package com.mercadolibre.android.cardform.presentation.ui.custom
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.util.AttributeSet
@@ -33,7 +34,9 @@ class AppBar(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     }
 
     fun updateProgress(value: Int) {
-        progress.progress += value
+        with(progress) {
+            ObjectAnimator.ofInt(this, "progress", progress, progress + value).start()
+        }
     }
 
     fun configureToolbar(activity: AppCompatActivity) {
