@@ -12,9 +12,9 @@ data class Identification(
     val mask: String?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
         parcel.readInt(),
         parcel.readInt(),
         parcel.readString()

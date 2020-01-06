@@ -15,7 +15,7 @@ android {
         versionName Versions.versionToDeploy
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles 'consumer-rules.pro'
+        consumerProguardFiles 'proguard-rules.pro'
 
         buildConfigField "String", "USER_AGENT", "\"$user_agent\""
     }
@@ -29,8 +29,6 @@ android {
         release {
             buildConfigField "String", "API_ENVIRONMENT", "\"production\""
             buildConfigField "boolean", "HTTP_CLIENT_LOG", "false"
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 

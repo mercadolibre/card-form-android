@@ -15,7 +15,8 @@ object Versions {
     const val targetSdkVersion = 28
 
     const val constraintLayout = "1.1.3"
-    const val gradle = "3.5.1"
+    const val gradlePlugin = "3.4.2"
+    const val gradleWrapper = "5.6.2"
     const val gradleKotlin = "1.3.50"
     const val kotlinCoroutines = "1.3.2"
     const val picassoDiskCache = "1.+"
