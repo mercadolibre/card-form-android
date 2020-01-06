@@ -15,15 +15,15 @@ data class IdentificationData(
     val identifications: List<Identification>
 ) : InputData, Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
+        parcel.readString()!!,
         parcel.readInt(),
+        parcel.readString()!!,
+        parcel.readString()!!,
         parcel.readString(),
         parcel.readString(),
+        parcel.readString()!!,
         parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.createTypedArrayList(Identification)
+        parcel.createTypedArrayList(Identification)!!
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
