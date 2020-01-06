@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cf_card_date_hint" translatable="false">MM/YY</string>
+</resources>
