@@ -108,9 +108,9 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         )
     )
 
-    fun showError() {
+    fun showError(errorMessage: String? = null) {
         infoInput.post {
-            infoInput.text = infoErrorHint
+            infoInput.text = if (errorMessage.isNullOrEmpty()) infoErrorHint else errorMessage
             infoInput.setTextColor(
                 ContextCompat.getColor(
                     context,

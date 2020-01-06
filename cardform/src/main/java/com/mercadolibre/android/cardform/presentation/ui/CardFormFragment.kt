@@ -268,7 +268,12 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
             hideProgress()
         }
         if (error.showError) {
-            ErrorUtil.resolveError(rootCardForm, error)
+            ErrorUtil.resolveError(
+                rootCardForm,
+                error,
+                if (error is UiError.ConnectionError) View.OnClickListener {
+                    viewModel.retryFetchCard(context)
+                } else null)
         }
     }
 
@@ -285,7 +290,11 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
             intent.data = Uri.parse(data)
             if (fromFragment) {
                 supportFragmentManager.popBackStackImmediate()
-                getCurrentFragment(supportFragmentManager)?.onActivityResult(requestCode, resultCode, intent)
+                getCurrentFragment(supportFragmentManager)?.onActivityResult(
+                    requestCode,
+                    resultCode,
+                    intent
+                )
             } else {
                 setResult(resultCode, intent)
                 finish()
@@ -295,7 +304,7 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
 
     private fun getCurrentFragment(manager: FragmentManager): Fragment? = try {
         manager.fragments.run {
-            get(size-1)
+            get(size - 1)
         }
     } catch (e: Exception) {
         null

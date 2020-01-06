@@ -2,17 +2,17 @@
     <string name="cf_card_number_hint">Card number</string>
     <string name="cf_card_number_info_hint">Invalid Card Number</string>
     <string name="cf_card_name_hint">Name of owner</string>
-    <string name="cf_card_expiration_hint">Expiration</string>
-    <string name="cf_card_name_info_hint">As it appears on the card</string>
-    <string name="cf_card_cvv_hint">Security code</string>
-    <string name="cf_card_cvv_info_hint">CVV</string>
-    <string name="cf_card_identification_number_hint">Document</string>
-    <string name="cf_card_date_hint">MM/YY</string>
     <string name="cf_generic_title_app_bar">New card</string>
     <string name="cf_credit_title_app_bar">New credit card</string>
     <string name="cf_debit_title_app_bar">New debit card</string>
     <string name="cf_issuers_header_title">Who issued your card?</string>
     <string name="cf_without_connection">Without connection</string>
     <string name="cf_generic_error">Something went wrong</string>
-    <string name="cf_selected_issuer_text">Pay</string>
+    <string name="cf_back">Back</string>
+    <string name="cf_next">Next</string>
+    <string name="cf_confirm">Confirm</string>
+    <string name="cf_retry">Retry</string>
+    <string name="cf_complete_field">Complete this field</string>
+
+    <string name="cf_card_date_hint" translatable="false">MM/YY</string>
 </resources>

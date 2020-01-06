@@ -33,12 +33,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/cf_selected_issuer_text"
+            android:text="@string/cf_confirm"
             android:textAllCaps="false"
             android:textSize="@dimen/ui_fontsize_small"
             app:state="disable"
             app:type="actionPrimary"
-            tools:text="Pay" />
+            tools:text="@string/cf_confirm" />
 
     </FrameLayout>
 
