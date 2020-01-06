@@ -3,12 +3,13 @@ project_name: add-card
 
 source_directories:
   - module: cardform
-    base_translation: cardform/src/main/res/values-es/strings.xml
+    base_translation: cardform/src/main/res/values/strings.xml
     translations:
+      - cardform/src/main/res/values-en/strings.xml
       - cardform/src/main/res/values-es-rAR/strings.xml
       - cardform/src/main/res/values-es-rMX/strings.xml
       - cardform/src/main/res/values-es-rPE/strings.xml
       - cardform/src/main/res/values-es-rCL/strings.xml
       - cardform/src/main/res/values-es-rCO/strings.xml
       - cardform/src/main/res/values-es-rVE/strings.xml
-      - cardform/src/main/res/values-pt/strings.xml
+      - cardform/src/main/res/values-pt-rBR/strings.xml

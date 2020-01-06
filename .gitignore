@@ -8,3 +8,6 @@ build
 *.iml
 *.log
 config/
+captures/
+# CI
+mobile-cd
