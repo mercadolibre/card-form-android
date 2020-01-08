@@ -101,7 +101,7 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
             cardDrawer.show(defaultCardDrawerConfiguration)
         }
 
-        FragmentNavigationController.init(fragmentManager, inputViewPager)
+        FragmentNavigationController.init(childFragmentManager, inputViewPager)
         KeyboardHelper.addKeyBoardListener(this@CardFormFragment)
 
         animationEnded = savedInstanceState?.getBoolean(EXTRA_ANIMATION, false) ?: false
