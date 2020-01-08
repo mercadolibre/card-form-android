@@ -3,6 +3,7 @@ package com.mercadolibre.android.example
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.mercadolibre.android.cardform.presentation.ui.CardFormFragment
 
 class OneTapActivity : AppCompatActivity() {
 
@@ -13,17 +14,23 @@ class OneTapActivity : AppCompatActivity() {
         if (supportFragmentManager.findFragmentByTag(OneTapFragment.TAG) == null) {
             with(supportFragmentManager.beginTransaction()) {
                 replace(R.id.container, OneTapFragment.newInstance(), OneTapFragment.TAG)
-                addToBackStack(OneTapFragment.TAG)
                 commitAllowingStateLoss()
             }
         }
     }
 
     override fun onBackPressed() {
-        if(supportFragmentManager.backStackEntryCount == 1) {
-            finish()
-        } else {
+        val cardFormFragment = supportFragmentManager.findFragmentByTag(CardFormFragment.TAG)
+        cardFormFragment?.childFragmentManager?.apply {
+            if (backStackEntryCount > 0) {
+                popBackStack()
+                return
+            }
+        }
+        if(supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()
+        } else {
+            super.onBackPressed()
         }
     }
 
