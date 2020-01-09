@@ -18,5 +18,6 @@ data class CardToken(
     val publicKey: String,
     val requireEsc: Boolean,
     val securityCodeLength: Int,
-    val status: String
+    val status: String,
+    val esc: String
 )
