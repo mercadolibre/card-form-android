@@ -17,12 +17,15 @@ class Dependencies {
         private set
     var localPreferences: LocalRepositoryModule? = null
         private set
+    var behaviourModule: BehaviourModule? = null
+        private set
 
     fun initialize(fragment: Fragment, cardForm: CardForm) {
         networkModule = NetworkModule(fragment.activity!!)
+        behaviourModule = BehaviourModule(cardForm.sessionId)
         repositoryModule = RepositoryModule(networkModule!!.retrofit, cardForm.accessToken!!,
             cardForm.siteId, cardForm.excludedTypes)
-        viewModelModule = ViewModelModule(fragment, repositoryModule!!)
+        viewModelModule = ViewModelModule(fragment, repositoryModule!!, behaviourModule!!)
         localPreferences = LocalRepositoryModule(fragment.activity!!.applicationContext)
     }
 

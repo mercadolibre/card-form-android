@@ -1,9 +1,14 @@
 package com.mercadolibre.android.cardform.data.model.body
 
+import com.google.gson.annotations.SerializedName
+import com.mercadolibre.android.cardform.data.model.esc.Device
+
 data class CardInfoBody(
     val cardNumber: String,
-    val cardholder: CardHolder,
+    @SerializedName("cardholder") val cardHolder: CardHolder,
     val expirationMonth: Int,
     val expirationYear: Int,
-    val securityCode: String
+    val securityCode: String,
+    val device: Device,
+    val requireEsc: Boolean = true
 )
