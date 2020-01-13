@@ -49,29 +49,32 @@ class CardNumberFragment : InputFragment() {
                 FormType.CARD_NUMBER.getType()
             )
         ) {
-            with(viewModel) {
-                updateInputData(CardFilledData.Number(it))
-                onCardNumberChange(it.replace("\\s+".toRegex(), ""))
-            }
+            resolveState(it)
+            isInputValid = sanitizeBin(it).length >= MIN_LENGTH_BIN
         }
     }
 
     override fun bindViewModel() {
-        with(viewModel) {
-            numberLiveData.nonNullObserve(viewLifecycleOwner) { data ->
-                numberCardEditText.configure(data) {
-
-                    if (numberCardEditText.hasError()) {
-                        numberCardEditText.clearError()
-                    }
-
-                    updateInputData(CardFilledData.Number(it))
-                    onCardNumberChange(it.replace("\\s+".toRegex(), ""))
-                    resolveValidation(it)
-                }
+        viewModel.numberLiveData.nonNullObserve(viewLifecycleOwner) { data ->
+            numberCardEditText.configure(data) {
+                resolveState(it)
+                resolveValidation(it)
             }
         }
     }
+
+    private fun resolveState(textInput: String) {
+        with(viewModel) {
+            if (numberCardEditText.hasError()) {
+                numberCardEditText.clearError()
+            }
+
+            updateInputData(CardFilledData.Number(textInput))
+            onCardNumberChange(sanitizeBin(textInput))
+        }
+    }
+
+    private fun sanitizeBin(textInput: String) = textInput.replace("\\s+".toRegex(), "")
 
     private fun resolveValidation(cardNumber: String) {
         with(viewModel) {
@@ -129,5 +132,9 @@ class CardNumberFragment : InputFragment() {
 
     override fun showError() {
         numberCardEditText.showError(if (!numberCardEditText.isComplete()) getString(R.string.cf_complete_field) else "")
+    }
+
+    companion object {
+        private const val MIN_LENGTH_BIN = 6
     }
 }

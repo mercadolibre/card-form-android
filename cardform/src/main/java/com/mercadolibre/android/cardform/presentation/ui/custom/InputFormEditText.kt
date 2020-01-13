@@ -176,7 +176,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
 
             addWatcher(mask, textChanged)
 
-            if (getText().isNotEmpty()) {
+            if (getText().isNotEmpty() && mask.isNotEmpty()) {
                 var holdText = getText()
                 var newText = mask
 

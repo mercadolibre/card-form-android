@@ -67,6 +67,7 @@ dependencies {
     implementation Dependencies.extensions
     implementation Dependencies.livedataCore
     implementation Dependencies.viewmodel
+    implementation "com.mercadopago.android.px:addons:4.+"
 
     testImplementation Dependencies.junit
     androidTestImplementation Dependencies.runner

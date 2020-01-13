@@ -3,7 +3,6 @@ package com.mercadolibre.android.cardform.di
 import android.support.v4.app.Fragment
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.di.module.*
-import java.util.*
 
 class Dependencies {
 
@@ -15,18 +14,23 @@ class Dependencies {
         private set
     var localPreferences: LocalRepositoryModule? = null
         private set
+    var behaviourModule: BehaviourModule? = null
+        private set
 
     var trackerModule: TrackerModule? = null
 
     fun initialize(fragment: Fragment, cardForm: CardForm) {
-        networkModule = NetworkModule(fragment.activity!!, "12312312")
+        val activity = fragment.activity!!
+        networkModule = NetworkModule(activity, cardForm.sessionId)
+        behaviourModule = BehaviourModule(cardForm.sessionId)
         repositoryModule = RepositoryModule(networkModule!!.retrofit, cardForm.accessToken!!,
             cardForm.siteId, cardForm.excludedTypes)
-        localPreferences = LocalRepositoryModule(fragment.activity!!.applicationContext)
+        localPreferences = LocalRepositoryModule(activity.applicationContext)
         trackerModule = TrackerModule(cardForm.siteId,
-            "test_flow",
-            "12312312")
-        viewModelModule = ViewModelModule(fragment, repositoryModule!!, trackerModule!!)
+            cardForm.flowId,
+            cardForm.sessionId,
+            behaviourModule!!.trackerBehaviour)
+        viewModelModule = ViewModelModule(fragment, repositoryModule!!, behaviourModule!!, trackerModule!!)
     }
 
     fun clean() {
@@ -34,6 +38,7 @@ class Dependencies {
         repositoryModule = null
         viewModelModule = null
         localPreferences =  null
+        behaviourModule = null
         trackerModule = null
     }
 

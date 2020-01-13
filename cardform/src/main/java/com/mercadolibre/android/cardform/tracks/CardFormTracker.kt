@@ -2,10 +2,11 @@ package com.mercadolibre.android.cardform.tracks
 
 import android.util.Log
 import com.mercadolibre.android.cardform.BuildConfig
+import com.mercadopago.android.px.addons.TrackingBehaviour
 import java.util.*
 import kotlin.collections.HashMap
 
-class CardFormTracker(baseData: TrackerData) : Tracker {
+class CardFormTracker(baseData: TrackerData, private val behaviour: TrackingBehaviour) : Tracker {
 
     private val dataMap: HashMap<String, Any>
 
@@ -31,13 +32,13 @@ class CardFormTracker(baseData: TrackerData) : Tracker {
 
     override fun trackView(track: Track) {
         addDataTrack(track) {
-            //TODO: trackerListener.trackView(track.pathEvent, dataMap)
+            behaviour.onView(track.pathEvent, dataMap)
         }
     }
 
     override fun trackEvent(track: Track) {
         addDataTrack(track) {
-            //TODO: trackerListener.trackEvent(track.pathEvent, dataMap)
+            behaviour.onEvent(track.pathEvent, dataMap)
         }
     }
 

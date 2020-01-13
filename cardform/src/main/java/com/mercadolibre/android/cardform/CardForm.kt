@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import com.mercadolibre.android.cardform.presentation.ui.CardFormActivity
 import com.mercadolibre.android.cardform.presentation.ui.CardFormFragment
 import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationController
+import java.util.*
 
 class CardForm : Parcelable {
 
@@ -16,12 +17,16 @@ class CardForm : Parcelable {
     val excludedTypes: List<String>?
     var requestCode = 0
         private set
+    val sessionId: String
+    val flowId: String
 
     private constructor(builder: Builder) {
         siteId = builder.siteId
         publicKey = builder.publicKey
         accessToken = builder.accessToken
         excludedTypes = builder.excludedTypes
+        flowId = builder.flowId
+        sessionId = builder.sessionId ?: UUID.randomUUID().toString()
     }
 
     private constructor(parcel: Parcel) {
@@ -29,6 +34,8 @@ class CardForm : Parcelable {
         publicKey = parcel.readString()
         accessToken = parcel.readString()
         excludedTypes = parcel.createStringArrayList()
+        flowId = parcel.readString()!!
+        sessionId = parcel.readString()!!
     }
 
     fun start(activity: AppCompatActivity, requestCode: Int) {
@@ -72,6 +79,12 @@ class CardForm : Parcelable {
         var accessToken: String? = null
             private set
 
+        var sessionId: String? = null
+            private set
+
+        lateinit var flowId: String
+            private set
+
         fun setExcludedTypes(excludedTypes: List<String>) = apply {
             this.excludedTypes = excludedTypes
         }
@@ -80,13 +93,20 @@ class CardForm : Parcelable {
 
         private fun setAccessToken(accessToken: String) = apply { this.accessToken = accessToken }
 
+        private fun setFlowId(flowId: String) = apply { this.flowId = flowId }
+
+        fun setSessionId(sessionId: String) = apply { this.sessionId = sessionId }
+
         fun build() = CardForm(this)
 
         companion object {
-            @JvmStatic fun withPublicKey(publicKey: String, siteId: String) =
-                Builder(siteId).setPublicKey(publicKey)
-            @JvmStatic fun withAccessToken(accessToken: String, siteId: String) =
-                Builder(siteId).setAccessToken(accessToken)
+            @JvmStatic
+            fun withPublicKey(publicKey: String, siteId: String, flowId: String) =
+                Builder(siteId).setPublicKey(publicKey).setFlowId(flowId)
+
+            @JvmStatic
+            fun withAccessToken(accessToken: String, siteId: String, flowId: String) =
+                Builder(siteId).setAccessToken(accessToken).setFlowId(flowId)
         }
     }
 
@@ -95,6 +115,8 @@ class CardForm : Parcelable {
         parcel.writeString(publicKey)
         parcel.writeString(accessToken)
         parcel.writeStringList(excludedTypes)
+        parcel.writeString(flowId)
+        parcel.writeString(sessionId)
     }
 
     override fun describeContents() = 0

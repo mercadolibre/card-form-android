@@ -5,6 +5,11 @@ import android.content.Context
 import android.os.Bundle
 import com.mercadolibre.android.cardform.LifecycleListener
 import com.mercadolibre.android.cardform.base.BaseViewModel
+import com.mercadolibre.android.cardform.data.model.esc.Device
+import com.mercadolibre.android.cardform.data.model.response.CardUi
+import com.mercadolibre.android.cardform.data.model.response.Issuer
+import com.mercadolibre.android.cardform.data.model.response.PaymentMethod
+import com.mercadolibre.android.cardform.data.model.response.RegisterCard
 import com.mercadolibre.android.cardform.data.model.response.*
 import com.mercadolibre.android.cardform.data.repository.CardAssociationRepository
 import com.mercadolibre.android.cardform.data.repository.CardRepository
@@ -19,6 +24,7 @@ import com.mercadolibre.android.cardform.tracks.Tracker
 import com.mercadolibre.android.cardform.tracks.model.TrackApiSteps
 import com.mercadolibre.android.cardform.tracks.model.bin.*
 import com.mercadolibre.android.cardform.tracks.model.flow.*
+import com.mercadopago.android.px.addons.ESCManagerBehaviour
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,6 +34,8 @@ class InputFormViewModel(
     private val cardRepository: CardRepository,
     private val cardTokenRepository: TokenizeRepository,
     private val cardAssociationRepository: CardAssociationRepository,
+    private val escManager: ESCManagerBehaviour,
+    private val device: Device,
     val tracker: Tracker
 ) : BaseViewModel() {
 
@@ -47,6 +55,7 @@ class InputFormViewModel(
     private var binValidator = BinValidator()
     private var issuer: Issuer? = null
     private var paymentMethod: PaymentMethod? = null
+    private var escEnabled = true
 
     override fun recoverFromBundle(bundle: Bundle) {
         super.recoverFromBundle(bundle)
@@ -61,6 +70,7 @@ class InputFormViewModel(
         paymentMethod = bundle.getParcelable(EXTRA_PAYMENT_METHOD_DATA)
         cardStepInfo = bundle.getParcelable(EXTRA_CARD_STEP_DATA)!!
         cardLiveData.value = bundle.getParcelable(EXTRA_CARD_DATA)
+        escEnabled = bundle.getBoolean(EXTRA_ESC_ENABLED)
     }
 
     override fun storeInBundle(bundle: Bundle) {
@@ -81,6 +91,7 @@ class InputFormViewModel(
         bundle.putParcelable(EXTRA_ISSUER_DATA, issuer)
         bundle.putParcelable(EXTRA_CARD_STEP_DATA, cardStepInfo)
         cardLiveData.value?.let { bundle.putParcelable(EXTRA_CARD_DATA, it) }
+        bundle.putBoolean(EXTRA_ESC_ENABLED, escEnabled)
     }
 
     fun updateInputData(cardFilledData: CardFilledData) {
@@ -149,6 +160,7 @@ class InputFormViewModel(
     private fun loadRegisterCard(registerCard: RegisterCard) {
         with(registerCard) {
             setIssuer(issuers[0])
+            this@InputFormViewModel.escEnabled = escEnabled
             this@InputFormViewModel.paymentMethod = paymentMethod
             cardLiveData.postValue(CardDataMapper.map(this))
             issuersLiveData.postValue(ArrayList(issuers))
@@ -179,7 +191,7 @@ class InputFormViewModel(
         CoroutineScope(Dispatchers.IO).launch {
             var cardToken: CardToken? = null
             try {
-                cardToken = cardTokenRepository.tokenizeCard(CardInfoMapper.map(cardStepInfo))
+                cardToken = cardTokenRepository.tokenizeCard(CardInfoMapper(device).map(cardStepInfo))
             } catch (e: Exception) {
                 e.printStackTrace()
                 tracker.trackEvent(ErrorTrack(TrackApiSteps.TOKEN.getType(), e.message.orEmpty()))
@@ -199,6 +211,9 @@ class InputFormViewModel(
                             )
                         )
                     if (cardAssociated != null) {
+                        if (escEnabled) {
+                            escManager.saveESCWith(cardAssociated.id, cardToken.esc)
+                        }
                         val onSuccess = {
                             stateUiLiveData.postValue(UiResult.CardResult("UiResult Ok"))
                         }
@@ -271,5 +286,6 @@ class InputFormViewModel(
         private const val EXTRA_CARD_STEP_DATA = "card_step_data"
         private const val EXTRA_ISSUER_LIST_DATA = "issuer_list_data"
         private const val EXTRA_CARD_DATA = "card_data"
+        private const val EXTRA_ESC_ENABLED = "esc_enabled"
     }
 }
