@@ -39,6 +39,8 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
     private var icon: Icon = Icon.EMPTY
     private var showIcons = true
     private var touchListener: () -> Unit = {}
+    private var focusChangeListener: (hasFocus: Boolean) -> Unit = {}
+    private var iconClickListener: () -> Unit = {}
     private var isTouched = false
 
     init {
@@ -58,6 +60,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
                 isTouched = false
                 touchListener()
             }
+            focusChangeListener(hasFocus)
             if (hasFocus) {
                 input.setSelection(getText().length)
             }
@@ -122,6 +125,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         }
         hasError = true
     }
+
     fun showIconActions(show: Boolean) {
         showIcons = show
     }
@@ -165,25 +169,28 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         return input.text?.trim()?.length == maxLength
     }
 
-    private fun resetMask(newMask: String) {
+    fun addMaskWatcher(mask: String, textChanged: OnTextChanged) {
+
         maskWatcher.takeIf { it != null }?.apply {
             input.removeTextChangedListener(this)
-            if (newMask != getMask() && getText().isNotEmpty()) {
+
+            addWatcher(mask, textChanged)
+
+            if (getText().isNotEmpty()) {
                 var holdText = getText()
-                var newText = newMask
+                var newText = mask
 
                 holdText = holdText.replace("\\s+".toRegex(), "")
                 for (i in holdText.indices)
                     newText = newText.replaceFirst('$', holdText[i])
+
                 setText(newText.substringBefore("$").trimEnd())
                 input.setSelection(getText().length)
             }
-        }
+        } ?: apply { addWatcher(mask, textChanged) }
     }
 
-    fun addMaskWatcher(mask: String, textChanged: OnTextChanged) {
-
-        resetMask(mask)
+    private fun addWatcher(mask: String, textChanged: OnTextChanged) {
         maskWatcher = object : MaskWatcher(mask) {
 
             override fun onTextChanged(
@@ -214,18 +221,18 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         }
 
         var mask = ""
-        val maxLength: Int
         var minLength = 0
+        val maxLength: Int
 
         if (!data.mask.isNullOrEmpty()) {
-            mask = data.mask ?: mask
+            mask = data.mask!!
             maxLength = mask.length
             minLength = maxLength - 1
         } else {
-            maxLength = if (data.maxLength > 0) data.maxLength else LENGTH_DEFAULT
+            maxLength = data.maxLength
         }
 
-        addFilters(arrayOf(InputFilter.LengthFilter(maxLength)))
+        setFilters(arrayOf(InputFilter.LengthFilter(maxLength)))
         setMinLength(minLength)
         setMaxLength(maxLength)
 
@@ -243,14 +250,6 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
 
     fun validatePattern(): Boolean {
         return pattern.isEmpty() || Regex(pattern).matches(getText())
-    }
-
-    private fun addFilters(newFilters: Array<InputFilter>) {
-        with(input) {
-            val newSetFilters = filters.toMutableSet()
-            newSetFilters.addAll(newFilters)
-            filters = newSetFilters.toTypedArray()
-        }
     }
 
     fun saveState(savedState: Boolean) {
@@ -281,7 +280,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         icon = if (iconCancel > 0) {
             cancel = ContextCompat.getDrawable(context, iconCancel)
             cancel?.setBounds(0, 0, cancel.intrinsicWidth, cancel.intrinsicHeight)
-            input.addRightDrawableClicked { it.setText("") }
+            input.addRightDrawableClicked { it.setText(""); iconClickListener() }
             Icon.CLEAR
         } else {
             Icon.EMPTY
@@ -322,8 +321,12 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         )
     }
 
-    fun addOnTouchListener(focusListener: () -> Unit) {
-        this.touchListener = focusListener
+    fun addOnTouchListener(touchListener: () -> Unit) {
+        this.touchListener = touchListener
+    }
+
+    fun addOnIconClickListener(iconClickListener: () -> Unit) {
+        this.iconClickListener = iconClickListener
     }
 
     internal class InputSavedState : BaseSavedState {

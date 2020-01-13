@@ -7,15 +7,24 @@ import com.mercadolibre.android.cardform.data.service.CardAssociationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
+import java.io.IOException
 
 class CardAssociationRepositoryImpl(private val associationService: CardAssociationService,
                                     private val accessToken: String) : CardAssociationRepository {
     override suspend fun associateCard(associatedCardBody: AssociatedCardBody): AssociatedCard? {
         return withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
             try {
-                val response = associationService.associateCardAsync(BuildConfig.API_ENVIRONMENT,
-                    accessToken, associatedCardBody).await()
-                if (response.isSuccessful) response.body() else null
+                with(associationService.associateCardAsync(BuildConfig.API_ENVIRONMENT,
+                    accessToken, associatedCardBody).await()) {
+                    if (isSuccessful) {
+                        body()
+                    } else {
+                        //https://github.com/square/retrofit/issues/3255
+                        val jsonError = JSONObject(errorBody()?.string())
+                        throw IOException(jsonError.getString("message"))
+                    }
+                }
             } catch (e: Exception) {
                 throw e
             }

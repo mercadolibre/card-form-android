@@ -13,6 +13,12 @@ import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.model.Identification
 import com.mercadolibre.android.cardform.presentation.model.TypeInput
 import com.mercadolibre.android.cardform.presentation.ui.custom.InputFormEditText.Companion.LENGTH_DEFAULT
+import com.mercadolibre.android.cardform.tracks.model.TrackSteps
+import com.mercadolibre.android.cardform.tracks.model.flow.BackTrack
+import com.mercadolibre.android.cardform.tracks.model.flow.NextTrack
+import com.mercadolibre.android.cardform.tracks.model.identification.IdentificationInvalidTrack
+import com.mercadolibre.android.cardform.tracks.model.identification.IdentificationValidTrack
+import com.mercadolibre.android.cardform.tracks.model.identification.IdentificationView
 import kotlinx.android.synthetic.main.fragment_identification.*
 
 /**
@@ -24,6 +30,8 @@ class IdentificationFragment : InputFragment() {
     private lateinit var preferences: IdentificationPreferences
     private var lastPositionSelected = 0
     private var isFirstTime = false
+    private var isIdentificationTracked = false
+    private var populate = false
     private val onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
         override fun onNothingSelected(parent: AdapterView<*>?) = Unit
         override fun onItemSelected(
@@ -46,6 +54,8 @@ class IdentificationFragment : InputFragment() {
             isFirstTime = true
         } else {
             lastPositionSelected = savedInstanceState.getInt(LAST_POSITION_EXTRA)
+            isIdentificationTracked = savedInstanceState.getBoolean(TRACK_IDENTIFICATION_VIEW, false)
+            populate = savedInstanceState.getBoolean(POPULATE, false)
             isFirstTime = false
         }
     }
@@ -83,6 +93,8 @@ class IdentificationFragment : InputFragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(LAST_POSITION_EXTRA, identificationTypes.selectedItemPosition)
+        outState.putBoolean(TRACK_IDENTIFICATION_VIEW, populate)
+        outState.putBoolean(POPULATE, populate)
     }
 
     private fun selectSpinnerItemByValue(id: String, number: String) {
@@ -95,6 +107,7 @@ class IdentificationFragment : InputFragment() {
                     setText(number)
                     setMaxLength(number.length)
                     isInputValid = validate()
+                    populate = true
                 }
                 return
             }
@@ -110,11 +123,23 @@ class IdentificationFragment : InputFragment() {
 
     override fun toNext(position: Int, move: MoveTo) {
         super.toNext(position, move)
-        if (isInputValid) {
-            val number = identificationEditText.getText()
-            viewModel.cardStepInfo.identificationNumber = number
-            preferences.saveIdentificationNumber(number)
+        val number = identificationEditText.getText()
+
+        with(viewModel) {
+            if (isInputValid) {
+                cardStepInfo.identificationNumber = number
+                tracker.trackEvent(IdentificationValidTrack())
+                tracker.trackEvent(NextTrack(TrackSteps.IDENTIFICATION.getType()))
+                preferences.saveIdentificationNumber(number)
+            } else {
+                tracker.trackEvent(IdentificationInvalidTrack(cardStepInfo.identificationId, number))
+            }
         }
+    }
+
+    override fun toBack(position: Int, move: MoveTo) {
+        super.toBack(position, move)
+        viewModel.tracker.trackEvent(BackTrack(TrackSteps.IDENTIFICATION.getType()))
     }
 
     override fun showError() = identificationEditText.showError()
@@ -159,7 +184,13 @@ class IdentificationFragment : InputFragment() {
         identificationEditText.setText("")
     }
 
+    override fun trackFragmentView() {
+        viewModel.tracker.trackView(IdentificationView(populate))
+    }
+
     companion object {
         private const val LAST_POSITION_EXTRA = "last_position"
+        private const val TRACK_IDENTIFICATION_VIEW = "track_identification_view"
+        private const val POPULATE = "populate"
     }
 }

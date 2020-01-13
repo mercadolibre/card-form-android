@@ -18,6 +18,9 @@ import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.extensions.setAnimationListener
 import com.mercadolibre.android.cardform.presentation.helpers.KeyboardHelper
 import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationController
+import com.mercadolibre.android.cardform.tracks.model.issuers.IssuerCloseTrack
+import com.mercadolibre.android.cardform.tracks.model.issuers.IssuerSelectedTrack
+import com.mercadolibre.android.cardform.tracks.model.issuers.IssuersView
 import com.mercadolibre.android.picassodiskcache.PicassoDiskLoader
 import com.mercadolibre.android.ui.widgets.MeliButton
 import kotlinx.android.synthetic.main.fragment_issuers.*
@@ -29,6 +32,7 @@ class IssuersFragment : InputFragment() {
     private lateinit var issuerAdapter: IssuerAdapter
     private var isIssuerSelected = false
     private var issuerSelected: Issuer? = null
+    private var isIssuerViewTracked = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,16 +40,34 @@ class IssuersFragment : InputFragment() {
         issuerList.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         select.setOnClickListener {
             isIssuerSelected = true
-            viewModel.updateIssuer(issuerSelected)
+            issuerSelected?.let {
+                with(viewModel) {
+                    updateIssuer(it)
+                    tracker.trackEvent(IssuerSelectedTrack(it.id))
+                }
+            }
             activity?.onBackPressed()
+        }
+        savedInstanceState?.let {
+            isIssuerViewTracked = it.getBoolean(TRACK_ISSUER_VIEW, false)
         }
     }
 
     override fun bindViewModel() {
         viewModel.issuersLiveData.nonNullObserve(viewLifecycleOwner) { list ->
-            issuerAdapter = IssuerAdapter(list.filter { !it.imageUrl.isNullOrEmpty() })
+            val filterList = list.filter { !it.imageUrl.isNullOrEmpty() }
+            issuerAdapter = IssuerAdapter(filterList)
             issuerList.adapter = issuerAdapter
+            if (!isIssuerViewTracked) {
+                isIssuerViewTracked = true
+                viewModel.tracker.trackView(IssuersView(filterList.size))
+            }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(TRACK_ISSUER_VIEW, isIssuerViewTracked)
     }
 
     override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
@@ -135,16 +157,22 @@ class IssuersFragment : InputFragment() {
 
     override fun getInputTag() = "issuers"
 
+    override fun trackFragmentView() = Unit
 
     override fun onDetach() {
         super.onDetach()
-        if (isIssuerSelected) {
-            viewModel.associateCard()
+        with(viewModel) {
+            if (isIssuerSelected) {
+                associateCard()
+            } else {
+                tracker.trackEvent(IssuerCloseTrack())
+            }
         }
     }
 
     companion object {
         private const val HEADER_TYPE = -2
         private const val ISSUER_TYPE = -1
+        private const val TRACK_ISSUER_VIEW = "track_issuer_view"
     }
 }
