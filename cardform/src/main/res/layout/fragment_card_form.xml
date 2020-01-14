@@ -47,7 +47,7 @@
             android:layout_height="@dimen/ui_button_height"
             android:layout_weight="1"
             android:background="@color/cf_button_navigation_background"
-            android:text="Back"
+            android:text="@string/cf_back"
             android:textAllCaps="false"
             android:textColor="@color/cf_button_navigation_text"
             android:textSize="@dimen/ui_fontsize_xsmall" />
@@ -58,7 +58,7 @@
             android:layout_height="@dimen/ui_button_height"
             android:layout_weight="1"
             android:background="@color/cf_button_navigation_background"
-            android:text="Next"
+            android:text="@string/cf_next"
             android:textAllCaps="false"
             android:textColor="@color/cf_button_navigation_text"
             android:textSize="@dimen/ui_fontsize_xsmall" />
