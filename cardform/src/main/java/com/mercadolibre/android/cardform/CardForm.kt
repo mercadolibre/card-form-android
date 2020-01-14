@@ -69,7 +69,7 @@ class CardForm : Parcelable {
         }
     }
 
-    class Builder private constructor(val siteId: String) {
+    class Builder private constructor(val siteId: String, val flowId: String) {
         var excludedTypes: List<String>? = null
             private set
 
@@ -82,31 +82,26 @@ class CardForm : Parcelable {
         var sessionId: String? = null
             private set
 
-        lateinit var flowId: String
-            private set
-
         fun setExcludedTypes(excludedTypes: List<String>) = apply {
             this.excludedTypes = excludedTypes
         }
 
+        fun setSessionId(sessionId: String) = apply { this.sessionId = sessionId }
+
         private fun setPublicKey(publicKey: String) = apply { this.publicKey = publicKey }
 
         private fun setAccessToken(accessToken: String) = apply { this.accessToken = accessToken }
-
-        private fun setFlowId(flowId: String) = apply { this.flowId = flowId }
-
-        fun setSessionId(sessionId: String) = apply { this.sessionId = sessionId }
 
         fun build() = CardForm(this)
 
         companion object {
             @JvmStatic
             fun withPublicKey(publicKey: String, siteId: String, flowId: String) =
-                Builder(siteId).setPublicKey(publicKey).setFlowId(flowId)
+                Builder(siteId, flowId).setPublicKey(publicKey)
 
             @JvmStatic
             fun withAccessToken(accessToken: String, siteId: String, flowId: String) =
-                Builder(siteId).setAccessToken(accessToken).setFlowId(flowId)
+                Builder(siteId, flowId).setAccessToken(accessToken)
         }
     }
 
