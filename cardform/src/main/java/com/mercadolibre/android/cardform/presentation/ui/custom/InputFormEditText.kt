@@ -245,7 +245,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         return pattern.isEmpty() || Regex(pattern).matches(getText())
     }
 
-    private fun addFilters(newFilters: Array<InputFilter>) {
+    fun addFilters(newFilters: Array<InputFilter>) {
         with(input) {
             val newSetFilters = filters.toMutableSet()
             newSetFilters.addAll(newFilters)

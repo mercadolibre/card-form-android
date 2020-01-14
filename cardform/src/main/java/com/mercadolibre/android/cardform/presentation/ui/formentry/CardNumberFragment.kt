@@ -2,6 +2,7 @@ package com.mercadolibre.android.cardform.presentation.ui.formentry
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.text.InputFilter
 import android.view.View
 
 import com.mercadolibre.android.cardform.R
@@ -28,6 +29,18 @@ class CardNumberFragment : InputFragment() {
                 ObjectStepFactory.createDefaultStepFrom(resources, FormType.CARD_NUMBER.getType())
         }
         numberCardEditText.showIconActions(false)
+
+        val filter = InputFilter { source, start, end, _, _, _ ->
+            for (i in start until end) {
+                val char = source[i]
+                if (!Character.isDigit(char) && !Character.isSpaceChar(char)) {
+                    return@InputFilter ""
+                }
+            }
+            null
+        }
+
+        numberCardEditText.addFilters(arrayOf(filter))
     }
 
     override fun bindViewModel() {
