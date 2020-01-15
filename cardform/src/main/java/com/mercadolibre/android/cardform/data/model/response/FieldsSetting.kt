@@ -1,6 +1,6 @@
 package com.mercadolibre.android.cardform.data.model.response
 
-data class FieldsSetting (
+internal data class FieldsSetting (
     val name: String,
     val length : Int?,
     val type : String,

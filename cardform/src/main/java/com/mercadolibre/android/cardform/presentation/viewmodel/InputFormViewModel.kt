@@ -3,7 +3,7 @@ package com.mercadolibre.android.cardform.presentation.viewmodel
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.os.Bundle
-import com.mercadolibre.android.cardform.LifecycleListener
+import com.mercadolibre.android.cardform.internal.LifecycleListener
 import com.mercadolibre.android.cardform.base.BaseViewModel
 import com.mercadolibre.android.cardform.data.model.esc.Device
 import com.mercadolibre.android.cardform.data.model.response.CardUi
@@ -30,7 +30,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
-class InputFormViewModel(
+internal class InputFormViewModel(
     private val cardRepository: CardRepository,
     private val cardTokenRepository: TokenizeRepository,
     private val cardAssociationRepository: CardAssociationRepository,
@@ -215,7 +215,7 @@ class InputFormViewModel(
                             escManager.saveESCWith(cardAssociated.id, cardToken.esc)
                         }
                         val onSuccess = {
-                            stateUiLiveData.postValue(UiResult.CardResult("UiResult Ok"))
+                            stateUiLiveData.postValue(UiResult.CardResult(cardAssociated.id))
                         }
                         lifecycleListener?.onCardAdded(
                             cardAssociated.id,

@@ -9,7 +9,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface CardAssociationService {
+internal interface CardAssociationService {
     @POST("/{environment}/px_mobile/v1/card")
     fun associateCardAsync(
         @Path("environment") environment : String,

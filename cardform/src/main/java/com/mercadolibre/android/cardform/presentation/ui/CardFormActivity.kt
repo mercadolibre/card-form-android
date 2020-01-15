@@ -5,17 +5,18 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.R
+import com.mercadolibre.android.cardform.internal.CardFormWithFragment
 
-class CardFormActivity : AppCompatActivity() {
+internal class CardFormActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card_form)
-        if (supportFragmentManager.findFragmentByTag(CardFormFragment.TAG) == null) {
+        if (supportFragmentManager.findFragmentByTag(CardFormWithFragment.TAG) == null) {
             supportFragmentManager.beginTransaction().run {
                 replace(R.id.container,
                     CardFormFragment.newInstance(false, intent.getParcelableExtra(EXTRA_CARD_FORM)),
-                    CardFormFragment.TAG)
+                    CardFormWithFragment.TAG)
                 commitAllowingStateLoss()
             }
         }

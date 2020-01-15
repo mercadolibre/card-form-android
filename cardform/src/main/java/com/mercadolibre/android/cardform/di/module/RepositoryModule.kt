@@ -6,7 +6,7 @@ import com.mercadolibre.android.cardform.data.service.CardService
 import com.mercadolibre.android.cardform.data.service.TokenizeService
 import retrofit2.Retrofit
 
-class RepositoryModule(retrofit: Retrofit, accessToken: String,
+internal class RepositoryModule(retrofit: Retrofit, accessToken: String,
                        siteId: String, excludedPaymentTypes: List<String>?) {
     val cardRepository by lazy {
         CardRepositoryImpl(retrofit.create(CardService::class.java), siteId, excludedPaymentTypes)

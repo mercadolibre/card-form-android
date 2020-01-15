@@ -1,6 +1,6 @@
 package com.mercadolibre.android.cardform.tracks.model
 
-enum class TrackSteps(private val type: String) {
+internal enum class TrackSteps(private val type: String) {
     BIN_NUMBER("bin_number"),
     NAME("name"),
     EXPIRATION("expiration_security_date"),

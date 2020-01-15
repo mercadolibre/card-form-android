@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_number_card.*
 /**
  * A simple [Fragment] subclass.
  */
-class CardNumberFragment : InputFragment() {
+internal class CardNumberFragment : InputFragment() {
 
     override val rootLayout = R.layout.fragment_number_card
 

@@ -9,7 +9,7 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.IOException
 
-class TokenizeRepositoryImpl(
+internal class TokenizeRepositoryImpl(
     private val service: TokenizeService,
     private val accessToken: String
 ) : TokenizeRepository {

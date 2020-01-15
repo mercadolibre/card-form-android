@@ -10,7 +10,7 @@ import kotlinx.coroutines.async
 import org.json.JSONObject
 import java.io.IOException
 
-class CardRepositoryImpl(private val cardService: CardService, private val siteId: String,
+internal class CardRepositoryImpl(private val cardService: CardService, private val siteId: String,
                          private val excludedPaymentTypes: List<String>?) : CardRepository {
 
     private val cache = mutableMapOf<String, RegisterCard>()

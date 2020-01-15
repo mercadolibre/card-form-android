@@ -6,7 +6,7 @@ import com.mercadopago.android.px.addons.TrackingBehaviour
 import java.util.*
 import kotlin.collections.HashMap
 
-class CardFormTracker(baseData: TrackerData, private val behaviour: TrackingBehaviour) : Tracker {
+internal class CardFormTracker(baseData: TrackerData, private val behaviour: TrackingBehaviour) : Tracker {
 
     private val dataMap: HashMap<String, Any>
 

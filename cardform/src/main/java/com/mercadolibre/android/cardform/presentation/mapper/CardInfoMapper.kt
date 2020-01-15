@@ -7,7 +7,7 @@ import com.mercadolibre.android.cardform.data.model.body.IdentificationBody
 import com.mercadolibre.android.cardform.data.model.esc.Device
 import com.mercadolibre.android.cardform.presentation.model.CardStepInfo
 
-class CardInfoMapper(private val device: Device): Mapper<CardInfoBody, CardStepInfo> {
+internal class CardInfoMapper(private val device: Device): Mapper<CardInfoBody, CardStepInfo> {
     override fun map(model: CardStepInfo): CardInfoBody {
         val expiration = model.expiration.split('/')
         return CardInfoBody(

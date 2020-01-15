@@ -39,7 +39,7 @@ import kotlinx.android.synthetic.main.fragment_card_form.*
  * Use the [CardFormFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class CardFormFragment : RootFragment<InputFormViewModel>() {
+internal class CardFormFragment : RootFragment<InputFormViewModel>() {
 
     override val viewModelClass = InputFormViewModel::class.java
     override val rootLayout = R.layout.fragment_card_form
@@ -304,21 +304,20 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
     }
 
     private fun returnResult(data: String, resultCode: Int) {
+        //Not sending any data currently, only ok or not
         activity?.apply {
-            val intent = Intent()
-            intent.data = Uri.parse(data)
             if (fromFragment) {
                 supportFragmentManager.popBackStackImmediate()
                 getCurrentFragment(supportFragmentManager)?.onActivityResult(
                     requestCode,
                     resultCode,
-                    intent
+                    null
                 )
-                viewModel.tracker.trackEvent(SuccessTrack())
             } else {
-                setResult(resultCode, intent)
+                setResult(resultCode)
                 finish()
             }
+            viewModel.tracker.trackEvent(SuccessTrack())
         }
     }
 
@@ -331,7 +330,6 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
     }
 
     companion object {
-        const val TAG = "card_form"
         private const val ARG_FROM_FRAGMENT = "from_fragment"
         private const val EXTRA_ANIMATION = "animation"
 

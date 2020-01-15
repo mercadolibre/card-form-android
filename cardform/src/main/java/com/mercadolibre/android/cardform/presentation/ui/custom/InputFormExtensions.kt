@@ -4,7 +4,7 @@ import android.support.v7.widget.AppCompatEditText
 import android.view.MotionEvent
 import android.widget.EditText
 
-fun AppCompatEditText.addRightDrawableClicked(onClicked: ((view: EditText) -> Unit)?) {
+internal fun AppCompatEditText.addRightDrawableClicked(onClicked: ((view: EditText) -> Unit)?) {
     setOnTouchListener { v, event ->
         var hasConsumed = false
         if (v is EditText) {

@@ -6,7 +6,7 @@ import com.mercadolibre.android.cardform.data.model.response.IdentificationTypes
 import com.mercadolibre.android.cardform.presentation.model.Identification
 import com.mercadolibre.android.cardform.presentation.model.IdentificationData
 
-class IdentificationMapper(private val fieldsSetting: FieldsSetting) :
+internal class IdentificationMapper(private val fieldsSetting: FieldsSetting) :
     Mapper<IdentificationData, List<IdentificationTypes>> {
 
     override fun map(model: List<IdentificationTypes>): IdentificationData {

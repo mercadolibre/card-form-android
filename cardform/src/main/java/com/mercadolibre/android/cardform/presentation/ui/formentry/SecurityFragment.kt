@@ -19,8 +19,7 @@ import kotlinx.android.synthetic.main.fragment_security.*
 import java.util.*
 import kotlin.math.pow
 
-
-class SecurityFragment : InputFragment() {
+internal class SecurityFragment : InputFragment() {
 
     override val rootLayout = R.layout.fragment_security
 

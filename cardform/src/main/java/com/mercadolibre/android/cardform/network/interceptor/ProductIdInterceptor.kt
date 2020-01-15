@@ -3,7 +3,7 @@ package com.mercadolibre.android.cardform.network.interceptor
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class ProductIdInterceptor : Interceptor {
+internal class ProductIdInterceptor : Interceptor {
 
     companion object {
         private const val HEADER = "x-product-id"

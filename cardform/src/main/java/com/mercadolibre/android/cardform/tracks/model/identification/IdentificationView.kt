@@ -3,7 +3,7 @@ package com.mercadolibre.android.cardform.tracks.model.identification
 import com.mercadolibre.android.cardform.tracks.Track.Companion.BASE_PATH
 import com.mercadolibre.android.cardform.tracks.TrackData
 
-class IdentificationView(private val prepopulate: Boolean) : TrackData {
+internal class IdentificationView(private val prepopulate: Boolean) : TrackData {
     override val pathEvent = "$BASE_PATH/identification"
 
     override fun addTrackData(data: MutableMap<String, Any>) {

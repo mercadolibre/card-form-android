@@ -5,7 +5,7 @@ import android.os.Build
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class LocaleInterceptor(private val context: Context) : Interceptor {
+internal class LocaleInterceptor(private val context: Context) : Interceptor {
 
     companion object {
         private const val HEADER = "accept-language"
