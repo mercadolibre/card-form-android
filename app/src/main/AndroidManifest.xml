@@ -22,7 +22,7 @@
         </activity>
         <activity android:name=".OneTapActivity"
             android:screenOrientation="sensorPortrait"
-            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:windowSoftInputMode="adjustResize"
             />
     </application>
 

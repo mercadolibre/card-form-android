@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.animation.Animation
 import com.meli.android.carddrawer.configuration.DefaultCardConfiguration
+import com.meli.android.carddrawer.model.CardAnimationType
 import com.meli.android.carddrawer.model.CardDrawerView
 import com.meli.android.carddrawer.model.CardUI
 import com.mercadolibre.android.cardform.CardForm
@@ -70,23 +71,21 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
     override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
         if (fromFragment) {
             val duration = resources.getInteger(R.integer.cf_anim_duration).toLong()
+            val offset = (duration * 0.5).toLong()
             if (enter) {
                 if (!animationEnded) {
-                    KeyboardHelper.showKeyboard(this)
                     cardDrawer.pushUpIn(onFinish = {
                         animationEnded = true
                     })
-                    back.fadeIn()
-                    next.fadeIn()
-                    inputViewPager.slideLeftIn((duration * 0.5).toLong())
-                    progress.slideRightIn(duration)
-                    title.fadeIn(duration)
+                    buttonContainer.fadeIn()
+                    inputViewPager.slideLeftIn(offset)
+                    progress.slideRightIn(offset)
+                    title.fadeIn(duration, offset)
                 }
             } else {
                 cardDrawer.pushDownOut()
                 inputViewPager.slideRightOut()
-                back.goneDuringAnimation()
-                next.goneDuringAnimation()
+                buttonContainer.goneDuringAnimation()
                 progress.fadeOut()
                 title.fadeOut()
             }
@@ -101,7 +100,19 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
 
         if (savedInstanceState == null) {
             viewModel.tracker.trackEvent(InitTrack())
-            cardDrawer.show(defaultCardDrawerConfiguration)
+            cardDrawer.show(object : DefaultCardConfiguration(context) {
+                override fun getNamePlaceHolder(): String {
+                    return getString(R.string.cf_card_name_hint)
+                }
+
+                override fun getExpirationPlaceHolder(): String {
+                    return getString(R.string.cf_card_date_hint)
+                }
+
+                override fun getAnimationType(): String {
+                    return CardAnimationType.NONE
+                }
+            })
         }
 
         FragmentNavigationController.init(childFragmentManager, inputViewPager)

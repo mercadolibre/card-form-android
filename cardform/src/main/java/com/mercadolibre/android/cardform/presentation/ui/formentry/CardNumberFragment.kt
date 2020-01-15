@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.InputFilter
 import android.view.View
-
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
+import com.mercadolibre.android.cardform.presentation.extensions.showKeyboard
 import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
 import com.mercadolibre.android.cardform.presentation.model.CardFilledData
 import com.mercadolibre.android.cardform.presentation.ui.custom.Luhn
@@ -17,6 +17,7 @@ import com.mercadolibre.android.cardform.tracks.model.bin.BinNumberView
 import com.mercadolibre.android.cardform.tracks.model.bin.BinValidTrack
 import com.mercadolibre.android.cardform.tracks.model.flow.BackTrack
 import com.mercadolibre.android.cardform.tracks.model.flow.NextTrack
+import kotlinx.android.synthetic.main.cf_input_form_edittext.*
 import kotlinx.android.synthetic.main.fragment_number_card.*
 
 /**
@@ -38,7 +39,8 @@ class CardNumberFragment : InputFragment() {
         }
 
         if (isVisible) {
-            numberCardEditText.requestFocus()
+            input.requestFocus()
+            showKeyboard()
         }
         numberCardEditText.showIconActions(false)
 
