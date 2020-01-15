@@ -9,7 +9,7 @@ import android.os.Parcelable
 import android.support.annotation.DrawableRes
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
-import android.text.InputFilter
+import android.text.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View.OnFocusChangeListener
@@ -50,6 +50,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
     constructor(context: Context) : this(context, null)
 
     private fun configureView(context: Context) {
+        orientation = VERTICAL
         inflate(context, R.layout.cf_input_form_edittext, this)
 
         input.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
@@ -111,7 +112,10 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
                 )
             )
             TypefaceHelper.setTypeface(infoInput, Font.SEMI_BOLD)
-            ViewCompat.setBackgroundTintList(input, getColorStateUnderLine(R.color.ui_meli_red))
+            ViewCompat.setBackgroundTintList(
+                input,
+                getColorStateUnderLine(R.color.ui_components_error_color)
+            )
         }
         hasError = true
     }
@@ -126,7 +130,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         TypefaceHelper.setTypeface(infoInput, Font.REGULAR)
         ViewCompat.setBackgroundTintList(
             input,
-            getColorStateUnderLine(R.color.ui_meli_blue)
+            getColorStateUnderLine(R.color.ui_components_primary_color)
         )
         hasError = false
     }

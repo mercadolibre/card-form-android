@@ -60,6 +60,7 @@ class IdentificationFragment : InputFragment() {
             populate = savedInstanceState.getBoolean(POPULATE, false)
             isFirstTime = false
         }
+        identificationEditText.showIconActions(false)
     }
 
     override fun bindViewModel() {

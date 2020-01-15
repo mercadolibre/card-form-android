@@ -185,7 +185,7 @@ class InputFormViewModel(
         }
     }
 
-    fun hasLuhnValidation() = paymentMethod?.validation == "standard"
+    fun hasLuhnValidation() = cardLiveData.value?.cardUi?.validation == "standard"
 
     private fun setIssuer(issuer: Issuer?) {
         this.issuer = issuer

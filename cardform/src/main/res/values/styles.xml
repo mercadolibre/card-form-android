@@ -3,8 +3,8 @@
 
     <style name="InputFormTheme">
         <item name="colorControlNormal">@color/cf_hint_input_text</item>
-        <item name="colorControlActivated">@color/cf_button_navigation_text</item>
-        <item name="colorControlHighlight">@color/cf_button_navigation_text</item>
+        <item name="colorControlActivated">@color/ui_components_primary_color</item>
+        <item name="colorControlHighlight">@color/ui_components_primary_color</item>
         <item name="android:textSize">@dimen/ui_fontsize_medium</item>
         <item name="android:textColor">@color/ui_fullscreenmodal_toolbar_text_color</item>
     </style>

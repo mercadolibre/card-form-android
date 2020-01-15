@@ -7,15 +7,13 @@ data class PaymentMethod(
     val paymentMethodId: String,
     val paymentTypeId: String,
     val name: String,
-    val processingModes: List<String>,
-    val validation: String
+    val processingModes: List<String>
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.createStringArrayList()!!,
-        parcel.readString()!!
+        parcel.createStringArrayList()!!
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -23,7 +21,6 @@ data class PaymentMethod(
         parcel.writeString(paymentTypeId)
         parcel.writeString(name)
         parcel.writeStringList(processingModes)
-        parcel.writeString(validation)
     }
 
     override fun describeContents() = 0
