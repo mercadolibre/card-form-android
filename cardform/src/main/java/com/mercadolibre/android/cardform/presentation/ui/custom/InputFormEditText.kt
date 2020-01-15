@@ -252,6 +252,14 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         return pattern.isEmpty() || Regex(pattern).matches(getText())
     }
 
+    fun addFilters(newFilters: Array<InputFilter>) {
+        with(input) {
+            val newSetFilters = filters.toMutableSet()
+            newSetFilters.addAll(newFilters)
+            filters = newSetFilters.toTypedArray()
+        }
+    }
+
     fun saveState(savedState: Boolean) {
         input.isSaveEnabled = savedState
     }

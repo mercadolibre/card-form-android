@@ -145,7 +145,7 @@ class InputFormViewModel(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                tracker.trackEvent(BinUnknownTrack(binValidator.bin!!))
+                tracker.trackEvent(BinUnknownTrack(binValidator.getLastValidBin()))
                 tracker.trackEvent(ErrorTrack(TrackApiSteps.BIN_NUMBER.getType(), e.message.orEmpty()))
                 with(ErrorUtil.createError(e)) {
                     if (this is UiError.ConnectionError) {
