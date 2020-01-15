@@ -5,8 +5,11 @@ import android.arch.lifecycle.ViewModelProvider
 import com.mercadolibre.android.cardform.data.model.esc.Device
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
 
-class ViewModelFactory(private val repositoryModule: RepositoryModule,
-    private val behaviourModule: BehaviourModule, private val device: Device) : ViewModelProvider.Factory {
+class ViewModelFactory(
+    private val repositoryModule: RepositoryModule,
+    private val behaviourModule: BehaviourModule, private val device: Device,
+    private val trackerModule: TrackerModule
+) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -16,7 +19,8 @@ class ViewModelFactory(private val repositoryModule: RepositoryModule,
                 repositoryModule.tokenizeRepository,
                 repositoryModule.cardAssociation,
                 behaviourModule.escManager,
-                device
+                device,
+                trackerModule.tracker
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

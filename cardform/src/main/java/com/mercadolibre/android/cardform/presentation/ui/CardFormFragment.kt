@@ -27,6 +27,8 @@ import com.mercadolibre.android.cardform.presentation.model.StateUi.UiLoading
 import com.mercadolibre.android.cardform.presentation.model.UiError
 import com.mercadolibre.android.cardform.presentation.model.UiResult
 import com.mercadolibre.android.cardform.presentation.ui.custom.ProgressFragment
+import com.mercadolibre.android.cardform.tracks.model.flow.InitTrack
+import com.mercadolibre.android.cardform.tracks.model.flow.SuccessTrack
 import kotlinx.android.synthetic.main.cf_card.inputViewPager
 import kotlinx.android.synthetic.main.app_bar.*
 import kotlinx.android.synthetic.main.fragment_card_form.*
@@ -98,6 +100,7 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
         cardDrawer = view.findViewById(R.id.cardDrawer)
 
         if (savedInstanceState == null) {
+            viewModel.tracker.trackEvent(InitTrack())
             cardDrawer.show(defaultCardDrawerConfiguration)
         }
 
@@ -112,7 +115,6 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
 
         cardDrawer.hideSecCircle()
         enableBackButton()
-
 
         next.setOnClickListener {
             if (!FragmentNavigationController.toNext()) {
@@ -183,11 +185,15 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
                 appBar.updateProgress(it)
             }
 
-            cardLiveData.observe(viewLifecycleOwner, Observer {
-                val cardDrawerData = if (it != null) {
-                    FragmentNavigationController.setAdditionalSteps(it.additionalSteps)
-                    appBar.setTitle(TitleBar.fromType(it.paymentTypeId).getTitle())
-                    CardDrawerData(context!!, it.cardUi!!)
+            cardLiveData.observe(viewLifecycleOwner, Observer { cardData ->
+                var maxLengthBin = 0
+                val cardDrawerData = if (cardData != null) {
+                    FragmentNavigationController.setAdditionalSteps(cardData.additionalSteps)
+                    appBar.setTitle(TitleBar.fromType(cardData.paymentTypeId).getTitle())
+                    cardData.cardUi!!.let {
+                        maxLengthBin = it.cardNumberLength
+                        CardDrawerData(context!!, it)
+                    }
                 } else {
                     appBar.setTitle(TitleBar.NONE_TITLE.getTitle())
                     with(cardDrawer.card) {
@@ -202,6 +208,7 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
                     .createDefaultStepFrom(
                         resources,
                         FormType.CARD_NUMBER.getType(),
+                        maxLengthBin,
                         cardDrawerData.cardNumberPattern
                     )
             })
@@ -247,7 +254,7 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
         }
         progressFragment?.apply {
             if (!isVisible) {
-                progressFragment?.show(
+                progressFragment?.showNow(
                     this@CardFormFragment.childFragmentManager,
                     ProgressFragment.TAG
                 )
@@ -264,16 +271,17 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
     }
 
     private fun resolveError(error: UiError) {
-        if (progressFragment?.isVisible == true) {
-            hideProgress()
-        }
+        hideProgress()
         if (error.showError) {
             ErrorUtil.resolveError(
                 rootCardForm,
                 error,
                 if (error is UiError.ConnectionError) View.OnClickListener {
                     viewModel.retryFetchCard(context)
-                } else null)
+                } else {
+                    null
+                }
+            )
         }
     }
 
@@ -295,6 +303,7 @@ class CardFormFragment : RootFragment<InputFormViewModel>() {
                     resultCode,
                     intent
                 )
+                viewModel.tracker.trackEvent(SuccessTrack())
             } else {
                 setResult(resultCode, intent)
                 finish()

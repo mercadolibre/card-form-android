@@ -3,9 +3,11 @@ package com.mercadolibre.android.cardform.data.repository
 import com.mercadolibre.android.cardform.BuildConfig
 import com.mercadolibre.android.cardform.data.model.response.RegisterCard
 import com.mercadolibre.android.cardform.data.service.CardService
+import com.mercadolibre.android.cardform.network.exceptions.ExcludePaymentException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import org.json.JSONObject
 import java.io.IOException
 
 class CardRepositoryImpl(private val cardService: CardService, private val siteId: String,
@@ -35,7 +37,14 @@ class CardRepositoryImpl(private val cardService: CardService, private val siteI
                             return@async it
                         }
                     } else {
-                        throw IOException()
+                        //https://github.com/square/retrofit/issues/3255
+                        val jsonObject = JSONObject(errorBody()?.string())
+                        if (code() == 400) {
+                            throw ExcludePaymentException(jsonObject)
+                        } else {
+                            val message = jsonObject.getString("message")
+                            throw IOException(message)
+                        }
                     }
                 }
             } catch (e: Exception) {

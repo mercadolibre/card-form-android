@@ -12,7 +12,7 @@ data class CardUi (
     val securityCodeLength : Int,
     val paymentMethodImageUrl : String?,
     var issuerImageUrl : String?,
-    val cardPattern : IntArray
+    var cardPattern : IntArray
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),

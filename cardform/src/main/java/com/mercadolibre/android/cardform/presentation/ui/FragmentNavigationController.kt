@@ -31,6 +31,8 @@ object FragmentNavigationController {
                         } else if (localCurrentItem > position) {
                             fromRight()
                         }
+
+                        trackFragmentView()
                     }
                 }
             })

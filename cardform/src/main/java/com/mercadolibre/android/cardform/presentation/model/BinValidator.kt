@@ -6,6 +6,7 @@ import android.os.Parcelable
 class BinValidator() : Parcelable {
 
     private var previousBin: String? = null
+    private var lastBinValid = ""
     var bin : String? = null
         private set
 
@@ -19,9 +20,13 @@ class BinValidator() : Parcelable {
         bin = if (cardNumber.length < BIN_LENGTH) {
             null
         } else {
-            cardNumber.substring(0 until BIN_LENGTH)
+            cardNumber.substring(0 until BIN_LENGTH).also {
+                lastBinValid = it
+            }
         }
     }
+
+    fun getLastValidBin() = lastBinValid
 
     fun hasChanged() = previousBin != bin
 

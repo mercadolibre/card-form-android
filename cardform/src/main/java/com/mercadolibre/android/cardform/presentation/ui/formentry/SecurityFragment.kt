@@ -7,6 +7,14 @@ import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
 import com.mercadolibre.android.cardform.presentation.model.CardFilledData
 import com.mercadolibre.android.cardform.presentation.model.CardState
+import com.mercadolibre.android.cardform.tracks.model.TrackSteps
+import com.mercadolibre.android.cardform.tracks.model.expiration.ExpirationInvalidTrack
+import com.mercadolibre.android.cardform.tracks.model.expiration.ExpirationValidTrack
+import com.mercadolibre.android.cardform.tracks.model.flow.BackTrack
+import com.mercadolibre.android.cardform.tracks.model.flow.NextTrack
+import com.mercadolibre.android.cardform.tracks.model.security.ExpirationSecurityView
+import com.mercadolibre.android.cardform.tracks.model.security.SecurityInvalidTrack
+import com.mercadolibre.android.cardform.tracks.model.security.SecurityValidTrack
 import kotlinx.android.synthetic.main.fragment_security.*
 import java.util.*
 import kotlin.math.pow
@@ -36,6 +44,7 @@ class SecurityFragment : InputFragment() {
 
         expirationEditText.addOnTouchListener {
             super.fromRight()
+            viewModel.tracker.trackEvent(BackTrack(TrackSteps.SECURITY.getType()))
         }
 
         cvvCodeEditText.addOnTouchListener {
@@ -43,8 +52,13 @@ class SecurityFragment : InputFragment() {
                 with(expirationEditText) {
                     requestFocus()
                     showError()
+                    viewModel.tracker.trackEvent(ExpirationInvalidTrack())
                 }
             } else {
+                with(viewModel) {
+                    tracker.trackEvent(ExpirationValidTrack())
+                    tracker.trackEvent(NextTrack(TrackSteps.EXPIRATION.getType()))
+                }
                 super.fromLeft()
             }
         }
@@ -91,7 +105,7 @@ class SecurityFragment : InputFragment() {
 
     private fun validateCvvCode(): Boolean {
         viewModel.cardStepInfo.code = cvvCodeEditText.getText()
-        return cvvCodeEditText.isNotEmpty() && cvvCodeEditText.isComplete() && cvvCodeEditText.validatePattern()
+        return cvvCodeEditText.isComplete() && cvvCodeEditText.validatePattern()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -109,7 +123,7 @@ class SecurityFragment : InputFragment() {
 
         val expiration = expirationText.trim().split('/')
 
-        if (expiration[0].toInt() in 1..12 && expiration[1].matches(Regex("[0-9]{2}"))) {
+        if (expiration.size == 2 && expiration[0].toInt() in 1..12 && expiration[1].matches(Regex("[0-9]{2}"))) {
             val date = Date()
             val cal = Calendar.getInstance(TimeZone.getTimeZone(TimeZone.getDefault().id))
             cal.time = date
@@ -129,27 +143,41 @@ class SecurityFragment : InputFragment() {
         if (expirationHasFocus()) {
 
             if (validateExpirationDate()) {
-                viewModel.stateCardLiveData.value = CardState.ShowCode
+                with(viewModel) {
+                    tracker.trackEvent(ExpirationValidTrack())
+                    tracker.trackEvent(NextTrack(TrackSteps.EXPIRATION.getType()))
+                    stateCardLiveData.value = CardState.ShowCode
+                }
                 super.fromLeft()
                 focusCvvCodeInput()
             } else {
+                viewModel.tracker.trackEvent(ExpirationInvalidTrack())
                 expirationEditText.showError()
             }
 
-        } else if (validateExpirationDate() && validateCvvCode()) {
-            viewModel.stateCardLiveData.value = CardState.HideCode
+        } else if (validateCvvCode()) {
+            with(viewModel) {
+                tracker.trackEvent(SecurityValidTrack())
+                tracker.trackEvent(NextTrack(TrackSteps.SECURITY.getType()))
+                stateCardLiveData.value = CardState.HideCode
+            }
             move(position)
         } else {
+            viewModel.tracker.trackEvent(SecurityInvalidTrack())
             cvvCodeEditText.showError()
         }
     }
 
     override fun toBack(position: Int, move: ((previousPosition: Int) -> Unit)) {
         if (cvvCodeHasFocus()) {
+            with(viewModel) {
+                tracker.trackEvent(BackTrack(TrackSteps.SECURITY.getType()))
+                stateCardLiveData.value = CardState.HideCode
+            }
             super.fromRight()
             focusExpirationInput()
-            viewModel.stateCardLiveData.value = CardState.HideCode
         } else {
+            viewModel.tracker.trackEvent(BackTrack(TrackSteps.EXPIRATION.getType()))
             move(position)
         }
     }
@@ -163,6 +191,10 @@ class SecurityFragment : InputFragment() {
     private fun expirationHasFocus(): Boolean = expirationEditText.hasFocus()
     private fun focusExpirationInput() = expirationEditText.requestFocus()
     private fun focusCvvCodeInput() = cvvCodeEditText.requestFocus()
+
+    override fun trackFragmentView() {
+        viewModel.tracker.trackView(ExpirationSecurityView())
+    }
 
     companion object {
         private const val EXTRA_EXPIRATION_TEXT = "expiration_text"

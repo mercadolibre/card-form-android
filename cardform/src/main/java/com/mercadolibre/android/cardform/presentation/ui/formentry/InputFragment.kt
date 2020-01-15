@@ -9,6 +9,8 @@ import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationContr
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
 import android.view.animation.AlphaAnimation
 import com.mercadolibre.android.cardform.R
+import com.mercadolibre.android.cardform.tracks.Track
+import com.mercadolibre.android.cardform.tracks.model.bin.BinNumberView
 
 typealias MoveTo = ((position: Int) -> Unit)
 
@@ -67,6 +69,7 @@ abstract class InputFragment : BaseFragment<InputFormViewModel>() {
 
     open fun getInputTag(): String = InputFragment::class.java.name
     open fun refreshData() = Unit
+    abstract fun trackFragmentView()
 
     companion object {
         private const val INPUT_VALID = "input_valid"
