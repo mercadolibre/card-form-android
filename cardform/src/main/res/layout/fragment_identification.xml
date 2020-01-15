@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginEnd="@dimen/ui_2m"
-            android:background="@color/cf_button_navigation_text"/>
+            android:background="@color/ui_components_primary_color"/>
 
     </LinearLayout>
 
