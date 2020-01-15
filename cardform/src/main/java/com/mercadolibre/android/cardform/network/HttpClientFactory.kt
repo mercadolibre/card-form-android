@@ -3,10 +3,7 @@ package com.mercadolibre.android.cardform.network
 import android.content.Context
 import android.os.Build
 import com.mercadolibre.android.cardform.BuildConfig
-import com.mercadolibre.android.cardform.network.interceptor.LocaleInterceptor
-import com.mercadolibre.android.cardform.network.interceptor.ProductIdInterceptor
-import com.mercadolibre.android.cardform.network.interceptor.ScreenDensityInterceptor
-import com.mercadolibre.android.cardform.network.interceptor.UserAgentInterceptor
+import com.mercadolibre.android.cardform.network.interceptor.*
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.File
@@ -31,7 +28,8 @@ object HttpClientFactory {
 
     fun get(
         context: Context, connectTimeout: Int, readTimeout: Int,
-        writeTimeout: Int
+        writeTimeout: Int,
+        sessionId: String
     ): OkHttpClient {
         val cacheFile = getCacheDir(context)
 
@@ -45,6 +43,7 @@ object HttpClientFactory {
         client.addInterceptor(UserAgentInterceptor())
         client.addInterceptor(ProductIdInterceptor())
         client.addInterceptor(ScreenDensityInterceptor(context.applicationContext))
+        client.addInterceptor(SessionInterceptor(sessionId))
 
         // add logging interceptor (should be last interceptor)
         val loginInterceptor = HttpLoggingInterceptor()

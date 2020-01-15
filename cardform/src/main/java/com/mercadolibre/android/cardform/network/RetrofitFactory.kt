@@ -12,12 +12,12 @@ object RetrofitFactory {
     private const val DEFAULT_CONNECT_TIMEOUT = 10
     private const val DEFAULT_WRITE_TIMEOUT = 20
 
-    fun get(context: Context) : Retrofit {
+    fun get(context: Context, sessionId: String) : Retrofit {
         return Retrofit.Builder()
             .baseUrl(MP_API_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(GsonFactory.get()))
             .client(HttpClientFactory.get(context, DEFAULT_CONNECT_TIMEOUT, DEFAULT_READ_TIMEOUT,
-                DEFAULT_WRITE_TIMEOUT))
+                DEFAULT_WRITE_TIMEOUT, sessionId))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
     }

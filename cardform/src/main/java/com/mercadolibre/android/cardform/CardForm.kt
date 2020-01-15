@@ -18,12 +18,14 @@ class CardForm : Parcelable {
     var requestCode = 0
         private set
     val sessionId: String
+    val flowId: String
 
     private constructor(builder: Builder) {
         siteId = builder.siteId
         publicKey = builder.publicKey
         accessToken = builder.accessToken
         excludedTypes = builder.excludedTypes
+        flowId = builder.flowId
         sessionId = builder.sessionId ?: UUID.randomUUID().toString()
     }
 
@@ -32,6 +34,7 @@ class CardForm : Parcelable {
         publicKey = parcel.readString()
         accessToken = parcel.readString()
         excludedTypes = parcel.createStringArrayList()
+        flowId = parcel.readString()!!
         sessionId = parcel.readString()!!
     }
 
@@ -66,7 +69,7 @@ class CardForm : Parcelable {
         }
     }
 
-    class Builder private constructor(val siteId: String) {
+    class Builder private constructor(val siteId: String, val flowId: String) {
         var excludedTypes: List<String>? = null
             private set
 
@@ -83,22 +86,22 @@ class CardForm : Parcelable {
             this.excludedTypes = excludedTypes
         }
 
+        fun setSessionId(sessionId: String) = apply { this.sessionId = sessionId }
+
         private fun setPublicKey(publicKey: String) = apply { this.publicKey = publicKey }
 
         private fun setAccessToken(accessToken: String) = apply { this.accessToken = accessToken }
-
-        fun setSessionId(sessionId: String) = apply { this.sessionId = sessionId }
 
         fun build() = CardForm(this)
 
         companion object {
             @JvmStatic
-            fun withPublicKey(publicKey: String, siteId: String) =
-                Builder(siteId).setPublicKey(publicKey)
+            fun withPublicKey(publicKey: String, siteId: String, flowId: String) =
+                Builder(siteId, flowId).setPublicKey(publicKey)
 
             @JvmStatic
-            fun withAccessToken(accessToken: String, siteId: String) =
-                Builder(siteId).setAccessToken(accessToken)
+            fun withAccessToken(accessToken: String, siteId: String, flowId: String) =
+                Builder(siteId, flowId).setAccessToken(accessToken)
         }
     }
 
@@ -107,6 +110,7 @@ class CardForm : Parcelable {
         parcel.writeString(publicKey)
         parcel.writeString(accessToken)
         parcel.writeStringList(excludedTypes)
+        parcel.writeString(flowId)
         parcel.writeString(sessionId)
     }
 

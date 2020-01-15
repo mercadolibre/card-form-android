@@ -10,6 +10,7 @@ import com.mercadolibre.android.cardform.data.model.response.CardUi
 import com.mercadolibre.android.cardform.data.model.response.Issuer
 import com.mercadolibre.android.cardform.data.model.response.PaymentMethod
 import com.mercadolibre.android.cardform.data.model.response.RegisterCard
+import com.mercadolibre.android.cardform.data.model.response.*
 import com.mercadolibre.android.cardform.data.repository.CardAssociationRepository
 import com.mercadolibre.android.cardform.data.repository.CardRepository
 import com.mercadolibre.android.cardform.data.repository.TokenizeRepository
@@ -19,6 +20,10 @@ import com.mercadolibre.android.cardform.presentation.model.*
 import com.mercadolibre.android.cardform.presentation.model.StateUi.UiLoading
 import com.mercadolibre.android.cardform.presentation.ui.ErrorUtil
 import com.mercadolibre.android.cardform.presentation.ui.formentry.FormType
+import com.mercadolibre.android.cardform.tracks.Tracker
+import com.mercadolibre.android.cardform.tracks.model.TrackApiSteps
+import com.mercadolibre.android.cardform.tracks.model.bin.*
+import com.mercadolibre.android.cardform.tracks.model.flow.*
 import com.mercadopago.android.px.addons.ESCManagerBehaviour
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +35,8 @@ class InputFormViewModel(
     private val cardTokenRepository: TokenizeRepository,
     private val cardAssociationRepository: CardAssociationRepository,
     private val escManager: ESCManagerBehaviour,
-    private val device: Device
+    private val device: Device,
+    val tracker: Tracker
 ) : BaseViewModel() {
 
     val cardLiveFilledData: MutableLiveData<CardFilledData> = MutableLiveData()
@@ -44,7 +50,7 @@ class InputFormViewModel(
     val stateCardLiveData: MutableLiveData<CardState> = MutableLiveData()
     val issuersLiveData: MutableLiveData<ArrayList<Issuer>> = MutableLiveData()
     val cardLiveData: MutableLiveData<CardData> = MutableLiveData()
-    val updateCardData:  MutableLiveData<CardUi> = MutableLiveData()
+    val updateCardData: MutableLiveData<CardUi> = MutableLiveData()
     var cardStepInfo = CardStepInfo()
     private var binValidator = BinValidator()
     private var issuer: Issuer? = null
@@ -110,8 +116,8 @@ class InputFormViewModel(
     }
 
     fun retryFetchCard(context: Context?) {
+        stateUiLiveData.value = UiLoading
         if (context.hasConnection()) {
-            stateUiLiveData.value = UiLoading
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     cardRepository.getCardInfo(binValidator.bin!!)?.let {
@@ -119,6 +125,8 @@ class InputFormViewModel(
                         stateUiLiveData.postValue(UiResult.EmptyResult)
                     }
                 } catch (e: Exception) {
+                    tracker.trackEvent(BinUnknownTrack(binValidator.bin!!))
+                    tracker.trackEvent(ErrorTrack(TrackApiSteps.BIN_NUMBER.getType(), e.message.orEmpty()))
                     e.printStackTrace()
                     stateUiLiveData.postValue(ErrorUtil.createError(e))
                 }
@@ -137,8 +145,12 @@ class InputFormViewModel(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                tracker.trackEvent(BinUnknownTrack(binValidator.bin!!))
+                tracker.trackEvent(ErrorTrack(TrackApiSteps.BIN_NUMBER.getType(), e.message.orEmpty()))
                 with(ErrorUtil.createError(e)) {
-                    showError = false
+                    if (this is UiError.ConnectionError) {
+                        showError = false
+                    }
                     stateUiLiveData.postValue(this)
                 }
             }
@@ -153,8 +165,11 @@ class InputFormViewModel(
             cardLiveData.postValue(CardDataMapper.map(this))
             issuersLiveData.postValue(ArrayList(issuers))
             loadInputData(this)
+            tracker.trackEvent(BinRecognizedTrack())
         }
     }
+
+    fun hasLuhnValidation() = paymentMethod?.validation == "standard"
 
     private fun setIssuer(issuer: Issuer?) {
         this.issuer = issuer
@@ -174,9 +189,16 @@ class InputFormViewModel(
 
     private fun tokenizeAndAddNewCard() {
         CoroutineScope(Dispatchers.IO).launch {
+            var cardToken: CardToken? = null
             try {
-                val cardToken = cardTokenRepository.tokenizeCard(CardInfoMapper(device).map(cardStepInfo))
+                cardToken = cardTokenRepository.tokenizeCard(CardInfoMapper(device).map(cardStepInfo))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                tracker.trackEvent(ErrorTrack(TrackApiSteps.TOKEN.getType(), e.message.orEmpty()))
+                stateUiLiveData.postValue(ErrorUtil.createError(e))
+            }
 
+            try {
                 if (cardToken != null) {
                     val cardAssociated = cardAssociationRepository
                         .associateCard(
@@ -195,15 +217,17 @@ class InputFormViewModel(
                         val onSuccess = {
                             stateUiLiveData.postValue(UiResult.CardResult("UiResult Ok"))
                         }
-                        lifecycleListener?.onCardAdded(cardAssociated.id, object : LifecycleListener.Callback {
-                            override fun onSuccess() {
-                                onSuccess()
-                            }
+                        lifecycleListener?.onCardAdded(
+                            cardAssociated.id,
+                            object : LifecycleListener.Callback {
+                                override fun onSuccess() {
+                                    onSuccess()
+                                }
 
-                            override fun onError() {
-                                sendGenericError()
-                            }
-                        }) ?: onSuccess()
+                                override fun onError() {
+                                    sendGenericError()
+                                }
+                            }) ?: onSuccess()
                     } else {
                         sendGenericError()
                     }
@@ -212,6 +236,7 @@ class InputFormViewModel(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                tracker.trackEvent(ErrorTrack(TrackApiSteps.ASSOCIATION.getType(), e.message.orEmpty()))
                 stateUiLiveData.postValue(ErrorUtil.createError(e))
             }
         }
@@ -223,7 +248,6 @@ class InputFormViewModel(
 
     private fun loadInputData(registerCard: RegisterCard) {
         CoroutineScope(Dispatchers.Default).launch {
-
             registerCard.fieldsSetting.forEach { setting ->
 
                 when (setting.name) {
