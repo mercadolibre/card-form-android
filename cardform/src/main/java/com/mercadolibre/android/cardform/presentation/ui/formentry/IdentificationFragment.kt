@@ -12,6 +12,7 @@ import com.mercadolibre.android.cardform.di.preferences.IdentificationPreference
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.model.Identification
 import com.mercadolibre.android.cardform.presentation.model.TypeInput
+import com.mercadolibre.android.cardform.presentation.ui.IdentificationUtils
 import com.mercadolibre.android.cardform.presentation.ui.custom.InputFormEditText.Companion.LENGTH_DEFAULT
 import com.mercadolibre.android.cardform.tracks.model.TrackSteps
 import com.mercadolibre.android.cardform.tracks.model.flow.BackTrack
@@ -54,7 +55,8 @@ class IdentificationFragment : InputFragment() {
             isFirstTime = true
         } else {
             lastPositionSelected = savedInstanceState.getInt(LAST_POSITION_EXTRA)
-            isIdentificationTracked = savedInstanceState.getBoolean(TRACK_IDENTIFICATION_VIEW, false)
+            isIdentificationTracked =
+                savedInstanceState.getBoolean(TRACK_IDENTIFICATION_VIEW, false)
             populate = savedInstanceState.getBoolean(POPULATE, false)
             isFirstTime = false
         }
@@ -100,13 +102,15 @@ class IdentificationFragment : InputFragment() {
     private fun selectSpinnerItemByValue(id: String, number: String) {
         val adapter = identificationTypes.adapter
         for (position in 0 until adapter.count) {
-            if ((adapter.getItem(position) as Identification).id == id) {
+            val identification = (adapter.getItem(position) as Identification)
+            if (identification.id == id) {
                 with(identificationEditText) {
                     lastPositionSelected = position
                     identificationTypes.setSelection(lastPositionSelected)
                     setText(number)
                     setMaxLength(number.length)
-                    isInputValid = validate()
+                    isInputValid =
+                        IdentificationUtils.validate(number.filter { it.isDigit() }, identification)
                     populate = true
                 }
                 return
@@ -132,7 +136,12 @@ class IdentificationFragment : InputFragment() {
                 tracker.trackEvent(NextTrack(TrackSteps.IDENTIFICATION.getType()))
                 preferences.saveIdentificationNumber(number)
             } else {
-                tracker.trackEvent(IdentificationInvalidTrack(cardStepInfo.identificationId, number))
+                tracker.trackEvent(
+                    IdentificationInvalidTrack(
+                        cardStepInfo.identificationId,
+                        number
+                    )
+                )
             }
         }
     }
@@ -171,7 +180,7 @@ class IdentificationFragment : InputFragment() {
             }
 
             addMaskWatcher(mask) {
-                isInputValid = validate()
+                isInputValid = IdentificationUtils.validate(it.filter { c -> c.isDigit() }, data)
 
                 if (hasError()) {
                     clearError()
