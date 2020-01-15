@@ -6,8 +6,8 @@ import android.text.InputFilter
 import android.view.View
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
-import com.mercadolibre.android.cardform.presentation.extensions.showKeyboard
 import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
+import com.mercadolibre.android.cardform.presentation.helpers.KeyboardHelper
 import com.mercadolibre.android.cardform.presentation.model.CardFilledData
 import com.mercadolibre.android.cardform.presentation.ui.custom.Luhn
 import com.mercadolibre.android.cardform.tracks.model.TrackSteps
@@ -40,7 +40,7 @@ class CardNumberFragment : InputFragment() {
 
         if (isVisible) {
             input.requestFocus()
-            showKeyboard()
+            KeyboardHelper.showKeyboard(input)
         }
         numberCardEditText.showIconActions(false)
 

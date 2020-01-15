@@ -4,16 +4,15 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
 import android.support.annotation.DrawableRes
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
-import android.text.*
+import android.text.InputFilter
 import android.util.AttributeSet
 import android.view.MotionEvent
-import android.view.View
+import android.view.View.OnFocusChangeListener
 import android.widget.LinearLayout
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.presentation.model.InputData
@@ -21,7 +20,6 @@ import com.mercadolibre.android.cardform.presentation.model.TypeInput
 import com.mercadolibre.android.ui.font.Font
 import com.mercadolibre.android.ui.font.TypefaceHelper
 import kotlinx.android.synthetic.main.cf_input_form_edittext.view.*
-import java.lang.IllegalArgumentException
 
 typealias OnTextChanged = (s: String) -> Unit
 
@@ -75,9 +73,6 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
 
     fun setInputType(inputType: Int) {
         input.setRawInputType(inputType)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            input.importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_NO
-        }
     }
 
     fun setHint(hint: String) {
@@ -207,7 +202,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         setHint(data.title)
         data.hintMessage?.let { setInfoHint(it) }
         setMessageError(data.validationMessage)
-        setPatter(data.validationPattern ?: "")
+        setPattern(data.validationPattern ?: "")
 
         if (hasError) {
             showError()
@@ -234,7 +229,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         addMaskWatcher(mask, textChanged)
     }
 
-    private fun setPatter(pattern: String) {
+    private fun setPattern(pattern: String) {
         this.pattern = pattern
     }
 
