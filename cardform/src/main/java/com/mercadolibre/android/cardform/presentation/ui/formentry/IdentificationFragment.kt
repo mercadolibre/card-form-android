@@ -115,7 +115,7 @@ class IdentificationFragment : InputFragment() {
     }
 
     override fun focusableInTouchMode(focusable: Boolean) {
-        identificationEditText.setIsFocusableInTouchMode(focusable)
+        identificationEditText.isFocusableInTouchMode = focusable
         if (!focusable) {
             identificationEditText.requestFocus()
         }

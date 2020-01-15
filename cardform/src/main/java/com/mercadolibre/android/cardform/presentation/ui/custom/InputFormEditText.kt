@@ -53,7 +53,6 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
 
     private fun configureView(context: Context) {
         inflate(context, R.layout.cf_input_form_edittext, this)
-        input.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
 
         input.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
             if (isTouched) {
@@ -92,10 +91,6 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
 
     fun setFilters(filters: Array<InputFilter>) {
         input.filters = filters
-    }
-
-    fun setIsFocusableInTouchMode(focusable: Boolean) {
-        rootInput.isFocusableInTouchMode = focusable
     }
 
     fun hasError() = hasError
@@ -299,7 +294,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
     override fun onRestoreInstanceState(state: Parcelable?) {
         val savedState = (state as InputSavedState)
         super.onRestoreInstanceState(savedState.superState)
-        rootInput.isFocusableInTouchMode = savedState.getIsFocusableInTouchMode()
+        isFocusableInTouchMode = savedState.getIsFocusableInTouchMode()
         hasError = savedState.hasError()
         showIcons = savedState.showIcon()
         if (showIcons) {
@@ -322,7 +317,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
     override fun onSaveInstanceState(): Parcelable? {
         return InputSavedState(
             super.onSaveInstanceState(),
-            rootInput.isFocusableInTouchMode,
+            isFocusableInTouchMode,
             hasError,
             icon,
             showIcons
