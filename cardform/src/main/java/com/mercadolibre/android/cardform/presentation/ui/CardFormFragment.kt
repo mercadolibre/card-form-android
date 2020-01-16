@@ -2,8 +2,6 @@ package com.mercadolibre.android.cardform.presentation.ui
 
 import android.app.Activity
 import android.arch.lifecycle.Observer
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -22,16 +20,14 @@ import com.mercadolibre.android.cardform.presentation.extensions.*
 import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
 import com.mercadolibre.android.cardform.presentation.helpers.KeyboardHelper
 import com.mercadolibre.android.cardform.presentation.model.*
+import com.mercadolibre.android.cardform.presentation.model.StateUi.UiLoading
+import com.mercadolibre.android.cardform.presentation.ui.custom.ProgressFragment
 import com.mercadolibre.android.cardform.presentation.ui.formentry.FormType
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
-import com.mercadolibre.android.cardform.presentation.model.StateUi.UiLoading
-import com.mercadolibre.android.cardform.presentation.model.UiError
-import com.mercadolibre.android.cardform.presentation.model.UiResult
-import com.mercadolibre.android.cardform.presentation.ui.custom.ProgressFragment
 import com.mercadolibre.android.cardform.tracks.model.flow.InitTrack
 import com.mercadolibre.android.cardform.tracks.model.flow.SuccessTrack
-import kotlinx.android.synthetic.main.cf_card.inputViewPager
 import kotlinx.android.synthetic.main.app_bar.*
+import kotlinx.android.synthetic.main.cf_card.inputViewPager
 import kotlinx.android.synthetic.main.fragment_card_form.*
 
 /**
@@ -74,13 +70,13 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
             val offset = (duration * 0.5).toLong()
             if (enter) {
                 if (!animationEnded) {
-                    cardDrawer.pushUpIn(onFinish = {
-                        animationEnded = true
-                    })
+                    cardDrawer.pushUpIn()
                     buttonContainer.fadeIn()
                     inputViewPager.slideLeftIn(offset)
                     progress.slideRightIn(offset)
-                    title.fadeIn(duration, offset)
+                    title.fadeIn(duration, offset, onFinish = {
+                        animationEnded = true
+                    })
                 }
             } else {
                 cardDrawer.pushDownOut()
