@@ -2,7 +2,7 @@ package com.mercadolibre.android.cardform.di.preferences
 
 import android.content.SharedPreferences
 
-class IdentificationPreferences(private val localPreferences: SharedPreferences) {
+internal class IdentificationPreferences(private val localPreferences: SharedPreferences) {
 
     fun saveIdentificationId(id: String) {
         localPreferences.edit()?.apply {

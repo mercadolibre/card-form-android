@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.mercadolibre.android.cardform.R
 
-class ProgressFragment: DialogFragment() {
+internal class ProgressFragment: DialogFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,

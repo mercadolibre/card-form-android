@@ -16,7 +16,7 @@ import java.security.SecureRandom
 import java.util.*
 import java.util.regex.Pattern
 
-class Fingerprint(context: Context) {
+internal class Fingerprint(context: Context) {
     val vendorIds = getVendorIds(context)
     val model: String? = Build.MODEL
     val os = "android"

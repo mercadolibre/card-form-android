@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.mercadolibre.android.cardform.data.model.response.CardUi
 
-data class CardData(val cardUi: CardUi?,
+internal data class CardData(val cardUi: CardUi?,
                     val paymentTypeId: String,
                     val additionalSteps: List<String>): Parcelable {
     constructor(parcel: Parcel) : this(

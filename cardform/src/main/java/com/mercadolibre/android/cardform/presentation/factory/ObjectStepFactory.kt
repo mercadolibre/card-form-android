@@ -7,7 +7,7 @@ import com.mercadolibre.android.cardform.presentation.model.TypeInput
 import com.mercadolibre.android.cardform.presentation.ui.formentry.FormType
 import java.lang.StringBuilder
 
-object ObjectStepFactory : StepFactory {
+internal object ObjectStepFactory : StepFactory {
     override fun createDefaultStepFrom(
         resources: Resources,
         name: String,

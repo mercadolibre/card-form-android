@@ -3,7 +3,7 @@ package com.mercadolibre.android.example
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.mercadolibre.android.cardform.presentation.ui.CardFormFragment
+import com.mercadolibre.android.cardform.internal.CardFormWithFragment
 
 class OneTapActivity : AppCompatActivity() {
 
@@ -20,7 +20,7 @@ class OneTapActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val cardFormFragment = supportFragmentManager.findFragmentByTag(CardFormFragment.TAG)
+        val cardFormFragment = supportFragmentManager.findFragmentByTag(CardFormWithFragment.TAG)
         cardFormFragment?.childFragmentManager?.apply {
             if (backStackEntryCount > 0) {
                 popBackStack()

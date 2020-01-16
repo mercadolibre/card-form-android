@@ -5,7 +5,7 @@ import android.support.v4.view.ViewPager
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.presentation.ui.formentry.*
 
-object FragmentNavigationController {
+internal object FragmentNavigationController {
     private lateinit var formViewPager: InputFormViewPager
     private var currentFragment: InputFragment? = null
     private var localCurrentItem = 0

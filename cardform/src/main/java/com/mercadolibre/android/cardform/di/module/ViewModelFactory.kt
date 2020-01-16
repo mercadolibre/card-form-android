@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModelProvider
 import com.mercadolibre.android.cardform.data.model.esc.Device
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
 
-class ViewModelFactory(
+internal class ViewModelFactory(
     private val repositoryModule: RepositoryModule,
     private val behaviourModule: BehaviourModule, private val device: Device,
     private val trackerModule: TrackerModule

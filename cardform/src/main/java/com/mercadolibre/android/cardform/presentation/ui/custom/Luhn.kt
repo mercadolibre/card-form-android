@@ -1,6 +1,6 @@
 package com.mercadolibre.android.cardform.presentation.ui.custom
 
-object Luhn {
+internal object Luhn {
     fun isValid(input: String): Boolean {
         val sanitizedInput = input.replace(" ", "")
 

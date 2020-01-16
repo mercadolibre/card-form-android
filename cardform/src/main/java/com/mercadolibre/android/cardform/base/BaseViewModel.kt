@@ -2,9 +2,9 @@ package com.mercadolibre.android.cardform.base
 
 import android.arch.lifecycle.ViewModel
 import android.os.Bundle
-import com.mercadolibre.android.cardform.LifecycleListener
+import com.mercadolibre.android.cardform.internal.LifecycleListener
 
-abstract class BaseViewModel : ViewModel() {
+internal abstract class BaseViewModel : ViewModel() {
 
     var lifecycleListener: LifecycleListener? = null
 

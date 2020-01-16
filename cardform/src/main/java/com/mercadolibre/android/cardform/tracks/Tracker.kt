@@ -1,6 +1,6 @@
 package com.mercadolibre.android.cardform.tracks
 
-interface Tracker {
+internal interface Tracker {
     fun trackView(track: Track) = Unit
     fun trackEvent(track: Track) = Unit
 }

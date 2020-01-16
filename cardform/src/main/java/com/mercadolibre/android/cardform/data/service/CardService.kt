@@ -7,7 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface CardService {
+internal interface CardService {
 
     @GET("/{environment}/px_mobile/v1/card")
     fun getCardInfoAsync(

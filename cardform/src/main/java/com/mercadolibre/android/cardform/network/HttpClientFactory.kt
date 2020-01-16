@@ -18,7 +18,7 @@ import javax.net.ssl.TrustManager
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
-object HttpClientFactory {
+internal object HttpClientFactory {
 
     private const val CACHE_SIZE = 10 * 1024 * 1024 // 10 MB
     private const val TLS_1_2 = "TLSv1.2"

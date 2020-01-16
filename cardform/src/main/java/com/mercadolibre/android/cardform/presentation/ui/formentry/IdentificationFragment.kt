@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.fragment_identification.*
 /**
  * A simple [Fragment] subclass.
  */
-class IdentificationFragment : InputFragment() {
+internal class IdentificationFragment : InputFragment() {
 
     override val rootLayout = R.layout.fragment_identification
     private lateinit var preferences: IdentificationPreferences

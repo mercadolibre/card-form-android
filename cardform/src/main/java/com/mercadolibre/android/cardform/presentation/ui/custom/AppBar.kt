@@ -9,7 +9,7 @@ import android.widget.LinearLayout
 import com.mercadolibre.android.cardform.R
 import kotlinx.android.synthetic.main.app_bar.view.*
 
-class AppBar(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
+internal class AppBar(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     LinearLayout(context, attrs, defStyleAttr) {
 
     init {

@@ -3,7 +3,7 @@ package com.mercadolibre.android.cardform.network.exceptions
 import org.json.JSONObject
 import java.lang.Exception
 
-open class CardFormException(private var error: String,
+internal open class CardFormException(private var error: String,
                                  private var status: Int,
                                  override var message: String): Exception() {
 

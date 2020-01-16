@@ -3,7 +3,7 @@ package com.mercadolibre.android.cardform.presentation.model
 import android.os.Parcel
 import android.os.Parcelable
 
-class BinValidator() : Parcelable {
+internal class BinValidator() : Parcelable {
 
     private var previousBin: String? = null
     private var lastBinValid = ""

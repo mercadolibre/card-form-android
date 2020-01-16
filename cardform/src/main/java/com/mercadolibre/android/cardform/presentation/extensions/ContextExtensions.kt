@@ -6,16 +6,16 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.TypedValue
 
-fun Context.getPxFromDp(dp: Float): Float {
+internal fun Context.getPxFromDp(dp: Float): Float {
     return dp * resources.displayMetrics.density
 }
 
-fun Context.getPxFromSp(sp: Float): Int {
+internal fun Context.getPxFromSp(sp: Float): Int {
     return TypedValue
         .applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, resources.displayMetrics).toInt()
 }
 
-fun Context?.hasConnection(): Boolean {
+internal fun Context?.hasConnection(): Boolean {
     if (this != null) {
         try {
             var haveConnectedWifi = false
