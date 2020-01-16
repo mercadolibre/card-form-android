@@ -20,7 +20,6 @@ import com.mercadolibre.android.cardform.tracks.model.flow.NextTrack
 import com.mercadolibre.android.cardform.tracks.model.identification.IdentificationInvalidTrack
 import com.mercadolibre.android.cardform.tracks.model.identification.IdentificationValidTrack
 import com.mercadolibre.android.cardform.tracks.model.identification.IdentificationView
-import kotlinx.android.synthetic.main.cf_input_form_edittext.view.*
 import kotlinx.android.synthetic.main.fragment_identification.*
 
 /**
@@ -42,6 +41,7 @@ internal class IdentificationFragment : InputFragment() {
         ) {
             (identificationTypes.adapter.getItem(position) as Identification?)?.let {
                 if (position != lastPositionSelected) {
+                    lastPositionSelected = position
                     identificationEditText.setText("")
                 }
                 configureInput(it)
@@ -112,7 +112,10 @@ internal class IdentificationFragment : InputFragment() {
                     setText(number)
                     setMaxLength(number.length)
                     isInputValid =
-                        IdentificationUtils.validate(number.filter { it.isDigit() }, identification)
+                        IdentificationUtils.validate(
+                            number.filter { it.isLetterOrDigit() },
+                            identification
+                        )
                     populate = true
                 }
                 return
@@ -182,7 +185,8 @@ internal class IdentificationFragment : InputFragment() {
             }
 
             addMaskWatcher(mask) {
-                isInputValid = IdentificationUtils.validate(it.filter { c -> c.isDigit() }, data)
+                isInputValid =
+                    IdentificationUtils.validate(it.filter { c -> c.isLetterOrDigit() }, data)
 
                 if (hasError()) {
                     clearError()

@@ -78,6 +78,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
 
     fun setInputType(inputType: Int) {
         input.inputType = inputType
+        setRawInputType(inputType)
     }
 
     fun setHint(hint: String) {
