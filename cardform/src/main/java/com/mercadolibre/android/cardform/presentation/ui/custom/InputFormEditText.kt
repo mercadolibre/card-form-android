@@ -72,8 +72,12 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
         return super.dispatchTouchEvent(ev)
     }
 
-    fun setInputType(inputType: Int) {
+    private fun setRawInputType(inputType: Int) {
         input.setRawInputType(inputType)
+    }
+
+    fun setInputType(inputType: Int) {
+        input.inputType = inputType
     }
 
     fun setHint(hint: String) {
@@ -202,7 +206,7 @@ class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: In
     }
 
     fun configure(data: InputData, textChanged: OnTextChanged) {
-        setInputType(TypeInput.fromType(data.type).getInputType())
+        setRawInputType(TypeInput.fromType(data.type).getInputType())
         setHint(data.title)
         data.hintMessage?.let { setInfoHint(it) }
         setMessageError(data.validationMessage)

@@ -20,6 +20,7 @@ import com.mercadolibre.android.cardform.tracks.model.flow.NextTrack
 import com.mercadolibre.android.cardform.tracks.model.identification.IdentificationInvalidTrack
 import com.mercadolibre.android.cardform.tracks.model.identification.IdentificationValidTrack
 import com.mercadolibre.android.cardform.tracks.model.identification.IdentificationView
+import kotlinx.android.synthetic.main.cf_input_form_edittext.view.*
 import kotlinx.android.synthetic.main.fragment_identification.*
 
 /**
@@ -172,6 +173,7 @@ class IdentificationFragment : InputFragment() {
             }
 
             setInputType(TypeInput.fromType(data.type).getInputType())
+            input.inputType = TypeInput.fromType(data.type).getInputType()
             setFilters(arrayOf(InputFilter.LengthFilter(maxLength)))
             setMinLength(minLength)
             setMaxLength(maxLength)

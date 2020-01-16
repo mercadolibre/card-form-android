@@ -5,7 +5,15 @@ import java.lang.IllegalArgumentException
 
 enum class TypeInput(private val type: String) {
 
-    TEXT("text"){
+    TEXT("text") {
+        override fun getInputType(): Int {
+            return InputType.TYPE_TEXT_VARIATION_FILTER or
+                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD or
+                    InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS
+        }
+
+    },
+    STRING("string") {
         override fun getInputType(): Int {
             return InputType.TYPE_TEXT_VARIATION_FILTER or
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD or
@@ -15,7 +23,7 @@ enum class TypeInput(private val type: String) {
     },
     NUMBER("number") {
         override fun getInputType(): Int {
-            return InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
+            return InputType.TYPE_CLASS_NUMBER or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
         }
     };
 
