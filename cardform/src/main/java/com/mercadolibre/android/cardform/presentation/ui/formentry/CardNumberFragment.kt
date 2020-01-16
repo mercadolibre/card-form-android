@@ -46,11 +46,6 @@ internal class CardNumberFragment : InputFragment() {
             viewModel.tracker.trackEvent(BinClearTrack())
         }
 
-        if (isVisible) {
-            input.requestFocus()
-            KeyboardHelper.showKeyboard(input)
-        }
-
         val filter = InputFilter { source, start, end, _, _, _ ->
             for (i in start until end) {
                 val char = source[i]
