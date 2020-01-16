@@ -6,6 +6,7 @@ import android.text.InputFilter
 import android.view.View
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
+import com.mercadolibre.android.cardform.presentation.extensions.postDelayed
 import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
 import com.mercadolibre.android.cardform.presentation.helpers.KeyboardHelper
 import com.mercadolibre.android.cardform.presentation.model.CardFilledData
@@ -34,6 +35,13 @@ internal class CardNumberFragment : InputFragment() {
             setDefaultConfiguration()
         }
 
+        postDelayed((resources.getInteger(R.integer.cf_anim_duration) * 1.5).toLong()) {
+            if (isVisible) {
+                input.requestFocus()
+                KeyboardHelper.showKeyboard(input)
+            }
+        }
+
         numberCardEditText.addOnIconClickListener {
             viewModel.tracker.trackEvent(BinClearTrack())
         }
@@ -55,7 +63,6 @@ internal class CardNumberFragment : InputFragment() {
 
         numberCardEditText.addFilters(arrayOf(filter))
     }
-
 
     private fun setDefaultConfiguration() {
         numberCardEditText.configure(
