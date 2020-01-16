@@ -116,8 +116,8 @@ internal class InputFormViewModel(
     }
 
     fun retryFetchCard(context: Context?) {
-        stateUiLiveData.value = UiLoading
         if (context.hasConnection()) {
+            stateUiLiveData.value = UiLoading
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     cardRepository.getCardInfo(binValidator.bin!!)?.let {
@@ -126,7 +126,12 @@ internal class InputFormViewModel(
                     }
                 } catch (e: Exception) {
                     tracker.trackEvent(BinUnknownTrack(binValidator.bin!!))
-                    tracker.trackEvent(ErrorTrack(TrackApiSteps.BIN_NUMBER.getType(), e.message.orEmpty()))
+                    tracker.trackEvent(
+                        ErrorTrack(
+                            TrackApiSteps.BIN_NUMBER.getType(),
+                            e.message.orEmpty()
+                        )
+                    )
                     e.printStackTrace()
                     stateUiLiveData.postValue(ErrorUtil.createError(e))
                 }
@@ -145,11 +150,22 @@ internal class InputFormViewModel(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                tracker.trackEvent(BinUnknownTrack(binValidator.getLastValidBin()))
-                tracker.trackEvent(ErrorTrack(TrackApiSteps.BIN_NUMBER.getType(), e.message.orEmpty()))
+                tracker.trackEvent(
+                    ErrorTrack(
+                        TrackApiSteps.BIN_NUMBER.getType(),
+                        e.message.orEmpty()
+                    )
+                )
                 with(ErrorUtil.createError(e)) {
-                    if (this is UiError.ConnectionError) {
-                        showError = false
+                    when (this) {
+
+                        is UiError.ConnectionError -> {
+                            showError = false
+                        }
+
+                        is UiError.BusinessError -> {
+                            tracker.trackEvent(BinUnknownTrack(binValidator.getLastValidBin()))
+                        }
                     }
                     stateUiLiveData.postValue(this)
                 }
@@ -169,7 +185,7 @@ internal class InputFormViewModel(
         }
     }
 
-    fun hasLuhnValidation() = paymentMethod?.validation == "standard"
+    fun hasLuhnValidation() = cardLiveData.value?.cardUi?.validation == "standard"
 
     private fun setIssuer(issuer: Issuer?) {
         this.issuer = issuer
@@ -191,7 +207,8 @@ internal class InputFormViewModel(
         CoroutineScope(Dispatchers.IO).launch {
             var cardToken: CardToken? = null
             try {
-                cardToken = cardTokenRepository.tokenizeCard(CardInfoMapper(device).map(cardStepInfo))
+                cardToken =
+                    cardTokenRepository.tokenizeCard(CardInfoMapper(device).map(cardStepInfo))
             } catch (e: Exception) {
                 e.printStackTrace()
                 tracker.trackEvent(ErrorTrack(TrackApiSteps.TOKEN.getType(), e.message.orEmpty()))
@@ -236,7 +253,12 @@ internal class InputFormViewModel(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                tracker.trackEvent(ErrorTrack(TrackApiSteps.ASSOCIATION.getType(), e.message.orEmpty()))
+                tracker.trackEvent(
+                    ErrorTrack(
+                        TrackApiSteps.ASSOCIATION.getType(),
+                        e.message.orEmpty()
+                    )
+                )
                 stateUiLiveData.postValue(ErrorUtil.createError(e))
             }
         }

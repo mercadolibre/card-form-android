@@ -42,7 +42,6 @@ internal class CardNumberFragment : InputFragment() {
             input.requestFocus()
             KeyboardHelper.showKeyboard(input)
         }
-        numberCardEditText.showIconActions(false)
 
         val filter = InputFilter { source, start, end, _, _, _ ->
             for (i in start until end) {

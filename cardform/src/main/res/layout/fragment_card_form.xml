@@ -49,7 +49,7 @@
             android:background="@color/cf_button_navigation_background"
             android:text="@string/cf_back"
             android:textAllCaps="false"
-            android:textColor="@color/cf_button_navigation_text"
+            android:textColor="@color/ui_components_primary_color"
             android:textSize="@dimen/ui_fontsize_xsmall" />
 
         <Button
@@ -60,7 +60,7 @@
             android:background="@color/cf_button_navigation_background"
             android:text="@string/cf_next"
             android:textAllCaps="false"
-            android:textColor="@color/cf_button_navigation_text"
+            android:textColor="@color/ui_components_primary_color"
             android:textSize="@dimen/ui_fontsize_xsmall" />
 
     </LinearLayout>

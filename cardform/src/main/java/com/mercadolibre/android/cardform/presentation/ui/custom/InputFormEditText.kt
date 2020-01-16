@@ -9,7 +9,7 @@ import android.os.Parcelable
 import android.support.annotation.DrawableRes
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
-import android.text.InputFilter
+import android.text.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View.OnFocusChangeListener
@@ -50,6 +50,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     constructor(context: Context) : this(context, null)
 
     private fun configureView(context: Context) {
+        orientation = VERTICAL
         inflate(context, R.layout.cf_input_form_edittext, this)
 
         input.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
@@ -71,8 +72,13 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
         return super.dispatchTouchEvent(ev)
     }
 
-    fun setInputType(inputType: Int) {
+    private fun setRawInputType(inputType: Int) {
         input.setRawInputType(inputType)
+    }
+
+    fun setInputType(inputType: Int) {
+        input.inputType = inputType
+        setRawInputType(inputType)
     }
 
     fun setHint(hint: String) {
@@ -111,7 +117,10 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
                 )
             )
             TypefaceHelper.setTypeface(infoInput, Font.SEMI_BOLD)
-            ViewCompat.setBackgroundTintList(input, getColorStateUnderLine(R.color.ui_meli_red))
+            ViewCompat.setBackgroundTintList(
+                input,
+                getColorStateUnderLine(R.color.ui_components_error_color)
+            )
         }
         hasError = true
     }
@@ -126,7 +135,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
         TypefaceHelper.setTypeface(infoInput, Font.REGULAR)
         ViewCompat.setBackgroundTintList(
             input,
-            getColorStateUnderLine(R.color.ui_meli_blue)
+            getColorStateUnderLine(R.color.ui_components_primary_color)
         )
         hasError = false
     }
@@ -198,7 +207,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     }
 
     fun configure(data: InputData, textChanged: OnTextChanged) {
-        setInputType(TypeInput.fromType(data.type).getInputType())
+        setRawInputType(TypeInput.fromType(data.type).getInputType())
         setHint(data.title)
         data.hintMessage?.let { setInfoHint(it) }
         setMessageError(data.validationMessage)

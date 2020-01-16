@@ -18,6 +18,7 @@
             android:id="@+id/input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:lines="1"
             android:imeOptions="flagNoEnterAction"
             android:importantForAutofill="no" />
 

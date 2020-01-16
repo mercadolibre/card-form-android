@@ -158,7 +158,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
                     ContextCompat.getColor(
                         context!!,
                         if (isEnabled) {
-                            R.color.cf_button_navigation_text
+                            R.color.ui_components_primary_color
                         } else {
                             R.color.card_drawer_gray_light
                         }
