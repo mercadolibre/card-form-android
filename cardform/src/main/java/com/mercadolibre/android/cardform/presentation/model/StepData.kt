@@ -3,7 +3,7 @@ package com.mercadolibre.android.cardform.presentation.model
 import android.os.Parcel
 import android.os.Parcelable
 
-class StepData(
+internal class StepData(
     override var name: String,
     override var maxLength: Int,
     override var type: String,

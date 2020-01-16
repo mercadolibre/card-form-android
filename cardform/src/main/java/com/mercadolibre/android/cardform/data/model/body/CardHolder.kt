@@ -1,6 +1,6 @@
 package com.mercadolibre.android.cardform.data.model.body
 
-data class CardHolder(
+internal data class CardHolder(
     val identification: IdentificationBody,
     val name: String
 )

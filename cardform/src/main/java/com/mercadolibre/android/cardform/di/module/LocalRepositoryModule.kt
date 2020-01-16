@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import com.mercadolibre.android.cardform.di.preferences.IdentificationPreferences
 import com.mercadolibre.android.cardform.di.preferences.NameOwnerPreferences
 
-class LocalRepositoryModule(applicationContext: Context) {
+internal class LocalRepositoryModule(applicationContext: Context) {
 
     private val preferences: SharedPreferences by lazy { applicationContext.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE) }
 

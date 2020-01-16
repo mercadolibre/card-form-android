@@ -1,6 +1,6 @@
 package com.mercadolibre.android.cardform.data.model.response
 
-data class IdentificationTypes (
+internal data class IdentificationTypes (
     val id : String,
     val name : String,
     val type : String,

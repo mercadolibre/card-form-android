@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.cf_input_form_edittext.view.*
 
 typealias OnTextChanged = (s: String) -> Unit
 
-class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
+internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     LinearLayout(context, attrs, defStyleAttr) {
 
     private var hint: String = ""

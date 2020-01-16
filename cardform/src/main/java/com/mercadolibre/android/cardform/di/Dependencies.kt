@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.di.module.*
 
-class Dependencies {
+internal class Dependencies {
 
     var networkModule: NetworkModule? = null
         private set

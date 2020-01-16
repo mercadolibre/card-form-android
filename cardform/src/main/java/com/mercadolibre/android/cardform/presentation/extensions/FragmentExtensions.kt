@@ -6,25 +6,25 @@ import android.graphics.Rect
 import android.support.v4.app.Fragment
 import android.view.inputmethod.InputMethodManager
 
-fun Fragment.hideKeyboard() {
+internal fun Fragment.hideKeyboard() {
     activity?.hideKeyboard()
 }
 
-fun Activity.hideKeyboard() {
+internal fun Activity.hideKeyboard() {
     val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
 }
 
-fun Fragment.showKeyboard() {
+internal fun Fragment.showKeyboard() {
     activity?.showKeyboard()
 }
 
-fun Activity.showKeyboard() {
+internal fun Activity.showKeyboard() {
     val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
 }
 
-fun Fragment.addKeyBoardListener(
+internal fun Fragment.addKeyBoardListener(
     onKeyBoardOpen: (() -> Unit)? = null,
     onKeyBoardClose: (() -> Unit)? = null
 ) {

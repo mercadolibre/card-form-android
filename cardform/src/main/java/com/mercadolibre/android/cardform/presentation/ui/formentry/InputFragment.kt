@@ -3,14 +3,12 @@ package com.mercadolibre.android.cardform.presentation.ui.formentry
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.View
+import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.base.BaseFragment
 import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationController
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
-import android.view.animation.AlphaAnimation
-import com.mercadolibre.android.cardform.R
-import com.mercadolibre.android.cardform.tracks.Track
-import com.mercadolibre.android.cardform.tracks.model.bin.BinNumberView
 
 typealias MoveTo = ((position: Int) -> Unit)
 
@@ -18,7 +16,7 @@ typealias MoveTo = ((position: Int) -> Unit)
  * A simple [Fragment] subclass.
  */
 
-abstract class InputFragment : BaseFragment<InputFormViewModel>() {
+internal abstract class InputFragment : BaseFragment<InputFormViewModel>() {
     override val viewModelClass = InputFormViewModel::class.java
     protected var isInputValid = false
     override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {

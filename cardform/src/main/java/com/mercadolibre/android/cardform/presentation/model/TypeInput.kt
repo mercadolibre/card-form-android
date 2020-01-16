@@ -3,7 +3,7 @@ package com.mercadolibre.android.cardform.presentation.model
 import android.text.InputType
 import java.lang.IllegalArgumentException
 
-enum class TypeInput(private val type: String) {
+internal enum class TypeInput(private val type: String) {
 
     TEXT("text") {
         override fun getInputType(): Int {
@@ -23,7 +23,7 @@ enum class TypeInput(private val type: String) {
     },
     NUMBER("number") {
         override fun getInputType(): Int {
-            return InputType.TYPE_CLASS_NUMBER or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            return InputType.TYPE_CLASS_PHONE
         }
     };
 

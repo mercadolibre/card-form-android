@@ -4,7 +4,7 @@ import com.mercadolibre.android.cardform.presentation.model.Identification
 import java.util.*
 import java.util.regex.Pattern
 
-object IdentificationUtils {
+internal object IdentificationUtils {
     private const val CPF = "CPF"
     private const val CNPJ = "CNPJ"
     private const val CPF_ALGORITHM_EXPECTED_LENGTH = 11

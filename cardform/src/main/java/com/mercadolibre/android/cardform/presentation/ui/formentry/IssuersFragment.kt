@@ -25,8 +25,7 @@ import com.mercadolibre.android.picassodiskcache.PicassoDiskLoader
 import com.mercadolibre.android.ui.widgets.MeliButton
 import kotlinx.android.synthetic.main.fragment_issuers.*
 
-
-class IssuersFragment : InputFragment() {
+internal class IssuersFragment : InputFragment() {
     override val rootLayout = R.layout.fragment_issuers
 
     private lateinit var issuerAdapter: IssuerAdapter

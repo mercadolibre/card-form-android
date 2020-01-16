@@ -2,7 +2,7 @@ package com.mercadolibre.android.cardform.data.model.response
 
 import com.mercadolibre.android.cardform.data.model.body.CardHolder
 
-data class CardToken(
+internal data class CardToken(
     val cardNumberLength: Int,
     val cardholder: CardHolder,
     val dateCreated: String,

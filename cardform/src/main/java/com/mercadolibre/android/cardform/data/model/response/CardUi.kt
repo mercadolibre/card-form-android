@@ -3,16 +3,16 @@ package com.mercadolibre.android.cardform.data.model.response
 import android.os.Parcel
 import android.os.Parcelable
 
-data class CardUi(
-    val cardNumberLength: Int,
-    val cardColor: String,
-    val cardFontColor: String,
-    val cardFontType: String,
-    val securityCodeLocation: String,
-    val securityCodeLength: Int,
-    val paymentMethodImageUrl: String?,
-    var issuerImageUrl: String?,
-    var cardPattern: IntArray,
+internal data class CardUi (
+    val cardNumberLength : Int,
+    val cardColor : String,
+    val cardFontColor : String,
+    val cardFontType : String,
+    val securityCodeLocation : String,
+    val securityCodeLength : Int,
+    val paymentMethodImageUrl : String?,
+    var issuerImageUrl : String?,
+    var cardPattern : IntArray,
     val validation: String
 ) : Parcelable {
     constructor(parcel: Parcel) : this(

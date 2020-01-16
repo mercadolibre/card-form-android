@@ -4,7 +4,7 @@ import com.mercadolibre.android.cardform.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class UserAgentInterceptor : Interceptor {
+internal class UserAgentInterceptor : Interceptor {
 
     companion object {
         private const val HEADER = "user-agent"

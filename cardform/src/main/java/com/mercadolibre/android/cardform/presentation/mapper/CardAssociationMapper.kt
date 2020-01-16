@@ -6,7 +6,7 @@ import com.mercadolibre.android.cardform.data.model.body.IssuerBody
 import com.mercadolibre.android.cardform.data.model.body.PaymentMethodBody
 import com.mercadolibre.android.cardform.data.model.response.PaymentMethod
 
-object CardAssociationMapper: Mapper<AssociatedCardBody, CardAssociationMapper.Model> {
+internal object CardAssociationMapper: Mapper<AssociatedCardBody, CardAssociationMapper.Model> {
     override fun map(model: Model): AssociatedCardBody {
         return AssociatedCardBody(
             model.cardTokenId,

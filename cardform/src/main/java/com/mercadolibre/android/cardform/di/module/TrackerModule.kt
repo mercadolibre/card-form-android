@@ -4,7 +4,7 @@ import com.mercadolibre.android.cardform.tracks.CardFormTracker
 import com.mercadolibre.android.cardform.tracks.TrackerData
 import com.mercadopago.android.px.addons.TrackingBehaviour
 
-class TrackerModule(
+internal class TrackerModule(
     siteId: String,
     flowId: String,
     sessionId: String,

@@ -4,7 +4,7 @@ import android.view.animation.Animation
 
 typealias AnimationListener = () -> Unit
 
-fun Animation.setAnimationListener(repeat: AnimationListener? = null,
+internal fun Animation.setAnimationListener(repeat: AnimationListener? = null,
                                    start: AnimationListener? = null,
                                    finish: AnimationListener? = null) {
     setAnimationListener(object : Animation.AnimationListener {

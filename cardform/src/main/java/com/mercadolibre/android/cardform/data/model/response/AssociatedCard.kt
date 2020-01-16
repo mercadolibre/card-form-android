@@ -1,6 +1,6 @@
 package com.mercadolibre.android.cardform.data.model.response
 
-data class AssociatedCard(
+internal data class AssociatedCard(
     val dateCreated: String,
     val dateLastTimeUsed: String,
     val dateLastUpdated: String,

@@ -3,7 +3,7 @@ package com.mercadolibre.android.cardform.presentation.model
 import android.support.annotation.StringRes
 import com.mercadolibre.android.cardform.R
 
-enum class TitleBar(private val type: String) {
+internal enum class TitleBar(private val type: String) {
     CREDIT_TITLE("credit_card") {
         override fun getTitle() = R.string.cf_credit_title_app_bar
     },

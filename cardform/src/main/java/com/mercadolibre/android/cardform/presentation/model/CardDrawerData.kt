@@ -9,7 +9,7 @@ import com.meli.android.carddrawer.model.CardUI
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.data.model.response.CardUi
 
-class CardDrawerData(private val cardUi: CardUi) : CardUI, Parcelable {
+internal class CardDrawerData(private val cardUi: CardUi) : CardUI, Parcelable {
 
     private lateinit var namePlaceholder: String
     private lateinit var datePlaceholder: String

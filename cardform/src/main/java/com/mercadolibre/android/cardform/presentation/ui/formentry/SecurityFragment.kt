@@ -19,8 +19,7 @@ import kotlinx.android.synthetic.main.fragment_security.*
 import java.util.*
 import kotlin.math.pow
 
-
-class SecurityFragment : InputFragment() {
+internal class SecurityFragment : InputFragment() {
 
     override val rootLayout = R.layout.fragment_security
 
@@ -104,8 +103,9 @@ class SecurityFragment : InputFragment() {
     }
 
     private fun validateCvvCode(): Boolean {
-        viewModel.cardStepInfo.code = cvvCodeEditText.getText()
-        return cvvCodeEditText.isComplete() && cvvCodeEditText.validatePattern()
+        val text = cvvCodeEditText.getText()
+        viewModel.cardStepInfo.code = text
+        return text.toIntOrNull() != null && cvvCodeEditText.isComplete() && cvvCodeEditText.validatePattern()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

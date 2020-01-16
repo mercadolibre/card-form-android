@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.IOException
 
-class CardAssociationRepositoryImpl(private val associationService: CardAssociationService,
+internal class CardAssociationRepositoryImpl(private val associationService: CardAssociationService,
                                     private val accessToken: String) : CardAssociationRepository {
     override suspend fun associateCard(associatedCardBody: AssociatedCardBody): AssociatedCard? {
         return withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {

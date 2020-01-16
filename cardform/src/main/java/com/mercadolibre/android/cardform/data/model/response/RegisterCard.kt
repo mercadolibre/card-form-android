@@ -1,6 +1,6 @@
 package com.mercadolibre.android.cardform.data.model.response
 
-data class RegisterCard (
+internal data class RegisterCard (
     val escEnabled : Boolean,
     val paymentMethod : PaymentMethod,
     val cardUi : CardUi,

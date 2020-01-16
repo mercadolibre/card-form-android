@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.PagerAdapter
 import android.view.ViewGroup
 
-class FormInputViewPagerAdapter(
+internal class FormInputViewPagerAdapter(
     manager: FragmentManager?
 ) : FragmentStatePagerAdapter(manager) {
 

@@ -3,7 +3,7 @@ package com.mercadolibre.android.cardform.presentation.ui.custom
 import android.text.Editable
 import android.text.TextWatcher
 
-open class MaskWatcher(private val mask: String) : TextWatcher {
+internal open class MaskWatcher(private val mask: String) : TextWatcher {
     private var isRunning = false
     private var isDeleting = false
 

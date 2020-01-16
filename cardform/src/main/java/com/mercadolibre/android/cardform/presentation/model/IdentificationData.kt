@@ -3,7 +3,7 @@ package com.mercadolibre.android.cardform.presentation.model
 import android.os.Parcel
 import android.os.Parcelable
 
-data class IdentificationData(
+internal data class IdentificationData(
     override val name: String,
     override val maxLength: Int = 0,
     override val type: String,
