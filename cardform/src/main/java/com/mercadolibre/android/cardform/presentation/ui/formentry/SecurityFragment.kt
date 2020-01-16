@@ -123,7 +123,7 @@ internal class SecurityFragment : InputFragment() {
 
         val expiration = expirationText.trim().split('/')
 
-        if (expiration.size == 2 && expiration[0].toInt() in 1..12 && expiration[1].matches(Regex("[0-9]{2}"))) {
+        if (expiration.size == 2 && expiration[0].toIntOrNull() in 1..12 && expiration[1].matches(Regex("[0-9]{2}"))) {
             val date = Date()
             val cal = Calendar.getInstance(TimeZone.getTimeZone(TimeZone.getDefault().id))
             cal.time = date
