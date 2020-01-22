@@ -40,7 +40,10 @@ internal class SecurityFragment : InputFragment() {
             showIconActions(false)
             addOnTouchListener {
                 super.fromRight()
-                viewModel.tracker.trackEvent(BackTrack(TrackSteps.SECURITY.getType()))
+                with(viewModel) {
+                    stateCardLiveData.value = CardState.HideCode
+                    tracker.trackEvent(BackTrack(TrackSteps.SECURITY.getType()))
+                }
             }
         }
 
@@ -56,6 +59,7 @@ internal class SecurityFragment : InputFragment() {
                     }
                 } else {
                     with(viewModel) {
+                        stateCardLiveData.value = CardState.ShowCode
                         tracker.trackEvent(ExpirationValidTrack())
                         tracker.trackEvent(NextTrack(TrackSteps.EXPIRATION.getType()))
                     }

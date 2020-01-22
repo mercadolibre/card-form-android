@@ -33,12 +33,11 @@ internal class CardNumberFragment : InputFragment() {
         if (savedInstanceState == null) {
             trackFragmentView()
             setDefaultConfiguration()
-        }
-
-        postDelayed((resources.getInteger(R.integer.cf_anim_duration) * 1.5).toLong()) {
-            if (isVisible) {
-                input.requestFocus()
-                KeyboardHelper.showKeyboard(input)
+            postDelayed((resources.getInteger(R.integer.cf_anim_duration) * 1.5).toLong()) {
+                if (isVisible) {
+                    input.requestFocus()
+                    KeyboardHelper.showKeyboard(input)
+                }
             }
         }
 

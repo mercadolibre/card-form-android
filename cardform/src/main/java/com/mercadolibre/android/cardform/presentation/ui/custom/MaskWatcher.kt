@@ -29,7 +29,8 @@ internal open class MaskWatcher(private val mask: String) : TextWatcher {
 
         for (char in blackList) {
             if (editable.contains(char)) {
-                editable.replace(editable.indexOf(char), editable.indexOf(char) + 1, "")
+                var indexChar = editable.indexOf(char)
+                editable.replace(indexChar, ++indexChar, "")
                 isRunning = false
                 return
             }
@@ -46,6 +47,4 @@ internal open class MaskWatcher(private val mask: String) : TextWatcher {
 
         isRunning = false
     }
-
-    fun getMask() = mask
 }
