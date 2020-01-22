@@ -37,7 +37,6 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     private var icon: Icon = Icon.EMPTY
     private var showIcons = true
     private var touchListener: () -> Unit = {}
-    private var focusChangeListener: (hasFocus: Boolean) -> Unit = {}
     private var iconClickListener: () -> Unit = {}
     private var isTouched = false
 
@@ -58,7 +57,6 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
                 isTouched = false
                 touchListener()
             }
-            focusChangeListener(hasFocus)
             if (hasFocus) {
                 input.setSelection(getText().length)
             }

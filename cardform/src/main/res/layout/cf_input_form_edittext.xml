@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:parentTag="android.widget.LinearLayout"
-    android:orientation="vertical">
+    tools:parentTag="android.widget.LinearLayout">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/inputLayout"
