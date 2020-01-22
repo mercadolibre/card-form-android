@@ -6,6 +6,7 @@ import android.text.TextWatcher
 internal open class MaskWatcher(private val mask: String) : TextWatcher {
     private var isRunning = false
     private var isDeleting = false
+    private val blackList = arrayOf("*", "#", ",", ";", "+", "(", ")")
 
     override fun beforeTextChanged(
         charSequence: CharSequence?,
@@ -20,10 +21,19 @@ internal open class MaskWatcher(private val mask: String) : TextWatcher {
         Unit
 
     override fun afterTextChanged(editable: Editable) {
-        if (isRunning || isDeleting || mask.isEmpty()) {
+        if (isRunning || isDeleting) {
             return
         }
         isRunning = true
+
+
+        for (char in blackList) {
+            if (editable.contains(char)) {
+                editable.replace(editable.indexOf(char), editable.indexOf(char) + 1, "")
+                isRunning = false
+                return
+            }
+        }
 
         val editableLength = editable.length
         if (editableLength < mask.length && editableLength > 0) {

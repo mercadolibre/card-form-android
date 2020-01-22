@@ -125,14 +125,26 @@ internal class InputFormViewModel(
                         stateUiLiveData.postValue(UiResult.EmptyResult)
                     }
                 } catch (e: Exception) {
-                    tracker.trackEvent(BinUnknownTrack(binValidator.bin!!))
+                    e.printStackTrace()
                     tracker.trackEvent(
                         ErrorTrack(
                             TrackApiSteps.BIN_NUMBER.getType(),
                             e.message.orEmpty()
                         )
                     )
-                    e.printStackTrace()
+                    with(ErrorUtil.createError(e)) {
+                        when (this) {
+
+                            is UiError.ConnectionError -> {
+                                showError = false
+                            }
+
+                            is UiError.BusinessError -> {
+                                tracker.trackEvent(BinUnknownTrack(binValidator.getLastValidBin()))
+                            }
+                        }
+                        stateUiLiveData.postValue(this)
+                    }
                     stateUiLiveData.postValue(ErrorUtil.createError(e))
                 }
             }
