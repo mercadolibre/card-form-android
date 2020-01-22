@@ -7,7 +7,7 @@ object Versions {
     const val carddrawer = "2.+"
     const val runner = "1.0.2"
     const val junit = "4.12"
-    const val meliUI ="8.2.0"
+    const val ui ="8.+"
     const val lifecycle = "1.1.1"
     const val okHttp = "3.11.0"
     const val compileSdkVersion = 28

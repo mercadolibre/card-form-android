@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply from:   "$rootDir/gradle/deploy_card_form.gradle"
 
 def user_agent = "CardForm/Android/" + Versions.versionToDeploy
 
@@ -61,7 +60,7 @@ dependencies {
 
     implementation Dependencies.loggingInterceptor
 
-    implementation Dependencies.meliUI
+    implementation Dependencies.ui
     implementation Dependencies.carddrawer
     implementation Dependencies.picassoDiskCache
     implementation Dependencies.extensions
@@ -72,3 +71,5 @@ dependencies {
     testImplementation Dependencies.junit
     androidTestImplementation Dependencies.runner
 }
+
+apply from: "$rootDir/gradle/deploy_card_form.gradle"
