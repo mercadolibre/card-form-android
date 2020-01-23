@@ -39,7 +39,7 @@ dependencies {
     implementation Dependencies.constraintLayout
     implementation Dependencies.appCompat
 
-    implementation Dependencies.meliUI
+    implementation Dependencies.ui
     implementation Dependencies.extensions
     implementation Dependencies.livedataCore
     implementation Dependencies.viewmodel

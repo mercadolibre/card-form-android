@@ -4,10 +4,24 @@ apply plugin:'maven-publish'
 apply plugin:'com.jfrog.bintray'
 apply plugin:'com.github.dcendents.android-maven'
 
-def dateNow = project.hasProperty('production') ? "" : new Date().format("ddMMyyyyHHmmssS")
 def versionLocation = "build/last_deployed_version.txt"
 version = project.hasProperty('production') ? Versions.versionToDeploy :
         "EXPERIMENTAL-${Versions.versionToDeploy}-${dateNow}"
+
+task javadoc(type:Javadoc) {
+    failOnError = false
+    options.encoding = 'UTF-8'
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    exclude '**/BuildConfig.java'
+    exclude '**/R.java'
+    exclude '**/internal/**'
+}
+
+task androidJavadocsJar(type:Jar, dependsOn:javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
 
 task androidSourcesJar(type:Jar) {
     classifier = 'sources'
@@ -47,6 +61,7 @@ task printLastVersion {
 
 artifacts {
     archives androidSourcesJar
+    archives androidJavadocsJar
 }
 
 def localProperties = new Properties()
@@ -79,12 +94,12 @@ install {
                 }
                 developers {
                     developer {
-                        id 'agustin.mantuano'
+                        id 'agustinmantuano'
                         name 'Agustin Mantuano'
                         email 'agustin.mantuano@mercadolibre.com'
                     }
                     developer {
-                        id 'jorge.gonzalez'
+                        id 'george29'
                         name 'Jorge Gonzalez'
                         email 'jorge.gonzalez@mercadolibre.com'
                     }

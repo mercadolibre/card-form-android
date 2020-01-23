@@ -41,7 +41,7 @@ object Dependencies {
 
 
     // Mercado libre
-    const val meliUI = "com.mercadolibre.android:ui:${Versions.meliUI}"
+    const val ui = "com.mercadolibre.android:ui:${Versions.ui}"
     const val carddrawer = "com.mercadolibre.android:carddrawer:${Versions.carddrawer}"
     const val picassoDiskCache = "com.mercadolibre.android:picasso-disk-cache:${Versions.picassoDiskCache}"
 }
