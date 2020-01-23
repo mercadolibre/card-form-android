@@ -10,6 +10,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        tools:layout_height="50dp"
         app:contentInsetEnd="0dp"
         app:contentInsetLeft="0dp"
         app:contentInsetRight="0dp"
@@ -30,15 +31,25 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <ProgressBar
-        android:id="@+id/progress"
-        style="@style/ProgressBar"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_marginStart="-2dp"
-        android:layout_marginEnd="-2dp"
-        android:layout_height="4dp"
-        android:max="100"
-        android:progress="20"
-        android:progressDrawable="@drawable/horizontal_progress_drawable" />
+        android:layout_height="wrap_content">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@color/ui_components_primary_color"
+            android:alpha="0.2" />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="@style/ProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:progressDrawable="@drawable/horizontal_progress_drawable"
+            android:max="100"
+            android:progress="20" />
+
+    </FrameLayout>
 
 </merge>
