@@ -37,7 +37,6 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     private var icon: Icon = Icon.EMPTY
     private var showIcons = true
     private var touchListener: () -> Unit = {}
-    private var focusChangeListener: (hasFocus: Boolean) -> Unit = {}
     private var iconClickListener: () -> Unit = {}
     private var isTouched = false
 
@@ -58,7 +57,6 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
                 isTouched = false
                 touchListener()
             }
-            focusChangeListener(hasFocus)
             if (hasFocus) {
                 input.setSelection(getText().length)
             }
@@ -72,13 +70,8 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
         return super.dispatchTouchEvent(ev)
     }
 
-    private fun setRawInputType(inputType: Int) {
-        input.setRawInputType(inputType)
-    }
-
     fun setInputType(inputType: Int) {
         input.inputType = inputType
-        setRawInputType(inputType)
     }
 
     fun setHint(hint: String) {
@@ -145,7 +138,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     }
 
     fun getText(): String {
-        return input.text.toString().trim()
+        return input.text.toString()
     }
 
     fun setText(text: String) {
@@ -175,16 +168,18 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
 
             addWatcher(mask, textChanged)
 
-            if (getText().isNotEmpty() && mask.isNotEmpty()) {
-                var holdText = getText()
-                var newText = mask
+            input.text?.apply {
+                if (isNotEmpty() && mask.isNotEmpty()) {
+                    var newText = mask
+                    val holdText = replace("\\s+".toRegex(), "")
+                    for (i in holdText.indices) {
+                        newText = newText.replaceFirst('$', holdText[i])
+                    }
 
-                holdText = holdText.replace("\\s+".toRegex(), "")
-                for (i in holdText.indices)
-                    newText = newText.replaceFirst('$', holdText[i])
-
-                setText(newText.substringBefore("$").trimEnd())
-                input.setSelection(getText().length)
+                    update(this, newText.substringBefore('$')) {
+                        replace(0, it.length, it)
+                    }
+                }
             }
         } ?: apply { addWatcher(mask, textChanged) }
     }
@@ -207,7 +202,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     }
 
     fun configure(data: InputData, textChanged: OnTextChanged) {
-        setRawInputType(TypeInput.fromType(data.type).getInputType())
+        setInputType(TypeInput.fromType(data.type).getInputType())
         setHint(data.title)
         data.hintMessage?.let { setInfoHint(it) }
         setMessageError(data.validationMessage)

@@ -25,12 +25,6 @@ internal class SecurityFragment : InputFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        expirationEditText.saveState(false)
-        cvvCodeEditText.saveState(false)
-
-        expirationEditText.showIconActions(false)
-        cvvCodeEditText.showIconActions(false)
-
         if (savedInstanceState == null) {
             viewModel.codeLiveData.value =
                 ObjectStepFactory.createDefaultStepFrom(resources, FormType.SECURITY_CODE_TYPE)
@@ -41,24 +35,36 @@ internal class SecurityFragment : InputFragment() {
             }
         }
 
-        expirationEditText.addOnTouchListener {
-            super.fromRight()
-            viewModel.tracker.trackEvent(BackTrack(TrackSteps.SECURITY.getType()))
+        with(expirationEditText) {
+            saveState(false)
+            showIconActions(false)
+            addOnTouchListener {
+                super.fromRight()
+                with(viewModel) {
+                    stateCardLiveData.value = CardState.HideCode
+                    tracker.trackEvent(BackTrack(TrackSteps.SECURITY.getType()))
+                }
+            }
         }
 
-        cvvCodeEditText.addOnTouchListener {
-            if (!validateExpirationDate()) {
-                with(expirationEditText) {
-                    requestFocus()
-                    showError()
-                    viewModel.tracker.trackEvent(ExpirationInvalidTrack())
+        with(cvvCodeEditText) {
+            saveState(false)
+            showIconActions(false)
+            addOnTouchListener {
+                if (!validateExpirationDate()) {
+                    with(expirationEditText) {
+                        requestFocus()
+                        showError()
+                        viewModel.tracker.trackEvent(ExpirationInvalidTrack())
+                    }
+                } else {
+                    with(viewModel) {
+                        stateCardLiveData.value = CardState.ShowCode
+                        tracker.trackEvent(ExpirationValidTrack())
+                        tracker.trackEvent(NextTrack(TrackSteps.EXPIRATION.getType()))
+                    }
+                    super.fromLeft()
                 }
-            } else {
-                with(viewModel) {
-                    tracker.trackEvent(ExpirationValidTrack())
-                    tracker.trackEvent(NextTrack(TrackSteps.EXPIRATION.getType()))
-                }
-                super.fromLeft()
             }
         }
     }
@@ -123,7 +129,10 @@ internal class SecurityFragment : InputFragment() {
 
         val expiration = expirationText.trim().split('/')
 
-        if (expiration.size == 2 && expiration[0].toIntOrNull() in 1..12 && expiration[1].matches(Regex("[0-9]{2}"))) {
+        if (expiration.size == 2 && expiration[0].toIntOrNull() in 1..12 && expiration[1].matches(
+                Regex("[0-9]{2}")
+            )
+        ) {
             val date = Date()
             val cal = Calendar.getInstance(TimeZone.getTimeZone(TimeZone.getDefault().id))
             cal.time = date
@@ -134,7 +143,7 @@ internal class SecurityFragment : InputFragment() {
                 ((year / it) * it) + expiration[1].toInt()
             }
 
-            return yearExpiration > year || (yearExpiration == year && monthExpiration >= month )
+            return yearExpiration > year || (yearExpiration == year && monthExpiration >= month)
         }
         return false
     }
