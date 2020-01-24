@@ -138,7 +138,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     }
 
     fun getText(): String {
-        return input.text.toString().trim()
+        return input.text.toString()
     }
 
     fun setText(text: String) {
@@ -168,16 +168,18 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
 
             addWatcher(mask, textChanged)
 
-            if (getText().isNotEmpty() && mask.isNotEmpty()) {
-                var holdText = getText()
-                var newText = mask
+            input.text?.apply {
+                if (isNotEmpty() && mask.isNotEmpty()) {
+                    var newText = mask
+                    val holdText = replace("\\s+".toRegex(), "")
+                    for (i in holdText.indices) {
+                        newText = newText.replaceFirst('$', holdText[i])
+                    }
 
-                holdText = holdText.replace("\\s+".toRegex(), "")
-                for (i in holdText.indices)
-                    newText = newText.replaceFirst('$', holdText[i])
-
-                setText(newText.substringBefore("$").trimEnd())
-                input.setSelection(getText().length)
+                    update(this, newText.substringBefore('$')) {
+                        replace(0, it.length, it)
+                    }
+                }
             }
         } ?: apply { addWatcher(mask, textChanged) }
     }

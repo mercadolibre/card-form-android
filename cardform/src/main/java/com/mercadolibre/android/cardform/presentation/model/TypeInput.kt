@@ -23,7 +23,7 @@ internal enum class TypeInput(private val type: String) {
     },
     NUMBER("number") {
         override fun getInputType(): Int {
-            return InputType.TYPE_CLASS_PHONE
+            return InputType.TYPE_CLASS_NUMBER
         }
     };
 
