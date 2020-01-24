@@ -2,14 +2,17 @@ package com.mercadolibre.android.cardform.presentation.ui
 
 import android.app.Activity
 import android.arch.lifecycle.Observer
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.CardView
 import android.view.View
 import android.view.animation.Animation
 import com.meli.android.carddrawer.configuration.DefaultCardConfiguration
+import com.meli.android.carddrawer.configuration.SecurityCodeLocation
 import com.meli.android.carddrawer.model.CardAnimationType
 import com.meli.android.carddrawer.model.CardDrawerView
 import com.meli.android.carddrawer.model.CardUI
@@ -27,7 +30,7 @@ import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewMod
 import com.mercadolibre.android.cardform.tracks.model.flow.InitTrack
 import com.mercadolibre.android.cardform.tracks.model.flow.SuccessTrack
 import kotlinx.android.synthetic.main.app_bar.*
-import kotlinx.android.synthetic.main.cf_card.inputViewPager
+import kotlinx.android.synthetic.main.cf_card.*
 import kotlinx.android.synthetic.main.fragment_card_form.*
 
 /**
@@ -46,6 +49,8 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
     private var animationEnded = false
     private var progressFragment: ProgressFragment? = null
     private lateinit var cardDrawer: CardDrawerView
+    private lateinit var cardDrawerContainer: CardView
+    private var cvvOnBack = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +75,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
             val offset = (duration * 0.5).toLong()
             if (enter) {
                 if (!animationEnded) {
-                    cardDrawer.pushUpIn()
+                    cardDrawerContainer.pushUpIn()
                     buttonContainer.fadeIn()
                     inputViewPager.slideLeftIn(offset)
                     progress.slideRightIn(offset)
@@ -79,7 +84,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
                     })
                 }
             } else {
-                cardDrawer.pushDownOut()
+                cardDrawerContainer.pushDownOut()
                 inputViewPager.slideRightOut()
                 buttonContainer.goneDuringAnimation()
                 progress.fadeOut()
@@ -92,7 +97,11 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        cardDrawer = view.findViewById(R.id.cardDrawer)
+        cardDrawerContainer = view.findViewById(R.id.cardDrawerContainer)
+        cardDrawer = cardDrawerContainer.findViewById(R.id.cardDrawer)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cardDrawerContainer.clipToOutline = false
+        }
 
         if (savedInstanceState == null) {
             viewModel.tracker.trackEvent(InitTrack())
@@ -210,6 +219,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
                     defaultCardDrawerConfiguration
                 }
 
+                cvvOnBack = cardDrawerData.securityCodeLocation == SecurityCodeLocation.BACK
                 cardDrawer.show(cardDrawerData)
                 numberLiveData.value = ObjectStepFactory
                     .createDefaultStepFrom(
@@ -222,7 +232,6 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
 
             stateUiLiveData.nonNullObserve(viewLifecycleOwner) {
                 when (it) {
-
                     is UiLoading -> {
                         showProgress()
                     }
@@ -245,13 +254,27 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
                 when (it) {
                     CardState.ShowCode -> {
                         cardDrawer.showSecurityCode()
+                        if (cvvOnBack) {
+                            hideShadowWhileAnimating()
+                        }
                     }
 
                     CardState.HideCode -> {
                         cardDrawer.show()
+                        if (cvvOnBack) {
+                            hideShadowWhileAnimating()
+                        }
                     }
                 }
             }
+        }
+    }
+
+    private fun hideShadowWhileAnimating() {
+        val previousElevation = cardDrawerContainer.cardElevation
+        cardDrawerContainer.cardElevation = 0f
+        postDelayed(resources.getInteger(R.integer.card_drawer_card_flip_time_full).toLong()) {
+            cardDrawerContainer.cardElevation = previousElevation
         }
     }
 

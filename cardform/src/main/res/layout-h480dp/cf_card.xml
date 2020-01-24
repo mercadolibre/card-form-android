@@ -4,17 +4,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:orientation="vertical">
 
-    <com.meli.android.carddrawer.model.CardDrawerViewLowres
-        android:id="@+id/cardDrawer"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clipToPadding="false"
         android:paddingStart="50dp"
         android:paddingEnd="50dp"
-        app:card_header_behaviour="responsive"
-        app:card_header_internal_padding="18dp"/>
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingBottom="18dp"
+        android:paddingTop="18dp" >
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardDrawerContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:clipChildren="false"
+            app:cardBackgroundColor="@color/ui_transparent"
+            app:cardPreventCornerOverlap="false"
+            app:cardElevation="@dimen/ui_025m"
+            app:cardCornerRadius="@dimen/ui_1_5m" >
+
+            <com.meli.android.carddrawer.model.CardDrawerViewLowres
+                android:id="@+id/cardDrawer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:card_header_behaviour="responsive"
+                app:card_header_internal_padding="0dp"
+                tools:layout_height="200dp" />
+
+        </android.support.v7.widget.CardView>
+
+    </FrameLayout>
 
     <com.mercadolibre.android.cardform.presentation.ui.formentry.InputFormViewPager
         android:id="@+id/inputViewPager"
