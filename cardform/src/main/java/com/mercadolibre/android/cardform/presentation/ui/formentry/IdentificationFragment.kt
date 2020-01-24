@@ -137,6 +137,7 @@ internal class IdentificationFragment : InputFragment() {
         with(viewModel) {
             if (isInputValid) {
                 cardStepInfo.identificationNumber = number
+                preferences.saveIdentificationId(cardStepInfo.identificationId)
                 tracker.trackEvent(IdentificationValidTrack())
                 tracker.trackEvent(NextTrack(TrackSteps.IDENTIFICATION.getType()))
                 preferences.saveIdentificationNumber(number)
@@ -160,7 +161,6 @@ internal class IdentificationFragment : InputFragment() {
 
     private fun configureInput(data: Identification) {
         viewModel.cardStepInfo.identificationId = data.id
-        preferences.saveIdentificationId(data.id)
         with(identificationEditText) {
             var mask = ""
             val maxLength: Int
