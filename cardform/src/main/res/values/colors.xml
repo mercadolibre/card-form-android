@@ -4,4 +4,5 @@
     <color name="cf_button_navigation_text">#009ee3</color>
     <color name="cf_hint_input_text">#73000000</color>
     <color name="cf_radio_button_disable">#19000000</color>
+    <color name="cf_progress_color">#2968C8</color>
 </resources>
