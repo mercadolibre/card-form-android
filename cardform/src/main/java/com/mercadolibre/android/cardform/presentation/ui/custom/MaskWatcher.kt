@@ -51,7 +51,7 @@ internal open class MaskWatcher(private val mask: String) : TextWatcher {
         isRunning = false
     }
 
-    fun update(editable: Editable, text: CharSequence, editableAction: (text: CharSequence) -> Unit) {
+    fun update(editable: Editable, text: String, editableAction: (text: String) -> Unit) {
         with(editable) {
             val oldFilters = filters
             filters = emptyArray()

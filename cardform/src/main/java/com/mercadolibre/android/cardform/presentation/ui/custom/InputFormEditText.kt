@@ -142,7 +142,10 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     }
 
     fun setText(text: String) {
-        input.setText(text)
+        with(input) {
+            setText(text)
+            setSelection(text.length)
+        }
     }
 
     fun setMinLength(minLength: Int) {
@@ -177,7 +180,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
                     }
 
                     update(this, newText.substringBefore('$')) {
-                        replace(0, it.length, it)
+                        setText(it)
                     }
                 }
             }
