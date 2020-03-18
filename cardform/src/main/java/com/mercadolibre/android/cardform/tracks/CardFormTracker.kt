@@ -6,7 +6,8 @@ import com.mercadopago.android.px.addons.TrackingBehaviour
 import java.util.*
 import kotlin.collections.HashMap
 
-internal class CardFormTracker(baseData: TrackerData, private val behaviour: TrackingBehaviour) : Tracker {
+internal class CardFormTracker(baseData: TrackerData, private val behaviour: TrackingBehaviour) :
+    Tracker {
 
     private val dataMap: HashMap<String, Any>
 
@@ -24,21 +25,26 @@ internal class CardFormTracker(baseData: TrackerData, private val behaviour: Tra
         if (track is TrackData) {
             track.addTrackData(data)
         }
-        if (BuildConfig.DEBUG) {
-            Log.d(track.pathEvent, data.toString())
-        }
         trackerListener(data)
     }
 
     override fun trackView(track: Track) {
         addDataTrack(track) {
-            behaviour.onView(track.pathEvent, dataMap)
+            logDebug(track.pathEvent, it.toString())
+            behaviour.onView(track.pathEvent, it)
         }
     }
 
     override fun trackEvent(track: Track) {
         addDataTrack(track) {
-            behaviour.onEvent(track.pathEvent, dataMap)
+            logDebug(track.pathEvent, it.toString())
+            behaviour.onEvent(track.pathEvent, it)
+        }
+    }
+
+    private fun logDebug(path: String, data: String){
+        if (BuildConfig.DEBUG) {
+            Log.d(path, data)
         }
     }
 
