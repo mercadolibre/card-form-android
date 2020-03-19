@@ -10,7 +10,5 @@ internal class ViewModelModule(private val fragment: Fragment, repositoryModule:
 
     private val factory = ViewModelFactory(repositoryModule, behaviourModule, Device(fragment.context!!), trackerModule)
 
-    fun <T : ViewModel?> get(modelClass: Class<T>): T {
-        return ViewModelProviders.of(fragment, factory).get(modelClass)
-    }
+    fun <T : ViewModel?> get(modelClass: Class<T>): T = ViewModelProviders.of(fragment, factory).get(modelClass)
 }
