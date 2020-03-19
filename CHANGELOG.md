@@ -1,3 +1,7 @@
+## VERSION 1.0.4
+_18_03_2020_
+- Fix session_time in tracks
+
 ## VERSION 1.0.3
 _05_03_2020_
 - Fix copy-paste card number
