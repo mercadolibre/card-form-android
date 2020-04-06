@@ -14,6 +14,7 @@ internal interface CardService {
         @Path("environment") environment : String,
         @Query("bin") bin : String,
         @Query("site_id") siteId : String,
-        @Query("excluded_payment_types") excludedPaymentTypes : List<String>? = null
+        @Query("excluded_payment_types") excludedPaymentTypes : List<String>? = null,
+        @Query("odr") odrFlag : Boolean = true
     ): Deferred<Response<RegisterCard>>
 }
