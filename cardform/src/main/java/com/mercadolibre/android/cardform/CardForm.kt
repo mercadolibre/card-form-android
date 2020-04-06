@@ -4,6 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.support.v7.app.AppCompatActivity
 import com.mercadolibre.android.cardform.presentation.ui.CardFormActivity
+import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationController
 import java.util.*
 
 open class CardForm : Parcelable {
@@ -37,7 +38,7 @@ open class CardForm : Parcelable {
 
     fun start(activity: AppCompatActivity, requestCode: Int) {
         this.requestCode = requestCode
-
+        FragmentNavigationController.reset()
         CardFormActivity.start(activity, requestCode, this)
         activity.overridePendingTransition(
             R.anim.slide_right_to_left_in,
