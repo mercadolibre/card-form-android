@@ -1,3 +1,7 @@
+## VERSION 1.0.5
+_06_04_2020_
+- Fix navigation not reset on Activity flow
+
 ## VERSION 1.0.4
 _18_03_2020_
 - Fix session_time in tracks
