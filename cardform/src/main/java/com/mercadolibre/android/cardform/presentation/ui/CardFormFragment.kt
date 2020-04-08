@@ -53,7 +53,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
             fromFragment = getBoolean(ARG_FROM_FRAGMENT, false)
             requestCode = (getParcelable(ARG_CARD_FORM) as CardForm).requestCode
         }
-        defaultCardDrawerConfiguration = object : DefaultCardConfiguration(context) {
+        defaultCardDrawerConfiguration = object : DefaultCardConfiguration(context!!) {
             override fun getNamePlaceHolder(): String {
                 return getString(R.string.cf_card_name_hint)
             }
@@ -96,7 +96,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
 
         if (savedInstanceState == null) {
             viewModel.tracker.trackEvent(InitTrack())
-            cardDrawer.show(object : DefaultCardConfiguration(context) {
+            cardDrawer.show(object : DefaultCardConfiguration(context!!) {
                 override fun getNamePlaceHolder(): String {
                     return getString(R.string.cf_card_name_hint)
                 }
