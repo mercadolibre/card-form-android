@@ -1,3 +1,7 @@
+## VERSION 1.1.0
+_16_04_2020_
+- Added better remote resources
+
 ## VERSION 1.0.5
 _06_04_2020_
 - Fix navigation not reset on Activity flow
