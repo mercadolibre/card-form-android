@@ -46,6 +46,7 @@ internal class InputFormViewModel(
     val codeLiveData: MutableLiveData<StepData> = MutableLiveData()
     val nameLiveData: MutableLiveData<StepData> = MutableLiveData()
     val numberLiveData: MutableLiveData<StepData> = MutableLiveData()
+    val extraValidation: MutableLiveData<ArrayList<Validation>> = MutableLiveData()
     val stateUiLiveData: MutableLiveData<StateUi> = MutableLiveData()
     val stateCardLiveData: MutableLiveData<CardState> = MutableLiveData()
     val issuersLiveData: MutableLiveData<ArrayList<Issuer>> = MutableLiveData()
@@ -65,6 +66,7 @@ internal class InputFormViewModel(
         codeLiveData.value = bundle.getParcelable(EXTRA_CODE_DATA)
         nameLiveData.value = bundle.getParcelable(EXTRA_NAME_DATA)
         numberLiveData.value = bundle.getParcelable(EXTRA_NUMBER_DATA)
+        extraValidation.value = bundle.getParcelableArrayList(EXTRA_VALIDATION_DATA)
         issuersLiveData.value = bundle.getParcelableArrayList(EXTRA_ISSUER_LIST_DATA)
         issuer = bundle.getParcelable(EXTRA_ISSUER_DATA)
         paymentMethod = bundle.getParcelable(EXTRA_PAYMENT_METHOD_DATA)
@@ -86,6 +88,7 @@ internal class InputFormViewModel(
         codeLiveData.value?.let { bundle.putParcelable(EXTRA_CODE_DATA, it) }
         nameLiveData.value?.let { bundle.putParcelable(EXTRA_NAME_DATA, it) }
         numberLiveData.value?.let { bundle.putParcelable(EXTRA_NUMBER_DATA, it) }
+        extraValidation.value?.let { bundle.putParcelableArrayList(EXTRA_VALIDATION_DATA, it) }
         issuersLiveData.value?.let { bundle.putParcelableArrayList(EXTRA_ISSUER_LIST_DATA, it) }
         bundle.putParcelable(EXTRA_PAYMENT_METHOD_DATA, paymentMethod)
         bundle.putParcelable(EXTRA_ISSUER_DATA, issuer)
@@ -190,6 +193,7 @@ internal class InputFormViewModel(
             setIssuer(issuers[0])
             this@InputFormViewModel.escEnabled = escEnabled
             this@InputFormViewModel.paymentMethod = paymentMethod
+            extraValidation.postValue(cardUi.extraValidations)
             cardLiveData.postValue(CardDataMapper.map(this))
             issuersLiveData.postValue(ArrayList(issuers))
             loadInputData(this)
@@ -315,6 +319,7 @@ internal class InputFormViewModel(
         private const val EXTRA_CODE_DATA = "code_data"
         private const val EXTRA_NAME_DATA = "name_data"
         private const val EXTRA_NUMBER_DATA = "number_data"
+        private const val EXTRA_VALIDATION_DATA = "extra_validation_data"
         private const val EXTRA_ISSUER_DATA = "issuer_data"
         private const val EXTRA_PAYMENT_METHOD_DATA = "payment_method_data"
         private const val EXTRA_CARD_STEP_DATA = "card_step_data"
