@@ -123,14 +123,16 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     }
 
     fun clearError() {
-        infoInput.text = infoHint
-        infoInput.setTextColor(ContextCompat.getColor(context, R.color.cf_hint_input_text))
-        TypefaceHelper.setTypeface(infoInput, Font.REGULAR)
-        ViewCompat.setBackgroundTintList(
-            input,
-            getColorStateUnderLine(R.color.ui_components_primary_color)
-        )
-        hasError = false
+        if (hasError) {
+            infoInput.text = infoHint
+            infoInput.setTextColor(ContextCompat.getColor(context, R.color.cf_hint_input_text))
+            TypefaceHelper.setTypeface(infoInput, Font.REGULAR)
+            ViewCompat.setBackgroundTintList(
+                input,
+                getColorStateUnderLine(R.color.ui_components_primary_color)
+            )
+            hasError = false
+        }
     }
 
     fun setMessageError(message: String) {
@@ -163,6 +165,8 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     fun isComplete(): Boolean {
         return input.text?.trim()?.length == maxLength
     }
+
+    fun getMaxLength() = maxLength
 
     fun addMaskWatcher(mask: String, textChanged: OnTextChanged) {
 
@@ -285,7 +289,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
         icon = if (iconCancel > 0) {
             cancel = ContextCompat.getDrawable(context, iconCancel)
             cancel?.setBounds(0, 0, cancel.intrinsicWidth, cancel.intrinsicHeight)
-            input.addRightDrawableClicked { it.setText(""); iconClickListener() }
+            input.addRightDrawableClicked { clearError(); it.setText(""); iconClickListener() }
             Icon.CLEAR
         } else {
             Icon.EMPTY

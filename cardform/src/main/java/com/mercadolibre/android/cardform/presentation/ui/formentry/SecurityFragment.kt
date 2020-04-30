@@ -74,19 +74,14 @@ internal class SecurityFragment : InputFragment() {
         viewModel.expirationLiveData.nonNullObserve(viewLifecycleOwner) { data ->
             expirationEditText.configure(data) {
                 viewModel.updateInputData(CardFilledData.ExpirationDate(it))
-                if (expirationEditText.hasError()) {
-                    expirationEditText.clearError()
-                }
+                expirationEditText.clearError()
             }
         }
 
         viewModel.codeLiveData.nonNullObserve(viewLifecycleOwner) { data ->
             cvvCodeEditText.configure(data) {
                 viewModel.updateInputData(CardFilledData.Cvv(it))
-
-                if (cvvCodeEditText.hasError()) {
-                    cvvCodeEditText.clearError()
-                }
+                cvvCodeEditText.clearError()
             }
         }
     }

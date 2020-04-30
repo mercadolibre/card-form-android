@@ -56,10 +56,7 @@ internal class CardNameFragment : InputFragment() {
                 nameCardEditText.configure(data) {
                     updateInputData(CardFilledData.Name(it))
                     isInputValid = nameCardEditText.validate()
-
-                    if (nameCardEditText.hasError()) {
-                        nameCardEditText.clearError()
-                    }
+                    nameCardEditText.clearError()
                 }
             }
         }

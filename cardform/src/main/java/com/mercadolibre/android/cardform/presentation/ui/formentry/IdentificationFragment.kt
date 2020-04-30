@@ -188,9 +188,7 @@ internal class IdentificationFragment : InputFragment() {
                 isInputValid =
                     IdentificationUtils.validate(it.filter { c -> c.isLetterOrDigit() }, data)
 
-                if (hasError()) {
-                    clearError()
-                }
+                clearError()
             }
         }
     }

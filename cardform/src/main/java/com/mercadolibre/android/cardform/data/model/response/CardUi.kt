@@ -13,7 +13,8 @@ internal data class CardUi (
     val paymentMethodImageUrl : String?,
     var issuerImageUrl : String?,
     var cardPattern : IntArray,
-    val validation: String
+    val validation: String,
+    val extraValidations: ArrayList<Validation>
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
@@ -25,7 +26,8 @@ internal data class CardUi (
         parcel.readString(),
         parcel.readString(),
         parcel.createIntArray()!!,
-        parcel.readString()!!
+        parcel.readString()!!,
+        parcel.createTypedArrayList(Validation)!!
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -39,6 +41,7 @@ internal data class CardUi (
         parcel.writeString(issuerImageUrl)
         parcel.writeIntArray(cardPattern)
         parcel.writeString(validation)
+        parcel.writeTypedList(extraValidations)
     }
 
     override fun describeContents() = 0
