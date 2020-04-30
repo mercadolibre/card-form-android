@@ -1,3 +1,7 @@
+## VERSION 1.2.0
+_30_04_2020_
+- Added seventh digit validation
+
 ## VERSION 1.1.0
 _16_04_2020_
 - Added better remote resources
