@@ -1,3 +1,7 @@
+## VERSION 1.2.1
+_5_04_2020_
+- Seventh digit validation for virtual cards fixed
+
 ## VERSION 1.2.0
 _30_04_2020_
 - Added seventh digit validation
