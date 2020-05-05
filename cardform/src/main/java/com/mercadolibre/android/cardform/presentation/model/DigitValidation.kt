@@ -6,7 +6,7 @@ enum class DigitValidation(private val type: String) {
         override val digit = 7
         override fun validate(cardNumber: String, value: Char): Boolean {
             val length = cardNumber.length
-            return length < digit || length >= digit && cardNumber[digit - 1] != value
+            return length < digit || length >= digit && cardNumber[digit - 1] == value
         }
     },
     NONE("none") {
