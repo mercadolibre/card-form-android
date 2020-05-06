@@ -21,5 +21,5 @@ object Versions {
     const val kotlinCoroutines = "1.3.2"
     const val picassoDiskCache = "1.+"
 
-    const val versionToDeploy = "1.2.1"
+    const val versionToDeploy = "1.2.2"
 }
