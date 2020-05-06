@@ -4,17 +4,17 @@ import android.os.Parcel
 import android.os.Parcelable
 
 internal data class Validation(val name: String,
-                               val value: String,
+                               val values: List<String>,
                                val errorMessage: String) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
-        parcel.readString()!!,
+        parcel.createStringArrayList()!!,
         parcel.readString()!!
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
-        parcel.writeString(value)
+        parcel.writeStringList(values)
         parcel.writeString(errorMessage)
     }
 

@@ -26,7 +26,7 @@ internal sealed class ValidationType {
 
                 result = DigitValidation
                     .fromType(it.name)
-                    .validate(input.replace("\\s+".toRegex(), ""), it.value[0])
+                    .validate(input.replace("\\s+".toRegex(), ""), it.values)
 
                 if (!result) {
                     message = it.errorMessage
