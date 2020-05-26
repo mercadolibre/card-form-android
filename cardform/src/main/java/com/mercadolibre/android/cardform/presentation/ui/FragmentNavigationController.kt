@@ -107,7 +107,7 @@ internal object FragmentNavigationController {
         manager: FragmentManager?,
         fragment: InputFragment
     ): InputFragment? {
-        return manager?.beginTransaction()?.run {
+        return manager?.beginTransaction()?.takeIf { parentRootViewId > 0 }?.run {
             setCustomAnimations(R.anim.cf_push_up_in, 0, 0, R.anim.cf_push_down_out)
             add(
                 parentRootViewId, fragment,
