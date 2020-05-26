@@ -29,6 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/cf_hint_input_text"
+        android:importantForAccessibility="no"
         android:textSize="@dimen/ui_fontsize_xsmall"
         android:lines="1"
         android:ellipsize="end"

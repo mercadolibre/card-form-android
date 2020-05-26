@@ -8,6 +8,8 @@ internal object CardDataMapper : Mapper<CardData, RegisterCard> {
     override fun map(model: RegisterCard) = CardData(
         model.cardUi,
         model.paymentMethod.paymentTypeId,
+        model.paymentMethod.name,
+        model.issuers.first().name,
         model.additionalSteps
     )
 }

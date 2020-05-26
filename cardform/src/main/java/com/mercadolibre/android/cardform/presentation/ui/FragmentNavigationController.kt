@@ -1,7 +1,9 @@
 package com.mercadolibre.android.cardform.presentation.ui
 
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.view.ViewPager
+import android.view.ViewGroup
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.presentation.ui.formentry.*
 
@@ -11,13 +13,15 @@ internal object FragmentNavigationController {
     private var localCurrentItem = 0
     private var progressByStep = 0
     private const val PROGRESS_DEFAULT = 80
+    private var parentRootViewId: Int = 0
 
-    fun init(manager: FragmentManager?, viewPager: InputFormViewPager) {
+    fun init(rootFragment: Fragment?, viewPager: InputFormViewPager) {
         formViewPager = viewPager
+        parentRootViewId = (rootFragment?.view?.parent as ViewGroup?)?.id ?: 0
 
         with(formViewPager) {
             setScrollEnable(false)
-            adapter = FormInputViewPagerAdapter(manager)
+            adapter = FormInputViewPagerAdapter(rootFragment?.childFragmentManager)
 
             addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrollStateChanged(position: Int) = Unit
@@ -77,7 +81,7 @@ internal object FragmentNavigationController {
                 } else {
                     currentFragment?.run {
                         focusableInTouchMode(true)
-                        addNextFragment(fragmentManager, FormType.getValue(it).getFragment())
+                        addNextFragment(activity?.supportFragmentManager, FormType.getValue(it).getFragment())
                     }
                 }
                 localCurrentItem = it
@@ -105,8 +109,8 @@ internal object FragmentNavigationController {
     ): InputFragment? {
         return manager?.beginTransaction()?.run {
             setCustomAnimations(R.anim.cf_push_up_in, 0, 0, R.anim.cf_push_down_out)
-            replace(
-                R.id.rootCardForm, fragment,
+            add(
+                parentRootViewId, fragment,
                 fragment.getInputTag()
             )
             addToBackStack(fragment.getInputTag())

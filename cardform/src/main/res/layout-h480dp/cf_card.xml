@@ -6,18 +6,27 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <com.meli.android.carddrawer.model.CardDrawerViewLowres
-        android:id="@+id/cardDrawer"
+    <FrameLayout
+        android:id="@+id/cardContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:paddingStart="50dp"
-        android:paddingEnd="50dp"
-        app:card_header_behaviour="responsive"
-        app:card_header_internal_padding="18dp"/>
+        android:layout_height="wrap_content">
+
+        <com.meli.android.carddrawer.model.CardDrawerViewLowres
+            android:id="@+id/cardDrawer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingStart="50dp"
+            android:paddingEnd="50dp"
+            android:importantForAccessibility="noHideDescendants"
+            app:card_header_behaviour="responsive"
+            app:card_header_internal_padding="18dp"/>
+
+    </FrameLayout>
 
     <com.mercadolibre.android.cardform.presentation.ui.formentry.InputFormViewPager
         android:id="@+id/inputViewPager"
+        android:importantForAccessibility="no"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:layout_height="60dp" />

@@ -13,4 +13,5 @@
     <string name="cf_confirm">Confirmar</string>
     <string name="cf_retry">Reintentar</string>
     <string name="cf_complete_field">Completa este campo</string>
+    <string name="cf_label_back">atrás</string>
 </resources>
