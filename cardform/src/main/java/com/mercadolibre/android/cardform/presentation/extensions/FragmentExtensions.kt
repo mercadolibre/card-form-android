@@ -28,7 +28,7 @@ internal fun Activity.showKeyboard() {
     inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
 }
 
-fun FragmentManager.setupForAccessibility() {
+internal fun FragmentManager.setupForAccessibility() {
     addOnBackStackChangedListener {
         val lastFragmentWithView = fragments.last { it.view != null }
         for (fragment in fragments) {
