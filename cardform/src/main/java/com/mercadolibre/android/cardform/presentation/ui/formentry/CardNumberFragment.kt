@@ -69,6 +69,7 @@ internal class CardNumberFragment : InputFragment() {
             )
         ) {
             resolveState(it)
+            numberCardEditText.clearError()
             isInputValid = sanitizeBin(it).length >= MIN_LENGTH_BIN
         }
     }
@@ -80,8 +81,8 @@ internal class CardNumberFragment : InputFragment() {
             }
             numberLiveData.nonNullObserve(viewLifecycleOwner) { data ->
                 numberCardEditText.configure(data) {
-                    resolveState(it)
                     resolveValidation()
+                    resolveState(it)
                 }
             }
         }

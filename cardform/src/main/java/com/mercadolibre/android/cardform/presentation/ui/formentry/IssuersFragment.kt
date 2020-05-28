@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import android.view.accessibility.AccessibilityEvent
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
@@ -16,6 +18,7 @@ import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.data.model.response.Issuer
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.extensions.setAnimationListener
+import com.mercadolibre.android.cardform.presentation.extensions.setupForAccessibility
 import com.mercadolibre.android.cardform.presentation.helpers.KeyboardHelper
 import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationController
 import com.mercadolibre.android.cardform.tracks.model.issuers.IssuerCloseTrack
@@ -33,6 +36,7 @@ internal class IssuersFragment : InputFragment() {
     private var issuerSelected: Issuer? = null
     private var isIssuerViewTracked = false
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         issuerList.layoutManager = LinearLayoutManager(context)
@@ -49,6 +53,16 @@ internal class IssuersFragment : InputFragment() {
         }
         savedInstanceState?.let {
             isIssuerViewTracked = it.getBoolean(TRACK_ISSUER_VIEW, false)
+        }
+        setupForAccessibility()
+        issuerList.apply {
+            viewTreeObserver
+                .addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+                    override fun onGlobalLayout() {
+                        viewTreeObserver.removeOnGlobalLayoutListener(this)
+                        getChildAt(0)?.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+                    }
+                })
         }
     }
 
@@ -116,31 +130,20 @@ internal class IssuersFragment : InputFragment() {
                 val validPosition = position - 1
                 val issuer = issuers[validPosition]
 
-                holder.radioButton.isChecked =
-                    lastPositionSelected != null && lastPositionSelected == validPosition
+                holder.isChecked(lastPositionSelected != null && lastPositionSelected == validPosition)
+                holder.loadImage(issuer.imageUrl)
+                holder.setContentDescription(issuer.name)
+                holder.setOnClickListener { radioButton ->
+                    lastIssuerSelected
+                        ?.takeIf { it.radioButton.isChecked }
+                        ?.radioButton
+                        ?.isChecked = false
 
-
-                with(holder.issuerImage) {
-                    PicassoDiskLoader
-                        .get(context)
-                        .load(issuer.imageUrl)
-                        .into(this)
-                }
-
-                holder.itemView.setOnClickListener {
-
-                    if (!holder.radioButton.isChecked) {
-                        lastIssuerSelected
-                            ?.takeIf { it.radioButton.isChecked }
-                            ?.radioButton
-                            ?.isChecked = false
-
-                        lastIssuerSelected = holder
-                        lastPositionSelected = validPosition
-                        select.state = MeliButton.State.NORMAL
-                        holder.radioButton.isChecked = true
-                        issuerSelected = issuer
-                    }
+                    lastIssuerSelected = holder
+                    lastPositionSelected = validPosition
+                    select.state = MeliButton.State.NORMAL
+                    radioButton.isChecked = true
+                    issuerSelected = issuer
                 }
             }
         }
@@ -151,7 +154,30 @@ internal class IssuersFragment : InputFragment() {
     @SuppressLint("RestrictedApi")
     inner class IssuerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val radioButton: AppCompatRadioButton = itemView.findViewById(R.id.radioButton)
-        val issuerImage: ImageView = itemView.findViewById(R.id.issuerImage)
+        private val issuerImage: ImageView = itemView.findViewById(R.id.issuerImage)
+
+        fun loadImage(imageUrl: String?) {
+            PicassoDiskLoader
+                .get(issuerImage.context)
+                .load(imageUrl)
+                .into(issuerImage)
+        }
+
+        fun isChecked(isChecked: Boolean) {
+            radioButton.isChecked = isChecked
+        }
+
+        fun setContentDescription(description: String) {
+            itemView.contentDescription = description
+        }
+
+        fun setOnClickListener(onClick: (AppCompatRadioButton)-> Unit) {
+            itemView.setOnClickListener {
+                if (!radioButton.isChecked) {
+                    onClick(radioButton)
+                }
+            }
+        }
     }
 
     override fun getInputTag() = "issuers"

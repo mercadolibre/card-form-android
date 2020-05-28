@@ -12,7 +12,9 @@ import android.support.v4.view.ViewCompat
 import android.text.*
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.View
 import android.view.View.OnFocusChangeListener
+import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.LinearLayout
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.presentation.model.InputData
@@ -26,9 +28,9 @@ typealias OnTextChanged = (s: String) -> Unit
 internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     LinearLayout(context, attrs, defStyleAttr) {
 
-    private var hint: String = ""
     private var infoHint: String = ""
     private var infoErrorHint: String = ""
+    private var errorMessage: String? = null
     private var pattern: String = ""
     private var minLength = 0
     private var maxLength = 0
@@ -70,12 +72,30 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
         return super.dispatchTouchEvent(ev)
     }
 
+    fun setInitializeAccessibilityFunction(
+        onInitializeAccessibility: (
+            host: View?,
+            info: AccessibilityNodeInfo?
+        ) -> Unit
+    ) {
+        input.setAccessibilityDelegate(object : View.AccessibilityDelegate() {
+            override fun onInitializeAccessibilityNodeInfo(
+                host: View?,
+                info: AccessibilityNodeInfo?
+            ) {
+                super.onInitializeAccessibilityNodeInfo(host, info)
+                onInitializeAccessibility(host, info)
+            }
+        })
+    }
+
     fun setInputType(inputType: Int) {
         input.inputType = inputType
     }
 
     fun setHint(hint: String) {
-        this.hint = hint
+        //for accessibility
+        contentDescription = hint
         inputLayout.hint = hint
     }
 
@@ -100,9 +120,9 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
         )
     )
 
-    fun showError(errorMessage: String? = null) {
+    fun showError(message: String? = null) {
         infoInput.post {
-            infoInput.text = if (errorMessage.isNullOrEmpty()) infoErrorHint else errorMessage
+            infoInput.text = if (message.isNullOrEmpty()) infoErrorHint else message
             infoInput.setTextColor(
                 ContextCompat.getColor(
                     context,
@@ -114,6 +134,8 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
                 input,
                 getColorStateUnderLine(R.color.ui_components_error_color)
             )
+            errorMessage = infoInput.text.toString()
+            announceForAccessibility(errorMessage)
         }
         hasError = true
     }
@@ -131,6 +153,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
                 input,
                 getColorStateUnderLine(R.color.ui_components_primary_color)
             )
+            errorMessage = null
             hasError = false
         }
     }
@@ -178,7 +201,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
             input.text?.apply {
                 if (isNotEmpty() && mask.isNotEmpty()) {
                     var newText = mask
-                    val holdText = replace("\\s+".toRegex(), "")
+                    val holdText = replace("[^A-Za-z0-9]+".toRegex(), "")
                     for (i in holdText.indices) {
                         newText = newText.replaceFirst('$', holdText[i])
                     }
@@ -216,7 +239,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
         setPattern(data.validationPattern ?: "")
 
         if (hasError) {
-            showError()
+            showError(errorMessage)
         } else {
             infoInput.text = infoHint
         }
@@ -302,6 +325,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
         super.onRestoreInstanceState(savedState.superState)
         isFocusableInTouchMode = savedState.getIsFocusableInTouchMode()
         hasError = savedState.hasError()
+        errorMessage = savedState.getErrorMessage()
         showIcons = savedState.showIcon()
         if (showIcons) {
             when (savedState.getIcon()) {
@@ -325,6 +349,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
             super.onSaveInstanceState(),
             isFocusableInTouchMode,
             hasError,
+            errorMessage,
             icon,
             showIcons
         )
@@ -341,12 +366,14 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     internal class InputSavedState : BaseSavedState {
         private var isFocusable: Boolean
         private var hasError: Boolean
+        private var errorMessage: String?
         private var icon: Icon
         private var showIcon: Boolean
 
         constructor(source: Parcel?) : super(source) {
             isFocusable = source?.readByte() != 0.toByte()
             hasError = source?.readByte() != 0.toByte()
+            errorMessage = source?.readString()
             icon = Icon.fromType(source?.readInt() ?: 0)
             showIcon = source?.readByte() != 0.toByte()
         }
@@ -355,6 +382,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
             superState: Parcelable?,
             isFocusable: Boolean,
             hasError: Boolean,
+            errorMessage: String?,
             drawable: Icon,
             showIcon: Boolean
         ) : super(
@@ -362,6 +390,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
         ) {
             this.isFocusable = isFocusable
             this.hasError = hasError
+            this.errorMessage = errorMessage
             this.icon = drawable
             this.showIcon = showIcon
         }
@@ -370,12 +399,14 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
             super.writeToParcel(parcel, flags)
             parcel.writeByte(if (isFocusable) 1 else 0)
             parcel.writeByte(if (hasError) 1 else 0)
+            parcel.writeString(errorMessage)
             parcel.writeInt(icon.ordinal)
             parcel.writeByte(if (showIcon) 1 else 0)
         }
 
         fun getIsFocusableInTouchMode() = isFocusable
         fun hasError() = hasError
+        fun getErrorMessage() = errorMessage
         fun getIcon() = icon
         fun showIcon() = showIcon
 

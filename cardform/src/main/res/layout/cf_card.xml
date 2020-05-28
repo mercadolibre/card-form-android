@@ -8,7 +8,8 @@
         android:id="@+id/cardDrawer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:importantForAccessibility="noHideDescendants"/>
 
     <com.mercadolibre.android.cardform.presentation.ui.formentry.InputFormViewPager
         android:id="@+id/inputViewPager"
@@ -16,5 +17,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/ui_3m"
         android:layout_marginBottom="@dimen/ui_3m"
+        android:importantForAccessibility="no"
         tools:layout_height="60dp" />
 </FrameLayout>

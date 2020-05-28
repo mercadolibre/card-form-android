@@ -6,6 +6,11 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <FrameLayout
+        android:id="@+id/cardContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <com.meli.android.carddrawer.model.CardDrawerView
         android:id="@+id/cardDrawer"
         android:layout_width="match_parent"
@@ -15,12 +20,15 @@
         android:paddingEnd="52dp"
         app:card_header_behaviour="responsive"
         app:card_header_internal_padding="@dimen/ui_6m"
+        android:importantForAccessibility="noHideDescendants"
         tools:layout_height="200dp" />
+    </FrameLayout>
 
     <com.mercadolibre.android.cardform.presentation.ui.formentry.InputFormViewPager
         android:id="@+id/inputViewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:importantForAccessibility="no"
         tools:layout_height="60dp" />
 
 </LinearLayout>

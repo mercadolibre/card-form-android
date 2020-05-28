@@ -1,6 +1,7 @@
 package com.mercadolibre.android.cardform.presentation.ui.formentry
 
 import android.os.Bundle
+import android.support.design.widget.TextInputEditText
 import android.view.View
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
@@ -43,6 +44,19 @@ internal class SecurityFragment : InputFragment() {
                 with(viewModel) {
                     stateCardLiveData.value = CardState.HideCode
                     tracker.trackEvent(BackTrack(TrackSteps.SECURITY.getType()))
+                }
+            }
+
+            setInitializeAccessibilityFunction { host, info ->
+                val currentText = getText()
+                val textAccessibility = (host as TextInputEditText).hint
+                if (currentText.isNotEmpty()) {
+                    info?.text?.takeIf { it.contains('/') }?.let {
+                        val textSplit = it.split("/")
+                        info.text = "${textSplit[0]} / ${textSplit[1]}"
+                    }
+                } else {
+                    info?.text = textAccessibility
                 }
             }
         }

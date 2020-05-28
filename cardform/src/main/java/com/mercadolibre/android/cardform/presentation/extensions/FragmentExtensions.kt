@@ -1,9 +1,13 @@
 package com.mercadolibre.android.cardform.presentation.extensions
 
+
 import android.app.Activity
 import android.content.Context
 import android.graphics.Rect
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentActivity
+import android.support.v4.app.FragmentManager
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 
 internal fun Fragment.hideKeyboard() {
@@ -22,6 +26,27 @@ internal fun Fragment.showKeyboard() {
 internal fun Activity.showKeyboard() {
     val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
+}
+
+internal fun FragmentManager.setupForAccessibility() {
+    addOnBackStackChangedListener {
+        val lastFragmentWithView = fragments.last { it.view != null }
+        for (fragment in fragments) {
+            if (fragment == lastFragmentWithView) {
+                fragment?.view?.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
+            } else {
+                fragment?.view?.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
+            }
+        }
+    }
+}
+
+fun FragmentActivity?.setupForAccessibility() {
+    this?.supportFragmentManager?.setupForAccessibility()
+}
+
+fun Fragment?.setupForAccessibility() {
+    this?.activity?.setupForAccessibility()
 }
 
 internal fun Fragment.addKeyBoardListener(

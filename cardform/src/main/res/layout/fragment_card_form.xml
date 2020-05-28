@@ -11,14 +11,14 @@
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/cardContainer"
+        app:layout_constraintBottom_toTopOf="@id/container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="spread_inside" />
 
     <FrameLayout
-        android:id="@+id/cardContainer"
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:clipChildren="false"
@@ -36,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="2"
-        app:layout_constraintTop_toBottomOf="@id/cardContainer"
+        app:layout_constraintTop_toBottomOf="@id/container"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

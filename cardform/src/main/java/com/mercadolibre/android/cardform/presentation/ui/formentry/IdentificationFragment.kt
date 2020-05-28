@@ -1,9 +1,11 @@
 package com.mercadolibre.android.cardform.presentation.ui.formentry
 
 import android.os.Bundle
+import android.support.design.widget.TextInputEditText
 import android.support.v4.app.Fragment
 import android.text.InputFilter
 import android.view.View
+import android.view.accessibility.AccessibilityEvent
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.mercadolibre.android.cardform.R
@@ -21,6 +23,7 @@ import com.mercadolibre.android.cardform.tracks.model.identification.Identificat
 import com.mercadolibre.android.cardform.tracks.model.identification.IdentificationValidTrack
 import com.mercadolibre.android.cardform.tracks.model.identification.IdentificationView
 import kotlinx.android.synthetic.main.fragment_identification.*
+import java.lang.StringBuilder
 
 /**
  * A simple [Fragment] subclass.
@@ -61,7 +64,35 @@ internal class IdentificationFragment : InputFragment() {
             populate = savedInstanceState.getBoolean(POPULATE, false)
             isFirstTime = false
         }
-        identificationEditText.showIconActions(false)
+
+        with(identificationEditText) {
+            showIconActions(false)
+            setInitializeAccessibilityFunction { host, info ->
+
+                val currentText = getText()
+                val textAccessibility = (host as TextInputEditText).hint
+                if (currentText.isNotEmpty()) {
+                    info?.text = info?.text?.let {
+                        var newText = it
+                        var textSplit: List<String>
+
+                        if (it.contains("/")) {
+                            textSplit = it.split("/")
+                            newText = "${textSplit[0]} / ${textSplit[1]}"
+                        }
+
+                        if (newText.contains("-")) {
+                            textSplit = newText.split("-")
+                            newText = "${textSplit[0]} ${textSplit[1]}"
+                        }
+
+                        newText
+                    }
+                } else {
+                    info?.text = textAccessibility
+                }
+            }
+        }
     }
 
     override fun bindViewModel() {
@@ -119,6 +150,15 @@ internal class IdentificationFragment : InputFragment() {
                     populate = true
                 }
                 return
+            }
+        }
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            identificationEditText.post {
+                identificationEditText.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
             }
         }
     }

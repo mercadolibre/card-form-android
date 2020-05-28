@@ -16,6 +16,7 @@
         app:contentInsetRight="0dp"
         app:contentInsetStart="0dp"
         app:contentInsetStartWithNavigation="0dp"
+        app:navigationContentDescription="@string/cf_label_back"
         app:theme="@style/ToolBar"
         app:elevation="0dp">
 

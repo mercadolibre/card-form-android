@@ -27,7 +27,7 @@ import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewMod
 import com.mercadolibre.android.cardform.tracks.model.flow.InitTrack
 import com.mercadolibre.android.cardform.tracks.model.flow.SuccessTrack
 import kotlinx.android.synthetic.main.app_bar.*
-import kotlinx.android.synthetic.main.cf_card.inputViewPager
+import kotlinx.android.synthetic.main.cf_card.*
 import kotlinx.android.synthetic.main.fragment_card_form.*
 
 /**
@@ -70,7 +70,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
             val offset = (duration * 0.5).toLong()
             if (enter) {
                 if (!animationEnded) {
-                    cardDrawer.pushUpIn()
+                    cardContainer?.pushUpIn()
                     buttonContainer.fadeIn()
                     inputViewPager.slideLeftIn(offset)
                     progress.slideRightIn(offset)
@@ -79,7 +79,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
                     })
                 }
             } else {
-                cardDrawer.pushDownOut()
+                cardContainer?.pushDownOut()
                 inputViewPager.slideRightOut()
                 buttonContainer.goneDuringAnimation()
                 progress.fadeOut()
@@ -111,7 +111,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
             })
         }
 
-        FragmentNavigationController.init(childFragmentManager, inputViewPager)
+        FragmentNavigationController.init(this, inputViewPager)
         KeyboardHelper.addKeyBoardListener(this@CardFormFragment)
 
         animationEnded = savedInstanceState?.getBoolean(EXTRA_ANIMATION, false) ?: false
@@ -195,6 +195,10 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
             cardLiveData.observe(viewLifecycleOwner, Observer { cardData ->
                 var maxLengthBin = 0
                 val cardDrawerData = if (cardData != null) {
+                    cardContainer?.apply {
+                        importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
+                        contentDescription = "${cardData.name} ${cardData.issuerName}"
+                    }
                     FragmentNavigationController.setAdditionalSteps(cardData.additionalSteps)
                     appBar.setTitle(TitleBar.fromType(cardData.paymentTypeId).getTitle())
                     cardData.cardUi!!.let {
@@ -202,6 +206,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
                         CardDrawerData(context!!, it)
                     }
                 } else {
+                    cardContainer?.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
                     appBar.setTitle(TitleBar.NONE_TITLE.getTitle())
                     with(cardDrawer.card) {
                         secCode = ""
