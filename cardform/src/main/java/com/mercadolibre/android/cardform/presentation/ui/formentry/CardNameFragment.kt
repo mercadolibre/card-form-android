@@ -41,7 +41,7 @@ internal class CardNameFragment : InputFragment() {
             nameCardEditText?.let {
                 populate = false
                 if (it.getText().isEmpty()) {
-                    it.post { it.setText(preferences.getNameOwner()) ; populate = true}
+                    it.post { it.setText(preferences.getNameOwner()); populate = true }
                 }
 
                 it.addOnIconClickListener {
@@ -54,8 +54,8 @@ internal class CardNameFragment : InputFragment() {
     override fun bindViewModel() {
         with(viewModel) {
             nameLiveData.nonNullObserve(viewLifecycleOwner) { data ->
-                nameCardEditText?.configure(data) {
-                    nameCardEditText?.apply {
+                nameCardEditText?.apply {
+                    configure(data) {
                         updateInputData(CardFilledData.Name(it))
                         isInputValid = validate()
                         clearError()
@@ -68,7 +68,7 @@ internal class CardNameFragment : InputFragment() {
     override fun toNext(position: Int, move: MoveTo) {
         super.toNext(position, move)
         if (isInputValid) {
-            nameCardEditText?.getText()?.let { nameOwner->
+            nameCardEditText?.getText()?.let { nameOwner ->
                 with(viewModel) {
                     tracker.trackEvent(NameValidTrack())
                     tracker.trackEvent(NextTrack(TrackSteps.NAME.getType()))
