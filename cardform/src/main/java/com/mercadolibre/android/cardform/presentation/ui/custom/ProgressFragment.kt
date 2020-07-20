@@ -28,7 +28,6 @@ internal class ProgressFragment: DialogFragment() {
 
     companion object {
         const val TAG = "progress_fragment"
-        fun newInstance() =
-            ProgressFragment()
+        fun newInstance() = ProgressFragment()
     }
 }

@@ -8,6 +8,7 @@ import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
 import com.mercadolibre.android.cardform.presentation.model.CardFilledData
 import com.mercadolibre.android.cardform.presentation.model.CardState
+import com.mercadolibre.android.cardform.presentation.ui.custom.InputFormEditText
 import com.mercadolibre.android.cardform.tracks.model.TrackSteps
 import com.mercadolibre.android.cardform.tracks.model.expiration.ExpirationInvalidTrack
 import com.mercadolibre.android.cardform.tracks.model.expiration.ExpirationValidTrack
@@ -16,27 +17,31 @@ import com.mercadolibre.android.cardform.tracks.model.flow.NextTrack
 import com.mercadolibre.android.cardform.tracks.model.security.ExpirationSecurityView
 import com.mercadolibre.android.cardform.tracks.model.security.SecurityInvalidTrack
 import com.mercadolibre.android.cardform.tracks.model.security.SecurityValidTrack
-import kotlinx.android.synthetic.main.fragment_security.*
 import java.util.*
 import kotlin.math.pow
 
 internal class SecurityFragment : InputFragment() {
 
     override val rootLayout = R.layout.fragment_security
+    private var expirationEditText: InputFormEditText? = null
+    private var cvvCodeEditText: InputFormEditText? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        expirationEditText = view.findViewById(R.id.expirationEditText)
+        cvvCodeEditText = view.findViewById(R.id.cvvCodeEditText)
+
         if (savedInstanceState == null) {
             viewModel.codeLiveData.value =
                 ObjectStepFactory.createDefaultStepFrom(resources, FormType.SECURITY_CODE_TYPE)
         } else {
             savedInstanceState.apply {
-                expirationEditText.setText(getString(EXTRA_EXPIRATION_TEXT, ""))
-                cvvCodeEditText.setText(getString(EXTRA_CODE_TEXT, ""))
+                expirationEditText?.setText(getString(EXTRA_EXPIRATION_TEXT, ""))
+                cvvCodeEditText?.setText(getString(EXTRA_CODE_TEXT, ""))
             }
         }
 
-        with(expirationEditText) {
+        expirationEditText?.apply {
             saveState(false)
             showIconActions(false)
             addOnTouchListener {
@@ -61,12 +66,12 @@ internal class SecurityFragment : InputFragment() {
             }
         }
 
-        with(cvvCodeEditText) {
+        cvvCodeEditText?.apply {
             saveState(false)
             showIconActions(false)
             addOnTouchListener {
                 if (!validateExpirationDate()) {
-                    with(expirationEditText) {
+                    expirationEditText?.apply {
                         requestFocus()
                         showError()
                         viewModel.tracker.trackEvent(ExpirationInvalidTrack())
@@ -86,16 +91,16 @@ internal class SecurityFragment : InputFragment() {
     override fun bindViewModel() {
 
         viewModel.expirationLiveData.nonNullObserve(viewLifecycleOwner) { data ->
-            expirationEditText.configure(data) {
+            expirationEditText?.configure(data) {
                 viewModel.updateInputData(CardFilledData.ExpirationDate(it))
-                expirationEditText.clearError()
+                expirationEditText?.clearError()
             }
         }
 
         viewModel.codeLiveData.nonNullObserve(viewLifecycleOwner) { data ->
-            cvvCodeEditText.configure(data) {
+            cvvCodeEditText?.configure(data) {
                 viewModel.updateInputData(CardFilledData.Cvv(it))
-                cvvCodeEditText.clearError()
+                cvvCodeEditText?.clearError()
             }
         }
     }
@@ -113,26 +118,32 @@ internal class SecurityFragment : InputFragment() {
     }
 
     private fun validateExpirationDate(): Boolean {
-        viewModel.cardStepInfo.expiration = expirationEditText.getText()
-        return expirationEditText.isNotEmpty() && expirationEditText.validatePattern() && isValidDate()
+        expirationEditText?.apply {
+            viewModel.cardStepInfo.expiration = getText()
+            return isNotEmpty() && validatePattern() && isValidDate()
+        }
+        return false
     }
 
     private fun validateCvvCode(): Boolean {
-        val text = cvvCodeEditText.getText()
-        viewModel.cardStepInfo.code = text
-        return text.toIntOrNull() != null && cvvCodeEditText.isComplete() && cvvCodeEditText.validatePattern()
+        cvvCodeEditText?.apply {
+            val text = getText()
+            viewModel.cardStepInfo.code = text
+            return text.toIntOrNull() != null && isComplete() && validatePattern()
+        }
+        return false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(EXTRA_EXPIRATION_TEXT, expirationEditText.getText())
-        outState.putString(EXTRA_CODE_TEXT, cvvCodeEditText.getText())
+        outState.putString(EXTRA_EXPIRATION_TEXT, expirationEditText?.getText())
+        outState.putString(EXTRA_CODE_TEXT, cvvCodeEditText?.getText())
     }
 
     private fun isValidDate(): Boolean {
-        val expirationText = expirationEditText.getText()
+        val expirationText = expirationEditText?.getText()
 
-        if (expirationText.isEmpty()) {
+        if (expirationText.isNullOrEmpty()) {
             return false
         }
 
@@ -170,7 +181,7 @@ internal class SecurityFragment : InputFragment() {
                 focusCvvCodeInput()
             } else {
                 viewModel.tracker.trackEvent(ExpirationInvalidTrack())
-                expirationEditText.showError()
+                expirationEditText?.showError()
             }
 
         } else if (validateCvvCode()) {
@@ -182,7 +193,7 @@ internal class SecurityFragment : InputFragment() {
             move(position)
         } else {
             viewModel.tracker.trackEvent(SecurityInvalidTrack())
-            cvvCodeEditText.showError()
+            cvvCodeEditText?.showError()
         }
     }
 
@@ -201,14 +212,14 @@ internal class SecurityFragment : InputFragment() {
     }
 
     override fun refreshData() {
-        expirationEditText.setText("")
-        cvvCodeEditText.setText("")
+        expirationEditText?.setText("")
+        cvvCodeEditText?.setText("")
     }
 
-    private fun cvvCodeHasFocus(): Boolean = cvvCodeEditText.hasFocus()
-    private fun expirationHasFocus(): Boolean = expirationEditText.hasFocus()
-    private fun focusExpirationInput() = expirationEditText.requestFocus()
-    private fun focusCvvCodeInput() = cvvCodeEditText.requestFocus()
+    private fun cvvCodeHasFocus(): Boolean = cvvCodeEditText?.hasFocus() ?: false
+    private fun expirationHasFocus(): Boolean = expirationEditText?.hasFocus() ?: false
+    private fun focusExpirationInput() = expirationEditText?.requestFocus()
+    private fun focusCvvCodeInput() = cvvCodeEditText?.requestFocus()
 
     override fun trackFragmentView() {
         viewModel.tracker.trackView(ExpirationSecurityView())
