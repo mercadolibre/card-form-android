@@ -9,13 +9,13 @@ import com.mercadolibre.android.cardform.di.preferences.NameOwnerPreferences
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
 import com.mercadolibre.android.cardform.presentation.model.CardFilledData
+import com.mercadolibre.android.cardform.presentation.ui.custom.InputFormEditText
 import com.mercadolibre.android.cardform.tracks.model.TrackSteps
 import com.mercadolibre.android.cardform.tracks.model.flow.BackTrack
 import com.mercadolibre.android.cardform.tracks.model.flow.NextTrack
 import com.mercadolibre.android.cardform.tracks.model.name.NameClearTrack
 import com.mercadolibre.android.cardform.tracks.model.name.NameValidTrack
 import com.mercadolibre.android.cardform.tracks.model.name.NameView
-import kotlinx.android.synthetic.main.fragment_name_card.*
 
 /**
  * A simple [Fragment] subclass.
@@ -25,22 +25,23 @@ internal class CardNameFragment : InputFragment() {
     override val rootLayout = R.layout.fragment_name_card
     private lateinit var preferences: NameOwnerPreferences
     private var populate = false
+    private var nameCardEditText: InputFormEditText? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         preferences = Dependencies.instance.localPreferences!!.nameOwnerPreferences
+        nameCardEditText = view.findViewById(R.id.nameCardEditText)
 
         if (savedInstanceState == null) {
             viewModel.nameLiveData.value =
                 ObjectStepFactory.createDefaultStepFrom(resources, FormType.CARD_NAME.getType())
         }
-
         with(viewModel) {
 
-            nameCardEditText.let {
+            nameCardEditText?.let {
                 populate = false
                 if (it.getText().isEmpty()) {
-                    it.post { it.setText(preferences.getNameOwner()) ; populate = true}
+                    it.post { it.setText(preferences.getNameOwner()); populate = true }
                 }
 
                 it.addOnIconClickListener {
@@ -53,10 +54,12 @@ internal class CardNameFragment : InputFragment() {
     override fun bindViewModel() {
         with(viewModel) {
             nameLiveData.nonNullObserve(viewLifecycleOwner) { data ->
-                nameCardEditText.configure(data) {
-                    updateInputData(CardFilledData.Name(it))
-                    isInputValid = nameCardEditText.validate()
-                    nameCardEditText.clearError()
+                nameCardEditText?.apply {
+                    configure(data) {
+                        updateInputData(CardFilledData.Name(it))
+                        isInputValid = validate()
+                        clearError()
+                    }
                 }
             }
         }
@@ -65,13 +68,14 @@ internal class CardNameFragment : InputFragment() {
     override fun toNext(position: Int, move: MoveTo) {
         super.toNext(position, move)
         if (isInputValid) {
-            val nameOwner = nameCardEditText.getText()
-            with(viewModel) {
-                tracker.trackEvent(NameValidTrack())
-                tracker.trackEvent(NextTrack(TrackSteps.NAME.getType()))
-                cardStepInfo.nameOwner = nameOwner
+            nameCardEditText?.getText()?.let { nameOwner ->
+                with(viewModel) {
+                    tracker.trackEvent(NameValidTrack())
+                    tracker.trackEvent(NextTrack(TrackSteps.NAME.getType()))
+                    cardStepInfo.nameOwner = nameOwner
+                }
+                preferences.saveNameOwner(nameOwner)
             }
-            preferences.saveNameOwner(nameOwner)
         }
     }
 
@@ -80,10 +84,12 @@ internal class CardNameFragment : InputFragment() {
         viewModel.tracker.trackEvent(BackTrack(TrackSteps.NAME.getType()))
     }
 
-    override fun showError() = nameCardEditText.showError()
+    override fun showError() {
+        nameCardEditText?.showError()
+    }
 
     override fun refreshData() {
-        nameCardEditText.setText("")
+        nameCardEditText?.setText("")
     }
 
     override fun trackFragmentView() {

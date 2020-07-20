@@ -15,6 +15,7 @@ import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.model.Identification
 import com.mercadolibre.android.cardform.presentation.model.TypeInput
 import com.mercadolibre.android.cardform.presentation.ui.IdentificationUtils
+import com.mercadolibre.android.cardform.presentation.ui.custom.InputFormEditText
 import com.mercadolibre.android.cardform.presentation.ui.custom.InputFormEditText.Companion.LENGTH_DEFAULT
 import com.mercadolibre.android.cardform.tracks.model.TrackSteps
 import com.mercadolibre.android.cardform.tracks.model.flow.BackTrack
@@ -23,7 +24,6 @@ import com.mercadolibre.android.cardform.tracks.model.identification.Identificat
 import com.mercadolibre.android.cardform.tracks.model.identification.IdentificationValidTrack
 import com.mercadolibre.android.cardform.tracks.model.identification.IdentificationView
 import kotlinx.android.synthetic.main.fragment_identification.*
-import java.lang.StringBuilder
 
 /**
  * A simple [Fragment] subclass.
@@ -36,6 +36,8 @@ internal class IdentificationFragment : InputFragment() {
     private var isFirstTime = false
     private var isIdentificationTracked = false
     private var populate = false
+    private var identificationEditText: InputFormEditText? = null
+
     private val onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
         override fun onNothingSelected(parent: AdapterView<*>?) = Unit
         override fun onItemSelected(
@@ -45,7 +47,7 @@ internal class IdentificationFragment : InputFragment() {
             (identificationTypes.adapter.getItem(position) as Identification?)?.let {
                 if (position != lastPositionSelected) {
                     lastPositionSelected = position
-                    identificationEditText.setText("")
+                    identificationEditText?.setText("")
                 }
                 configureInput(it)
             }
@@ -55,6 +57,7 @@ internal class IdentificationFragment : InputFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         preferences = Dependencies.instance.localPreferences!!.identificationPreferences
+        identificationEditText = view.findViewById(R.id.identificationEditText)
         if (savedInstanceState == null) {
             isFirstTime = true
         } else {
@@ -65,7 +68,7 @@ internal class IdentificationFragment : InputFragment() {
             isFirstTime = false
         }
 
-        with(identificationEditText) {
+        identificationEditText?.apply {
             showIconActions(false)
             setInitializeAccessibilityFunction { host, info ->
 
@@ -97,7 +100,7 @@ internal class IdentificationFragment : InputFragment() {
 
     override fun bindViewModel() {
         viewModel.identificationTypesLiveData.nonNullObserve(viewLifecycleOwner) { data ->
-            identificationEditText.apply {
+            identificationEditText?.apply {
                 setHint(data!!.title)
                 setMessageError(data.validationMessage)
             }
@@ -137,7 +140,7 @@ internal class IdentificationFragment : InputFragment() {
         for (position in 0 until adapter.count) {
             val identification = (adapter.getItem(position) as Identification)
             if (identification.id == id) {
-                with(identificationEditText) {
+                identificationEditText?.apply {
                     lastPositionSelected = position
                     identificationTypes.setSelection(lastPositionSelected)
                     setText(number)
@@ -157,37 +160,39 @@ internal class IdentificationFragment : InputFragment() {
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
-            identificationEditText.post {
-                identificationEditText.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+            identificationEditText?.apply {
+                post { sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED) }
             }
         }
     }
 
     override fun focusableInTouchMode(focusable: Boolean) {
-        identificationEditText.isFocusableInTouchMode = focusable
-        if (!focusable) {
-            identificationEditText.requestFocus()
+        identificationEditText?.apply {
+            isFocusableInTouchMode = focusable
+            if (!focusable) {
+                requestFocus()
+            }
         }
     }
 
     override fun toNext(position: Int, move: MoveTo) {
         super.toNext(position, move)
-        val number = identificationEditText.getText()
-
-        with(viewModel) {
-            if (isInputValid) {
-                cardStepInfo.identificationNumber = number
-                preferences.saveIdentificationId(cardStepInfo.identificationId)
-                tracker.trackEvent(IdentificationValidTrack())
-                tracker.trackEvent(NextTrack(TrackSteps.IDENTIFICATION.getType()))
-                preferences.saveIdentificationNumber(number)
-            } else {
-                tracker.trackEvent(
-                    IdentificationInvalidTrack(
-                        cardStepInfo.identificationId,
-                        number
+        identificationEditText?.getText()?.let { number ->
+            with(viewModel) {
+                if (isInputValid) {
+                    cardStepInfo.identificationNumber = number
+                    preferences.saveIdentificationId(cardStepInfo.identificationId)
+                    tracker.trackEvent(IdentificationValidTrack())
+                    tracker.trackEvent(NextTrack(TrackSteps.IDENTIFICATION.getType()))
+                    preferences.saveIdentificationNumber(number)
+                } else {
+                    tracker.trackEvent(
+                        IdentificationInvalidTrack(
+                            cardStepInfo.identificationId,
+                            number
+                        )
                     )
-                )
+                }
             }
         }
     }
@@ -197,11 +202,13 @@ internal class IdentificationFragment : InputFragment() {
         viewModel.tracker.trackEvent(BackTrack(TrackSteps.IDENTIFICATION.getType()))
     }
 
-    override fun showError() = identificationEditText.showError()
+    override fun showError() {
+        identificationEditText?.showError()
+    }
 
     private fun configureInput(data: Identification) {
         viewModel.cardStepInfo.identificationId = data.id
-        with(identificationEditText) {
+        identificationEditText?.apply {
             var mask = ""
             val maxLength: Int
             val minLength: Int
@@ -234,7 +241,7 @@ internal class IdentificationFragment : InputFragment() {
     }
 
     override fun refreshData() {
-        identificationEditText.setText("")
+        identificationEditText?.setText("")
     }
 
     override fun trackFragmentView() {
