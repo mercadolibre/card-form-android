@@ -1,3 +1,7 @@
+## VERSION 1.3.1
+_23_07_2020_
+- NullPointer in views fixed
+
 ## VERSION 1.3.0
 _28_05_2020_
 - Accessibility support
