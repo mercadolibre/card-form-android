@@ -1,7 +1,6 @@
 package com.mercadolibre.android.cardform.network
 
 import android.content.Context
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -18,7 +17,6 @@ internal object RetrofitFactory {
             .addConverterFactory(GsonConverterFactory.create(GsonFactory.get()))
             .client(HttpClientFactory.get(context, DEFAULT_CONNECT_TIMEOUT, DEFAULT_READ_TIMEOUT,
                 DEFAULT_WRITE_TIMEOUT, sessionId))
-            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
     }
 }

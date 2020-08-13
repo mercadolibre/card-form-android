@@ -1,25 +1,28 @@
 object Versions {
 
-    const val support = "28.0.0"
-    const val retrofit = "2.4.0"
-    const val retrofitCoroutines = "0.9.2"
-    const val gson = "2.8.2"
+    const val retrofit = "2.6.4"
+    const val gson = "2.8.5"
     const val carddrawer = "2.+"
-    const val runner = "1.0.2"
-    const val junit = "4.12"
+    const val testRunner = "1.1.1"
+    const val junit = "4.13"
     const val ui ="8.+"
-    const val lifecycle = "1.1.1"
-    const val okHttp = "3.11.0"
-    const val compileSdkVersion = 28
+    const val appCompat = "1.0.0"
+    const val lifecycle = "2.0.0"
+    const val material = "1.0.0"
+    const val okHttp = "3.12.10"
+    const val sdkVersion = 29
     const val minSdkVersion = 19
-    const val targetSdkVersion = 28
+    const val buildTools = "29.0.2"
 
     const val constraintLayout = "1.1.3"
     const val gradlePlugin = "3.4.2"
-    const val gradleWrapper = "5.6.2"
-    const val gradleKotlin = "1.3.50"
-    const val kotlinCoroutines = "1.3.2"
+    const val gradleWrapper = "5.6.4"
+    const val kotlin = "1.3.40"
+    const val kotlinCoroutines = "1.2.2"
     const val picassoDiskCache = "1.+"
+    const val bintray = "1.8.4"
+    const val maven = "2.1"
+    const val pxAddons = "4.+"
 
-    const val versionToDeploy = "1.3.1"
+    const val versionToDeploy = "1.4.0"
 }

@@ -3,14 +3,15 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion Versions.compileSdkVersion
+    compileSdkVersion Versions.sdkVersion
+    buildToolsVersion Versions.buildTools
     defaultConfig {
         applicationId "com.mercadolibre.android.example"
         minSdkVersion Versions.minSdkVersion
-        targetSdkVersion Versions.targetSdkVersion
+        targetSdkVersion Versions.sdkVersion
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
         release {

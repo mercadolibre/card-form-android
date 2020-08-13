@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     tools:parentTag="android.widget.LinearLayout">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -30,7 +30,7 @@
             style="@style/MLFont.Bold.Semi"
             android:layout_marginEnd="@dimen/ui_2m" />
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <FrameLayout
         android:layout_width="match_parent"

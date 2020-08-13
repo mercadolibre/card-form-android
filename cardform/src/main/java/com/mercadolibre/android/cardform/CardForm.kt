@@ -2,7 +2,7 @@ package com.mercadolibre.android.cardform
 
 import android.os.Parcel
 import android.os.Parcelable
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.mercadolibre.android.cardform.presentation.ui.CardFormActivity
 import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationController
 import java.util.*

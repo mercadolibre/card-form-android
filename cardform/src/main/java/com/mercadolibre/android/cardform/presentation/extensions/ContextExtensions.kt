@@ -11,8 +11,7 @@ internal fun Context.getPxFromDp(dp: Float): Float {
 }
 
 internal fun Context.getPxFromSp(sp: Float): Int {
-    return TypedValue
-        .applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, resources.displayMetrics).toInt()
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, resources.displayMetrics).toInt()
 }
 
 internal fun Context?.hasConnection(): Boolean {

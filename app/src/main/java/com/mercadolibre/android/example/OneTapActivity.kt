@@ -2,7 +2,7 @@ package com.mercadolibre.android.example
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.mercadolibre.android.cardform.internal.CardFormWithFragment
 
 class OneTapActivity : AppCompatActivity() {

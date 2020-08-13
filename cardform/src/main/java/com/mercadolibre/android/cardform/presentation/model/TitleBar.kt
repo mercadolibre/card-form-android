@@ -1,6 +1,6 @@
 package com.mercadolibre.android.cardform.presentation.model
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import com.mercadolibre.android.cardform.R
 
 internal enum class TitleBar(private val type: String) {

@@ -1,8 +1,8 @@
 package com.mercadolibre.android.cardform.presentation.extensions
 
 import android.content.Context
-import android.support.annotation.AnimRes
-import android.support.v4.app.Fragment
+import androidx.annotation.AnimRes
+import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils

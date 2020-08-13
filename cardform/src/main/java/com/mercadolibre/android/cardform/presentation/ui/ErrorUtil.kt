@@ -1,7 +1,7 @@
 package com.mercadolibre.android.cardform.presentation.ui
 
 import android.annotation.SuppressLint
-import android.support.design.widget.Snackbar
+import com.google.android.material.snackbar.Snackbar
 import android.view.View
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.network.exceptions.CardFormException

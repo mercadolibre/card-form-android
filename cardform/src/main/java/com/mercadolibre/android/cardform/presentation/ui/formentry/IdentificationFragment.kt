@@ -1,8 +1,8 @@
 package com.mercadolibre.android.cardform.presentation.ui.formentry
 
 import android.os.Bundle
-import android.support.design.widget.TextInputEditText
-import android.support.v4.app.Fragment
+import com.google.android.material.textfield.TextInputEditText
+import androidx.fragment.app.Fragment
 import android.text.InputFilter
 import android.view.View
 import android.view.accessibility.AccessibilityEvent

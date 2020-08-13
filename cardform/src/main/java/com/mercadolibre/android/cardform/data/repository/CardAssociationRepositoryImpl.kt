@@ -16,7 +16,7 @@ internal class CardAssociationRepositoryImpl(private val associationService: Car
         return withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
             try {
                 with(associationService.associateCardAsync(BuildConfig.API_ENVIRONMENT,
-                    accessToken, associatedCardBody).await()) {
+                    accessToken, associatedCardBody)) {
                     if (isSuccessful) {
                         body()
                     } else {
