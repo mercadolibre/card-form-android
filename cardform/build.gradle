@@ -5,15 +5,16 @@ apply plugin: 'kotlin-android-extensions'
 def user_agent = "CardForm/Android/" + Versions.versionToDeploy
 
 android {
-    compileSdkVersion Versions.compileSdkVersion
+    compileSdkVersion Versions.sdkVersion
+    buildToolsVersion Versions.buildTools
 
     defaultConfig {
         minSdkVersion Versions.minSdkVersion
-        targetSdkVersion Versions.targetSdkVersion
+        targetSdkVersion Versions.sdkVersion
         versionCode 1
         versionName Versions.versionToDeploy
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         consumerProguardFiles 'proguard-rules.pro'
 
         buildConfigField "String", "USER_AGENT", "\"$user_agent\""
@@ -48,12 +49,10 @@ dependencies {
     implementation Dependencies.kotlinCoroutinesCore
     implementation Dependencies.constraintLayout
     implementation Dependencies.appCompat
-    implementation Dependencies.support
-    implementation Dependencies.design
+    implementation Dependencies.material
 
     implementation Dependencies.gson
     implementation Dependencies.retrofit
-    implementation Dependencies.retrofitCoroutines
     implementation(Dependencies.retrofitGsonConverter) {
         exclude group: "com.google.code.gson", module: "gson"
     }
@@ -66,7 +65,7 @@ dependencies {
     implementation Dependencies.extensions
     implementation Dependencies.livedataCore
     implementation Dependencies.viewmodel
-    implementation "com.mercadopago.android.px:addons:4.+"
+    implementation Dependencies.pxAddons
 
     testImplementation Dependencies.junit
     androidTestImplementation Dependencies.runner

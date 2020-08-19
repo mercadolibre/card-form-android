@@ -5,8 +5,7 @@ import android.view.animation.Animation
 typealias AnimationListener = () -> Unit
 
 internal fun Animation.setAnimationListener(repeat: AnimationListener? = null,
-                                   start: AnimationListener? = null,
-                                   finish: AnimationListener? = null) {
+    start: AnimationListener? = null, finish: AnimationListener? = null) {
     setAnimationListener(object : Animation.AnimationListener {
 
         override fun onAnimationRepeat(animation: Animation?) {

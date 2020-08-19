@@ -1,8 +1,8 @@
 package com.mercadolibre.android.cardform.presentation.ui
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.view.ViewPager
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.viewpager.widget.ViewPager
 import android.view.ViewGroup
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.presentation.ui.formentry.*

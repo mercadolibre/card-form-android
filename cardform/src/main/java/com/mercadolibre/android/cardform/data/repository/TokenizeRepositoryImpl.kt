@@ -16,7 +16,7 @@ internal class TokenizeRepositoryImpl(
     override suspend fun tokenizeCard(cardInfoBody: CardInfoBody): CardToken? {
         return withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
             try {
-                with(service.createTokenAsync(accessToken, cardInfoBody).await()) {
+                with(service.createTokenAsync(accessToken, cardInfoBody)) {
                     if (isSuccessful) {
                         body()
                     } else {

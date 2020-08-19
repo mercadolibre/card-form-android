@@ -1,6 +1,6 @@
 package com.mercadolibre.android.cardform.presentation.viewmodel
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import android.content.Context
 import android.os.Bundle
 import com.mercadolibre.android.cardform.internal.LifecycleListener

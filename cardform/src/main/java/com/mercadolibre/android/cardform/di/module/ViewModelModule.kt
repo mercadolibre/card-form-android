@@ -1,8 +1,8 @@
 package com.mercadolibre.android.cardform.di.module
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProviders
-import android.support.v4.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.Fragment
 import com.mercadolibre.android.cardform.data.model.esc.Device
 
 internal class ViewModelModule(private val fragment: Fragment, repositoryModule: RepositoryModule,

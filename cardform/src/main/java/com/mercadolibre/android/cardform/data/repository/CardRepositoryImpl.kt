@@ -28,7 +28,7 @@ internal class CardRepositoryImpl(private val cardService: CardService, private 
         return CoroutineScope(Dispatchers.IO).async {
             try {
                 val response = cardService.getCardInfoAsync(BuildConfig.API_ENVIRONMENT, bin,
-                    siteId, excludedPaymentTypes).await()
+                    siteId, excludedPaymentTypes)
                 response.run {
                     if (isSuccessful) {
                         body()?.let {

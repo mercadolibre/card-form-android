@@ -1,12 +1,12 @@
 package com.mercadolibre.android.cardform.presentation.ui
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.view.animation.Animation
 import com.meli.android.carddrawer.configuration.DefaultCardConfiguration
@@ -51,7 +51,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
         super.onCreate(savedInstanceState)
         arguments?.apply {
             fromFragment = getBoolean(ARG_FROM_FRAGMENT, false)
-            requestCode = (getParcelable(ARG_CARD_FORM) as CardForm).requestCode
+            requestCode = (getParcelable<CardForm>(ARG_CARD_FORM))!!.requestCode
         }
         defaultCardDrawerConfiguration = object : DefaultCardConfiguration(context!!) {
             override fun getNamePlaceHolder(): String {

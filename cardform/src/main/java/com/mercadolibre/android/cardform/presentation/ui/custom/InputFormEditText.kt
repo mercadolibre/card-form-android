@@ -6,9 +6,9 @@ import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.os.Parcel
 import android.os.Parcelable
-import android.support.annotation.DrawableRes
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewCompat
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import android.text.*
 import android.util.AttributeSet
 import android.view.MotionEvent

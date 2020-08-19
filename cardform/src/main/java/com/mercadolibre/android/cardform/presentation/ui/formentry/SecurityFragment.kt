@@ -1,7 +1,7 @@
 package com.mercadolibre.android.cardform.presentation.ui.formentry
 
 import android.os.Bundle
-import android.support.design.widget.TextInputEditText
+import com.google.android.material.textfield.TextInputEditText
 import android.view.View
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve

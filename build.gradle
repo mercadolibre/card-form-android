@@ -6,7 +6,7 @@ buildscript {
     }
     dependencies {
         classpath Dependencies.gradle
-        classpath Dependencies.gradleKotlin
+        classpath Dependencies.kotlin
         classpath Dependencies.bintray
         classpath Dependencies.maven
         // NOTE: Do not place your application dependencies here; they belong

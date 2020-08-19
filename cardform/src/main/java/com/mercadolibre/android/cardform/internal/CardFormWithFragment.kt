@@ -2,7 +2,7 @@ package com.mercadolibre.android.cardform.internal
 
 import android.os.Parcel
 import android.os.Parcelable
-import android.support.v4.app.FragmentManager
+import androidx.fragment.app.FragmentManager
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.presentation.ui.CardFormFragment

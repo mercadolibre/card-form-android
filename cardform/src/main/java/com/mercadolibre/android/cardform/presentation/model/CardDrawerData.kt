@@ -19,8 +19,7 @@ internal class CardDrawerData(private val cardUi: CardUi) : CardUI, Parcelable {
         datePlaceholder = context.getString(R.string.cf_card_date_hint)
     }
 
-    constructor(parcel: Parcel) :
-            this(parcel.readParcelable(CardUi::class.java.classLoader) as CardUi) {
+    constructor(parcel: Parcel) : this(parcel.readParcelable<CardUi>(CardUi::class.java.classLoader)!!) {
         namePlaceholder = parcel.readString()!!
         datePlaceholder = parcel.readString()!!
     }
