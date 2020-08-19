@@ -1,3 +1,7 @@
+## VERSION 1.4.0
+_19_08_2020_
+- Migrated to AndroidX and API 29.
+
 ## VERSION 1.3.1
 _23_07_2020_
 - NullPointer in views fixed
