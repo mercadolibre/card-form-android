@@ -1,3 +1,7 @@
+## VERSION 1.4.1
+_20_08_2020_
+- Fixed card token request.
+
 ## VERSION 1.4.0
 _19_08_2020_
 - Migrated to AndroidX and API 29.
