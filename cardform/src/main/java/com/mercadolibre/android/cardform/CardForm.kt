@@ -93,8 +93,13 @@ open class CardForm : Parcelable {
 
     override fun describeContents() = 0
 
-    companion object CREATOR : Parcelable.Creator<CardForm> {
-        override fun createFromParcel(parcel: Parcel) = CardForm(parcel)
-        override fun newArray(size: Int) = arrayOfNulls<CardForm?>(size)
+    companion object {
+        const val RESULT_CARD_ID_KEY = "associated_card_id"
+
+        @JvmField
+        val CREATOR: Parcelable.Creator<CardForm> = object : Parcelable.Creator<CardForm> {
+            override fun createFromParcel(parcel: Parcel) = CardForm(parcel)
+            override fun newArray(size: Int) = arrayOfNulls<CardForm?>(size)
+        }
     }
 }

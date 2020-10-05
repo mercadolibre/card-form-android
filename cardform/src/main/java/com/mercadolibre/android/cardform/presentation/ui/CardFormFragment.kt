@@ -1,6 +1,7 @@
 package com.mercadolibre.android.cardform.presentation.ui
 
 import android.app.Activity
+import android.content.Intent
 import androidx.lifecycle.Observer
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -304,22 +305,25 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
         }
     }
 
-    private fun returnResult(data: String, resultCode: Int) {
-        //Not sending any data currently, only ok or not
+    private fun returnResult(associatedCardId: String, resultCode: Int) {
         activity?.apply {
             if (fromFragment) {
                 supportFragmentManager.popBackStackImmediate()
                 getCurrentFragment(supportFragmentManager)?.onActivityResult(
                     requestCode,
                     resultCode,
-                    null
+                    buildResultIntent(associatedCardId)
                 )
             } else {
-                setResult(resultCode)
+                setResult(resultCode, buildResultIntent(associatedCardId))
                 finish()
             }
             viewModel.tracker.trackEvent(SuccessTrack())
         }
+    }
+
+    private fun buildResultIntent(associatedCardId: String) = Intent().apply {
+        putExtra(CardForm.RESULT_CARD_ID_KEY, associatedCardId)
     }
 
     private fun getCurrentFragment(manager: FragmentManager): Fragment? = try {
