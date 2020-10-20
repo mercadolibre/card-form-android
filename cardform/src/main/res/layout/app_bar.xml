@@ -39,8 +39,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="4dp"
-            android:background="@color/ui_components_primary_color"
-            android:alpha="0.2" />
+            android:background="@color/cf_progress_background" />
 
         <ProgressBar
             android:id="@+id/progress"
