@@ -3,8 +3,8 @@
 
     <style name="InputFormTheme">
         <item name="colorControlNormal">@color/cf_hint_input_text</item>
-        <item name="colorControlActivated">@color/ui_components_primary_color</item>
-        <item name="colorControlHighlight">@color/ui_components_primary_color</item>
+        <item name="colorControlActivated">@color/cf_input_accent</item>
+        <item name="colorControlHighlight">@color/cf_input_accent</item>
         <item name="android:textSize">@dimen/ui_fontsize_medium</item>
         <item name="android:textColor">@color/ui_fullscreenmodal_toolbar_text_color</item>
     </style>
@@ -20,10 +20,10 @@
     </style>
 
     <style name="ToolBar" parent="ThemeOverlay.AppCompat.ActionBar">
-        <item name="android:textColorPrimary">@color/ui_components_action_bar_text_color</item>
+        <item name="android:textColorPrimary">@color/cf_back</item>
         <item name="android:textColor">@color/ui_components_action_bar_text_color</item>
         <item name="android:textColorPrimaryInverse">@color/ui_components_action_bar_text_color</item>
-        <item name="android:background">@color/ui_components_actionModeBackground</item>
+        <item name="android:background">@color/cf_action_bar</item>
     </style>
 
 </resources>

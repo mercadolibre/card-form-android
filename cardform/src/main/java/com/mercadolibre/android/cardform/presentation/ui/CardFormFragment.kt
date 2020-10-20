@@ -75,7 +75,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
                     buttonContainer.fadeIn()
                     inputViewPager.slideLeftIn(offset)
                     progress.slideRightIn(offset)
-                    title.fadeIn(duration, offset, onFinish = {
+                    toolbar.fadeIn(duration, offset, onFinish = {
                         animationEnded = true
                     })
                 }
@@ -84,7 +84,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
                 inputViewPager.slideRightOut()
                 buttonContainer.goneDuringAnimation()
                 progress.fadeOut()
-                title.fadeOut()
+                toolbar.fadeOut()
             }
         }
         return super.onCreateAnimation(transit, enter, nextAnim)
