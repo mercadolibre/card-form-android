@@ -1,3 +1,8 @@
+## VERSION 1.5.0
+_20_10_2020_
+- Added cardId on result.
+- Updated meli colors.
+
 ## VERSION 1.4.1
 _20_08_2020_
 - Fixed card token request.
