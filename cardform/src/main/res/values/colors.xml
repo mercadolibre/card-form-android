@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="cf_action_bar">#00ffffff</color>
+    <color name="cf_action_bar_text">#333333</color>
     <color name="cf_input_accent">#3483fa</color>
     <color name="cf_button_navigation_background">#f5f5f5</color>
     <color name="cf_back">#3483fa</color>

@@ -1,3 +1,7 @@
+## VERSION 1.5.1
+_20_10_2020_
+- Fix activity status bar color.
+
 ## VERSION 1.5.0
 _20_10_2020_
 - Added cardId on result.

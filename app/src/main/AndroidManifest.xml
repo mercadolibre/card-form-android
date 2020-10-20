@@ -9,9 +9,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
         <activity android:name=".SampleActivity"
+            android:theme="@style/Theme.Base"
             android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".OneTapActivity"
+            android:theme="@style/Theme.Base"
             android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="adjustResize"
             />
