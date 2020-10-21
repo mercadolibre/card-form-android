@@ -26,4 +26,8 @@
         <item name="android:background">@color/cf_action_bar</item>
     </style>
 
+    <style name="AppTheme" parent="Theme.Base">
+        <!-- Customize your theme here. -->
+    </style>
+
 </resources>
