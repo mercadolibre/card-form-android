@@ -24,5 +24,5 @@ object Versions {
     const val maven = "2.1"
     const val pxAddons = "4.+"
 
-    const val versionToDeploy = "1.5.1"
+    const val versionToDeploy = "1.5.2"
 }
