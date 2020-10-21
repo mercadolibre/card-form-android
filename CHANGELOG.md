@@ -1,3 +1,7 @@
+## VERSION 1.5.2
+_21_10_2020_
+- Adjusted status bar color again.
+
 ## VERSION 1.5.1
 _20_10_2020_
 - Fix activity status bar color.
