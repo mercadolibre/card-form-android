@@ -24,7 +24,7 @@ internal class Dependencies {
         networkModule = NetworkModule(activity, cardForm.sessionId)
         behaviourModule = BehaviourModule(cardForm.sessionId)
         repositoryModule = RepositoryModule(networkModule!!.retrofit, cardForm.accessToken!!,
-            cardForm.siteId, cardForm.excludedTypes)
+            cardForm.siteId, cardForm.excludedTypes, cardForm.flowId, cardForm.extraData)
         localPreferences = LocalRepositoryModule(activity.applicationContext)
         trackerModule = TrackerModule(cardForm.siteId,
             cardForm.flowId,

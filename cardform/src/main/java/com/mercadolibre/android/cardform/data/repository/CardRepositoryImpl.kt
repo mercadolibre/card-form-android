@@ -2,6 +2,7 @@ package com.mercadolibre.android.cardform.data.repository
 
 import com.mercadolibre.android.cardform.BuildConfig
 import com.mercadolibre.android.cardform.data.model.response.RegisterCard
+import com.mercadolibre.android.cardform.data.service.CardInfoDto
 import com.mercadolibre.android.cardform.data.service.CardService
 import com.mercadolibre.android.cardform.network.exceptions.ExcludePaymentException
 import kotlinx.coroutines.CoroutineScope
@@ -9,9 +10,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import org.json.JSONObject
 import java.io.IOException
+import java.io.Serializable
 
-internal class CardRepositoryImpl(private val cardService: CardService, private val siteId: String,
-                         private val excludedPaymentTypes: List<String>?) : CardRepository {
+internal class CardRepositoryImpl(
+    private val cardService: CardService,
+    private val siteId: String,
+    private val excludedPaymentTypes: List<String>?,
+    private val flowId: String,
+    private val extraData: Serializable?
+) : CardRepository {
 
     private val cache = mutableMapOf<String, RegisterCard>()
     private val queue = mutableListOf<String>()
@@ -27,8 +34,11 @@ internal class CardRepositoryImpl(private val cardService: CardService, private 
         queue.add(bin)
         return CoroutineScope(Dispatchers.IO).async {
             try {
-                val response = cardService.getCardInfoAsync(BuildConfig.API_ENVIRONMENT, bin,
-                    siteId, excludedPaymentTypes)
+
+                val response = cardService.getCardInfoAsync(
+                    BuildConfig.API_ENVIRONMENT,
+                    CardInfoDto(bin, siteId, excludedPaymentTypes, flowId, extraData)
+                )
                 response.run {
                     if (isSuccessful) {
                         body()?.let {

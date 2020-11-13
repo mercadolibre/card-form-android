@@ -5,7 +5,8 @@ import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
 import com.mercadolibre.android.cardform.presentation.ui.CardFormActivity
 import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationController
-import java.util.*
+import java.io.Serializable
+import java.util.UUID
 
 open class CardForm : Parcelable {
 
@@ -17,6 +18,7 @@ open class CardForm : Parcelable {
         protected set
     val sessionId: String
     val flowId: String
+    val extraData: Serializable?
 
     protected constructor(builder: Builder) {
         siteId = builder.siteId
@@ -25,6 +27,7 @@ open class CardForm : Parcelable {
         excludedTypes = builder.excludedTypes
         flowId = builder.flowId
         sessionId = builder.sessionId ?: UUID.randomUUID().toString()
+        extraData = builder.extraData
     }
 
     protected constructor(parcel: Parcel) {
@@ -34,6 +37,7 @@ open class CardForm : Parcelable {
         excludedTypes = parcel.createStringArrayList()
         flowId = parcel.readString()!!
         sessionId = parcel.readString()!!
+        extraData = parcel.readSerializable()
     }
 
     fun start(activity: AppCompatActivity, requestCode: Int) {
@@ -58,6 +62,12 @@ open class CardForm : Parcelable {
 
         var sessionId: String? = null
             private set
+
+        var extraData: Serializable? = null
+
+        fun setExtraData(extraData: Serializable?) = apply {
+            this.extraData = extraData
+        }
 
         open fun setExcludedTypes(excludedTypes: List<String>) = apply {
             this.excludedTypes = excludedTypes
@@ -89,6 +99,7 @@ open class CardForm : Parcelable {
         parcel.writeStringList(excludedTypes)
         parcel.writeString(flowId)
         parcel.writeString(sessionId)
+        parcel.writeSerializable(extraData)
     }
 
     override fun describeContents() = 0
