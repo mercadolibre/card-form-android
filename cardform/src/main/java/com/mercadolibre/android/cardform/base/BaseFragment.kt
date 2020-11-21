@@ -23,7 +23,7 @@ internal abstract class BaseFragment<T : BaseViewModel> : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = Dependencies.instance.viewModelModule!!.get(viewModelClass)
+        viewModel = Dependencies.instance.viewModelModule!!.get(this, viewModelClass)
         bindViewModel()
     }
 
