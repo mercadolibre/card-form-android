@@ -12,19 +12,18 @@ internal abstract class UseCase<in P, out R> {
     protected open val contextProvider = CoroutineContextProvider()
     protected abstract suspend fun doExecute(param: P): ResponseCallback<R>
 
-    fun execute(param: P, success: CallBack<R> = {}, failure: CallBack<Throwable> = {}) {
-        runCatching {
-            CoroutineScope(contextProvider.Default).launch {
+    fun execute(param: P, success: CallBack<R> = {}, failure: CallBack<Throwable> = {}) =
+        CoroutineScope(contextProvider.Default).launch {
+            runCatching {
                 doExecute(param).also { response ->
                     withContext(contextProvider.Main) { response.fold(success, failure) }
                 }
-            }
-        }.onFailure(failure)
-    }
-
-    suspend fun execute(param: P) = runCatching {
-        withContext(contextProvider.Default) {
-            doExecute(param).also { response -> withContext(contextProvider.Default) { response } }
+            }.onFailure { withContext(contextProvider.Main) { failure(it) }}
         }
-    }.getOrElse(::Failure)
+
+    suspend fun execute(param: P) = withContext(contextProvider.Default) {
+        runCatching {
+            doExecute(param).also { response -> withContext(contextProvider.Default) { response } }
+        }.getOrElse { withContext(contextProvider.Main) { Failure(it) } }
+    }
 }

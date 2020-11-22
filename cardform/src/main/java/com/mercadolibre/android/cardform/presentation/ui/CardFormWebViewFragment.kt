@@ -15,15 +15,14 @@ internal const val USER_NAME_EXTRA = "user_name"
 internal const val USER_EMAIL_EXTRA = "user_email"
 internal const val RESPONSE_URL_EXTRA = "response_url"
 
-@SuppressLint("SetJavaScriptEnabled")
-internal class CardFormWebViewFragment: RootFragment<CardFormWebViewModel>() {
+internal class CardFormWebViewFragment : RootFragment<CardFormWebViewModel>() {
     override val viewModelClass = CardFormWebViewModel::class.java
     override val rootLayout = R.layout.fragment_web_view
 
     private lateinit var webView: WebView
     private lateinit var iconInclude: View
 
-    @SuppressLint("JavascriptInterface")
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         webView = view.findViewById(R.id.web_view)
@@ -42,10 +41,6 @@ internal class CardFormWebViewFragment: RootFragment<CardFormWebViewModel>() {
                     val scriptInputStream = it.assets.open("override.js")
                     webView.evaluateJavascript(scriptInputStream.reader().readText(), null)
                 }
-            }
-
-            override fun onPageStarted() {
-                Log.i("JORGE", "onPageStarted")
             }
 
             override fun onReceivingData(data: String) {
@@ -71,7 +66,7 @@ internal class CardFormWebViewFragment: RootFragment<CardFormWebViewModel>() {
 
     override fun bindViewModel() {
         viewModel.webUiStateLiveData.nonNullObserve(this) {
-            when(it) {
+            when (it) {
                 is WebUiState.WebSuccess -> {
                     Log.d("JORGE", "Success")
 
