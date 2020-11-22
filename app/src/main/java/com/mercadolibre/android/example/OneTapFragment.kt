@@ -34,7 +34,7 @@ class OneTapFragment : Fragment(), LifecycleListener {
         button.setOnClickListener {
             activity?.apply {
                 CardFormWithFragment.Builder.withAccessToken(
-                    "APP_USR-3671576383500204-072117-d275735575b2b95458be231afc00f14c-506902649",
+                    "TEST-8395553183432240-112213-78d68d4be7b3c86042aae6314097c08f-658879489",
                     "MLA", "test_flow")
                     .build()
                     .start(supportFragmentManager, REQUEST_CODE, R.id.container)

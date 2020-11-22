@@ -33,7 +33,7 @@ internal class Dependencies {
             cardForm.flowId,
             cardForm.sessionId,
             behaviourModule!!.trackerBehaviour)
-        viewModelModule = ViewModelModule(activity, useCaseModule!!, repositoryModule!!, behaviourModule!!, trackerModule!!)
+        viewModelModule = ViewModelModule(fragment, useCaseModule!!, repositoryModule!!, behaviourModule!!, trackerModule!!)
     }
 
     fun clean() {
