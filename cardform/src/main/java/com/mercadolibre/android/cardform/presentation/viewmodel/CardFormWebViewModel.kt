@@ -26,16 +26,21 @@ internal class CardFormWebViewModel(
     private val webUiStateMutableLiveData = MutableLiveData<WebUiState>()
     val webUiStateLiveData: LiveData<WebUiState>
         get() = webUiStateMutableLiveData
+    private lateinit var userFullName: String
+    private lateinit var userIdentificationNumber: String
+    private lateinit var userIdentificationType: String
 
-    private lateinit var token: ByteArray
-
-    fun initInscription(userName: String, userEmail: String, responseUrl: String) {
+    fun initInscription() {
         webUiStateMutableLiveData.value = WebUiState.WebProgress
-        inscriptionUseCase.execute(
-            InscriptionParams(userName, userEmail, responseUrl),
+        inscriptionUseCase.execute(Unit,
             success = {
-                token = it.token
-                webUiStateMutableLiveData.value = WebUiState.WebSuccess(it.urlWebPay, token)
+                userFullName = it.fullName
+                userIdentificationNumber = it.identifierNumber
+                userIdentificationType = it.identifierType
+                webUiStateMutableLiveData.value = WebUiState.WebSuccess(
+                    it.urlWebPay,
+                    it.token,
+                    it.redirectUrl)
             },
             failure = {
                 Log.i("JORGE", it.localizedMessage.orIfEmpty("inscriptionUseCase"))

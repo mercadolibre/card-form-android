@@ -24,7 +24,7 @@ internal class RepositoryModule(
     val cardAssociationRepository by lazy {
         CardAssociationRepositoryImpl(retrofit.create(CardAssociationService::class.java), accessToken)
     }
-    val inscriptionRepository by lazy { InscriptionRepositoryImpl(retrofit.create(InscriptionService::class.java))}
+    val inscriptionRepository by lazy { InscriptionRepositoryImpl(accessToken, retrofit.create(InscriptionService::class.java))}
 
     val finishInscriptionRepository by lazy { FinishInscriptionRepositoryImpl(retrofit.create(FinishInscriptionService::class.java))}
 }

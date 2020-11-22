@@ -6,7 +6,7 @@ sealed class WebUiState(
     val progressState: ProgressState
 ) {
 
-    data class WebSuccess(val url: String, val token: ByteArray) : WebUiState(0, 0, ProgressState.SUCCESS)
+    data class WebSuccess(val url: String, val token: ByteArray, val redirectUrl: String) : WebUiState(0, 0, ProgressState.SUCCESS)
     object WebProgress : WebUiState(0, 0, ProgressState.PROGRESS)
     object WebError : WebUiState(0, 0, ProgressState.ERROR)
 
