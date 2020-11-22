@@ -25,7 +25,7 @@ internal class Dependencies {
         val activity = fragment.activity!!
         networkModule = NetworkModule(activity, cardForm.sessionId)
         behaviourModule = BehaviourModule(cardForm.sessionId)
-        repositoryModule = RepositoryModule(networkModule!!.retrofit, cardForm.accessToken!!,
+        repositoryModule = RepositoryModule(networkModule!!.retrofit, networkModule!!.retrofit2, cardForm.accessToken!!,
             cardForm.siteId, cardForm.excludedTypes)
         useCaseModule = UseCaseModule(repositoryModule!!)
         localPreferences = LocalRepositoryModule(activity.applicationContext)

@@ -5,5 +5,6 @@ import com.mercadolibre.android.cardform.network.RetrofitFactory
 
 internal class NetworkModule(context: Context, sessionId: String) {
 
-    val retrofit by lazy { RetrofitFactory.get(context.applicationContext, sessionId) }
+    val retrofit by lazy { RetrofitFactory.get(context.applicationContext, RetrofitFactory.MP_API_BASE_URL, sessionId) }
+    val retrofit2 by lazy { RetrofitFactory.get(context.applicationContext, RetrofitFactory.MP_API_INTERNAL_BASE_URL, sessionId) }
 }

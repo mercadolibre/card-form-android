@@ -3,6 +3,8 @@ package com.mercadolibre.android.cardform.di.module
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.mercadolibre.android.cardform.data.model.esc.Device
+import com.mercadolibre.android.cardform.presentation.mapper.CardInfoMapper
+import com.mercadolibre.android.cardform.presentation.viewmodel.CardFormWebViewModel
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
 
 internal class ViewModelFactory(
@@ -15,16 +17,29 @@ internal class ViewModelFactory(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(InputFormViewModel::class.java)) {
-            return InputFormViewModel(
-                repositoryModule.cardRepository,
-                useCaseModule.tokenizeUseCase,
-                useCaseModule.cardAssociationUseCase,
-                behaviourModule.escManager,
-                device,
-                trackerModule.tracker
-            ) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
+        return run {
+            when {
+                modelClass.isAssignableFrom(InputFormViewModel::class.java) -> {
+                    InputFormViewModel(
+                        repositoryModule.cardRepository,
+                        useCaseModule.tokenizeUseCase,
+                        useCaseModule.cardAssociationUseCase,
+                        behaviourModule.escManager,
+                        device,
+                        trackerModule.tracker)
+                }
+                modelClass.isAssignableFrom(CardFormWebViewModel::class.java) -> {
+                    CardFormWebViewModel(
+                        useCaseModule.inscriptionUseCase,
+                        useCaseModule.finishInscriptionUseCase,
+                        useCaseModule.tokenizeWebCardUseCase,
+                        useCaseModule.cardAssociationUseCase,
+                        CardInfoMapper(device))
+                }
+                else -> {
+                    throw IllegalArgumentException("Unknown ViewModel class")
+                }
+            }
+        } as T
     }
 }
