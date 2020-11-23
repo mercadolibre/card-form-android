@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.webkit.*
+import com.mercadolibre.android.andesui.button.AndesButton
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.base.RootFragment
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
@@ -21,11 +22,15 @@ internal class CardFormWebViewFragment : RootFragment<CardFormWebViewModel>() {
 
     private lateinit var webView: WebView
     private lateinit var iconInclude: View
+    private lateinit var retryButton: AndesButton
+    private lateinit var backButton: AndesButton
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         webView = view.findViewById(R.id.web_view)
+        retryButton = view.findViewById(R.id.retry_button)
+        backButton = view.findViewById(R.id.back_button)
         WebView.setWebContentsDebuggingEnabled(true)
 
         webView.settings.javaScriptEnabled = true
