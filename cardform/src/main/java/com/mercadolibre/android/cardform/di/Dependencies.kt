@@ -25,22 +25,32 @@ internal class Dependencies {
         val activity = fragment.activity!!
         networkModule = NetworkModule(activity, cardForm.sessionId)
         behaviourModule = BehaviourModule(cardForm.sessionId)
-        repositoryModule = RepositoryModule(networkModule!!.retrofit, networkModule!!.retrofit2, cardForm.accessToken!!,
-            cardForm.siteId, cardForm.excludedTypes)
+        repositoryModule = RepositoryModule(
+            networkModule!!.retrofit, cardForm.accessToken!!,
+            cardForm.siteId, cardForm.excludedTypes
+        )
         useCaseModule = UseCaseModule(repositoryModule!!)
         localPreferences = LocalRepositoryModule(activity.applicationContext)
-        trackerModule = TrackerModule(cardForm.siteId,
+        trackerModule = TrackerModule(
+            cardForm.siteId,
             cardForm.flowId,
             cardForm.sessionId,
-            behaviourModule!!.trackerBehaviour)
-        viewModelModule = ViewModelModule(fragment, useCaseModule!!, repositoryModule!!, behaviourModule!!, trackerModule!!)
+            behaviourModule!!.trackerBehaviour
+        )
+        viewModelModule = ViewModelModule(
+            fragment,
+            useCaseModule!!,
+            repositoryModule!!,
+            behaviourModule!!,
+            trackerModule!!
+        )
     }
 
     fun clean() {
         networkModule = null
         repositoryModule = null
         viewModelModule = null
-        localPreferences =  null
+        localPreferences = null
         behaviourModule = null
         trackerModule = null
     }
