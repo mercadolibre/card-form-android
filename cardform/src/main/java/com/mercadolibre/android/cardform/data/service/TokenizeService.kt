@@ -15,7 +15,7 @@ internal interface TokenizeService {
         @Body cardInfoBody: CardInfoBody
     ): Response<CardToken>
 
-    @POST("/gateway/staging/card_tokens")
+    @POST("/v1/card_tokens")
     suspend fun createWebCardToken(
         @Query("access_token") accessToken : String,
         @Body webCardTokenBody: WebCardTokenBody

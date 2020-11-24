@@ -10,7 +10,6 @@ import retrofit2.Retrofit
 
 internal class RepositoryModule(
     retrofit: Retrofit,
-    retrofit2: Retrofit,
     accessToken: String,
     siteId: String,
     excludedPaymentTypes: List<String>?
@@ -19,7 +18,7 @@ internal class RepositoryModule(
         CardRepositoryImpl(retrofit.create(CardService::class.java), siteId, excludedPaymentTypes)
     }
     val tokenizeRepository by lazy {
-        TokenizeRepositoryImpl(retrofit2.create(TokenizeService::class.java), accessToken, siteId)
+        TokenizeRepositoryImpl(retrofit.create(TokenizeService::class.java), accessToken, siteId)
     }
     val cardAssociationRepository by lazy {
         CardAssociationRepositoryImpl(retrofit.create(CardAssociationService::class.java), accessToken)
