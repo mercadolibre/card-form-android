@@ -12,7 +12,6 @@ import org.json.JSONObject
 internal class TokenizeRepositoryImpl(
     private val service: TokenizeService,
     private val accessToken: String,
-    private val siteId: String,
     private val contextProvider: CoroutineContextProvider = CoroutineContextProvider()
 ) : TokenizeRepository {
 

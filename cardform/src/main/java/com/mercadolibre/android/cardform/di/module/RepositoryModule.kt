@@ -16,7 +16,7 @@ internal class RepositoryModule(
         CardRepositoryImpl(retrofit.create(CardService::class.java), siteId, excludedPaymentTypes)
     }
     val tokenizeRepository by lazy {
-        TokenizeRepositoryImpl(retrofit.create(TokenizeService::class.java), accessToken, siteId)
+        TokenizeRepositoryImpl(retrofit.create(TokenizeService::class.java), accessToken)
     }
     val cardAssociationRepository by lazy {
         CardAssociationRepositoryImpl(retrofit.create(CardAssociationService::class.java), accessToken)
