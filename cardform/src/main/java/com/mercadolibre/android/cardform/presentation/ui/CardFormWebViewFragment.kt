@@ -7,7 +7,8 @@ import android.view.View
 import android.webkit.*
 import com.mercadolibre.android.andesui.button.AndesButton
 import com.mercadolibre.android.cardform.R
-import com.mercadolibre.android.cardform.base.RootFragment
+import com.mercadolibre.android.cardform.base.BaseFragment
+import com.mercadolibre.android.cardform.di.sharedViewModel
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.model.WebUiState
 import com.mercadolibre.android.cardform.presentation.viewmodel.CardFormWebViewModel
@@ -16,9 +17,10 @@ internal const val USER_NAME_EXTRA = "user_name"
 internal const val USER_EMAIL_EXTRA = "user_email"
 internal const val RESPONSE_URL_EXTRA = "response_url"
 
-internal class CardFormWebViewFragment : RootFragment<CardFormWebViewModel>() {
+internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
     override val viewModelClass = CardFormWebViewModel::class.java
     override val rootLayout = R.layout.fragment_web_view
+    override val viewModel: CardFormWebViewModel by sharedViewModel { activity!! }
 
     private lateinit var webView: WebView
     private lateinit var iconInclude: View

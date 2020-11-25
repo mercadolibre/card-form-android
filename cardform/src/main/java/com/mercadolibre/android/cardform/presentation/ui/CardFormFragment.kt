@@ -17,6 +17,7 @@ import com.meli.android.carddrawer.model.CardUI
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.base.RootFragment
+import com.mercadolibre.android.cardform.di.viewModel
 import com.mercadolibre.android.cardform.presentation.extensions.*
 import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
 import com.mercadolibre.android.cardform.presentation.helpers.KeyboardHelper
@@ -40,6 +41,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
 
     override val viewModelClass = InputFormViewModel::class.java
     override val rootLayout = R.layout.fragment_card_form
+    override val viewModel: InputFormViewModel by viewModel()
 
     private var fromFragment = false
     private var requestCode = 0

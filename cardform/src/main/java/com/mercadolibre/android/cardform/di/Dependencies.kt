@@ -1,5 +1,6 @@
 package com.mercadolibre.android.cardform.di
 
+import android.content.Context
 import androidx.fragment.app.Fragment
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.di.module.*
@@ -21,16 +22,15 @@ internal class Dependencies {
 
     var trackerModule: TrackerModule? = null
 
-    fun initialize(fragment: Fragment, cardForm: CardForm) {
-        val activity = fragment.activity!!
-        networkModule = NetworkModule(activity, cardForm.sessionId)
+    fun initialize(context: Context, cardForm: CardForm) {
+        networkModule = NetworkModule(context, cardForm.sessionId)
         behaviourModule = BehaviourModule(cardForm.sessionId)
         repositoryModule = RepositoryModule(
             networkModule!!.retrofit, cardForm.accessToken!!,
             cardForm.siteId, cardForm.excludedTypes
         )
         useCaseModule = UseCaseModule(repositoryModule!!)
-        localPreferences = LocalRepositoryModule(activity.applicationContext)
+        localPreferences = LocalRepositoryModule(context.applicationContext)
         trackerModule = TrackerModule(
             cardForm.siteId,
             cardForm.flowId,
@@ -38,7 +38,7 @@ internal class Dependencies {
             behaviourModule!!.trackerBehaviour
         )
         viewModelModule = ViewModelModule(
-            fragment,
+            context,
             useCaseModule!!,
             repositoryModule!!,
             behaviourModule!!,

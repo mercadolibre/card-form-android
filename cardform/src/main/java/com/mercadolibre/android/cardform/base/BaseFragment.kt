@@ -9,7 +9,7 @@ import com.mercadolibre.android.cardform.di.Dependencies
 
 internal abstract class BaseFragment<T : BaseViewModel> : Fragment() {
 
-    protected lateinit var viewModel: T
+    protected abstract val viewModel: T
     protected abstract val viewModelClass: Class<T>
     protected abstract val rootLayout: Int
 
@@ -23,7 +23,6 @@ internal abstract class BaseFragment<T : BaseViewModel> : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = Dependencies.instance.viewModelModule!!.get(viewModelClass)
         bindViewModel()
     }
 

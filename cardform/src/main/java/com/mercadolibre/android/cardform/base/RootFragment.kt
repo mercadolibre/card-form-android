@@ -10,7 +10,7 @@ internal abstract class RootFragment<T : BaseViewModel> : BaseFragment<T>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            Dependencies.instance.initialize(this, it.getParcelable(ARG_CARD_FORM)!!)
+            Dependencies.instance.initialize(context!!, it.getParcelable(ARG_CARD_FORM)!!)
         }
     }
 
