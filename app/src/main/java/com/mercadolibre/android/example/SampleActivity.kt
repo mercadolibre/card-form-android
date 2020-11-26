@@ -34,8 +34,8 @@ class SampleActivity : AppCompatActivity() {
                 "MLC", "test_flow")
                 .build()
                 .start(this, REQUEST_CODE,
-                    "APRO",
-                    "apro@gmail.com",
+                    "chaca",
+                    "chaca@gmail.com",
                     "https://www.comercio.cl/return_inscription")
         }
     }
