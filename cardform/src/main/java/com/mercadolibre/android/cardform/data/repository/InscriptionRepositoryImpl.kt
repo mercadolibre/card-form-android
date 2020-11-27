@@ -21,7 +21,7 @@ internal class InscriptionRepositoryImpl(
         }
     }.mapCatching {
         InscriptionBusinessModel(
-            it.tkbToken,
+            it.tbkToken,
             it.urlWebPay,
             it.redirectUrl,
             it.user.firstName,
@@ -32,7 +32,7 @@ internal class InscriptionRepositoryImpl(
 }
 
 internal data class InscriptionDataModel(
-    val tkbToken: String,
+    val tbkToken: String,
     @SerializedName("url_webpay")
     val urlWebPay: String,
     val redirectUrl: String,
