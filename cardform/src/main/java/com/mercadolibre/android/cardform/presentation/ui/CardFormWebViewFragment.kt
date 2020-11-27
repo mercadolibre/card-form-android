@@ -18,7 +18,6 @@ internal const val USER_EMAIL_EXTRA = "user_email"
 internal const val RESPONSE_URL_EXTRA = "response_url"
 
 internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
-    override val viewModelClass = CardFormWebViewModel::class.java
     override val rootLayout = R.layout.fragment_web_view
     override val viewModel: CardFormWebViewModel by sharedViewModel { activity!! }
 

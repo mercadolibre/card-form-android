@@ -14,4 +14,6 @@
     <string name="cf_retry">Reintentar</string>
     <string name="cf_complete_field">Completa este campo</string>
     <string name="cf_label_back">atrás</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

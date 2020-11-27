@@ -10,7 +10,6 @@ import com.mercadolibre.android.cardform.di.Dependencies
 internal abstract class BaseFragment<T : BaseViewModel> : Fragment() {
 
     protected abstract val viewModel: T
-    protected abstract val viewModelClass: Class<T>
     protected abstract val rootLayout: Int
 
     override fun onCreateView(

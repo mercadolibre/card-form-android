@@ -18,7 +18,6 @@ typealias MoveTo = ((position: Int) -> Unit)
  */
 
 internal abstract class InputFragment : BaseFragment<InputFormViewModel>() {
-    override val viewModelClass = InputFormViewModel::class.java
     override val viewModel: InputFormViewModel by sharedViewModel { parentFragment!! }
     protected var isInputValid = false
     override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {

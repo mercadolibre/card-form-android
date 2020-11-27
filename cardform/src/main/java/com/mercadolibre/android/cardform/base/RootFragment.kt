@@ -2,6 +2,7 @@ package com.mercadolibre.android.cardform.base
 
 import android.os.Bundle
 import android.view.View
+import com.mercadolibre.android.cardform.CARD_FORM_EXTRA
 import com.mercadolibre.android.cardform.internal.LifecycleListener
 import com.mercadolibre.android.cardform.di.Dependencies
 
@@ -10,7 +11,7 @@ internal abstract class RootFragment<T : BaseViewModel> : BaseFragment<T>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            Dependencies.instance.initialize(context!!, it.getParcelable(ARG_CARD_FORM)!!)
+            Dependencies.instance.initialize(context!!, it.getParcelable(CARD_FORM_EXTRA)!!)
         }
     }
 
@@ -38,9 +39,5 @@ internal abstract class RootFragment<T : BaseViewModel> : BaseFragment<T>() {
         } catch (e: Exception) {
             null
         }
-    }
-
-    companion object {
-        const val ARG_CARD_FORM = "card_form"
     }
 }

@@ -10,6 +10,7 @@ import com.mercadolibre.android.cardform.domain.*
 import com.mercadolibre.android.cardform.domain.FinishInscriptionUseCase
 import com.mercadolibre.android.cardform.domain.InscriptionUseCase
 import com.mercadolibre.android.cardform.presentation.mapper.CardInfoMapper
+import com.mercadolibre.android.cardform.presentation.model.LoadingScreenState
 import com.mercadolibre.android.cardform.presentation.model.WebUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +27,10 @@ internal class CardFormWebViewModel(
     private val webUiStateMutableLiveData = MutableLiveData<WebUiState>()
     val webUiStateLiveData: LiveData<WebUiState>
         get() = webUiStateMutableLiveData
+
+    private val loadingScreenStateMutableLiveData = MutableLiveData<LoadingScreenState>()
+    val loadingScreenStateLiveData: LiveData<LoadingScreenState>
+        get() = loadingScreenStateMutableLiveData
 
     private lateinit var token: ByteArray
 

@@ -14,6 +14,7 @@ import com.meli.android.carddrawer.configuration.DefaultCardConfiguration
 import com.meli.android.carddrawer.model.CardAnimationType
 import com.meli.android.carddrawer.model.CardDrawerView
 import com.meli.android.carddrawer.model.CardUI
+import com.mercadolibre.android.cardform.CARD_FORM_EXTRA
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.base.RootFragment
@@ -39,7 +40,6 @@ import kotlinx.android.synthetic.main.fragment_card_form.*
  */
 internal class CardFormFragment : RootFragment<InputFormViewModel>() {
 
-    override val viewModelClass = InputFormViewModel::class.java
     override val rootLayout = R.layout.fragment_card_form
     override val viewModel: InputFormViewModel by viewModel()
 
@@ -54,7 +54,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
         super.onCreate(savedInstanceState)
         arguments?.apply {
             fromFragment = getBoolean(ARG_FROM_FRAGMENT, false)
-            requestCode = (getParcelable<CardForm>(ARG_CARD_FORM))!!.requestCode
+            requestCode = (getParcelable<CardForm>(CARD_FORM_EXTRA))!!.requestCode
         }
         defaultCardDrawerConfiguration = object : DefaultCardConfiguration(context!!) {
             override fun getNamePlaceHolder(): String {
@@ -350,7 +350,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
         fun newInstance(fromFragment: Boolean, cardForm: CardForm) = CardFormFragment().apply {
             arguments = Bundle().apply {
                 putBoolean(ARG_FROM_FRAGMENT, fromFragment)
-                putParcelable(ARG_CARD_FORM, cardForm)
+                putParcelable(CARD_FORM_EXTRA, cardForm)
             }
         }
     }
