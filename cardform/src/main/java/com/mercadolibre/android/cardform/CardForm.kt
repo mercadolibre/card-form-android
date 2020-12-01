@@ -8,7 +8,7 @@ import com.mercadolibre.android.cardform.presentation.ui.CardFormActivity
 import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationController
 import java.util.*
 
-const val CARD_FORM_EXTRA = "card_form"
+internal const val CARD_FORM_EXTRA = "card_form"
 
 open class CardForm : Parcelable {
 

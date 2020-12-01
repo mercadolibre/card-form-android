@@ -3,6 +3,7 @@ package com.mercadolibre.android.cardform.data.repository
 import com.mercadolibre.android.cardform.base.CoroutineContextProvider
 import com.mercadolibre.android.cardform.base.Response.Failure
 import com.mercadolibre.android.cardform.base.Response.Success
+import com.mercadolibre.android.cardform.data.model.body.PaymentMethodBody
 import com.mercadolibre.android.cardform.data.service.FinishInscriptionService
 import com.mercadolibre.android.cardform.domain.FinishInscriptionRepository
 import com.mercadolibre.android.cardform.domain.FinishInscriptionBusinessModel
@@ -18,35 +19,30 @@ internal class FinishInscriptionRepositoryImpl(
             finishInscriptionService.getFinishInscription(TokenData(token))
         }
     }.mapCatching {
-
-        if (it.errorMessage.isNotEmpty()) {
-            throw Exception(it.errorMessage)
-        }
-
         FinishInscriptionBusinessModel(
-            it.tbkUser,
-            it.cardNumber,
-            it.bin,
-            it.cardNumberLength,
-            it.identificationNumber ?: "153856400",
-            it.identificationId ?: "rut"
+            it.id,
+            it.number,
+            it.firstSixDigits,
+            it.length,
+            it.issuerId,
+            it.paymentMethod.id,
+            it.paymentMethod.paymentTypeId,
+            it.expirationMonth,
+            it.expirationYear
         )
 
     }.fold(::Success, ::Failure)
 }
 
-data class TokenData(val token: String)
+internal data class TokenData(val token: String)
 
-data class FinishInscriptionData(
-    val responseCode: Int,
-    val tbkUser: String,
-    val authorizationCode: String,
-    val cardType: String,
-    val cardNumber: String,
-    val errorMessage: String,
-    val bin: String,
-    val cardNumberLength: Int,
+internal data class FinishInscriptionData(
+    val id: String,
+    val firstSixDigits: String,
+    val number: String,
+    val expirationYear: Int,
+    val expirationMonth: Int,
+    val length: Int,
     val issuerId: Int,
-    val identificationNumber: String?,
-    val identificationId: String?
+    val paymentMethod: PaymentMethodBody
 )
