@@ -3,6 +3,7 @@ package com.mercadolibre.android.cardform.data.repository
 import com.mercadolibre.android.cardform.base.CoroutineContextProvider
 import com.mercadolibre.android.cardform.base.Response.Failure
 import com.mercadolibre.android.cardform.base.Response.Success
+import com.mercadolibre.android.cardform.base.resolveRetrofitResponse
 import com.mercadolibre.android.cardform.data.model.body.PaymentMethodBody
 import com.mercadolibre.android.cardform.data.service.FinishInscriptionService
 import com.mercadolibre.android.cardform.domain.FinishInscriptionRepository
@@ -14,24 +15,26 @@ internal class FinishInscriptionRepositoryImpl(
     private val contextProvider: CoroutineContextProvider = CoroutineContextProvider()
 ) : FinishInscriptionRepository {
 
-    override suspend fun getFinishInscriptionData(token: String) = runCatching {
+    override suspend fun getFinishInscriptionData(token: String) =
         withContext(contextProvider.IO) {
-            finishInscriptionService.getFinishInscription(TokenData(token))
+            runCatching {
+                finishInscriptionService
+                    .getFinishInscription(TokenData(token))
+                    .resolveRetrofitResponse()
+            }.mapCatching {
+                FinishInscriptionBusinessModel(
+                    it.id,
+                    it.number,
+                    it.firstSixDigits,
+                    it.length,
+                    it.issuerId,
+                    it.paymentMethod.id,
+                    it.paymentMethod.paymentTypeId,
+                    it.expirationMonth,
+                    it.expirationYear
+                )
+            }.fold(::Success, ::Failure)
         }
-    }.mapCatching {
-        FinishInscriptionBusinessModel(
-            it.id,
-            it.number,
-            it.firstSixDigits,
-            it.length,
-            it.issuerId,
-            it.paymentMethod.id,
-            it.paymentMethod.paymentTypeId,
-            it.expirationMonth,
-            it.expirationYear
-        )
-
-    }.fold(::Success, ::Failure)
 }
 
 internal data class TokenData(val token: String)

@@ -38,7 +38,8 @@ internal class CardFormWebViewModel(
                 webUiStateMutableLiveData.value = WebUiState.WebSuccess(
                     it.urlWebPay,
                     it.token,
-                    it.redirectUrl)
+                    it.redirectUrl
+                )
             },
             failure = {
                 Log.i("JORGE", it.localizedMessage.orIfEmpty("inscriptionUseCase"))
@@ -58,30 +59,20 @@ internal class CardFormWebViewModel(
             })
     }
 
-    private fun tokenizeAndAssociateCard(finishInscriptionModel: FinishInscriptionModel) {
-        CoroutineScope(Dispatchers.Default).launch {
-            lateinit var cardTokenId: String
-            getCardToken(finishInscriptionModel)?.let {
-                cardTokenId = it
-                getCardAssociationId(cardTokenId, finishInscriptionModel)
-            }?.let { cardAssociationId ->
-                Log.i("JORGE", "CardAssociationId: $cardAssociationId")
-            }
-        }
-    }
-
     private suspend fun getCardToken(model: FinishInscriptionModel) = run {
         tokenizeWebCardUseCase
-            .execute(TokenizeWebCardParam(
-                model.cardNumberId,
-                model.truncCardNumber,
-                userFullName,
-                userIdentificationNumber,
-                userIdentificationType,
-                model.expirationMonth,
-                model.expirationYear,
-                model.cardNumberLength
-            ))
+            .execute(
+                TokenizeWebCardParam(
+                    model.cardNumberId,
+                    model.truncCardNumber,
+                    userFullName,
+                    userIdentificationNumber,
+                    userIdentificationType,
+                    model.expirationMonth,
+                    model.expirationYear,
+                    model.cardNumberLength
+                )
+            )
             .getOrElse { throwable ->
                 Log.i("JORGE", throwable.localizedMessage.orIfEmpty("tokenizeUseCase"))
                 webUiStateMutableLiveData.postValue(WebUiState.WebError)
@@ -102,6 +93,18 @@ internal class CardFormWebViewModel(
         ).getOrElse { throwable ->
             Log.i("JORGE", throwable.localizedMessage.orIfEmpty("cardAssociationUseCase"))
             webUiStateMutableLiveData.postValue(WebUiState.WebError)
+        }
+    }
+
+    private fun tokenizeAndAssociateCard(finishInscriptionModel: FinishInscriptionModel) {
+        CoroutineScope(Dispatchers.Default).launch {
+            lateinit var cardTokenId: String
+            getCardToken(finishInscriptionModel)?.let {
+                cardTokenId = it
+                getCardAssociationId(cardTokenId, finishInscriptionModel)
+            }?.let { cardAssociationId ->
+                Log.i("JORGE", "CardAssociationId: $cardAssociationId")
+            }
         }
     }
 }
