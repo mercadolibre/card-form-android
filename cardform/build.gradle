@@ -47,6 +47,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation Dependencies.kotlinStdlib
     implementation Dependencies.kotlinCoroutinesCore
+    implementation Dependencies.kotlinCoroutinesAndroid
     implementation Dependencies.constraintLayout
     implementation Dependencies.appCompat
     implementation Dependencies.material

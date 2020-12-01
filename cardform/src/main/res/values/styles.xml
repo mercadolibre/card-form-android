@@ -26,6 +26,13 @@
         <item name="android:background">@color/cf_action_bar</item>
     </style>
 
+    <style name="ToolBarWebView" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorPrimary">@color/ui_components_action_bar_text_color</item>
+        <item name="android:textColor">@color/ui_components_action_bar_text_color</item>
+        <item name="android:textColorPrimaryInverse">@color/ui_components_action_bar_text_color</item>
+        <item name="android:background">@color/ui_components_android_color_primary</item>
+    </style>
+
     <style name="AppTheme" parent="Theme.Base">
         <!-- Customize your theme here. -->
     </style>

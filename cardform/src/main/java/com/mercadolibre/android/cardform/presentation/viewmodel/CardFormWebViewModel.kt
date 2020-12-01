@@ -10,7 +10,7 @@ import com.mercadolibre.android.cardform.domain.*
 import com.mercadolibre.android.cardform.domain.FinishInscriptionUseCase
 import com.mercadolibre.android.cardform.domain.InscriptionUseCase
 import com.mercadolibre.android.cardform.presentation.mapper.CardInfoMapper
-import com.mercadolibre.android.cardform.presentation.model.LoadingScreenState
+import com.mercadolibre.android.cardform.presentation.model.ScreenState
 import com.mercadolibre.android.cardform.presentation.model.WebUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,35 +28,50 @@ internal class CardFormWebViewModel(
     val webUiStateLiveData: LiveData<WebUiState>
         get() = webUiStateMutableLiveData
 
-    private val loadingScreenStateMutableLiveData = MutableLiveData<LoadingScreenState>()
-    val loadingScreenStateLiveData: LiveData<LoadingScreenState>
-        get() = loadingScreenStateMutableLiveData
+    private val screenStateMutableLiveData = MutableLiveData<ScreenState>()
+    val screenStateLiveData: LiveData<ScreenState>
+        get() = screenStateMutableLiveData
+
+    private val loadWebViewMutableLiveData = MutableLiveData<Pair<String, ByteArray>>()
+    val loadWebViewLiveData: LiveData<Pair<String, ByteArray>>
+        get() = loadWebViewMutableLiveData
+
+    private val canGoBackMutableLiveData = MutableLiveData<Boolean>()
+    val canGoBackViewLiveData: LiveData<Boolean>
+        get() = canGoBackMutableLiveData
 
     private lateinit var token: ByteArray
+    private var retryFunction: () -> Unit = {}
 
     fun initInscription(userName: String, userEmail: String, responseUrl: String) {
-        webUiStateMutableLiveData.value = WebUiState.WebProgress
         inscriptionUseCase.execute(
             InscriptionParams(userName, userEmail, responseUrl),
             success = {
                 token = it.token
-                webUiStateMutableLiveData.value = WebUiState.WebSuccess(it.urlWebPay, token)
+                loadWebViewMutableLiveData.value = (it.urlWebPay to it.token)
             },
             failure = {
                 Log.i("JORGE", it.localizedMessage.orIfEmpty("inscriptionUseCase"))
-                webUiStateMutableLiveData.value = WebUiState.WebError
+                retryFunction = {
+                    showProgressStartScreen()
+                    initInscription(userName, userEmail, responseUrl)
+                }
+                showErrorState()
             })
     }
 
     fun finishInscription(token: String) {
         finishInscriptionUseCase.execute(token,
             success = {
-                webUiStateMutableLiveData.value = WebUiState.WebProgress
                 tokenizeAndAssociateCard(it)
             },
             failure = {
                 Log.i("JORGE", it.localizedMessage.orIfEmpty("finishInscriptionUseCase"))
-                webUiStateMutableLiveData.value = WebUiState.WebError
+                retryFunction = {
+                    showProgressBackScreen()
+                    finishInscription(token)
+                }
+                showErrorState()
             })
     }
 
@@ -67,8 +82,12 @@ internal class CardFormWebViewModel(
                 cardTokenId = it
                 getCardAssociationId(cardTokenId, finishInscriptionModel)
             }?.let { cardAssociationId ->
+                showSuccessState()
                 Log.i("JORGE", "CardAssociationId: $cardAssociationId")
-            }
+            } ?: let { retryFunction = {
+                showProgressBackScreen()
+                tokenizeAndAssociateCard(finishInscriptionModel)
+            } }
         }
     }
 
@@ -77,7 +96,7 @@ internal class CardFormWebViewModel(
             .execute(cardInfoMapper.map(finishInscriptionModel))
             .getOrElse { throwable ->
                 Log.i("JORGE", throwable.localizedMessage.orIfEmpty("tokenizeUseCase"))
-                webUiStateMutableLiveData.postValue(WebUiState.WebError)
+                showErrorState()
             }
     }
 
@@ -94,7 +113,37 @@ internal class CardFormWebViewModel(
             )
         ).getOrElse { throwable ->
             Log.i("JORGE", throwable.localizedMessage.orIfEmpty("cardAssociationUseCase"))
-            webUiStateMutableLiveData.postValue(WebUiState.WebError)
+            showErrorState()
         }
+    }
+
+    fun retry() {
+        retryFunction()
+    }
+
+    fun showSuccessState() {
+        webUiStateMutableLiveData.value = WebUiState.WebSuccess
+    }
+
+    private fun showErrorState() {
+        webUiStateMutableLiveData.postValue(WebUiState.WebError)
+    }
+
+    fun showWebViewScreen() {
+        screenStateMutableLiveData.value = ScreenState.WebViewState
+    }
+
+    fun showProgressBackScreen() {
+        screenStateMutableLiveData.postValue(ScreenState.ProgressState)
+        webUiStateMutableLiveData.postValue(WebUiState.WebProgressBack)
+    }
+
+    fun showProgressStartScreen() {
+        screenStateMutableLiveData.value = ScreenState.ProgressState
+        webUiStateMutableLiveData.value = WebUiState.WebProgressStart
+    }
+
+    fun canGoBack(canGoBack: Boolean) {
+        canGoBackMutableLiveData.value = canGoBack
     }
 }

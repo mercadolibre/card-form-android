@@ -5,12 +5,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.webkit.*
-import com.mercadolibre.android.andesui.button.AndesButton
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.base.BaseFragment
 import com.mercadolibre.android.cardform.di.sharedViewModel
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
-import com.mercadolibre.android.cardform.presentation.model.WebUiState
+import com.mercadolibre.android.cardform.presentation.extensions.postDelayed
 import com.mercadolibre.android.cardform.presentation.viewmodel.CardFormWebViewModel
 
 internal const val USER_NAME_EXTRA = "user_name"
@@ -22,18 +23,26 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
     override val viewModel: CardFormWebViewModel by sharedViewModel { activity!! }
 
     private lateinit var webView: WebView
-    private lateinit var iconInclude: View
-    private lateinit var retryButton: AndesButton
-    private lateinit var backButton: AndesButton
+    private lateinit var urlWebView: String
+    private lateinit var appBarWebView: Toolbar
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        webView = view.findViewById(R.id.web_view)
-        retryButton = view.findViewById(R.id.retry_button)
-        backButton = view.findViewById(R.id.back_button)
-        WebView.setWebContentsDebuggingEnabled(true)
 
+        appBarWebView = view.findViewById(R.id.app_bar_web_view)
+        (activity as AppCompatActivity?)?.apply {
+            setSupportActionBar(appBarWebView)
+            supportActionBar?.apply{
+                setDisplayShowTitleEnabled(false)
+                setDisplayHomeAsUpEnabled(true)
+                setDisplayShowHomeEnabled(true)
+                setHomeButtonEnabled(true)
+            }
+            appBarWebView.setNavigationOnClickListener { onBackPressed() }
+        }
+
+        webView = view.findViewById(R.id.web_view)
         webView.settings.javaScriptEnabled = true
         val webViewClient = CardFormWebViewClient()
         val recorder = PayloadRecorder(webViewClient, "https://www.comercio.cl/return_inscription")
@@ -41,54 +50,31 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
         webView.webViewClient = webViewClient
 
         webViewClient.addCardFormWebViewListener(object : CardFormWebViewListener {
-            override fun onPageFinished() {
+            override fun onPageFinished(url: String?) {
                 Log.i("JORGE", "onPageFinished")
                 context?.let {
                     val scriptInputStream = it.assets.open("override.js")
                     webView.evaluateJavascript(scriptInputStream.reader().readText(), null)
                 }
+
+                if (url == urlWebView) {
+                    viewModel.showSuccessState()
+                    postDelayed(1000) { viewModel.showWebViewScreen() }
+                }
             }
 
             override fun onReceivingData(data: String) {
                 Log.i("JORGE", "TOKEN_DATA: $data")
+                viewModel.showProgressBackScreen()
                 viewModel.finishInscription(data)
             }
         })
-
-        iconInclude = view.findViewById(R.id.progress_include)
-
-        arguments?.let {
-            check(it.containsKey(USER_NAME_EXTRA)) { "User name should not be null" }
-            check(it.containsKey(USER_EMAIL_EXTRA)) { "User email should not be null" }
-            check(it.containsKey(RESPONSE_URL_EXTRA)) { "Response url should not be null" }
-
-            viewModel.initInscription(
-                it.getString(USER_NAME_EXTRA, ""),
-                it.getString(USER_EMAIL_EXTRA, ""),
-                it.getString(RESPONSE_URL_EXTRA, "")
-            )
-        }
     }
 
     override fun bindViewModel() {
-        viewModel.webUiStateLiveData.nonNullObserve(this) {
-            when (it) {
-                is WebUiState.WebSuccess -> {
-                    Log.d("JORGE", "Success")
-
-                    webView.visibility = View.VISIBLE
-                    iconInclude.visibility = View.GONE
-                    webView.postUrl(it.url, it.token)
-                }
-
-                WebUiState.WebProgress -> {
-                    Log.d("JORGE", "Progress")
-                }
-
-                WebUiState.WebError -> {
-                    Log.d("JORGE", "Error")
-                }
-            }
+        viewModel.loadWebViewLiveData.nonNullObserve(this) {
+            urlWebView = it.first
+            webView.postUrl(urlWebView, it.second)
         }
     }
 

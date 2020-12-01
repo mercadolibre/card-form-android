@@ -6,6 +6,9 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.TypedValue
 
+private const val PLATFORM_MP = "MP"
+private const val PLATFORM_ML = "ML"
+
 internal fun Context.getPxFromDp(dp: Float): Float {
     return dp * resources.displayMetrics.density
 }
@@ -51,4 +54,15 @@ internal fun Context?.hasConnection(): Boolean {
     } else {
         return false
     }
+}
+
+internal fun Context.isML() = getPlatform() == PLATFORM_ML
+internal fun Context.isMP() = getPlatform() == PLATFORM_MP
+
+internal fun Context.getPlatform(): String {
+    if (applicationInfo.packageName.contains("com.mercadolibre")) {
+        return PLATFORM_ML
+    }
+
+    return PLATFORM_MP
 }

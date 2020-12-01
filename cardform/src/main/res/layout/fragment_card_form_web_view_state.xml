@@ -3,14 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/ui_components_white_color">
+
+    <ImageButton
+        android:id="@+id/progress_state_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="28dp"
+        android:background="@null"
+        android:src="@drawable/cf_icon_progress_state_close"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/linear_icon_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/title"
+        app:layout_constraintBottom_toTopOf="@+id/title_progress_state"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -18,29 +31,36 @@
 
         <ImageView
             android:id="@+id/go_to_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/cf_icon_close" />
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
 
-        <ImageView
-            android:id="@+id/progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/cf_icon_check" />
+        <FrameLayout
+            android:id="@+id/progress_state"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"/>
 
         <ImageView
             android:id="@+id/from_to_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ui_ic_clear_fullscreen" />
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
 
     </LinearLayout>
 
     <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:id="@+id/title_progress_state"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/description"
+        android:layout_marginStart="78dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="78dp"
+        android:gravity="center"
+        android:lineSpacingExtra="5sp"
+        android:maxLines="2"
+        android:textAppearance="@style/MLFont.Bold.Semi"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/description_progress_state"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,14 +68,21 @@
         tools:text="Text" />
 
     <TextView
-        android:id="@+id/description"
-        android:layout_width="wrap_content"
+        android:id="@+id/description_progress_state"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="36dp"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="4sp"
+        android:textAppearance="@style/MLFont.Regular"
+        android:textSize="14dp"
         app:layout_constraintBottom_toTopOf="@+id/retry_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/title_progress_state"
         tools:text="Description" />
 
     <com.mercadolibre.android.andesui.button.AndesButton
@@ -65,7 +92,8 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="8dp"
-        android:visibility="gone"
+        android:visibility="invisible"
+        app:andesButtonText="@string/cf_web_view_retry"
         app:layout_constraintBottom_toTopOf="@+id/back_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,7 +106,8 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
-        android:visibility="gone"
+        android:visibility="invisible"
+        app:andesButtonText="@string/cf_web_view_back"
         app:andesButtonHierarchy="quiet"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:visibility="visible" />

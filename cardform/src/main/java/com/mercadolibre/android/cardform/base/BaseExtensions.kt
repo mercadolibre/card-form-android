@@ -2,9 +2,9 @@ package com.mercadolibre.android.cardform.base
 
 import android.text.TextUtils
 
-internal fun String?.orIfEmpty(default: String): String {
+internal fun <T: CharSequence> T?.orIfEmpty(default: String): String {
     return if (!TextUtils.isEmpty(this)) {
-        this!!
+        this!!.toString()
     } else {
         default
     }
