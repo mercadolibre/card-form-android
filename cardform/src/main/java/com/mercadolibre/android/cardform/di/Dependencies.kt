@@ -8,6 +8,8 @@ internal class Dependencies {
 
     var networkModule: NetworkModule? = null
         private set
+    var useCaseModule: UseCaseModule? = null
+        private set
     var repositoryModule: RepositoryModule? = null
         private set
     var viewModelModule: ViewModelModule? = null
@@ -25,12 +27,13 @@ internal class Dependencies {
         behaviourModule = BehaviourModule(cardForm.sessionId)
         repositoryModule = RepositoryModule(networkModule!!.retrofit, cardForm.accessToken!!,
             cardForm.siteId, cardForm.excludedTypes)
+        useCaseModule = UseCaseModule(repositoryModule!!)
         localPreferences = LocalRepositoryModule(activity.applicationContext)
         trackerModule = TrackerModule(cardForm.siteId,
             cardForm.flowId,
             cardForm.sessionId,
             behaviourModule!!.trackerBehaviour)
-        viewModelModule = ViewModelModule(fragment, repositoryModule!!, behaviourModule!!, trackerModule!!)
+        viewModelModule = ViewModelModule(fragment, useCaseModule!!, repositoryModule!!, behaviourModule!!, trackerModule!!)
     }
 
     fun clean() {
