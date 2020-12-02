@@ -7,6 +7,6 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 internal interface FinishInscriptionService {
-    @POST("https://run.mocky.io/v3/88452122-6b45-4baa-87aa-8b6872903914")
+    @POST("https://run.mocky.io/v3/ee1f871a-4ce8-40bb-9c18-4840317decc1")
     suspend fun getFinishInscription(@Body token: TokenData): Response<FinishInscriptionData>
 }

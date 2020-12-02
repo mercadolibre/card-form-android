@@ -27,7 +27,7 @@ internal class FinishInscriptionRepositoryImpl(
                     it.number,
                     it.firstSixDigits,
                     it.length,
-                    it.issuerId,
+                    it.issuer.id,
                     it.paymentMethod.id,
                     it.paymentMethod.paymentTypeId,
                     it.expirationMonth,
@@ -38,7 +38,7 @@ internal class FinishInscriptionRepositoryImpl(
 }
 
 internal data class TokenData(val token: String)
-
+internal data class Issuer(val id: Int)
 internal data class FinishInscriptionData(
     val id: String,
     val firstSixDigits: String,
@@ -46,6 +46,6 @@ internal data class FinishInscriptionData(
     val expirationYear: Int,
     val expirationMonth: Int,
     val length: Int,
-    val issuerId: Int,
+    val issuer: Issuer,
     val paymentMethod: PaymentMethodBody
 )
