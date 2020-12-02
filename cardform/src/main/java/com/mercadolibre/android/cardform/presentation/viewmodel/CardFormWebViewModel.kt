@@ -4,17 +4,20 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mercadolibre.android.cardform.base.BaseViewModel
+import com.mercadolibre.android.cardform.base.CallBack
 import com.mercadolibre.android.cardform.base.getOrElse
 import com.mercadolibre.android.cardform.base.orIfEmpty
 import com.mercadolibre.android.cardform.domain.*
 import com.mercadolibre.android.cardform.domain.FinishInscriptionUseCase
 import com.mercadolibre.android.cardform.domain.InscriptionUseCase
+import com.mercadolibre.android.cardform.internal.LifecycleListener
 import com.mercadolibre.android.cardform.presentation.mapper.CardInfoMapper
 import com.mercadolibre.android.cardform.presentation.model.ScreenState
 import com.mercadolibre.android.cardform.presentation.model.WebUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 internal class CardFormWebViewModel(
     private val inscriptionUseCase: InscriptionUseCase,
@@ -39,6 +42,10 @@ internal class CardFormWebViewModel(
     private val canGoBackMutableLiveData = MutableLiveData<Boolean>()
     val canGoBackViewLiveData: LiveData<Boolean>
         get() = canGoBackMutableLiveData
+
+    private val cardResultMutableLiveData = MutableLiveData<String>()
+    val cardResultLiveData: LiveData<String>
+        get() = cardResultMutableLiveData
 
     private lateinit var token: ByteArray
     private var retryFunction: () -> Unit = {}
@@ -82,12 +89,16 @@ internal class CardFormWebViewModel(
                 cardTokenId = it
                 getCardAssociationId(cardTokenId, finishInscriptionModel)
             }?.let { cardAssociationId ->
-                showSuccessState()
-                Log.i("JORGE", "CardAssociationId: $cardAssociationId")
-            } ?: let { retryFunction = {
-                showProgressBackScreen()
-                tokenizeAndAssociateCard(finishInscriptionModel)
-            } }
+                withContext(Dispatchers.Main) {
+                    Log.i("JORGE", "CardAssociationId: $cardAssociationId")
+                    sendCardResult(cardAssociationId)
+                }
+            } ?: let {
+                retryFunction = {
+                    showProgressBackScreen()
+                    tokenizeAndAssociateCard(finishInscriptionModel)
+                }
+            }
         }
     }
 
@@ -115,6 +126,10 @@ internal class CardFormWebViewModel(
             Log.i("JORGE", throwable.localizedMessage.orIfEmpty("cardAssociationUseCase"))
             showErrorState()
         }
+    }
+
+    private fun sendCardResult(cardId: String) {
+        cardResultMutableLiveData.value = cardId
     }
 
     fun retry() {

@@ -1,5 +1,6 @@
 package com.mercadolibre.android.cardform.presentation.ui
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -10,6 +11,7 @@ import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.mercadolibre.android.cardform.CARD_FORM_EXTRA
+import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.di.Dependencies
 import com.mercadolibre.android.cardform.di.viewModel
@@ -26,6 +28,7 @@ internal class CardFormWebActivity : AppCompatActivity() {
 
     private val viewModel: CardFormWebViewModel by viewModel()
     private lateinit var extras: Bundle
+    private lateinit var cardFormWebContainer: FrameLayout
     private lateinit var progressStateContainer: FrameLayout
     private lateinit var webViewContainer: FrameLayout
     private var defaultStatusBarColor: Int = 0
@@ -34,6 +37,7 @@ internal class CardFormWebActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card_form_web)
+        cardFormWebContainer = findViewById(R.id.card_form_web)
         webViewContainer = findViewById(R.id.web_view_fragment_container)
         progressStateContainer = findViewById(R.id.progress_state_fragment_container)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -87,6 +91,15 @@ internal class CardFormWebActivity : AppCompatActivity() {
 
             canGoBackViewLiveData.nonNullObserve(this@CardFormWebActivity) {
                 canGoBack = it
+            }
+
+            cardResultLiveData.nonNullObserve(this@CardFormWebActivity) { cardId ->
+                showSuccessState()
+                cardFormWebContainer.postDelayed({
+                    val resultIntent = Intent().putExtra(CardForm.RESULT_CARD_ID_KEY, cardId)
+                    setResult(Activity.RESULT_OK, resultIntent)
+                    finish()
+                }, 1000)
             }
         }
     }
