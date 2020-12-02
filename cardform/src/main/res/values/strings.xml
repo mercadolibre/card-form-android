@@ -23,5 +23,5 @@
     <string name="cf_web_view_progress_back_title">Te estamos llevando de vuelta a Mercado Pago</string>
     <string name="cf_web_view_progress_description">En tu proxima compra podrás pagar usando la misma tarjeta sin tener que volver a cargarla.</string>
     <string name="cf_web_view_progress_error_title">Ocurrió un error</string>
-    <string name="cf_web_view_progress_error_description">Los sentimos, no pudimos cargar tu tarjeta.\nPor favor intenta nuevamente.</string>
+    <string name="cf_web_view_progress_error_description">Lo sentimos, no pudimos cargar tu tarjeta. Por favor intenta nuevamente o elige otro medio de pago.</string>
 </resources>
