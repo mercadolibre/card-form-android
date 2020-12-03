@@ -11,6 +11,7 @@ import com.mercadolibre.android.cardform.domain.FinishInscriptionBusinessModel
 import kotlinx.coroutines.withContext
 
 internal class FinishInscriptionRepositoryImpl(
+    private val accessToken: String,
     private val finishInscriptionService: FinishInscriptionService,
     private val contextProvider: CoroutineContextProvider = CoroutineContextProvider()
 ) : FinishInscriptionRepository {
@@ -19,7 +20,7 @@ internal class FinishInscriptionRepositoryImpl(
         withContext(contextProvider.IO) {
             runCatching {
                 finishInscriptionService
-                    .getFinishInscription(TokenData(token))
+                    .getFinishInscription(accessToken, TokenData(token))
                     .resolveRetrofitResponse()
             }.mapCatching {
                 FinishInscriptionBusinessModel(
@@ -37,7 +38,7 @@ internal class FinishInscriptionRepositoryImpl(
         }
 }
 
-internal data class TokenData(val token: String)
+internal data class TokenData(val tbkToken: String)
 internal data class Issuer(val id: Int)
 internal data class FinishInscriptionData(
     val id: String,

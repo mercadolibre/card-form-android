@@ -12,8 +12,8 @@ import com.mercadolibre.android.cardform.domain.TokenizeWebCardParam
 import kotlinx.coroutines.withContext
 
 internal class TokenizeRepositoryImpl(
-    private val tokenizeService: TokenizeService,
     private val accessToken: String,
+    private val tokenizeService: TokenizeService,
     private val webCardTokenBodyMapper: WebCardTokenBodyMapper,
     private val contextProvider: CoroutineContextProvider = CoroutineContextProvider()
 ) : TokenizeRepository {
