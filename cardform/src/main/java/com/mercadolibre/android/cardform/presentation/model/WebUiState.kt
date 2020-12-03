@@ -6,14 +6,16 @@ import com.mercadolibre.android.cardform.presentation.extensions.isML
 
 sealed class WebUiState(
     val layoutState: Int,
-    val title: Int,
-    val description: Int,
+    private val title: Int,
+    private val description: Int,
     private val iconFrom: Int = 0,
     private val iconTo: Int = 0
 ) {
 
     open fun getIconFrom(context: Context) = iconFrom
     open fun getIconTo(context: Context) = iconTo
+    open fun getTitle(context: Context) = context.getString(title)
+    open fun getDescription(context: Context) = context.getString(description)
 
     object WebSuccess : WebUiState(
         R.layout.cf_web_view_success_state,
@@ -34,6 +36,15 @@ sealed class WebUiState(
         R.drawable.cf_web_view_mp_logo,
         R.drawable.cf_web_view_icon_web_pay
     ) {
+
+        override fun getTitle(context: Context): String {
+            val platformStringRes = if (context.isML()) {
+                R.string.cf_web_view_platform_ml
+            } else {
+                R.string.cf_web_view_platform_mp
+            }
+            return super.getTitle(context).replace("{0}", context.getString(platformStringRes))
+        }
 
         override fun getIconFrom(context: Context): Int {
             if (context.isML()) {

@@ -44,7 +44,8 @@ internal class CardFormWebViewStateFragment : BaseFragment<CardFormWebViewModel>
 
         retryButton = view.findViewById(R.id.retry_button)
         backButton = view.findViewById<AndesButton>(R.id.back_button).also(::setOnBackPressAction)
-        closeButton = view.findViewById<ImageButton>(R.id.progress_state_close).also(::setOnBackPressAction)
+        closeButton =
+            view.findViewById<ImageButton>(R.id.progress_state_close).also(::setOnBackPressAction)
         goToImage = view.findViewById(R.id.go_to_image)
         fromToImage = view.findViewById(R.id.from_to_image)
         progressState = view.findViewById(R.id.progress_state)
@@ -55,42 +56,48 @@ internal class CardFormWebViewStateFragment : BaseFragment<CardFormWebViewModel>
 
     override fun bindViewModel() {
         viewModel.webUiStateLiveData.nonNullObserve(viewLifecycleOwner) {
-            when (it) {
-                WebUiState.WebSuccess -> {
-                    Log.d("JORGE", "Success")
-                    setLayoutState(it.layoutState)
-                    viewModel.canGoBack(true)
-                }
+            context?.let { context ->
+                when (it) {
+                    WebUiState.WebSuccess -> {
+                        Log.d("JORGE", "Success")
+                        setLayoutState(it.layoutState)
+                        viewModel.canGoBack(true)
+                    }
 
-                WebUiState.WebProgressStart -> {
-                    Log.d("JORGE", "Progress start")
-                    setLayoutState(it.layoutState)
-                    setTitleAndDescriptionState(getString(it.title), getString(it.description))
-                    setVisibilityErrorButtons(false)
-                    viewModel.canGoBack(false)
-
-                    context?.let { context ->
+                    WebUiState.WebProgressStart -> {
+                        Log.d("JORGE", "Progress start")
+                        setLayoutState(it.layoutState)
+                        setTitleAndDescriptionState(
+                            it.getTitle(context),
+                            it.getDescription(context)
+                        )
+                        setVisibilityErrorButtons(false)
+                        viewModel.canGoBack(false)
                         setNavigationIcons(it.getIconTo(context), it.getIconFrom(context))
                     }
-                }
 
-                WebUiState.WebProgressBack -> {
-                    Log.d("JORGE", "Progress back")
-                    setLayoutState(it.layoutState)
-                    setTitleAndDescriptionState(getString(it.title), getString(it.description))
-                    setVisibilityErrorButtons(false)
-                    viewModel.canGoBack(false)
-                    context?.let { context ->
+                    WebUiState.WebProgressBack -> {
+                        Log.d("JORGE", "Progress back")
+                        setLayoutState(it.layoutState)
+                        setTitleAndDescriptionState(
+                            it.getTitle(context),
+                            it.getDescription(context)
+                        )
+                        setVisibilityErrorButtons(false)
+                        viewModel.canGoBack(false)
                         setNavigationIcons(it.getIconTo(context), it.getIconFrom(context))
                     }
-                }
 
-                WebUiState.WebError -> {
-                    Log.d("JORGE", "Error")
-                    setLayoutState(it.layoutState)
-                    setTitleAndDescriptionState(getString(it.title), getString(it.description))
-                    setVisibilityErrorButtons(true)
-                    viewModel.canGoBack(true)
+                    WebUiState.WebError -> {
+                        Log.d("JORGE", "Error")
+                        setLayoutState(it.layoutState)
+                        setTitleAndDescriptionState(
+                            it.getTitle(context),
+                            it.getDescription(context)
+                        )
+                        setVisibilityErrorButtons(true)
+                        viewModel.canGoBack(true)
+                    }
                 }
             }
         }

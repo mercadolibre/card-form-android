@@ -33,6 +33,7 @@ internal class CardFormWebActivity : AppCompatActivity() {
     private lateinit var webViewContainer: FrameLayout
     private var defaultStatusBarColor: Int = 0
     private var canGoBack = false
+    private var resultCode: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,10 +45,12 @@ internal class CardFormWebActivity : AppCompatActivity() {
             defaultStatusBarColor = window.statusBarColor
         }
         intent.extras?.let { extras ->
+            val cardFormData = extras.getParcelable<CardForm>(CARD_FORM_EXTRA)!!
+            resultCode = cardFormData.requestCode
             this.extras = extras
             Dependencies.instance.initialize(
                 this@CardFormWebActivity,
-                extras.getParcelable(CARD_FORM_EXTRA)!!
+                cardFormData
             )
 
             check(extras.containsKey(USER_NAME_EXTRA)) { "User name should not be null" }
