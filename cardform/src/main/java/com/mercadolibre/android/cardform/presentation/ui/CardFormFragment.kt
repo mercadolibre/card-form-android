@@ -318,7 +318,6 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
                 setResult(resultCode, buildResultIntent(associatedCardId))
                 finish()
             }
-            viewModel.tracker.trackEvent(SuccessTrack())
         }
     }
 

@@ -5,7 +5,9 @@ internal enum class TrackSteps(private val type: String) {
     NAME("name"),
     EXPIRATION("expiration_security_date"),
     SECURITY("expiration_security_cvv"),
-    IDENTIFICATION("identification");
+    IDENTIFICATION("identification"),
+    TRADITIONAL("traditional"),
+    WEB_VIEW("web_view");
 
     fun getType() = type
 }

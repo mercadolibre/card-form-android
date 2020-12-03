@@ -1,15 +1,18 @@
 package com.mercadolibre.android.cardform.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mercadolibre.android.cardform.base.BaseViewModel
 import com.mercadolibre.android.cardform.base.getOrElse
-import com.mercadolibre.android.cardform.base.orIfEmpty
 import com.mercadolibre.android.cardform.domain.*
 import com.mercadolibre.android.cardform.domain.FinishInscriptionUseCase
 import com.mercadolibre.android.cardform.domain.InscriptionUseCase
 import com.mercadolibre.android.cardform.presentation.model.WebUiState
+import com.mercadolibre.android.cardform.tracks.Tracker
+import com.mercadolibre.android.cardform.tracks.model.TrackApiSteps
+import com.mercadolibre.android.cardform.tracks.model.flow.ErrorTrack
+import com.mercadolibre.android.cardform.tracks.model.flow.SuccessTrack
+import com.mercadolibre.android.cardform.tracks.model.webview.WebViewTrack
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,7 +21,8 @@ internal class CardFormWebViewModel(
     private val inscriptionUseCase: InscriptionUseCase,
     private val finishInscriptionUseCase: FinishInscriptionUseCase,
     private val tokenizeWebCardUseCase: TokenizeWebCardUseCase,
-    private val associatedCardUseCase: AssociatedCardUseCase
+    private val associatedCardUseCase: AssociatedCardUseCase,
+    val tracker: Tracker
 ) : BaseViewModel() {
 
     private val webUiStateMutableLiveData = MutableLiveData<WebUiState>()
@@ -40,9 +44,15 @@ internal class CardFormWebViewModel(
                     it.token,
                     it.redirectUrl
                 )
+                tracker.trackEvent(WebViewTrack(it.urlWebPay))
             },
             failure = {
-                Log.i("JORGE", it.localizedMessage.orIfEmpty("inscriptionUseCase"))
+                tracker.trackEvent(
+                    ErrorTrack(
+                        TrackApiSteps.INIT_INSCRIPTION.getType(),
+                        it.localizedMessage.orEmpty()
+                    )
+                )
                 webUiStateMutableLiveData.value = WebUiState.WebError
             })
     }
@@ -54,7 +64,12 @@ internal class CardFormWebViewModel(
                 tokenizeAndAssociateCard(it)
             },
             failure = {
-                Log.i("JORGE", it.localizedMessage.orIfEmpty("finishInscriptionUseCase"))
+                tracker.trackEvent(
+                    ErrorTrack(
+                        TrackApiSteps.FINISH_INSCRIPTION.getType(),
+                        it.localizedMessage.orEmpty()
+                    )
+                )
                 webUiStateMutableLiveData.value = WebUiState.WebError
             })
     }
@@ -74,7 +89,12 @@ internal class CardFormWebViewModel(
                 )
             )
             .getOrElse { throwable ->
-                Log.i("JORGE", throwable.localizedMessage.orIfEmpty("tokenizeUseCase"))
+                tracker.trackEvent(
+                    ErrorTrack(
+                        TrackApiSteps.TOKEN.getType(),
+                        throwable.localizedMessage.orEmpty()
+                    )
+                )
                 webUiStateMutableLiveData.postValue(WebUiState.WebError)
             }
     }
@@ -91,19 +111,31 @@ internal class CardFormWebViewModel(
                 model.issuerId
             )
         ).getOrElse { throwable ->
-            Log.i("JORGE", throwable.localizedMessage.orIfEmpty("cardAssociationUseCase"))
+            tracker.trackEvent(
+                ErrorTrack(
+                    TrackApiSteps.ASSOCIATION.getType(),
+                    throwable.localizedMessage.orEmpty()
+                )
+            )
             webUiStateMutableLiveData.postValue(WebUiState.WebError)
         }
     }
 
-    private fun tokenizeAndAssociateCard(finishInscriptionModel: FinishInscriptionModel) {
+    private fun tokenizeAndAssociateCard(model: FinishInscriptionModel) {
         CoroutineScope(Dispatchers.Default).launch {
             lateinit var cardTokenId: String
-            getCardToken(finishInscriptionModel)?.let {
+            getCardToken(model)?.let {
                 cardTokenId = it
-                getCardAssociationId(cardTokenId, finishInscriptionModel)
+                getCardAssociationId(cardTokenId, model)
             }?.let { cardAssociationId ->
-                Log.i("JORGE", "CardAssociationId: $cardAssociationId")
+                tracker.trackEvent(
+                    SuccessTrack(
+                        model.truncCardNumber.substring(0..5),
+                        model.issuerId,
+                        model.paymentMethodId,
+                        model.paymentMethodType
+                    )
+                )
             }
         }
     }

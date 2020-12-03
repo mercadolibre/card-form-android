@@ -264,6 +264,12 @@ internal class InputFormViewModel(
                     escManager.saveESCWith(cardAssociationId, cardTokenModel.esc)
                 }
                 val onSuccess = {
+                    tracker.trackEvent(SuccessTrack(
+                        cardStepInfo.cardNumber.substring(0..5),
+                        issuer!!.id,
+                        paymentMethod?.paymentMethodId!!,
+                        paymentMethod?.paymentTypeId!!
+                    ))
                     stateUiLiveData.postValue(UiResult.CardResult(cardAssociationId))
                 }
 
