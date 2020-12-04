@@ -2,7 +2,6 @@ package com.mercadolibre.android.cardform.presentation.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.webkit.*
 import com.mercadolibre.android.cardform.R
@@ -30,17 +29,14 @@ internal class CardFormWebViewFragment : RootFragment<CardFormWebViewModel>() {
         viewModel.webUiStateLiveData.nonNullObserve(this) {
             when (it) {
                 is WebUiState.WebSuccess -> {
-                    Log.d("JORGE", "Success")
                     configureWebView(it.redirectUrl)
                     webView.postUrl(it.url, it.token)
                 }
 
                 WebUiState.WebProgress -> {
-                    Log.d("JORGE", "Progress")
                 }
 
                 WebUiState.WebError -> {
-                    Log.d("JORGE", "Error")
                 }
             }
         }
@@ -48,14 +44,11 @@ internal class CardFormWebViewFragment : RootFragment<CardFormWebViewModel>() {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun configureWebView(redirectUrl: String) {
-        WebView.setWebContentsDebuggingEnabled(true)
-
         webView.settings.javaScriptEnabled = true
         webViewClient = CardFormWebViewClient()
         webView.webViewClient = webViewClient
         webViewClient.addCardFormWebViewListener(object : CardFormWebViewListener {
             override fun onPageFinished() {
-                Log.i("JORGE", "onPageFinished")
                 context?.let {
                     val scriptInputStream = it.assets.open("override.js")
                     webView.evaluateJavascript(scriptInputStream.reader().readText(), null)
@@ -63,7 +56,6 @@ internal class CardFormWebViewFragment : RootFragment<CardFormWebViewModel>() {
             }
 
             override fun onReceivingData(data: String) {
-                Log.i("JORGE", "TOKEN_DATA: $data")
                 viewModel.finishInscription(data)
             }
         })
