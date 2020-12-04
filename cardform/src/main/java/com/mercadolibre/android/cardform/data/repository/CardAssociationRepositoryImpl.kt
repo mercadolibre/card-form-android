@@ -27,8 +27,7 @@ internal class CardAssociationRepositoryImpl(
                         param.cardTokenId,
                         PaymentMethodBody(
                             param.paymentMethodId,
-                            param.paymentMethodType,
-                            ""
+                            param.paymentMethodType
                         ),
                         IssuerBody(param.issuerId.toString())
                     )
