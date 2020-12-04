@@ -33,8 +33,7 @@ internal class ViewModelFactory(
                         useCaseModule.inscriptionUseCase,
                         useCaseModule.finishInscriptionUseCase,
                         useCaseModule.tokenizeWebCardUseCase,
-                        useCaseModule.cardAssociationUseCase,
-                        CardInfoMapper(device))
+                        useCaseModule.cardAssociationUseCase)
                 }
                 else -> {
                     throw IllegalArgumentException("Unknown ViewModel class")

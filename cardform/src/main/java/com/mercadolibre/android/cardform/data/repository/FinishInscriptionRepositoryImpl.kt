@@ -3,50 +3,50 @@ package com.mercadolibre.android.cardform.data.repository
 import com.mercadolibre.android.cardform.base.CoroutineContextProvider
 import com.mercadolibre.android.cardform.base.Response.Failure
 import com.mercadolibre.android.cardform.base.Response.Success
+import com.mercadolibre.android.cardform.base.resolveRetrofitResponse
+import com.mercadolibre.android.cardform.data.model.body.PaymentMethodBody
 import com.mercadolibre.android.cardform.data.service.FinishInscriptionService
 import com.mercadolibre.android.cardform.domain.FinishInscriptionRepository
 import com.mercadolibre.android.cardform.domain.FinishInscriptionBusinessModel
 import kotlinx.coroutines.withContext
 
 internal class FinishInscriptionRepositoryImpl(
+    private val accessToken: String,
     private val finishInscriptionService: FinishInscriptionService,
     private val contextProvider: CoroutineContextProvider = CoroutineContextProvider()
 ) : FinishInscriptionRepository {
 
-    override suspend fun getFinishInscriptionData(token: String) = runCatching {
+    override suspend fun getFinishInscriptionData(token: String) =
         withContext(contextProvider.IO) {
-            finishInscriptionService.getFinishInscription(TokenData(token))
+            runCatching {
+                finishInscriptionService
+                    .getFinishInscription(accessToken, TokenData(token))
+                    .resolveRetrofitResponse()
+            }.mapCatching {
+                FinishInscriptionBusinessModel(
+                    it.id,
+                    it.number,
+                    it.firstSixDigits,
+                    it.length,
+                    it.issuer.id,
+                    it.paymentMethod.id,
+                    it.paymentMethod.paymentTypeId,
+                    it.expirationMonth,
+                    it.expirationYear
+                )
+            }.fold(::Success, ::Failure)
         }
-    }.mapCatching {
-
-        if (it.errorMessage.isNotEmpty()) {
-            throw Exception(it.errorMessage)
-        }
-
-        FinishInscriptionBusinessModel(
-            it.tbkUser,
-            it.cardNumber,
-            it.bin,
-            it.cardNumberLength,
-            it.identificationNumber ?: "153856400",
-            it.identificationId ?: "rut"
-        )
-
-    }.fold(::Success, ::Failure)
 }
 
-data class TokenData(val token: String)
-
-data class FinishInscriptionData(
-    val responseCode: Int,
-    val tbkUser: String,
-    val authorizationCode: String,
-    val cardType: String,
-    val cardNumber: String,
-    val errorMessage: String,
-    val bin: String,
-    val cardNumberLength: Int,
-    val issuerId: Int,
-    val identificationNumber: String?,
-    val identificationId: String?
+internal data class TokenData(val token: String)
+internal data class Issuer(val id: Int)
+internal data class FinishInscriptionData(
+    val id: String,
+    val firstSixDigits: String,
+    val number: String,
+    val expirationYear: Int,
+    val expirationMonth: Int,
+    val length: Int,
+    val issuer: Issuer,
+    val paymentMethod: PaymentMethodBody
 )

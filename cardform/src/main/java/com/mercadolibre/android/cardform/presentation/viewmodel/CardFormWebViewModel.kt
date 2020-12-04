@@ -1,17 +1,12 @@
 package com.mercadolibre.android.cardform.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mercadolibre.android.cardform.base.BaseViewModel
-import com.mercadolibre.android.cardform.base.CallBack
 import com.mercadolibre.android.cardform.base.getOrElse
-import com.mercadolibre.android.cardform.base.orIfEmpty
 import com.mercadolibre.android.cardform.domain.*
 import com.mercadolibre.android.cardform.domain.FinishInscriptionUseCase
 import com.mercadolibre.android.cardform.domain.InscriptionUseCase
-import com.mercadolibre.android.cardform.internal.LifecycleListener
-import com.mercadolibre.android.cardform.presentation.mapper.CardInfoMapper
 import com.mercadolibre.android.cardform.presentation.model.ScreenState
 import com.mercadolibre.android.cardform.presentation.model.WebUiState
 import kotlinx.coroutines.CoroutineScope
@@ -23,13 +18,15 @@ internal class CardFormWebViewModel(
     private val inscriptionUseCase: InscriptionUseCase,
     private val finishInscriptionUseCase: FinishInscriptionUseCase,
     private val tokenizeWebCardUseCase: TokenizeWebCardUseCase,
-    private val associatedCardUseCase: AssociatedCardUseCase,
-    private val cardInfoMapper: CardInfoMapper
+    private val associatedCardUseCase: AssociatedCardUseCase
 ) : BaseViewModel() {
 
     private val webUiStateMutableLiveData = MutableLiveData<WebUiState>()
     val webUiStateLiveData: LiveData<WebUiState>
         get() = webUiStateMutableLiveData
+    private lateinit var userFullName: String
+    private lateinit var userIdentificationNumber: String
+    private lateinit var userIdentificationType: String
 
     private val screenStateMutableLiveData = MutableLiveData<ScreenState>()
     val screenStateLiveData: LiveData<ScreenState>
@@ -47,21 +44,20 @@ internal class CardFormWebViewModel(
     val cardResultLiveData: LiveData<String>
         get() = cardResultMutableLiveData
 
-    private lateinit var token: ByteArray
     private var retryFunction: () -> Unit = {}
 
-    fun initInscription(userName: String, userEmail: String, responseUrl: String) {
-        inscriptionUseCase.execute(
-            InscriptionParams(userName, userEmail, responseUrl),
+    fun initInscription() {
+        inscriptionUseCase.execute(Unit,
             success = {
-                token = it.token
+                userFullName = it.fullName
+                userIdentificationNumber = it.identifierNumber
+                userIdentificationType = it.identifierType
                 loadWebViewMutableLiveData.value = (it.urlWebPay to it.token)
             },
             failure = {
-                Log.i("JORGE", it.localizedMessage.orIfEmpty("inscriptionUseCase"))
                 retryFunction = {
                     showProgressStartScreen()
-                    initInscription(userName, userEmail, responseUrl)
+                    initInscription()
                 }
                 showErrorState()
             })
@@ -73,7 +69,6 @@ internal class CardFormWebViewModel(
                 tokenizeAndAssociateCard(it)
             },
             failure = {
-                Log.i("JORGE", it.localizedMessage.orIfEmpty("finishInscriptionUseCase"))
                 retryFunction = {
                     showProgressBackScreen()
                     finishInscription(token)
@@ -90,7 +85,6 @@ internal class CardFormWebViewModel(
                 getCardAssociationId(cardTokenId, finishInscriptionModel)
             }?.let { cardAssociationId ->
                 withContext(Dispatchers.Main) {
-                    Log.i("JORGE", "CardAssociationId: $cardAssociationId")
                     sendCardResult(cardAssociationId)
                 }
             } ?: let {
@@ -102,28 +96,37 @@ internal class CardFormWebViewModel(
         }
     }
 
-    private suspend fun getCardToken(finishInscriptionModel: FinishInscriptionModel) = run {
+    private suspend fun getCardToken(model: FinishInscriptionModel) = run {
         tokenizeWebCardUseCase
-            .execute(cardInfoMapper.map(finishInscriptionModel))
+            .execute(
+                TokenizeWebCardParam(
+                    model.cardNumberId,
+                    model.truncCardNumber,
+                    userFullName,
+                    userIdentificationNumber,
+                    userIdentificationType,
+                    model.expirationMonth,
+                    model.expirationYear,
+                    model.cardNumberLength
+                )
+            )
             .getOrElse { throwable ->
-                Log.i("JORGE", throwable.localizedMessage.orIfEmpty("tokenizeUseCase"))
                 showErrorState()
             }
     }
 
     private suspend fun getCardAssociationId(
         cardTokenId: String,
-        finishInscriptionModel: FinishInscriptionModel
+        model: FinishInscriptionModel
     ) = run {
         associatedCardUseCase.execute(
             AssociatedCardParam(
                 cardTokenId,
-                "redcompra",
-                "debit_card",
-                1048
+                model.paymentMethodId,
+                model.paymentMethodType,
+                model.issuerId
             )
         ).getOrElse { throwable ->
-            Log.i("JORGE", throwable.localizedMessage.orIfEmpty("cardAssociationUseCase"))
             showErrorState()
         }
     }

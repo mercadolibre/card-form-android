@@ -48,21 +48,10 @@ internal class CardFormWebActivity : AppCompatActivity() {
             val cardFormData = extras.getParcelable<CardForm>(CARD_FORM_EXTRA)!!
             resultCode = cardFormData.requestCode
             this.extras = extras
-            Dependencies.instance.initialize(
-                this@CardFormWebActivity,
-                cardFormData
-            )
-
-            check(extras.containsKey(USER_NAME_EXTRA)) { "User name should not be null" }
-            check(extras.containsKey(USER_EMAIL_EXTRA)) { "User email should not be null" }
-            check(extras.containsKey(RESPONSE_URL_EXTRA)) { "Response url should not be null" }
+            Dependencies.instance.initialize(this, cardFormData)
             setUpScreenComponents()
             viewModel.showProgressStartScreen()
-            viewModel.initInscription(
-                extras.getString(USER_NAME_EXTRA, ""),
-                extras.getString(USER_EMAIL_EXTRA, ""),
-                extras.getString(RESPONSE_URL_EXTRA, "")
-            )
+            viewModel.initInscription()
         }
 
         setUpViewModel()

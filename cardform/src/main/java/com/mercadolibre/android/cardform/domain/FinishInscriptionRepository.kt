@@ -11,6 +11,9 @@ data class FinishInscriptionBusinessModel(
     val lastFourDigits: String,
     val firstSixDigits: String,
     val cardNumberLength: Int,
-    val identificationNumber: String,
-    val identificationId: String
+    val issuerId: Int,
+    val paymentMethodId: String,
+    val paymentMethodType: String,
+    val expirationMonth: Int,
+    val expirationYear: Int
 )

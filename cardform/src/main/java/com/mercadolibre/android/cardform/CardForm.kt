@@ -39,7 +39,7 @@ open class CardForm : Parcelable {
         sessionId = parcel.readString()!!
     }
 
-    fun start(activity: AppCompatActivity, requestCode: Int) {
+    open fun start(activity: AppCompatActivity, requestCode: Int) {
         this.requestCode = requestCode
         FragmentNavigationController.reset()
         CardFormActivity.start(activity, requestCode, this)

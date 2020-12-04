@@ -5,29 +5,14 @@ import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.presentation.ui.CardFormWebActivity
-import com.mercadolibre.android.cardform.presentation.ui.RESPONSE_URL_EXTRA
-import com.mercadolibre.android.cardform.presentation.ui.USER_EMAIL_EXTRA
-import com.mercadolibre.android.cardform.presentation.ui.USER_NAME_EXTRA
 
 class CardFormWeb: CardForm {
 
     private constructor(builder: Builder) : super(builder)
     private constructor(parcel: Parcel) : super(parcel)
 
-    fun start(activity: AppCompatActivity,
-              requestCode: Int,
-              userName: String,
-              email: String,
-              responseUrl: String) {
-
-
-        val bundle = getBundle().also {
-            it.putString(USER_NAME_EXTRA, userName)
-            it.putString(USER_EMAIL_EXTRA, email)
-            it.putString(RESPONSE_URL_EXTRA, responseUrl)
-        }
-
-        CardFormWebActivity.start(activity,requestCode, bundle)
+    override fun start(activity: AppCompatActivity, requestCode: Int) {
+        CardFormWebActivity.start(activity,requestCode, getBundle())
     }
 
     class Builder private constructor(siteId: String, flowId: String): CardForm.Builder(siteId, flowId) {

@@ -12,15 +12,15 @@ internal class FinishInscriptionUseCase(
             val lastIndexToReplace = it.firstSixDigits.lastIndex
             val truncCardNumber =
                 it.lastFourDigits.replaceRange(0..lastIndexToReplace, it.firstSixDigits)
-
             FinishInscriptionModel(
                 it.cardNumberId,
                 truncCardNumber,
-                "chaca",
-                it.identificationNumber,
-                it.identificationId,
-                "12/30",
-                it.cardNumberLength
+                it.expirationMonth,
+                it.expirationYear,
+                it.cardNumberLength,
+                it.issuerId,
+                it.paymentMethodId,
+                it.paymentMethodType
             )
         }
 }
@@ -28,9 +28,10 @@ internal class FinishInscriptionUseCase(
 data class FinishInscriptionModel(
     val cardNumberId: String,
     val truncCardNumber: String,
-    val cardholderName: String,
-    val identificationNumber: String,
-    val identificationId: String,
-    val expiration: String,
-    val cardNumberLength: Int
+    val expirationMonth: Int,
+    val expirationYear: Int,
+    val cardNumberLength: Int,
+    val issuerId: Int,
+    val paymentMethodId: String,
+    val paymentMethodType: String
 )

@@ -14,15 +14,12 @@ import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.extensions.postDelayed
 import com.mercadolibre.android.cardform.presentation.viewmodel.CardFormWebViewModel
 
-internal const val USER_NAME_EXTRA = "user_name"
-internal const val USER_EMAIL_EXTRA = "user_email"
-internal const val RESPONSE_URL_EXTRA = "response_url"
-
 internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
     override val rootLayout = R.layout.fragment_web_view
     override val viewModel: CardFormWebViewModel by sharedViewModel { activity!! }
 
     private lateinit var webView: WebView
+    private lateinit var webViewClient: CardFormWebViewClient
     private lateinit var urlWebView: String
     private lateinit var appBarWebView: Toolbar
 
@@ -51,7 +48,6 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
 
         webViewClient.addCardFormWebViewListener(object : CardFormWebViewListener {
             override fun onPageFinished(url: String?) {
-                Log.i("JORGE", "onPageFinished")
                 context?.let {
                     val scriptInputStream = it.assets.open("override.js")
                     webView.evaluateJavascript(scriptInputStream.reader().readText(), null)
@@ -64,7 +60,6 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
             }
 
             override fun onReceivingData(data: String) {
-                Log.i("JORGE", "TOKEN_DATA: $data")
                 viewModel.showProgressBackScreen()
                 viewModel.finishInscription(data)
             }

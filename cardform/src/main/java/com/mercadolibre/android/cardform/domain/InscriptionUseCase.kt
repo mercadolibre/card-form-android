@@ -5,22 +5,26 @@ import com.mercadolibre.android.cardform.base.map
 
 internal class InscriptionUseCase(
     private val inscriptionRepository: InscriptionRepository
-) : UseCase<InscriptionParams, InscriptionModel>() {
+) : UseCase<Unit, InscriptionModel>() {
 
-    override suspend fun doExecute(param: InscriptionParams) = inscriptionRepository
-        .getInscriptionData(param).map {
+    override suspend fun doExecute(param: Unit) = inscriptionRepository
+        .getInscriptionData().map {
             val tokenData = "TBK_TOKEN=${it.token}".toByteArray()
-            InscriptionModel(tokenData, it.urlWebPay)
+            val fullName = "${it.userName} ${it.userLastName}"
+            InscriptionModel(
+                tokenData,
+                it.urlWebPay,
+                it.redirectUrl,
+                fullName,
+                it.identifierNumber,
+                it.identifierType)
         }
 }
 
-data class InscriptionParams(
-    val userName: String,
-    val userEmail: String,
-    val responseUrl: String
-)
-
 data class InscriptionModel(
     val token: ByteArray,
-    val urlWebPay: String
-)
+    val urlWebPay: String,
+    val redirectUrl: String,
+    val fullName: String,
+    val identifierNumber: String,
+    val identifierType: String)
