@@ -38,7 +38,7 @@ internal class FinishInscriptionRepositoryImpl(
         }
 }
 
-internal data class TokenData(val tbkToken: String)
+internal data class TokenData(val token: String)
 internal data class Issuer(val id: Int)
 internal data class FinishInscriptionData(
     val id: String,
