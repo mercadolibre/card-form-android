@@ -125,7 +125,7 @@ internal class InputFormViewModel(
     fun retryFetchCard(context: Context?) {
         if (context.hasConnection()) {
             stateUiLiveData.value = UiLoading
-            CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(contextProvider.IO).launch {
                 try {
                     cardRepository.getCardInfo(binValidator.bin!!)?.let {
                         loadRegisterCard(it)
@@ -161,7 +161,7 @@ internal class InputFormViewModel(
     }
 
     private fun fetchCard(bin: String) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(contextProvider.IO).launch {
             try {
                 cardRepository.getCardInfo(bin)?.let {
                     loadRegisterCard(it)
@@ -253,7 +253,7 @@ internal class InputFormViewModel(
         }
 
     private fun tokenizeAndAddNewCard() {
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(contextProvider.Default).launch {
             lateinit var cardTokenModel: CardTokenModel
             getCardToken()?.let {
                 cardTokenModel = it
@@ -295,7 +295,7 @@ internal class InputFormViewModel(
     }
 
     private fun loadInputData(registerCard: RegisterCard) {
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(contextProvider.Default).launch {
             registerCard.fieldsSetting.forEach { setting ->
 
                 when (setting.name) {

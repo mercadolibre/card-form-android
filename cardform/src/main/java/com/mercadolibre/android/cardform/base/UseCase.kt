@@ -7,9 +7,8 @@ import com.mercadolibre.android.cardform.base.Response.Failure
 
 internal typealias CallBack<T> = (T) -> Unit
 
-internal abstract class UseCase<in P, out R> {
+internal abstract class UseCase<in P, out R> : BaseCoroutine() {
 
-    protected open val contextProvider = CoroutineContextProvider()
     protected abstract suspend fun doExecute(param: P): ResponseCallback<R>
 
     fun execute(param: P, success: CallBack<R> = {}, failure: CallBack<Throwable> = {}) =
@@ -18,7 +17,7 @@ internal abstract class UseCase<in P, out R> {
                 doExecute(param).also { response ->
                     withContext(contextProvider.Main) { response.fold(success, failure) }
                 }
-            }.onFailure { withContext(contextProvider.Main) { failure(it) }}
+            }.onFailure { withContext(contextProvider.Main) { failure(it) } }
         }
 
     suspend fun execute(param: P) = withContext(contextProvider.Default) {

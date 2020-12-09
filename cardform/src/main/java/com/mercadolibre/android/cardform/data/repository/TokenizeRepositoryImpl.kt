@@ -1,6 +1,6 @@
 package com.mercadolibre.android.cardform.data.repository
 
-import com.mercadolibre.android.cardform.base.CoroutineContextProvider
+import com.mercadolibre.android.cardform.base.BaseCoroutine
 import com.mercadolibre.android.cardform.base.Response.Success
 import com.mercadolibre.android.cardform.base.Response.Failure
 import com.mercadolibre.android.cardform.base.resolveRetrofitResponse
@@ -12,11 +12,10 @@ import com.mercadolibre.android.cardform.domain.TokenizeWebCardParam
 import kotlinx.coroutines.withContext
 
 internal class TokenizeRepositoryImpl(
-    private val tokenizeService: TokenizeService,
     private val accessToken: String,
-    private val webCardTokenBodyMapper: WebCardTokenBodyMapper,
-    private val contextProvider: CoroutineContextProvider = CoroutineContextProvider()
-) : TokenizeRepository {
+    private val tokenizeService: TokenizeService,
+    private val webCardTokenBodyMapper: WebCardTokenBodyMapper
+) : BaseCoroutine(), TokenizeRepository {
 
     override suspend fun tokenizeCard(cardInfoBody: CardInfoBody) =
         withContext(contextProvider.IO) {

@@ -3,8 +3,7 @@ package com.mercadolibre.android.cardform.di.module
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.mercadolibre.android.cardform.data.model.esc.Device
-import com.mercadolibre.android.cardform.presentation.mapper.CardInfoMapper
-import com.mercadolibre.android.cardform.presentation.viewmodel.CardFormWebViewModel
+import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardFormWebViewModel
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
 
 internal class ViewModelFactory(
@@ -33,7 +32,8 @@ internal class ViewModelFactory(
                         useCaseModule.inscriptionUseCase,
                         useCaseModule.finishInscriptionUseCase,
                         useCaseModule.tokenizeWebCardUseCase,
-                        useCaseModule.cardAssociationUseCase)
+                        useCaseModule.cardAssociationUseCase
+                    )
                 }
                 else -> {
                     throw IllegalArgumentException("Unknown ViewModel class")

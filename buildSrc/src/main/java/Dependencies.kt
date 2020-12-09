@@ -41,4 +41,5 @@ object Dependencies {
     const val carddrawer = "com.mercadolibre.android:carddrawer:${Versions.carddrawer}"
     const val picassoDiskCache = "com.mercadolibre.android:picasso-disk-cache:${Versions.picassoDiskCache}"
     const val pxAddons = "com.mercadopago.android.px:addons:${Versions.pxAddons}"
+    const val andesUi = "com.mercadolibre.android.andesui:components:${Versions.andesUi}"
 }

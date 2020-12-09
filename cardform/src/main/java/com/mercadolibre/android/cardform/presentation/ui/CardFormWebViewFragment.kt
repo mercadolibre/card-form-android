@@ -2,81 +2,98 @@ package com.mercadolibre.android.cardform.presentation.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.webkit.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.mercadolibre.android.cardform.R
-import com.mercadolibre.android.cardform.base.RootFragment
+import com.mercadolibre.android.cardform.base.BaseFragment
+import com.mercadolibre.android.cardform.di.sharedViewModel
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
-import com.mercadolibre.android.cardform.presentation.model.WebUiState
-import com.mercadolibre.android.cardform.presentation.viewmodel.CardFormWebViewModel
+import com.mercadolibre.android.cardform.presentation.extensions.postDelayed
+import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardFormWebViewModel
 
-internal class CardFormWebViewFragment : RootFragment<CardFormWebViewModel>() {
-    override val viewModelClass = CardFormWebViewModel::class.java
+private const val WEB_VIEW_DATA_EXTRA = "web_view_data"
+
+internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
     override val rootLayout = R.layout.fragment_web_view
+    override val viewModel: CardFormWebViewModel by sharedViewModel { activity!! }
 
     private lateinit var webView: WebView
-    private lateinit var webViewClient: CardFormWebViewClient
-    private lateinit var iconInclude: View
+    private lateinit var appBarWebView: Toolbar
+    private var webViewData: Triple<String, String, ByteArray>? = null
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         webView = view.findViewById(R.id.web_view)
-        iconInclude = view.findViewById(R.id.progress_include)
-        viewModel.initInscription()
-    }
+        appBarWebView = view.findViewById(R.id.app_bar_web_view)
 
-    override fun bindViewModel() {
-        viewModel.webUiStateLiveData.nonNullObserve(this) {
-            when (it) {
-                is WebUiState.WebSuccess -> {
-                    Log.d("JORGE", "Success")
-                    configureWebView(it.redirectUrl)
-                    webView.postUrl(it.url, it.token)
-                }
+        savedInstanceState?.let { bundle ->
+            webViewData =
+                bundle.getSerializable(WEB_VIEW_DATA_EXTRA) as Triple<String, String, ByteArray>?
+            setUpWebView()
+        }
 
-                WebUiState.WebProgress -> {
-                    Log.d("JORGE", "Progress")
-                }
-
-                WebUiState.WebError -> {
-                    Log.d("JORGE", "Error")
-                }
+        (activity as AppCompatActivity?)?.apply {
+            setSupportActionBar(appBarWebView)
+            supportActionBar?.apply {
+                setDisplayShowTitleEnabled(false)
+                setDisplayHomeAsUpEnabled(true)
+                setDisplayShowHomeEnabled(true)
+                setHomeButtonEnabled(true)
             }
+            appBarWebView.setNavigationOnClickListener { onBackPressed() }
         }
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
-    private fun configureWebView(redirectUrl: String) {
-        WebView.setWebContentsDebuggingEnabled(true)
+    override fun bindViewModel() {
+        viewModel.loadWebViewLiveData.nonNullObserve(viewLifecycleOwner) { webData ->
+            webViewData = webData
+            setUpWebView()
+        }
+    }
 
-        webView.settings.javaScriptEnabled = true
-        webViewClient = CardFormWebViewClient()
-        webView.webViewClient = webViewClient
-        webViewClient.addCardFormWebViewListener(object : CardFormWebViewListener {
-            override fun onPageFinished() {
-                Log.i("JORGE", "onPageFinished")
-                context?.let {
-                    val scriptInputStream = it.assets.open("override.js")
-                    webView.evaluateJavascript(scriptInputStream.reader().readText(), null)
+    private fun setUpWebView() {
+        webViewData?.also {
+            val (redirectUrl, webUrl, tokenData) = it
+            val webViewClient = CardFormWebViewClient()
+            val recorder = PayloadRecorder(webViewClient, redirectUrl)
+            webView.addJavascriptInterface(recorder, "recorder")
+            webView.webViewClient = webViewClient
+
+            webViewClient.addCardFormWebViewListener(object : CardFormWebViewListener {
+                override fun onPageFinished(url: String?) {
+                    context?.let { context ->
+                        val scriptInputStream = context.assets.open("override.js")
+                        webView.evaluateJavascript(scriptInputStream.reader().readText(), null)
+                    }
+
+                    if (url == webUrl) {
+                        viewModel.showSuccessState()
+                        postDelayed(1000) { viewModel.showWebViewScreen() }
+                    }
                 }
-            }
 
-            override fun onReceivingData(data: String) {
-                Log.i("JORGE", "TOKEN_DATA: $data")
-                viewModel.finishInscription(data)
-            }
-        })
-        val recorder = PayloadRecorder(webViewClient, redirectUrl)
-        webView.addJavascriptInterface(recorder, "recorder")
-        webView.visibility = View.VISIBLE
-        iconInclude.visibility = View.GONE
+                override fun onReceivingData(data: String) {
+                    viewModel.showProgressBackScreen()
+                    viewModel.finishInscription(data)
+                    webViewData = null
+                }
+            })
+
+            webView.postUrl(webUrl, tokenData)
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable(WEB_VIEW_DATA_EXTRA, webViewData)
     }
 
     companion object {
         const val TAG = "web_view"
-        fun newInstance(bundle: Bundle) = CardFormWebViewFragment().also {
-            it.arguments = bundle
-        }
+        fun newInstance() = CardFormWebViewFragment()
     }
 }

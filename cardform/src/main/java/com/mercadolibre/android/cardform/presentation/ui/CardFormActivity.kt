@@ -3,6 +3,7 @@ package com.mercadolibre.android.cardform.presentation.ui
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.mercadolibre.android.cardform.CARD_FORM_EXTRA
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.internal.CardFormWithFragment
@@ -15,7 +16,7 @@ internal class CardFormActivity : AppCompatActivity() {
         if (supportFragmentManager.findFragmentByTag(CardFormWithFragment.TAG) == null) {
             supportFragmentManager.beginTransaction().run {
                 replace(R.id.container,
-                    CardFormFragment.newInstance(false, intent.getParcelableExtra(EXTRA_CARD_FORM)),
+                    CardFormFragment.newInstance(false, intent.getParcelableExtra(CARD_FORM_EXTRA)),
                     CardFormWithFragment.TAG)
                 commitAllowingStateLoss()
             }
@@ -31,11 +32,9 @@ internal class CardFormActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val EXTRA_CARD_FORM = "card_form"
-
         fun start(activity: AppCompatActivity, requestCode: Int, cardForm: CardForm) {
             val intent = Intent(activity, CardFormActivity::class.java)
-            intent.putExtra(EXTRA_CARD_FORM, cardForm)
+            intent.putExtra(CARD_FORM_EXTRA, cardForm)
             activity.startActivityForResult(intent, requestCode)
         }
     }

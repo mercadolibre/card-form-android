@@ -22,7 +22,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField "String", "API_ENVIRONMENT", "\"gamma\""
+            buildConfigField "String", "API_ENVIRONMENT", "\"beta\""
             buildConfigField "boolean", "HTTP_CLIENT_LOG", "true"
         }
 
@@ -51,6 +51,8 @@ dependencies {
     implementation Dependencies.constraintLayout
     implementation Dependencies.appCompat
     implementation Dependencies.material
+    implementation Dependencies.andesUi
+
 
     implementation Dependencies.gson
     implementation Dependencies.retrofit
@@ -67,6 +69,8 @@ dependencies {
     implementation Dependencies.livedataCore
     implementation Dependencies.viewmodel
     implementation Dependencies.pxAddons
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     testImplementation Dependencies.junit
     androidTestImplementation Dependencies.runner
