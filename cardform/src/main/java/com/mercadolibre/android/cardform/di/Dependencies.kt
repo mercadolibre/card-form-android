@@ -1,7 +1,6 @@
 package com.mercadolibre.android.cardform.di
 
 import android.content.Context
-import androidx.fragment.app.Fragment
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.di.module.*
 

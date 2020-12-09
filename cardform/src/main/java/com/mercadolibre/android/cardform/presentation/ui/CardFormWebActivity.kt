@@ -20,14 +20,13 @@ import com.mercadolibre.android.cardform.presentation.extensions.gone
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.extensions.visible
 import com.mercadolibre.android.cardform.presentation.model.ScreenState
-import com.mercadolibre.android.cardform.presentation.viewmodel.CardFormWebViewModel
+import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardFormWebViewModel
 
 private const val DARKEN_FACTOR = 0.1f
 
 internal class CardFormWebActivity : AppCompatActivity() {
 
     private val viewModel: CardFormWebViewModel by viewModel()
-    private lateinit var extras: Bundle
     private lateinit var cardFormWebContainer: FrameLayout
     private lateinit var progressStateContainer: FrameLayout
     private lateinit var webViewContainer: FrameLayout
@@ -47,13 +46,16 @@ internal class CardFormWebActivity : AppCompatActivity() {
         intent.extras?.let { extras ->
             val cardFormData = extras.getParcelable<CardForm>(CARD_FORM_EXTRA)!!
             resultCode = cardFormData.requestCode
-            this.extras = extras
             Dependencies.instance.initialize(this, cardFormData)
+        }
+
+        if (savedInstanceState == null) {
             setUpScreenComponents()
             viewModel.showProgressStartScreen()
             viewModel.initInscription()
+        } else {
+            viewModel.recoverFromBundle(savedInstanceState)
         }
-
         setUpViewModel()
     }
 
@@ -96,6 +98,11 @@ internal class CardFormWebActivity : AppCompatActivity() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        viewModel.storeInBundle(outState)
+    }
+
     @ColorInt
     private fun getDarkPrimaryColor(@ColorInt primaryColor: Int): Int {
         val hsv = FloatArray(3)
@@ -108,7 +115,7 @@ internal class CardFormWebActivity : AppCompatActivity() {
     private fun setUpScreenComponents() {
         var pair = getStateFragment()
         updateScreenState(pair.first, progressStateContainer.id, pair.second)
-        pair = getWebViewFragment(extras)
+        pair = getWebViewFragment()
         updateScreenState(pair.first, webViewContainer.id, pair.second)
     }
 
@@ -136,9 +143,9 @@ internal class CardFormWebActivity : AppCompatActivity() {
         return (fragment to CardFormWebViewStateFragment.TAG)
     }
 
-    private fun getWebViewFragment(extras: Bundle): Pair<Fragment, String> {
+    private fun getWebViewFragment(): Pair<Fragment, String> {
         var fragment = supportFragmentManager.findFragmentByTag(CardFormWebViewFragment.TAG)
-        fragment = fragment ?: let { CardFormWebViewFragment.newInstance(extras) }
+        fragment = fragment ?: let { CardFormWebViewFragment.newInstance() }
 
         return (fragment to CardFormWebViewFragment.TAG)
     }
