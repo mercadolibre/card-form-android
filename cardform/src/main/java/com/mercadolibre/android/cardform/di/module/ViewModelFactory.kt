@@ -32,7 +32,8 @@ internal class ViewModelFactory(
                         useCaseModule.inscriptionUseCase,
                         useCaseModule.finishInscriptionUseCase,
                         useCaseModule.tokenizeWebCardUseCase,
-                        useCaseModule.cardAssociationUseCase
+                        useCaseModule.cardAssociationUseCase,
+                        trackerModule.tracker
                     )
                 }
                 else -> {
