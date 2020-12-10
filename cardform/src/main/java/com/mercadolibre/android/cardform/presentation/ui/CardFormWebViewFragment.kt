@@ -55,11 +55,13 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
         }
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private fun setUpWebView() {
         webViewData?.also {
             val (redirectUrl, webUrl, tokenData) = it
             val webViewClient = CardFormWebViewClient()
             val recorder = PayloadRecorder(webViewClient, redirectUrl)
+            webView.settings.javaScriptEnabled = true
             webView.addJavascriptInterface(recorder, "recorder")
             webView.webViewClient = webViewClient
 
