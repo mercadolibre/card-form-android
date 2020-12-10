@@ -1,6 +1,5 @@
 package com.mercadolibre.android.cardform.data.repository
 
-import com.mercadolibre.android.cardform.BuildConfig
 import com.mercadolibre.android.cardform.base.BaseCoroutine
 import com.mercadolibre.android.cardform.base.Response.Failure
 import com.mercadolibre.android.cardform.base.Response.Success
@@ -21,7 +20,6 @@ internal class CardAssociationRepositoryImpl(
         withContext(contextProvider.IO) {
             runCatching {
                 associationService.associateCard(
-                    BuildConfig.API_ENVIRONMENT,
                     accessToken, AssociatedCardBody(
                         param.cardTokenId,
                         PaymentMethodBody(
