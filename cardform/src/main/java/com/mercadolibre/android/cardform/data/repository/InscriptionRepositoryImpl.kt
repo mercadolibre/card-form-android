@@ -19,7 +19,7 @@ internal class InscriptionRepositoryImpl(
         withContext(contextProvider.IO) {
             runCatching {
                 inscriptionService
-                    .getInscription(accessToken)
+                    .getInscription(accessToken = accessToken)
                     .resolveRetrofitResponse()
             }.mapCatching {
                 InscriptionBusinessModel(

@@ -9,10 +9,9 @@ internal class InscriptionUseCase(
 
     override suspend fun doExecute(param: Unit) = inscriptionRepository
         .getInscriptionData().map {
-            val tokenData = "TBK_TOKEN=${it.token}".toByteArray()
             val fullName = "${it.userName} ${it.userLastName}"
             InscriptionModel(
-                tokenData,
+                it.token,
                 it.urlWebPay,
                 it.redirectUrl,
                 fullName,
@@ -22,7 +21,7 @@ internal class InscriptionUseCase(
 }
 
 data class InscriptionModel(
-    val token: ByteArray,
+    val token: String,
     val urlWebPay: String,
     val redirectUrl: String,
     val fullName: String,

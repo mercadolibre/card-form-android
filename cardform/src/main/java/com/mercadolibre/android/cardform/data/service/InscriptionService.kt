@@ -10,7 +10,7 @@ import retrofit2.http.Query
 internal interface InscriptionService {
     @GET("/{environment}/px_mobile/v1/card_webpay/inscription/init")
     suspend fun getInscription(
-        @Query("access_token") accessToken : String,
-        @Path("environment") environment : String = BuildConfig.API_ENVIRONMENT
+        @Path("environment") environment : String = BuildConfig.API_ENVIRONMENT,
+        @Query("access_token") accessToken : String
     ): Response<InscriptionDataModel>
 }

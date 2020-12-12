@@ -19,7 +19,7 @@ internal class FinishInscriptionRepositoryImpl(
         withContext(contextProvider.IO) {
             runCatching {
                 finishInscriptionService
-                    .getFinishInscription(accessToken, TokenData(token))
+                    .getFinishInscription(accessToken = accessToken, token = TokenData(token))
                     .resolveRetrofitResponse()
             }.mapCatching {
                 FinishInscriptionBusinessModel(

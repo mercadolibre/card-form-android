@@ -60,28 +60,21 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
         webViewData?.also {
             val (redirectUrl, webUrl, tokenData) = it
             val webViewClient = CardFormWebViewClient()
-            val recorder = PayloadRecorder(webViewClient, redirectUrl)
             webView.settings.javaScriptEnabled = true
-            webView.addJavascriptInterface(recorder, "recorder")
             webView.webViewClient = webViewClient
 
             webViewClient.addCardFormWebViewListener(object : CardFormWebViewListener {
                 override fun onPageFinished(url: String?) {
-                    context?.let { context ->
-                        val scriptInputStream = context.assets.open("override.js")
-                        webView.evaluateJavascript(scriptInputStream.reader().readText(), null)
-                    }
-
                     if (url == webUrl) {
                         viewModel.showSuccessState()
                         postDelayed(1000) { viewModel.showWebViewScreen() }
                     }
-                }
 
-                override fun onReceivingData(data: String) {
-                    viewModel.showProgressBackScreen()
-                    viewModel.finishInscription(data)
-                    webViewData = null
+                    if (url == redirectUrl) {
+                        viewModel.showProgressBackScreen()
+                        viewModel.finishInscription()
+                        webViewData = null
+                    }
                 }
             })
 

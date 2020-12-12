@@ -28,7 +28,7 @@
             android:lineSpacingExtra="-2dp"
             android:textStyle="normal"
             android:gravity="center"
-            android:text="@string/cf_web_view_generic_title_app_bar"
+            android:text="@string/cf_generic_title_app_bar"
             android:textColor="@color/ui_components_action_bar_text_color"
             android:layout_marginEnd="40dp"
             style="@style/MLFont.Bold.Semi" />

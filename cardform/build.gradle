@@ -22,7 +22,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField "String", "API_ENVIRONMENT", "\"beta\""
+            buildConfigField "String", "API_ENVIRONMENT", "\"gamma\""
             buildConfigField "boolean", "HTTP_CLIENT_LOG", "true"
         }
 

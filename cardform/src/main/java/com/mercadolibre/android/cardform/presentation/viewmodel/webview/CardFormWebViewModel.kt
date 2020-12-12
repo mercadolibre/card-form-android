@@ -26,6 +26,8 @@ import kotlinx.coroutines.withContext
 private const val USER_FULL_NAME_EXTRA = "user_full_name"
 private const val USER_IDENTIFICATION_NUMBER_EXTRA = "user_identification_number"
 private const val USER_IDENTIFICATION_TYPE_EXTRA = "user_identification_type"
+private const val TOKEN_DATA_EXTRA = "token_data"
+private const val TBK_TOKEN_KEY = "TBK_TOKEN"
 
 internal class CardFormWebViewModel(
     private val inscriptionUseCase: InscriptionUseCase,
@@ -55,12 +57,14 @@ internal class CardFormWebViewModel(
     private var userFullName = ""
     private var userIdentificationNumber = ""
     private var userIdentificationType = ""
+    private var tokenData = ""
 
     override fun recoverFromBundle(bundle: Bundle) {
         with(bundle) {
             getString(USER_FULL_NAME_EXTRA)?.let { userFullName = it }
             getString(USER_IDENTIFICATION_NUMBER_EXTRA)?.let { userIdentificationNumber = it }
             getString(USER_IDENTIFICATION_TYPE_EXTRA)?.let { userIdentificationType = it }
+            getString(TOKEN_DATA_EXTRA)?.let { tokenData = it }
         }
     }
 
@@ -69,6 +73,7 @@ internal class CardFormWebViewModel(
             putString(USER_FULL_NAME_EXTRA, userFullName)
             putString(USER_IDENTIFICATION_NUMBER_EXTRA, userIdentificationNumber)
             putString(USER_IDENTIFICATION_TYPE_EXTRA, userIdentificationType)
+            putString(TOKEN_DATA_EXTRA, tokenData)
         }
     }
 
@@ -78,8 +83,9 @@ internal class CardFormWebViewModel(
                 userFullName = it.fullName
                 userIdentificationNumber = it.identifierNumber
                 userIdentificationType = it.identifierType
+                tokenData = it.token
                 liveDataProvider.loadWebViewMutableLiveData.value =
-                    Triple(it.redirectUrl, it.urlWebPay, it.token)
+                    Triple(it.redirectUrl, it.urlWebPay, "$TBK_TOKEN_KEY=${tokenData}".toByteArray())
                 tracker.trackEvent(WebViewTrack(it.urlWebPay))
             },
             failure = {
@@ -97,8 +103,8 @@ internal class CardFormWebViewModel(
             })
     }
 
-    fun finishInscription(token: String) {
-        finishInscriptionUseCase.execute(token,
+    fun finishInscription() {
+        finishInscriptionUseCase.execute(tokenData,
             success = {
                 tokenizeAndAssociateCard(
                     TokenizeAssociationModel(
@@ -122,7 +128,7 @@ internal class CardFormWebViewModel(
                 )
                 flowRetryProvider.setRetryFunction {
                     showProgressBackScreen()
-                    finishInscription(token)
+                    finishInscription()
                 }
                 showErrorState()
             })

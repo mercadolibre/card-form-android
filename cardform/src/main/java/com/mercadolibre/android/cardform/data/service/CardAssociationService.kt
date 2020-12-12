@@ -12,8 +12,8 @@ import retrofit2.http.Query
 internal interface CardAssociationService {
     @POST("/{environment}/px_mobile/v1/card")
     suspend fun associateCard(
+        @Path("environment") environment : String = BuildConfig.API_ENVIRONMENT,
         @Query("access_token") accessToken : String,
-        @Body associatedCardBody: AssociatedCardBody,
-        @Path("environment") environment : String = BuildConfig.API_ENVIRONMENT
+        @Body associatedCardBody: AssociatedCardBody
     ): Response<AssociatedCard>
 }

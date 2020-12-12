@@ -20,7 +20,8 @@ internal class CardAssociationRepositoryImpl(
         withContext(contextProvider.IO) {
             runCatching {
                 associationService.associateCard(
-                    accessToken, AssociatedCardBody(
+                    accessToken = accessToken,
+                    associatedCardBody = AssociatedCardBody(
                         param.cardTokenId,
                         PaymentMethodBody(
                             param.paymentMethodId,
