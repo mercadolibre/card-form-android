@@ -21,6 +21,7 @@ import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.extensions.visible
 import com.mercadolibre.android.cardform.presentation.model.ScreenState
 import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardFormWebViewModel
+import com.mercadolibre.android.cardform.internal.CardFormWeb
 
 private const val DARKEN_FACTOR = 0.1f
 
@@ -151,8 +152,9 @@ internal class CardFormWebActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun start(activity: AppCompatActivity, requestCode: Int, bundle: Bundle) {
+        fun start(activity: AppCompatActivity, requestCode: Int, cardFormWeb: CardFormWeb) {
             val intent = Intent(activity, CardFormWebActivity::class.java)
+            val bundle = Bundle().also { it.putParcelable(CARD_FORM_EXTRA, cardFormWeb) }
             intent.putExtras(bundle)
             activity.startActivityForResult(intent, requestCode)
         }
