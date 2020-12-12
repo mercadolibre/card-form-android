@@ -12,14 +12,10 @@ class CardFormWeb: CardForm {
     private constructor(parcel: Parcel) : super(parcel)
 
     override fun start(activity: AppCompatActivity, requestCode: Int) {
-        CardFormWebActivity.start(activity,requestCode, getBundle())
+        CardFormWebActivity.start(activity,requestCode, this)
     }
 
     class Builder private constructor(siteId: String, flowId: String): CardForm.Builder(siteId, flowId) {
-
-        override fun setExcludedTypes(excludedTypes: List<String>) = apply { super.setExcludedTypes(excludedTypes) }
-        override fun setSessionId(sessionId: String) = apply { super.setSessionId(sessionId) }
-
         override fun build() = CardFormWeb(this)
 
         companion object {
