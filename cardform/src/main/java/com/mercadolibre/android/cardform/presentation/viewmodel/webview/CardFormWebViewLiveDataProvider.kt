@@ -10,5 +10,6 @@ internal object CardFormWebViewLiveDataProvider {
     val screenStateMutableLiveData = MutableLiveData<ScreenState>()
     val loadWebViewMutableLiveData = MutableSingleLiveData<Triple<String, String, ByteArray>>()
     val canGoBackMutableLiveData = MutableLiveData<Boolean>()
-    val cardResultMutableLiveData = MutableLiveData<String>()
+    val cardResultMutableLiveData = MutableSingleLiveData<String>()
+    val finishAssociationCardMutableLiveData = MutableSingleLiveData<Unit>()
 }

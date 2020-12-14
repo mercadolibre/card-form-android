@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
+import com.mercadolibre.android.cardform.service.CardFormHandler
 import com.mercadolibre.android.cardform.presentation.ui.CardFormActivity
 import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationController
 import java.util.*
@@ -20,6 +21,7 @@ open class CardForm : Parcelable {
         protected set
     val sessionId: String
     val flowId: String
+    val cardFormHandler: CardFormHandler?
 
     protected constructor(builder: Builder) {
         siteId = builder.siteId
@@ -28,6 +30,7 @@ open class CardForm : Parcelable {
         excludedTypes = builder.excludedTypes
         flowId = builder.flowId
         sessionId = builder.sessionId ?: UUID.randomUUID().toString()
+        cardFormHandler = builder.cardFormHandler
     }
 
     protected constructor(parcel: Parcel) {
@@ -37,6 +40,7 @@ open class CardForm : Parcelable {
         excludedTypes = parcel.createStringArrayList()
         flowId = parcel.readString()!!
         sessionId = parcel.readString()!!
+        cardFormHandler = parcel.readParcelable(CardFormHandler::class.java.classLoader)
     }
 
     open fun start(activity: AppCompatActivity, requestCode: Int) {
@@ -64,11 +68,16 @@ open class CardForm : Parcelable {
         var sessionId: String? = null
             private set
 
+        var cardFormHandler: CardFormHandler? = null
+            private set
+
         open fun setExcludedTypes(excludedTypes: List<String>) = apply {
             this.excludedTypes = excludedTypes
         }
 
         open fun setSessionId(sessionId: String) = apply { this.sessionId = sessionId }
+
+        fun setCardFormHandler(handler: CardFormHandler) = apply { cardFormHandler = handler }
 
         protected fun setPublicKey(publicKey: String) = apply { this.publicKey = publicKey }
 
@@ -94,6 +103,7 @@ open class CardForm : Parcelable {
         parcel.writeStringList(excludedTypes)
         parcel.writeString(flowId)
         parcel.writeString(sessionId)
+        parcel.writeParcelable(cardFormHandler, flags)
     }
 
     override fun describeContents() = 0

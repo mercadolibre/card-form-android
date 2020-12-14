@@ -54,6 +54,9 @@ internal class CardFormWebViewModel(
     val cardResultLiveData: LiveData<String>
         get() = liveDataProvider.cardResultMutableLiveData
 
+    val finishAssociationCardLiveData: LiveData<Unit>
+        get() = liveDataProvider.finishAssociationCardMutableLiveData
+
     private var userFullName = ""
     private var userIdentificationNumber = ""
     private var userIdentificationType = ""
@@ -85,7 +88,11 @@ internal class CardFormWebViewModel(
                 userIdentificationType = it.identifierType
                 tokenData = it.token
                 liveDataProvider.loadWebViewMutableLiveData.value =
-                    Triple(it.redirectUrl, it.urlWebPay, "$TBK_TOKEN_KEY=${tokenData}".toByteArray())
+                    Triple(
+                        it.redirectUrl,
+                        it.urlWebPay,
+                        "$TBK_TOKEN_KEY=${tokenData}".toByteArray()
+                    )
                 tracker.trackEvent(WebViewTrack(it.urlWebPay))
             },
             failure = {
@@ -221,6 +228,10 @@ internal class CardFormWebViewModel(
 
     fun showSuccessState() {
         liveDataProvider.webUiStateLiveData.value = WebUiState.WebSuccess
+    }
+
+    fun finishProcessAssociationCard() {
+        liveDataProvider.finishAssociationCardMutableLiveData.value = Unit
     }
 
     private fun showErrorState() {

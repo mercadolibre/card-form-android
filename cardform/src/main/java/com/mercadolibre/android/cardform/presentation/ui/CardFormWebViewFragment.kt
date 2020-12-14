@@ -30,6 +30,8 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
         webView = view.findViewById(R.id.web_view)
         appBarWebView = view.findViewById(R.id.app_bar_web_view)
 
+        WebView.setWebContentsDebuggingEnabled(true)
+
         savedInstanceState?.let { bundle ->
             webViewData =
                 bundle.getSerializable(WEB_VIEW_DATA_EXTRA) as Triple<String, String, ByteArray>?
@@ -60,7 +62,11 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
         webViewData?.also {
             val (redirectUrl, webUrl, tokenData) = it
             val webViewClient = CardFormWebViewClient()
-            webView.settings.javaScriptEnabled = true
+            webView.settings.also { settings ->
+                settings.javaScriptEnabled = true
+                settings.domStorageEnabled = true
+                settings.databaseEnabled = true
+            }
             webView.webViewClient = webViewClient
 
             webViewClient.addCardFormWebViewListener(object : CardFormWebViewListener {

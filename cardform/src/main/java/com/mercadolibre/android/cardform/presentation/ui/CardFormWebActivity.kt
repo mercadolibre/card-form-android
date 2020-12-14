@@ -12,7 +12,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.mercadolibre.android.cardform.CARD_FORM_EXTRA
 import com.mercadolibre.android.cardform.CardForm
+import com.mercadolibre.android.cardform.CardForm.Companion.RESULT_CARD_ID_KEY
 import com.mercadolibre.android.cardform.R
+import com.mercadolibre.android.cardform.service.IncomingHandler
+import com.mercadolibre.android.cardform.service.CardFormServiceManager
 import com.mercadolibre.android.cardform.di.Dependencies
 import com.mercadolibre.android.cardform.di.viewModel
 import com.mercadolibre.android.cardform.presentation.extensions.*
@@ -24,6 +27,7 @@ import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardForm
 import com.mercadolibre.android.cardform.internal.CardFormWeb
 
 private const val DARKEN_FACTOR = 0.1f
+private const val SUCCESS_RETURN_DELAY = 2000L
 
 internal class CardFormWebActivity : AppCompatActivity() {
 
@@ -34,6 +38,11 @@ internal class CardFormWebActivity : AppCompatActivity() {
     private var defaultStatusBarColor: Int = 0
     private var canGoBack = false
     private var resultCode: Int = 0
+    private var cardFormServiceManager: CardFormServiceManager? = null
+    private var incomingHandler = IncomingHandler {
+        cardFormServiceManager?.onUnbindService(applicationContext)
+        viewModel.finishProcessAssociationCard()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +56,10 @@ internal class CardFormWebActivity : AppCompatActivity() {
         intent.extras?.let { extras ->
             val cardFormData = extras.getParcelable<CardForm>(CARD_FORM_EXTRA)!!
             resultCode = cardFormData.requestCode
+            cardFormServiceManager = cardFormData.cardFormHandler?.let {
+                CardFormServiceManager(it, incomingHandler)
+            }
+
             Dependencies.instance.initialize(this, cardFormData)
         }
 
@@ -87,17 +100,25 @@ internal class CardFormWebActivity : AppCompatActivity() {
                 }
             }
 
-            canGoBackViewLiveData.nonNullObserve(this@CardFormWebActivity) {
-                canGoBack = it
+            cardResultLiveData.nonNullObserve(this@CardFormWebActivity) { cardId ->
+                cardFormServiceManager?.let { serviceCommunication ->
+                    val bundle = Bundle().also { it.putString(RESULT_CARD_ID_KEY, cardId) }
+                    serviceCommunication.setDataBundle(bundle)
+                    serviceCommunication.onBindService(applicationContext)
+                } ?: let {
+                    val resultIntent = Intent().putExtra(RESULT_CARD_ID_KEY, cardId)
+                    setResult(Activity.RESULT_OK, resultIntent)
+                    finishProcessAssociationCard()
+                }
             }
 
-            cardResultLiveData.nonNullObserve(this@CardFormWebActivity) { cardId ->
+            finishAssociationCardLiveData.nonNullObserve(this@CardFormWebActivity) {
                 showSuccessState()
-                cardFormWebContainer.postDelayed({
-                    val resultIntent = Intent().putExtra(CardForm.RESULT_CARD_ID_KEY, cardId)
-                    setResult(Activity.RESULT_OK, resultIntent)
-                    finish()
-                }, 1000)
+                cardFormWebContainer.postDelayed({ finish() }, SUCCESS_RETURN_DELAY)
+            }
+
+            canGoBackViewLiveData.nonNullObserve(this@CardFormWebActivity) {
+                canGoBack = it
             }
         }
     }
