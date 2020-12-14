@@ -7,10 +7,10 @@ import retrofit2.Response
 import retrofit2.http.*
 
 internal interface FinishInscriptionService {
-    @POST("/{environment}/px_mobile/v1/card_webpay/inscription/finish")
+    @POST("http://api.mp.internal.ml.com/alpha/px_mobile/v1/card_webpay/inscription/finish")
     suspend fun getFinishInscription(
-        @Path("environment") environment : String = BuildConfig.API_ENVIRONMENT,
         @Query("access_token") accessToken: String,
-        @Body token: TokenData
+        @Body token: TokenData,
+        @Header("X-public") public: Boolean = true
     ): Response<FinishInscriptionData>
 }

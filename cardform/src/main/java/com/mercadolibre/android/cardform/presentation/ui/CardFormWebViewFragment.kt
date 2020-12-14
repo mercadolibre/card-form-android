@@ -64,8 +64,12 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
             val webViewClient = CardFormWebViewClient()
             webView.settings.also { settings ->
                 settings.javaScriptEnabled = true
-                settings.domStorageEnabled = true
-                settings.databaseEnabled = true
+                if (android.os.Build.VERSION.SDK_INT >= 21) {
+                    CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true)
+                } else {
+                    CookieManager.getInstance().setAcceptCookie(true)
+                }
+                settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
             }
             webView.webViewClient = webViewClient
 
@@ -91,6 +95,15 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putSerializable(WEB_VIEW_DATA_EXTRA, webViewData)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (android.os.Build.VERSION.SDK_INT >= 21)
+            CookieManager.getInstance().removeAllCookies(null);
+        else
+            CookieManager.getInstance().removeAllCookie();
+        webView.clearCache(true);
     }
 
     companion object {
