@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.mercadolibre.android.cardform.CardForm
+import com.mercadolibre.android.cardform.internal.CardFormWeb
 import kotlinx.android.synthetic.main.activity_sample.*
 
 class SampleActivity : AppCompatActivity() {
@@ -23,6 +24,16 @@ class SampleActivity : AppCompatActivity() {
 
         fromOneTap.setOnClickListener {
             OneTapActivity.start(this)
+        }
+
+        fromWebView.setOnClickListener {
+            CardFormWeb
+                .Builder
+                .buildWithAccessToken(
+                "TEST-5476935244572826-112116-4dfe0023f3a444c1e42013b05336f027-675049545",
+                "MLC", "test_flow")
+                .build()
+                .start(this, REQUEST_CODE)
         }
     }
 

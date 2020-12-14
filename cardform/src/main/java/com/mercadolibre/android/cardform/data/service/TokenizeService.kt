@@ -2,6 +2,7 @@ package com.mercadolibre.android.cardform.data.service
 
 import com.mercadolibre.android.cardform.data.model.body.CardInfoBody
 import com.mercadolibre.android.cardform.data.model.response.CardToken
+import com.mercadolibre.android.cardform.data.repository.WebCardTokenBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -12,5 +13,11 @@ internal interface TokenizeService {
     suspend fun createTokenAsync(
         @Query("access_token") accessToken : String,
         @Body cardInfoBody: CardInfoBody
+    ): Response<CardToken>
+
+    @POST("/v1/card_tokens")
+    suspend fun createWebCardToken(
+        @Query("access_token") accessToken : String,
+        @Body webCardTokenBody: WebCardTokenBody
     ): Response<CardToken>
 }
