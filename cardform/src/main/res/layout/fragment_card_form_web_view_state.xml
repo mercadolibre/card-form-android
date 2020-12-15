@@ -10,43 +10,48 @@
         android:id="@+id/progress_state_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="28dp"
         android:background="@null"
+        android:padding="10dp"
         android:src="@drawable/cf_icon_progress_state_close"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/linear_icon_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/title_progress_state"
-        app:layout_constraintEnd_toEndOf="parent"
+
+    <ImageView
+        android:id="@+id/go_to_image"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/progress_state"
+        app:layout_constraintEnd_toStartOf="@+id/progress_state"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/progress_state" />
+
+    <FrameLayout
+        android:id="@+id/progress_state"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/title_progress_state"
+        app:layout_constraintEnd_toStartOf="@+id/from_to_image"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/go_to_image"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed">
+        app:layout_constraintVertical_chainStyle="packed" />
 
-        <ImageView
-            android:id="@+id/go_to_image"
-            android:layout_width="48dp"
-            android:layout_height="48dp" />
-
-        <FrameLayout
-            android:id="@+id/progress_state"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"/>
-
-        <ImageView
-            android:id="@+id/from_to_image"
-            android:layout_width="48dp"
-            android:layout_height="48dp" />
-
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/from_to_image"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/progress_state"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/progress_state"
+        app:layout_constraintTop_toTopOf="@+id/progress_state" />
 
     <TextView
         android:id="@+id/title_progress_state"
@@ -64,7 +69,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear_icon_container"
+        app:layout_constraintTop_toBottomOf="@+id/progress_state"
         tools:text="Text" />
 
     <TextView
@@ -107,8 +112,8 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
         android:visibility="invisible"
-        app:andesButtonText="@string/cf_web_view_back"
         app:andesButtonHierarchy="quiet"
+        app:andesButtonText="@string/cf_web_view_back"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:visibility="visible" />
 
