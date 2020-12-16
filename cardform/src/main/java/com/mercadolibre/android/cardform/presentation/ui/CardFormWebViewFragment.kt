@@ -23,7 +23,6 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
     private lateinit var appBarWebView: Toolbar
     private var webViewData: Triple<String, String, ByteArray>? = null
 
-    @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
