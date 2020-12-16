@@ -10,6 +10,7 @@ import com.mercadolibre.android.cardform.domain.InscriptionUseCase
 import com.mercadolibre.android.cardform.presentation.model.ScreenState
 import com.mercadolibre.android.cardform.presentation.model.TokenizeAssociationModel
 import com.mercadolibre.android.cardform.presentation.model.WebUiState
+import com.mercadolibre.android.cardform.presentation.model.WebViewData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,7 +35,7 @@ internal class CardFormWebViewModel(
     val screenStateLiveData: LiveData<ScreenState>
         get() = liveDataProvider.screenStateMutableLiveData
 
-    val loadWebViewLiveData: LiveData<Triple<String, String, ByteArray>>
+    val loadWebViewLiveData: LiveData<WebViewData>
         get() = liveDataProvider.loadWebViewMutableLiveData
 
     val canGoBackViewLiveData: LiveData<Boolean>
@@ -70,7 +71,7 @@ internal class CardFormWebViewModel(
                 userIdentificationNumber = it.identifierNumber
                 userIdentificationType = it.identifierType
                 liveDataProvider.loadWebViewMutableLiveData.value =
-                    Triple(it.redirectUrl, it.urlWebPay, it.token)
+                    WebViewData(it.redirectUrl, it.urlWebPay, it.token)
             },
             failure = {
                 flowRetryProvider.setRetryFunction {
