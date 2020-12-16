@@ -1,7 +1,7 @@
 package com.mercadolibre.android.cardform.data.repository
 
 import com.google.gson.annotations.SerializedName
-import com.mercadolibre.android.cardform.base.BaseCoroutine
+import com.mercadolibre.android.cardform.base.CoroutineContextProvider
 import com.mercadolibre.android.cardform.base.Response.Success
 import com.mercadolibre.android.cardform.base.Response.Failure
 import com.mercadolibre.android.cardform.base.resolveRetrofitResponse
@@ -12,8 +12,9 @@ import kotlinx.coroutines.withContext
 
 internal class InscriptionRepositoryImpl(
     private val accessToken: String,
-    private val inscriptionService: InscriptionService
-) : BaseCoroutine(), InscriptionRepository {
+    private val inscriptionService: InscriptionService,
+    private val contextProvider: CoroutineContextProvider = CoroutineContextProvider()
+) : InscriptionRepository {
 
     override suspend fun getInscriptionData() =
         withContext(contextProvider.IO) {

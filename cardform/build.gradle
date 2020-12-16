@@ -69,8 +69,6 @@ dependencies {
     implementation Dependencies.livedataCore
     implementation Dependencies.viewmodel
     implementation Dependencies.pxAddons
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     testImplementation Dependencies.junit
     androidTestImplementation Dependencies.runner
