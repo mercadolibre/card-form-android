@@ -67,7 +67,7 @@ internal class CardFormWebViewClient: WebViewClient() {
     }
 }
 
-interface CardFormWebViewListener {
+internal interface CardFormWebViewListener {
     fun onReceivingData(data: String) { }
     fun onPageFinished(url: String?) { }
     fun onPageStarted(url: String?) { }

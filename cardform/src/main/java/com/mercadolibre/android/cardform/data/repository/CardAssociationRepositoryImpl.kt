@@ -1,7 +1,7 @@
 package com.mercadolibre.android.cardform.data.repository
 
 import com.mercadolibre.android.cardform.BuildConfig
-import com.mercadolibre.android.cardform.base.BaseCoroutine
+import com.mercadolibre.android.cardform.base.CoroutineContextProvider
 import com.mercadolibre.android.cardform.base.Response.Failure
 import com.mercadolibre.android.cardform.base.Response.Success
 import com.mercadolibre.android.cardform.base.resolveRetrofitResponse
@@ -14,8 +14,9 @@ import kotlinx.coroutines.withContext
 
 internal class CardAssociationRepositoryImpl(
     private val associationService: CardAssociationService,
-    private val accessToken: String
-) : BaseCoroutine(), CardAssociationRepository {
+    private val accessToken: String,
+    private val contextProvider: CoroutineContextProvider = CoroutineContextProvider()
+) : CardAssociationRepository {
 
     override suspend fun associateCard(param: AssociatedCardParam) =
         withContext(contextProvider.IO) {
