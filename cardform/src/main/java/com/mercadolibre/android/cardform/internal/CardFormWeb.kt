@@ -3,6 +3,7 @@ package com.mercadolibre.android.cardform.internal
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.presentation.ui.CardFormWebActivity
 
@@ -13,6 +14,10 @@ class CardFormWeb: CardForm {
 
     override fun start(activity: AppCompatActivity, requestCode: Int) {
         CardFormWebActivity.start(activity,requestCode, this)
+    }
+
+    override fun start(fragment: Fragment, requestCode: Int) {
+        CardFormWebActivity.start(fragment,requestCode, this)
     }
 
     class Builder private constructor(siteId: String, flowId: String): CardForm.Builder(siteId, flowId) {
