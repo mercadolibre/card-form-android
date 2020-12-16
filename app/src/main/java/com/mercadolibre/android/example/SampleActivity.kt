@@ -30,7 +30,7 @@ class SampleActivity : AppCompatActivity() {
         fromWebView.setOnClickListener {
             CardFormWeb
                 .Builder
-                .buildWithAccessToken(
+                .withAccessToken(
                 "TEST-5476935244572826-112116-4dfe0023f3a444c1e42013b05336f027-675049545",
                 "MLC", "test_flow")
                 .build()

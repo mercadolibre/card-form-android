@@ -20,11 +20,11 @@ class CardFormWeb: CardForm {
 
         companion object {
             @JvmStatic
-            fun buildWithPublicKey(publicKey: String, siteId: String, flowId: String) =
+            fun withPublicKey(publicKey: String, siteId: String, flowId: String) =
                 Builder(siteId, flowId).setPublicKey(publicKey) as Builder
 
             @JvmStatic
-            fun buildWithAccessToken(accessToken: String, siteId: String, flowId: String) =
+            fun withAccessToken(accessToken: String, siteId: String, flowId: String) =
                 Builder(siteId, flowId).setAccessToken(accessToken) as Builder
         }
     }
