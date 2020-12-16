@@ -11,6 +11,7 @@ import com.mercadolibre.android.cardform.base.BaseFragment
 import com.mercadolibre.android.cardform.di.sharedViewModel
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.extensions.postDelayed
+import com.mercadolibre.android.cardform.presentation.model.WebViewData
 import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardFormWebViewModel
 import java.net.URI
 
@@ -22,7 +23,7 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
 
     private lateinit var webView: WebView
     private lateinit var appBarWebView: Toolbar
-    private var webViewData: Triple<String, String, ByteArray>? = null
+    private var webViewData: WebViewData? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,8 +32,7 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
         appBarWebView = view.findViewById(R.id.app_bar_web_view)
 
         savedInstanceState?.let { bundle ->
-            webViewData =
-                bundle.getSerializable(WEB_VIEW_DATA_EXTRA) as Triple<String, String, ByteArray>?
+            webViewData = bundle.getParcelable(WEB_VIEW_DATA_EXTRA) as WebViewData?
             setUpWebView()
         }
 
@@ -93,7 +93,7 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putSerializable(WEB_VIEW_DATA_EXTRA, webViewData)
+        outState.putParcelable(WEB_VIEW_DATA_EXTRA, webViewData)
     }
 
     companion object {
