@@ -16,7 +16,6 @@ class SampleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sample)
-        Fresco.initialize(this)
 
         fromCardAssociation.setOnClickListener {
             CardForm.Builder.withAccessToken(
