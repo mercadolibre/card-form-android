@@ -45,6 +45,8 @@ internal class CardFormTracker(baseData: TrackerData, private val behaviour: Tra
     private fun logDebug(path: String, data: String){
         if (BuildConfig.DEBUG) {
             Log.d(path, data)
+        } else {
+            Log.i(path, data)
         }
     }
 

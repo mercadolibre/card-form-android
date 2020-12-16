@@ -4,25 +4,31 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 
-internal class CardFormServiceManager(
-    private val cardFormHandler: CardFormHandler,
-    incomingHandler: IncomingHandler
-) {
+/**
+ * Register the client and send the cardId value for the integrator to process.
+ */
+internal const val MSG_REGISTER_CLIENT = 1
 
-    private val cardFormServiceConnection = CardFormServiceConnection(incomingHandler)
+/**
+ * Association process is finished
+ */
+internal const val MSG_PROCESS_FINISHED = 2
 
-    fun onBindService(context: Context) {
-        val intent = Intent(context, CardFormService::class.java)
-        intent.putExtra(CARD_FORM_HANDLE_EXTRA, cardFormHandler)
+
+internal class CardFormServiceManager(private val context: Context) {
+
+    private lateinit var cardFormServiceConnection: CardFormServiceConnection
+
+    fun onBindService(intent: Intent, block: () -> Unit) {
+        cardFormServiceConnection = CardFormServiceConnection(IncomingHandler {
+            context.unbindService(cardFormServiceConnection)
+            block()
+        })
         context.bindService(
             intent,
             cardFormServiceConnection,
             Context.BIND_AUTO_CREATE
         )
-    }
-
-    fun onUnbindService(context: Context) {
-        context.unbindService(cardFormServiceConnection)
     }
 
     fun setDataBundle(data: Bundle) {

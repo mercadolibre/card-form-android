@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Messenger
 import android.widget.FrameLayout
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
@@ -38,11 +39,6 @@ internal class CardFormWebActivity : AppCompatActivity() {
     private var defaultStatusBarColor: Int = 0
     private var canGoBack = false
     private var resultCode: Int = 0
-    private var cardFormServiceManager: CardFormServiceManager? = null
-    private var incomingHandler = IncomingHandler {
-        cardFormServiceManager?.onUnbindService(applicationContext)
-        viewModel.finishProcessAssociationCard()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,9 +52,6 @@ internal class CardFormWebActivity : AppCompatActivity() {
         intent.extras?.let { extras ->
             val cardFormData = extras.getParcelable<CardForm>(CARD_FORM_EXTRA)!!
             resultCode = cardFormData.requestCode
-            cardFormServiceManager = cardFormData.cardFormHandler?.let {
-                CardFormServiceManager(it, incomingHandler)
-            }
 
             Dependencies.instance.initialize(this, cardFormData)
         }
@@ -101,10 +94,8 @@ internal class CardFormWebActivity : AppCompatActivity() {
             }
 
             cardResultLiveData.nonNullObserve(this@CardFormWebActivity) { cardId ->
-                cardFormServiceManager?.let { serviceCommunication ->
-                    val bundle = Bundle().also { it.putString(RESULT_CARD_ID_KEY, cardId) }
-                    serviceCommunication.setDataBundle(bundle)
-                    serviceCommunication.onBindService(applicationContext)
+                requestHandlerIntent?.let {
+                    setUpCardFormService(it, cardId)
                 } ?: let {
                     val resultIntent = Intent().putExtra(RESULT_CARD_ID_KEY, cardId)
                     setResult(Activity.RESULT_OK, resultIntent)
@@ -120,6 +111,13 @@ internal class CardFormWebActivity : AppCompatActivity() {
             canGoBackViewLiveData.nonNullObserve(this@CardFormWebActivity) {
                 canGoBack = it
             }
+        }
+    }
+
+    private fun setUpCardFormService(intent: Intent, cardId: String) {
+        CardFormServiceManager(applicationContext).also { manager ->
+            manager.setDataBundle(Bundle().also { it.putString(RESULT_CARD_ID_KEY, cardId) })
+            manager.onBindService(intent) { viewModel.finishProcessAssociationCard() }
         }
     }
 

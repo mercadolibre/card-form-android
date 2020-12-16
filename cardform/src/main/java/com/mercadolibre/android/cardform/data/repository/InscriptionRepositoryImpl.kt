@@ -28,8 +28,8 @@ internal class InscriptionRepositoryImpl(
                     it.redirectUrl,
                     it.user.firstName,
                     it.user.lastName,
-                    it.user.identifier.number,
-                    it.user.identifier.type
+                    "11111111-1",
+                    "RUT"
                 )
             }.fold(::Success, ::Failure)
         }
@@ -50,6 +50,6 @@ internal data class User(
 )
 
 internal data class Identifier(
-    val number: String,
-    val type: String
+    val number: String? = null,
+    val type: String? = null
 )

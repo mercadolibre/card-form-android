@@ -27,7 +27,7 @@ android {
         }
 
         release {
-            buildConfigField "String", "API_ENVIRONMENT", "\"gamma\""
+            buildConfigField "String", "API_ENVIRONMENT", "\"production\""
             buildConfigField "boolean", "HTTP_CLIENT_LOG", "false"
         }
     }

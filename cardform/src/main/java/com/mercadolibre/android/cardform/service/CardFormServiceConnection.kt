@@ -15,7 +15,9 @@ internal class CardFormServiceConnection(incomingHandler: IncomingHandler) : Ser
 
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
         messengerService = Messenger(service)
-        val msg = Message.obtain(null, MSG_REGISTER_CLIENT).also {
+        val msg = Message.obtain(null,
+            MSG_REGISTER_CLIENT
+        ).also {
             it.data = dataBundle
             it.replyTo = messenger
         }

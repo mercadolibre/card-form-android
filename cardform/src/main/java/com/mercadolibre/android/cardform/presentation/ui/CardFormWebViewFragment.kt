@@ -2,6 +2,7 @@ package com.mercadolibre.android.cardform.presentation.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.webkit.*
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,7 @@ import com.mercadolibre.android.cardform.di.sharedViewModel
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.extensions.postDelayed
 import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardFormWebViewModel
+import java.net.URI
 
 private const val WEB_VIEW_DATA_EXTRA = "web_view_data"
 
@@ -27,6 +29,7 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Log.i("CARD_FORM", "WEB_VIEW")
         webView = view.findViewById(R.id.web_view)
         appBarWebView = view.findViewById(R.id.app_bar_web_view)
 
@@ -75,7 +78,7 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
 
             webViewClient.addCardFormWebViewListener(object : CardFormWebViewListener {
                 override fun onPageFinished(url: String?) {
-                    if (url == webUrl) {
+                    if (URI(url).path == URI(webUrl).path) {
                         viewModel.showSuccessState()
                         postDelayed(1000) { viewModel.showWebViewScreen() }
                     }

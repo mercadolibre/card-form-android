@@ -219,6 +219,8 @@ internal class CardFormWebViewModel(
     }
 
     private fun sendCardResult(cardId: String) {
+
+
         liveDataProvider.cardResultMutableLiveData.value = cardId
     }
 
@@ -234,7 +236,7 @@ internal class CardFormWebViewModel(
         liveDataProvider.finishAssociationCardMutableLiveData.value = Unit
     }
 
-    private fun showErrorState() {
+    fun showErrorState() {
         liveDataProvider.webUiStateLiveData.postValue(WebUiState.WebError)
     }
 

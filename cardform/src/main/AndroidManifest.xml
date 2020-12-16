@@ -14,11 +14,6 @@
             android:theme="@style/AppTheme"
             android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="adjustResize"/>
-
-        <service
-            android:name=".service.CardFormService"
-            android:enabled="true"
-            android:exported="true"/>
     </application>
 
 </manifest>
