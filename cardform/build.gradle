@@ -51,6 +51,8 @@ dependencies {
     implementation Dependencies.constraintLayout
     implementation Dependencies.appCompat
     implementation Dependencies.material
+    implementation Dependencies.andesUi
+
 
     implementation Dependencies.gson
     implementation Dependencies.retrofit

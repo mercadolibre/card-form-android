@@ -1,6 +1,5 @@
 package com.mercadolibre.android.cardform
 
-import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
@@ -48,8 +47,6 @@ open class CardForm : Parcelable {
             R.anim.slide_right_to_left_out
         )
     }
-
-    protected fun getBundle() = Bundle().also { it.putParcelable(CARD_FORM_EXTRA, this) }
 
     open class Builder protected constructor(val siteId: String, val flowId: String) {
         var excludedTypes: List<String>? = null
