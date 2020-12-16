@@ -18,6 +18,7 @@ import com.mercadolibre.android.cardform.tracks.model.flow.ErrorTrack
 import com.mercadolibre.android.cardform.tracks.model.flow.InitTrack
 import com.mercadolibre.android.cardform.tracks.model.flow.SuccessTrack
 import com.mercadolibre.android.cardform.presentation.model.WebViewData
+import com.mercadolibre.android.cardform.tracks.model.webview.WebViewTrack
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
