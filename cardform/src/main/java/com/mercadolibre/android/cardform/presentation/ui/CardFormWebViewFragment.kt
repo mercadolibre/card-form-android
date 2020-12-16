@@ -12,6 +12,7 @@ import com.mercadolibre.android.cardform.di.sharedViewModel
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.extensions.postDelayed
 import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardFormWebViewModel
+import java.net.URI
 
 private const val WEB_VIEW_DATA_EXTRA = "web_view_data"
 
@@ -23,7 +24,6 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
     private lateinit var appBarWebView: Toolbar
     private var webViewData: Triple<String, String, ByteArray>? = null
 
-    @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -60,12 +60,21 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
         webViewData?.also {
             val (redirectUrl, webUrl, tokenData) = it
             val webViewClient = CardFormWebViewClient()
-            webView.settings.javaScriptEnabled = true
+            webView.settings.also { settings ->
+                settings.javaScriptEnabled = true
+                if (android.os.Build.VERSION.SDK_INT >= 21) {
+                    CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true)
+                } else {
+                    CookieManager.getInstance().setAcceptCookie(true)
+                }
+                settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+            }
             webView.webViewClient = webViewClient
 
             webViewClient.addCardFormWebViewListener(object : CardFormWebViewListener {
+                val uriWebUrl = URI(webUrl).path
                 override fun onPageFinished(url: String?) {
-                    if (url == webUrl) {
+                    if (URI(url).path == uriWebUrl) {
                         viewModel.showSuccessState()
                         postDelayed(1000) { viewModel.showWebViewScreen() }
                     }
