@@ -1,6 +1,7 @@
 package com.mercadolibre.android.cardform.presentation.ui
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -142,11 +143,21 @@ internal class CardFormWebActivity : AppCompatActivity() {
     }
 
     companion object {
+
+        private fun getIntent(context: Context, cardFormWeb: CardFormWeb) =
+            Intent(context, CardFormWebActivity::class.java).also { intent ->
+                val bundle = Bundle().also { it.putParcelable(CARD_FORM_EXTRA, cardFormWeb) }
+                intent.putExtras(bundle)
+            }
+
+        fun start(fragment: Fragment, requestCode: Int, cardFormWeb: CardFormWeb) {
+            fragment.context?.let {
+                fragment.startActivityForResult(getIntent(it, cardFormWeb), requestCode)
+            }
+        }
+
         fun start(activity: AppCompatActivity, requestCode: Int, cardFormWeb: CardFormWeb) {
-            val intent = Intent(activity, CardFormWebActivity::class.java)
-            val bundle = Bundle().also { it.putParcelable(CARD_FORM_EXTRA, cardFormWeb) }
-            intent.putExtras(bundle)
-            activity.startActivityForResult(intent, requestCode)
+            activity.startActivityForResult(getIntent(activity, cardFormWeb), requestCode)
         }
     }
 }

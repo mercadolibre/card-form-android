@@ -1,8 +1,10 @@
 package com.mercadolibre.android.cardform.presentation.ui
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.mercadolibre.android.cardform.CARD_FORM_EXTRA
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.R
@@ -32,10 +34,20 @@ internal class CardFormActivity : AppCompatActivity() {
     }
 
     companion object {
+
+        private fun getIntent(context: Context, cardForm: CardForm) =
+            Intent(context, CardFormActivity::class.java).also {
+                it.putExtra(CARD_FORM_EXTRA, cardForm)
+            }
+
+        fun start(fragment: Fragment, requestCode: Int, cardForm: CardForm) {
+            fragment.context?.let {
+                fragment.startActivityForResult(getIntent(it, cardForm), requestCode)
+            }
+        }
+
         fun start(activity: AppCompatActivity, requestCode: Int, cardForm: CardForm) {
-            val intent = Intent(activity, CardFormActivity::class.java)
-            intent.putExtra(CARD_FORM_EXTRA, cardForm)
-            activity.startActivityForResult(intent, requestCode)
+            activity.startActivityForResult(getIntent(activity, cardForm), requestCode)
         }
     }
 }

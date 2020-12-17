@@ -13,6 +13,7 @@ import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.extensions.postDelayed
 import com.mercadolibre.android.cardform.presentation.model.WebViewData
 import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardFormWebViewModel
+import java.net.URI
 
 private const val WEB_VIEW_DATA_EXTRA = "web_view_data"
 
@@ -59,28 +60,30 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
         webViewData?.also {
             val (redirectUrl, webUrl, tokenData) = it
             val webViewClient = CardFormWebViewClient()
-            val recorder = PayloadRecorder(webViewClient, redirectUrl)
-            webView.settings.javaScriptEnabled = true
-            webView.addJavascriptInterface(recorder, "recorder")
+            webView.settings.also { settings ->
+                settings.javaScriptEnabled = true
+                if (android.os.Build.VERSION.SDK_INT >= 21) {
+                    CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true)
+                } else {
+                    CookieManager.getInstance().setAcceptCookie(true)
+                }
+                settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+            }
             webView.webViewClient = webViewClient
 
             webViewClient.addCardFormWebViewListener(object : CardFormWebViewListener {
+                val uriWebUrl = URI(webUrl).path
                 override fun onPageFinished(url: String?) {
-                    context?.let { context ->
-                        val scriptInputStream = context.assets.open("override.js")
-                        webView.evaluateJavascript(scriptInputStream.reader().readText(), null)
-                    }
-
-                    if (url == webUrl) {
+                    if (URI(url).path == uriWebUrl) {
                         viewModel.showSuccessState()
                         postDelayed(1000) { viewModel.showWebViewScreen() }
                     }
-                }
 
-                override fun onReceivingData(data: String) {
-                    viewModel.showProgressBackScreen()
-                    viewModel.finishInscription(data)
-                    webViewData = null
+                    if (url == redirectUrl) {
+                        viewModel.showProgressBackScreen()
+                        viewModel.finishInscription()
+                        webViewData = null
+                    }
                 }
             })
 

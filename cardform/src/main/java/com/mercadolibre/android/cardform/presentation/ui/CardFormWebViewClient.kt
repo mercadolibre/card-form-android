@@ -9,7 +9,6 @@ import com.mercadolibre.android.cardform.base.orIfEmpty
 internal class CardFormWebViewClient: WebViewClient() {
 
     private var webViewListener: CardFormWebViewListener = object : CardFormWebViewListener {}
-    private var dataCollected: String = ""
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         webViewListener.onPageStarted(url)
@@ -55,20 +54,12 @@ internal class CardFormWebViewClient: WebViewClient() {
         webViewListener.onPageError(error?.url, error?.toString().orEmpty())
     }
 
-    fun collectData(data: String) {
-        if(dataCollected != data) {
-            dataCollected = data
-            webViewListener.onReceivingData(dataCollected)
-        }
-    }
-
     fun addCardFormWebViewListener(webViewListener: CardFormWebViewListener) {
         this.webViewListener = webViewListener
     }
 }
 
 internal interface CardFormWebViewListener {
-    fun onReceivingData(data: String) { }
     fun onPageFinished(url: String?) { }
     fun onPageStarted(url: String?) { }
     fun onPageError(url: String?, errorMessage: String) { }

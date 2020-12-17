@@ -17,7 +17,6 @@
     <string name="cf_label_back">atrás</string>
     <string name="cf_web_view_platform_ml">Mercado Libre</string>
     <string name="cf_web_view_platform_mp">Mercado Pago</string>
-    <string name="cf_web_view_generic_title_app_bar">Agregar una nueva tarjeta</string>
     <string name="cf_web_view_back">Volver</string>
     <string name="cf_web_view_retry">Intentar nuevamente</string>
     <string name="cf_web_view_progress_start_title">Te estamos llevando al sitio de Webpay</string>
