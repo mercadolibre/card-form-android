@@ -1,5 +1,6 @@
 package com.mercadolibre.android.cardform.data.repository
 
+import com.mercadolibre.android.cardform.BuildConfig
 import com.mercadolibre.android.cardform.base.CoroutineContextProvider
 import com.mercadolibre.android.cardform.base.Response.Failure
 import com.mercadolibre.android.cardform.base.Response.Success
@@ -20,7 +21,7 @@ internal class FinishInscriptionRepositoryImpl(
         withContext(contextProvider.IO) {
             runCatching {
                 finishInscriptionService
-                    .getFinishInscription(accessToken = accessToken, token = TokenData(token))
+                    .getFinishInscription(BuildConfig.API_ENVIRONMENT, accessToken, TokenData(token))
                     .resolveRetrofitResponse()
             }.mapCatching {
                 FinishInscriptionBusinessModel(
