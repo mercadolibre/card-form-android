@@ -1,11 +1,10 @@
 package com.mercadolibre.android.cardform.data.repository
 
-import com.mercadolibre.android.cardform.BuildConfig
 import com.mercadolibre.android.cardform.base.CoroutineContextProvider
 import com.mercadolibre.android.cardform.base.Response.Failure
 import com.mercadolibre.android.cardform.base.Response.Success
 import com.mercadolibre.android.cardform.base.resolveRetrofitResponse
-import com.mercadolibre.android.cardform.data.model.body.PaymentMethodBody
+import com.mercadolibre.android.cardform.data.model.body.TokenData
 import com.mercadolibre.android.cardform.data.service.FinishInscriptionService
 import com.mercadolibre.android.cardform.domain.FinishInscriptionRepository
 import com.mercadolibre.android.cardform.domain.FinishInscriptionBusinessModel
@@ -21,7 +20,7 @@ internal class FinishInscriptionRepositoryImpl(
         withContext(contextProvider.IO) {
             runCatching {
                 finishInscriptionService
-                    .getFinishInscription(BuildConfig.API_ENVIRONMENT, accessToken, TokenData(token))
+                    .getFinishInscription(accessToken, TokenData(token))
                     .resolveRetrofitResponse()
             }.mapCatching {
                 FinishInscriptionBusinessModel(
@@ -38,16 +37,3 @@ internal class FinishInscriptionRepositoryImpl(
             }.fold(::Success, ::Failure)
         }
 }
-
-internal data class TokenData(val token: String)
-internal data class Issuer(val id: Int)
-internal data class FinishInscriptionData(
-    val id: String,
-    val firstSixDigits: String,
-    val number: String,
-    val expirationYear: Int,
-    val expirationMonth: Int,
-    val length: Int,
-    val issuer: Issuer,
-    val paymentMethod: PaymentMethodBody
-)

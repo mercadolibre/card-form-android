@@ -5,7 +5,6 @@ import com.mercadolibre.android.cardform.base.Response.Success
 import com.mercadolibre.android.cardform.base.Response.Failure
 import com.mercadolibre.android.cardform.base.resolveRetrofitResponse
 import com.mercadolibre.android.cardform.data.mapper.WebCardTokenBodyMapper
-import com.mercadolibre.android.cardform.data.model.body.CardHolder
 import com.mercadolibre.android.cardform.data.model.body.CardInfoBody
 import com.mercadolibre.android.cardform.data.service.TokenizeService
 import com.mercadolibre.android.cardform.domain.TokenizeWebCardParam
@@ -36,14 +35,3 @@ internal class TokenizeRepositoryImpl(
             }.fold(::Success, ::Failure)
         }
 }
-
-internal data class WebCardTokenBody(
-    val cardNumberId: String,
-    val truncCardNumber: String,
-    val siteId: String,
-    val cardholder: CardHolder,
-    val expirationMonth: Int,
-    val expirationYear: Int,
-    val cardNumberLength: Int,
-    val publicKey: String? = null
-)

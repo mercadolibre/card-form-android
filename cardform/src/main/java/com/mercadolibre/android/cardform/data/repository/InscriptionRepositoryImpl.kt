@@ -1,7 +1,5 @@
 package com.mercadolibre.android.cardform.data.repository
 
-import com.google.gson.annotations.SerializedName
-import com.mercadolibre.android.cardform.BuildConfig
 import com.mercadolibre.android.cardform.base.CoroutineContextProvider
 import com.mercadolibre.android.cardform.base.Response.Success
 import com.mercadolibre.android.cardform.base.Response.Failure
@@ -21,7 +19,7 @@ internal class InscriptionRepositoryImpl(
         withContext(contextProvider.IO) {
             runCatching {
                 inscriptionService
-                    .getInscription(BuildConfig.API_ENVIRONMENT, accessToken)
+                    .getInscription(accessToken)
                     .resolveRetrofitResponse()
             }.mapCatching {
                 InscriptionBusinessModel(
@@ -36,22 +34,3 @@ internal class InscriptionRepositoryImpl(
             }.fold(::Success, ::Failure)
         }
 }
-
-internal data class InscriptionDataModel(
-    val tbkToken: String,
-    @SerializedName("url_webpay")
-    val urlWebPay: String,
-    val redirectUrl: String,
-    val user: User
-)
-
-internal data class User(
-    val firstName: String,
-    val lastName: String,
-    val identifier: Identifier
-)
-
-internal data class Identifier(
-    val number: String?,
-    val type: String?
-)
