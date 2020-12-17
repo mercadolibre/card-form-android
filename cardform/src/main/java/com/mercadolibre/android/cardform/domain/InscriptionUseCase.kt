@@ -25,5 +25,5 @@ data class InscriptionModel(
     val urlWebPay: String,
     val redirectUrl: String,
     val fullName: String,
-    val identifierNumber: String,
-    val identifierType: String)
+    val identifierNumber: String?,
+    val identifierType: String?)

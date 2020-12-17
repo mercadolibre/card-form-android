@@ -56,8 +56,8 @@ internal class CardFormWebViewModel(
         get() = liveDataProvider.cardResultMutableLiveData
 
     private var userFullName = ""
-    private var userIdentificationNumber = ""
-    private var userIdentificationType = ""
+    private var userIdentificationNumber: String? = null
+    private var userIdentificationType: String? = null
     private var tokenData = ""
 
     override fun recoverFromBundle(bundle: Bundle) {

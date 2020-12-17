@@ -12,6 +12,6 @@ data class InscriptionBusinessModel(
     val redirectUrl: String,
     val userName: String,
     val userLastName: String,
-    val identifierNumber: String,
-    val identifierType: String
+    val identifierNumber: String?,
+    val identifierType: String?
 )
