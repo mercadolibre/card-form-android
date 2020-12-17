@@ -25,6 +25,7 @@ import com.mercadolibre.android.cardform.presentation.ui.ErrorUtil
 import com.mercadolibre.android.cardform.presentation.ui.formentry.FormType
 import com.mercadolibre.android.cardform.tracks.Tracker
 import com.mercadolibre.android.cardform.tracks.model.TrackApiSteps
+import com.mercadolibre.android.cardform.tracks.model.TrackSteps
 import com.mercadolibre.android.cardform.tracks.model.bin.*
 import com.mercadolibre.android.cardform.tracks.model.flow.*
 import com.mercadopago.android.px.addons.ESCManagerBehaviour
@@ -264,6 +265,12 @@ internal class InputFormViewModel(
                     escManager.saveESCWith(cardAssociationId, cardTokenModel.esc)
                 }
                 val onSuccess = {
+                    tracker.trackEvent(SuccessTrack(
+                        cardStepInfo.cardNumber.substring(0..5),
+                        issuer?.id ?: 0,
+                        paymentMethod?.paymentMethodId!!,
+                        paymentMethod?.paymentTypeId!!
+                    ))
                     stateUiLiveData.postValue(UiResult.CardResult(cardAssociationId))
                 }
 
@@ -314,6 +321,14 @@ internal class InputFormViewModel(
                 }
             }
         }
+    }
+
+    fun trackInit() {
+        tracker.trackEvent(InitTrack())
+    }
+
+    fun trackBack() {
+        tracker.trackEvent(BackTrack())
     }
 
     companion object {

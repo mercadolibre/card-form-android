@@ -10,7 +10,15 @@ import com.mercadolibre.android.cardform.domain.InscriptionUseCase
 import com.mercadolibre.android.cardform.presentation.model.ScreenState
 import com.mercadolibre.android.cardform.presentation.model.TokenizeAssociationModel
 import com.mercadolibre.android.cardform.presentation.model.WebUiState
+import com.mercadolibre.android.cardform.tracks.CardFormTracker
+import com.mercadolibre.android.cardform.tracks.model.TrackApiSteps
+import com.mercadolibre.android.cardform.tracks.model.TrackSteps
+import com.mercadolibre.android.cardform.tracks.model.flow.BackTrack
+import com.mercadolibre.android.cardform.tracks.model.flow.ErrorTrack
+import com.mercadolibre.android.cardform.tracks.model.flow.InitTrack
+import com.mercadolibre.android.cardform.tracks.model.flow.SuccessTrack
 import com.mercadolibre.android.cardform.presentation.model.WebViewData
+import com.mercadolibre.android.cardform.tracks.model.webview.WebViewTrack
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,6 +33,7 @@ internal class CardFormWebViewModel(
     private val finishInscriptionUseCase: FinishInscriptionUseCase,
     private val tokenizeWebCardUseCase: TokenizeWebCardUseCase,
     private val associatedCardUseCase: AssociatedCardUseCase,
+    private val tracker: CardFormTracker,
     private val liveDataProvider: CardFormWebViewLiveDataProvider = CardFormWebViewLiveDataProvider,
     private val flowRetryProvider: FlowRetryProvider = FlowRetryProvider
 ) : BaseViewModel() {
@@ -72,8 +81,15 @@ internal class CardFormWebViewModel(
                 userIdentificationType = it.identifierType
                 liveDataProvider.loadWebViewMutableLiveData.value =
                     WebViewData(it.redirectUrl, it.urlWebPay, it.token)
+                tracker.trackEvent(WebViewTrack(it.urlWebPay))
             },
             failure = {
+                tracker.trackEvent(
+                    ErrorTrack(
+                        TrackApiSteps.INIT_INSCRIPTION.getType(),
+                        it.localizedMessage.orEmpty()
+                    )
+                )
                 flowRetryProvider.setRetryFunction {
                     showProgressStartScreen()
                     initInscription()
@@ -99,6 +115,12 @@ internal class CardFormWebViewModel(
                 )
             },
             failure = {
+                tracker.trackEvent(
+                    ErrorTrack(
+                        TrackApiSteps.FINISH_INSCRIPTION.getType(),
+                        it.localizedMessage.orEmpty()
+                    )
+                )
                 flowRetryProvider.setRetryFunction {
                     showProgressBackScreen()
                     finishInscription(token)
@@ -116,8 +138,15 @@ internal class CardFormWebViewModel(
             }?.let { cardAssociationId ->
                 withContext(Dispatchers.Main) {
                     sendCardResult(cardAssociationId)
+                    tracker.trackEvent(
+                        SuccessTrack(
+                            model.truncCardNumber.substring(0..5),
+                            model.issuerId,
+                            model.paymentMethodId,
+                            model.paymentMethodType
+                        )
+                    )
                 }
-            } ?: let {
             }
         }
     }
@@ -137,6 +166,12 @@ internal class CardFormWebViewModel(
                 )
             )
             .getOrElse { throwable ->
+                tracker.trackEvent(
+                    ErrorTrack(
+                        TrackApiSteps.TOKEN.getType(),
+                        throwable.localizedMessage.orEmpty()
+                    )
+                )
                 flowRetryProvider.setRetryFunction {
                     showProgressBackScreen()
                     tokenizeAndAssociateCard(model)
@@ -157,6 +192,12 @@ internal class CardFormWebViewModel(
                 model.issuerId
             )
         ).getOrElse { throwable ->
+            tracker.trackEvent(
+                ErrorTrack(
+                    TrackApiSteps.ASSOCIATION.getType(),
+                    throwable.localizedMessage.orEmpty()
+                )
+            )
             flowRetryProvider.setRetryFunction {
                 showProgressBackScreen()
                 tokenizeAndAssociateCard(model)
@@ -197,5 +238,13 @@ internal class CardFormWebViewModel(
 
     fun canGoBack(canGoBack: Boolean) {
         liveDataProvider.canGoBackMutableLiveData.value = canGoBack
+    }
+
+    fun trackInit() {
+        tracker.trackEvent(InitTrack(TrackSteps.WEB_VIEW.getType()))
+    }
+
+    fun trackBack() {
+        tracker.trackEvent(BackTrack(TrackSteps.WEB_VIEW.getType()))
     }
 }

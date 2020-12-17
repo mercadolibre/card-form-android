@@ -45,12 +45,15 @@ internal class CardFormWebActivity : AppCompatActivity() {
             Dependencies.instance.initialize(this, cardFormData)
         } ?: error("Card form extra should not be null")
 
-        if (savedInstanceState == null) {
-            setUpScreenComponents()
-            viewModel.showProgressStartScreen()
-            viewModel.initInscription()
-        } else {
-            viewModel.recoverFromBundle(savedInstanceState)
+        with(viewModel) {
+            if (savedInstanceState == null) {
+                setUpScreenComponents()
+                showProgressStartScreen()
+                initInscription()
+                trackInit()
+            } else {
+                recoverFromBundle(savedInstanceState)
+            }
         }
         setUpViewModel()
     }
@@ -119,6 +122,7 @@ internal class CardFormWebActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (canGoBack) {
+            viewModel.trackBack()
             super.onBackPressed()
         }
     }

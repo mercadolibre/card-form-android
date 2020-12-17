@@ -27,8 +27,6 @@ import com.mercadolibre.android.cardform.presentation.model.StateUi.UiLoading
 import com.mercadolibre.android.cardform.presentation.ui.custom.ProgressFragment
 import com.mercadolibre.android.cardform.presentation.ui.formentry.FormType
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
-import com.mercadolibre.android.cardform.tracks.model.flow.InitTrack
-import com.mercadolibre.android.cardform.tracks.model.flow.SuccessTrack
 import kotlinx.android.synthetic.main.app_bar.*
 import kotlinx.android.synthetic.main.cf_card.*
 import kotlinx.android.synthetic.main.fragment_card_form.*
@@ -98,7 +96,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
         cardDrawer = view.findViewById(R.id.cardDrawer)
 
         if (savedInstanceState == null) {
-            viewModel.tracker.trackEvent(InitTrack())
+            viewModel.trackInit()
             cardDrawer.show(object : DefaultCardConfiguration(context!!) {
                 override fun getNamePlaceHolder(): String {
                     return getString(R.string.cf_card_name_hint)
@@ -143,6 +141,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
             appBar.setOnBackListener {
                 KeyboardHelper.hideKeyboard(this@CardFormFragment)
                 postDelayed(100) {
+                    viewModel.trackBack()
                     onBackPressed()
                 }
             }
@@ -320,7 +319,6 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
                 setResult(resultCode, buildResultIntent(associatedCardId))
                 finish()
             }
-            viewModel.tracker.trackEvent(SuccessTrack())
         }
     }
 
