@@ -267,7 +267,7 @@ internal class InputFormViewModel(
                 val onSuccess = {
                     tracker.trackEvent(SuccessTrack(
                         cardStepInfo.cardNumber.substring(0..5),
-                        issuer!!.id,
+                        issuer?.id ?: 0,
                         paymentMethod?.paymentMethodId!!,
                         paymentMethod?.paymentTypeId!!
                     ))
