@@ -15,12 +15,12 @@ internal const val MSG_REGISTER_CLIENT = 1
 internal const val MSG_PROCESS_FINISHED = 2
 
 
-internal class CardFormServiceManager(private val context: Context) {
+internal class CardFormServiceManager(private val context: Context, private val intent: Intent) {
 
     private lateinit var cardFormServiceConnection: CardFormServiceConnection
 
-    fun onBindService(intent: Intent, block: () -> Unit) {
-        cardFormServiceConnection = CardFormServiceConnection(IncomingHandler {
+    fun onBindService(data: Bundle, block: () -> Unit) {
+        cardFormServiceConnection = CardFormServiceConnection(data, ResponseHandler {
             context.unbindService(cardFormServiceConnection)
             block()
         })
@@ -29,9 +29,5 @@ internal class CardFormServiceManager(private val context: Context) {
             cardFormServiceConnection,
             Context.BIND_AUTO_CREATE
         )
-    }
-
-    fun setDataBundle(data: Bundle) {
-        cardFormServiceConnection.setDataBundle(data)
     }
 }

@@ -7,15 +7,18 @@ import android.os.IBinder
 import android.os.Message
 import android.os.Messenger
 
-internal class CardFormServiceConnection(incomingHandler: IncomingHandler) : ServiceConnection {
+internal class CardFormServiceConnection(
+    private val dataBundle: Bundle,
+    responseHandler: ResponseHandler
+) : ServiceConnection {
 
     private var messengerService: Messenger? = null
-    private val messenger = Messenger(incomingHandler)
-    private var dataBundle = Bundle()
+    private val messenger = Messenger(responseHandler)
 
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
         messengerService = Messenger(service)
-        val msg = Message.obtain(null,
+        val msg = Message.obtain(
+            null,
             MSG_REGISTER_CLIENT
         ).also {
             it.data = dataBundle
@@ -26,9 +29,5 @@ internal class CardFormServiceConnection(incomingHandler: IncomingHandler) : Ser
 
     override fun onServiceDisconnected(name: ComponentName?) {
         messengerService = null
-    }
-
-    fun setDataBundle(data: Bundle) {
-        dataBundle = data
     }
 }

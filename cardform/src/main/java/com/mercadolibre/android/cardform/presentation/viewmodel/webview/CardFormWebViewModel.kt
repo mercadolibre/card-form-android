@@ -2,6 +2,7 @@ package com.mercadolibre.android.cardform.presentation.viewmodel.webview
 
 import android.os.Bundle
 import androidx.lifecycle.LiveData
+import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.base.BaseViewModel
 import com.mercadolibre.android.cardform.base.getOrElse
 import com.mercadolibre.android.cardform.domain.*
@@ -10,6 +11,7 @@ import com.mercadolibre.android.cardform.domain.InscriptionUseCase
 import com.mercadolibre.android.cardform.presentation.model.ScreenState
 import com.mercadolibre.android.cardform.presentation.model.TokenizeAssociationModel
 import com.mercadolibre.android.cardform.presentation.model.WebUiState
+import com.mercadolibre.android.cardform.service.CardFormServiceManager
 import com.mercadolibre.android.cardform.tracks.CardFormTracker
 import com.mercadolibre.android.cardform.tracks.model.TrackApiSteps
 import com.mercadolibre.android.cardform.tracks.model.TrackSteps
@@ -35,6 +37,7 @@ internal class CardFormWebViewModel(
     private val tokenizeWebCardUseCase: TokenizeWebCardUseCase,
     private val associatedCardUseCase: AssociatedCardUseCase,
     private val tracker: CardFormTracker,
+    private val cardFormServiceManager: CardFormServiceManager?,
     private val liveDataProvider: CardFormWebViewLiveDataProvider = CardFormWebViewLiveDataProvider,
     private val flowRetryProvider: FlowRetryProvider = FlowRetryProvider
 ) : BaseViewModel() {
@@ -149,7 +152,7 @@ internal class CardFormWebViewModel(
                 getCardAssociationId(cardTokenId, model)
             }?.let { cardAssociationId ->
                 withContext(Dispatchers.Main) {
-                    sendCardResult(cardAssociationId)
+                    coordinateResultCompletion(cardAssociationId)
                     tracker.trackEvent(
                         SuccessTrack(
                             model.truncCardNumber.substring(0..5),
@@ -161,6 +164,15 @@ internal class CardFormWebViewModel(
                 }
             }
         }
+    }
+
+    private fun coordinateResultCompletion(cardAssociationId: String) {
+        cardFormServiceManager?.let { serviceManager ->
+            val data = Bundle().also {
+                it.putString(CardForm.RESULT_CARD_ID_KEY, cardAssociationId)
+            }
+            serviceManager.onBindService(data) { finishProcessAssociationCard() }
+        } ?: sendCardResult(cardAssociationId)
     }
 
     private suspend fun getCardToken(model: TokenizeAssociationModel) = run {
@@ -219,8 +231,6 @@ internal class CardFormWebViewModel(
     }
 
     private fun sendCardResult(cardId: String) {
-
-
         liveDataProvider.cardResultMutableLiveData.value = cardId
     }
 

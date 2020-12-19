@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Messenger
 import android.widget.FrameLayout
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
@@ -15,8 +14,6 @@ import com.mercadolibre.android.cardform.CARD_FORM_EXTRA
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.CardForm.Companion.RESULT_CARD_ID_KEY
 import com.mercadolibre.android.cardform.R
-import com.mercadolibre.android.cardform.service.IncomingHandler
-import com.mercadolibre.android.cardform.service.CardFormServiceManager
 import com.mercadolibre.android.cardform.di.Dependencies
 import com.mercadolibre.android.cardform.di.viewModel
 import com.mercadolibre.android.cardform.presentation.extensions.*
@@ -94,13 +91,8 @@ internal class CardFormWebActivity : AppCompatActivity() {
             }
 
             cardResultLiveData.nonNullObserve(this@CardFormWebActivity) { cardId ->
-                requestHandlerIntent?.let {
-                    setUpCardFormService(it, cardId)
-                } ?: let {
-                    val resultIntent = Intent().putExtra(RESULT_CARD_ID_KEY, cardId)
-                    setResult(Activity.RESULT_OK, resultIntent)
-                    finishProcessAssociationCard()
-                }
+                setResult(Activity.RESULT_OK, Intent().putExtra(RESULT_CARD_ID_KEY, cardId))
+                finishProcessAssociationCard()
             }
 
             finishAssociationCardLiveData.nonNullObserve(this@CardFormWebActivity) {
@@ -111,13 +103,6 @@ internal class CardFormWebActivity : AppCompatActivity() {
             canGoBackViewLiveData.nonNullObserve(this@CardFormWebActivity) {
                 canGoBack = it
             }
-        }
-    }
-
-    private fun setUpCardFormService(intent: Intent, cardId: String) {
-        CardFormServiceManager(applicationContext).also { manager ->
-            manager.setDataBundle(Bundle().also { it.putString(RESULT_CARD_ID_KEY, cardId) })
-            manager.onBindService(intent) { viewModel.finishProcessAssociationCard() }
         }
     }
 
@@ -172,6 +157,11 @@ internal class CardFormWebActivity : AppCompatActivity() {
         fragment = fragment ?: let { CardFormWebViewFragment.newInstance() }
 
         return (fragment to CardFormWebViewFragment.TAG)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Dependencies.instance.clean()
     }
 
     companion object {
