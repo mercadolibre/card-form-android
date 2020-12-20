@@ -1,10 +1,9 @@
 package com.mercadolibre.android.cardform
 
-import android.content.Intent
-import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.mercadolibre.android.cardform.presentation.ui.CardFormActivity
 import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationController
 import com.mercadolibre.android.cardform.service.CardFormIntent
@@ -55,7 +54,15 @@ open class CardForm : Parcelable {
         )
     }
 
-    protected fun getBundle() = Bundle().also { it.putParcelable(CARD_FORM_EXTRA, this) }
+    open fun start(fragment: Fragment, requestCode: Int) {
+        this.requestCode = requestCode
+        FragmentNavigationController.reset()
+        CardFormActivity.start(fragment, requestCode, this)
+        fragment.activity?.overridePendingTransition(
+            R.anim.slide_right_to_left_in,
+            R.anim.slide_right_to_left_out
+        )
+    }
 
     open class Builder protected constructor(val siteId: String, val flowId: String) {
         var excludedTypes: List<String>? = null

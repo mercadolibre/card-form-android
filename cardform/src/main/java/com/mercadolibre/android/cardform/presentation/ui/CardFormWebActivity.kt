@@ -1,13 +1,12 @@
 package com.mercadolibre.android.cardform.presentation.ui
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.FrameLayout
-import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.mercadolibre.android.cardform.CARD_FORM_EXTRA
@@ -23,9 +22,7 @@ import com.mercadolibre.android.cardform.presentation.extensions.visible
 import com.mercadolibre.android.cardform.presentation.model.ScreenState
 import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardFormWebViewModel
 import com.mercadolibre.android.cardform.internal.CardFormWeb
-
-private const val DARKEN_FACTOR = 0.1f
-private const val SUCCESS_RETURN_DELAY = 2000L
+import com.mercadolibre.android.cardform.presentation.utils.ViewUtils
 
 internal class CardFormWebActivity : AppCompatActivity() {
 
@@ -35,7 +32,6 @@ internal class CardFormWebActivity : AppCompatActivity() {
     private lateinit var webViewContainer: FrameLayout
     private var defaultStatusBarColor: Int = 0
     private var canGoBack = false
-    private var resultCode: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,10 +44,8 @@ internal class CardFormWebActivity : AppCompatActivity() {
         }
         intent.extras?.let { extras ->
             val cardFormData = extras.getParcelable<CardForm>(CARD_FORM_EXTRA)!!
-            resultCode = cardFormData.requestCode
-
             Dependencies.instance.initialize(this, cardFormData)
-        }
+        } ?: error("Card form extra should not be null")
 
         with(viewModel) {
             if (savedInstanceState == null) {
@@ -77,7 +71,7 @@ internal class CardFormWebActivity : AppCompatActivity() {
                     }
                     else -> {
                         window?.changeStatusBarColor(
-                            getDarkPrimaryColor(
+                            ViewUtils.getDarkPrimaryColor(
                                 ContextCompat.getColor(
                                     this@CardFormWebActivity,
                                     R.color.ui_components_android_color_primary
@@ -109,15 +103,6 @@ internal class CardFormWebActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         viewModel.storeInBundle(outState)
-    }
-
-    @ColorInt
-    private fun getDarkPrimaryColor(@ColorInt primaryColor: Int): Int {
-        val hsv = FloatArray(3)
-        Color.colorToHSV(primaryColor, hsv)
-        hsv[1] = hsv[1] + DARKEN_FACTOR
-        hsv[2] = hsv[2] - DARKEN_FACTOR
-        return Color.HSVToColor(hsv)
     }
 
     private fun setUpScreenComponents() {
@@ -165,11 +150,21 @@ internal class CardFormWebActivity : AppCompatActivity() {
     }
 
     companion object {
+
+        private fun getIntent(context: Context, cardFormWeb: CardFormWeb) =
+            Intent(context, CardFormWebActivity::class.java).also { intent ->
+                val bundle = Bundle().also { it.putParcelable(CARD_FORM_EXTRA, cardFormWeb) }
+                intent.putExtras(bundle)
+            }
+
+        fun start(fragment: Fragment, requestCode: Int, cardFormWeb: CardFormWeb) {
+            fragment.context?.let {
+                fragment.startActivityForResult(getIntent(it, cardFormWeb), requestCode)
+            }
+        }
+
         fun start(activity: AppCompatActivity, requestCode: Int, cardFormWeb: CardFormWeb) {
-            val intent = Intent(activity, CardFormWebActivity::class.java)
-            val bundle = Bundle().also { it.putParcelable(CARD_FORM_EXTRA, cardFormWeb) }
-            intent.putExtras(bundle)
-            activity.startActivityForResult(intent, requestCode)
+            activity.startActivityForResult(getIntent(activity, cardFormWeb), requestCode)
         }
     }
 }

@@ -19,6 +19,7 @@ import com.mercadolibre.android.cardform.tracks.model.flow.BackTrack
 import com.mercadolibre.android.cardform.tracks.model.flow.ErrorTrack
 import com.mercadolibre.android.cardform.tracks.model.flow.InitTrack
 import com.mercadolibre.android.cardform.tracks.model.flow.SuccessTrack
+import com.mercadolibre.android.cardform.presentation.model.WebViewData
 import com.mercadolibre.android.cardform.tracks.model.webview.WebViewTrack
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,7 +49,7 @@ internal class CardFormWebViewModel(
     val screenStateLiveData: LiveData<ScreenState>
         get() = liveDataProvider.screenStateMutableLiveData
 
-    val loadWebViewLiveData: LiveData<Triple<String, String, ByteArray>>
+    val loadWebViewLiveData: LiveData<WebViewData>
         get() = liveDataProvider.loadWebViewMutableLiveData
 
     val canGoBackViewLiveData: LiveData<Boolean>
@@ -61,8 +62,8 @@ internal class CardFormWebViewModel(
         get() = liveDataProvider.finishAssociationCardMutableLiveData
 
     private var userFullName = ""
-    private var userIdentificationNumber = ""
-    private var userIdentificationType = ""
+    private var userIdentificationNumber: String? = null
+    private var userIdentificationType: String? = null
     private var tokenData = ""
 
     override fun recoverFromBundle(bundle: Bundle) {
@@ -91,7 +92,7 @@ internal class CardFormWebViewModel(
                 userIdentificationType = it.identifierType
                 tokenData = it.token
                 liveDataProvider.loadWebViewMutableLiveData.value =
-                    Triple(
+                    WebViewData(
                         it.redirectUrl,
                         it.urlWebPay,
                         "$TBK_TOKEN_KEY=${tokenData}".toByteArray()

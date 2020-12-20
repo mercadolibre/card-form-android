@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.facebook.drawee.backends.pipeline.Fresco
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.CardForm.Companion.RESULT_CARD_ID_KEY
 import com.mercadolibre.android.cardform.internal.CardFormWeb
@@ -17,7 +16,6 @@ class SampleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sample)
-        Fresco.initialize(this)
 
         fromCardAssociation.setOnClickListener {
             CardForm.Builder.withAccessToken(
@@ -33,7 +31,7 @@ class SampleActivity : AppCompatActivity() {
         fromWebView.setOnClickListener {
             CardFormWeb
                 .Builder
-                .buildWithAccessToken(
+                .withAccessToken(
                 "TEST-5476935244572826-112116-4dfe0023f3a444c1e42013b05336f027-675049545",
                 "MLC", "test_flow")
                 .setCardFormHandler(CardFormIntent(this, SampleService::class.java))

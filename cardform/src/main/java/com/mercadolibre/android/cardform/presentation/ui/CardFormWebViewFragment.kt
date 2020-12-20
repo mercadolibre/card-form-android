@@ -2,7 +2,6 @@ package com.mercadolibre.android.cardform.presentation.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.webkit.*
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +11,7 @@ import com.mercadolibre.android.cardform.base.BaseFragment
 import com.mercadolibre.android.cardform.di.sharedViewModel
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.extensions.postDelayed
+import com.mercadolibre.android.cardform.presentation.model.WebViewData
 import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardFormWebViewModel
 import java.net.URI
 
@@ -23,21 +23,16 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
 
     private lateinit var webView: WebView
     private lateinit var appBarWebView: Toolbar
-    private var webViewData: Triple<String, String, ByteArray>? = null
+    private var webViewData: WebViewData? = null
 
-    @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.i("CARD_FORM", "WEB_VIEW")
         webView = view.findViewById(R.id.web_view)
         appBarWebView = view.findViewById(R.id.app_bar_web_view)
 
-        WebView.setWebContentsDebuggingEnabled(true)
-
         savedInstanceState?.let { bundle ->
-            webViewData =
-                bundle.getSerializable(WEB_VIEW_DATA_EXTRA) as Triple<String, String, ByteArray>?
+            webViewData = bundle.getParcelable(WEB_VIEW_DATA_EXTRA) as WebViewData?
             setUpWebView()
         }
 
@@ -77,6 +72,7 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
             webView.webViewClient = webViewClient
 
             webViewClient.addCardFormWebViewListener(object : CardFormWebViewListener {
+                val uriWebUrl = URI(webUrl).path
                 override fun onPageFinished(url: String?) {
                     if (URI(url).path == URI(webUrl).path) {
                         viewModel.showSuccessState()
@@ -97,7 +93,7 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putSerializable(WEB_VIEW_DATA_EXTRA, webViewData)
+        outState.putParcelable(WEB_VIEW_DATA_EXTRA, webViewData)
     }
 
     override fun onDestroyView() {

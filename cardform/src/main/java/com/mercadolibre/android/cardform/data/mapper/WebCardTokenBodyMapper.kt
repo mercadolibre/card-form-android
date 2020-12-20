@@ -3,7 +3,7 @@ package com.mercadolibre.android.cardform.data.mapper
 import com.mercadolibre.android.cardform.base.Mapper
 import com.mercadolibre.android.cardform.data.model.body.CardHolder
 import com.mercadolibre.android.cardform.data.model.body.IdentificationBody
-import com.mercadolibre.android.cardform.data.repository.WebCardTokenBody
+import com.mercadolibre.android.cardform.data.model.body.WebCardTokenBody
 import com.mercadolibre.android.cardform.domain.TokenizeWebCardParam
 
 internal class WebCardTokenBodyMapper(private val siteId: String) :

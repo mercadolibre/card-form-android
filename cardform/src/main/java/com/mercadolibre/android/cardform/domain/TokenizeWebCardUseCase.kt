@@ -15,8 +15,8 @@ internal data class TokenizeWebCardParam(
     val cardNumberId: String,
     val truncCardNumber: String,
     val userName: String,
-    val identificationNumber: String,
-    val identificationType: String,
+    val identificationNumber: String?,
+    val identificationType: String?,
     val expirationMonth: Int,
     val expirationYear: Int,
     val cardNumberLength: Int
