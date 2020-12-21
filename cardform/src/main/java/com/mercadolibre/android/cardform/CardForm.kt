@@ -23,7 +23,7 @@ open class CardForm : Parcelable {
         protected set
     val sessionId: String
     val flowId: String
-    val requestHandlerIntent: Intent?
+    val cardFormIntent: Intent?
 
     protected constructor(builder: Builder) {
         siteId = builder.siteId
@@ -32,7 +32,7 @@ open class CardForm : Parcelable {
         excludedTypes = builder.excludedTypes
         flowId = builder.flowId
         sessionId = builder.sessionId ?: UUID.randomUUID().toString()
-        requestHandlerIntent = builder.requestHandler
+        cardFormIntent = builder.cardFormIntent
     }
 
     protected constructor(parcel: Parcel) {
@@ -42,7 +42,7 @@ open class CardForm : Parcelable {
         excludedTypes = parcel.createStringArrayList()
         flowId = parcel.readString()!!
         sessionId = parcel.readString()!!
-        requestHandlerIntent = parcel.readParcelable(CardFormIntent::class.java.classLoader)
+        cardFormIntent = parcel.readParcelable(CardFormIntent::class.java.classLoader)
     }
 
     open fun start(activity: AppCompatActivity, requestCode: Int) {
@@ -78,7 +78,7 @@ open class CardForm : Parcelable {
         var sessionId: String? = null
             private set
 
-        var requestHandler: Intent? = null
+        var cardFormIntent: Intent? = null
             private set
 
         open fun setExcludedTypes(excludedTypes: List<String>) = apply {
@@ -87,7 +87,7 @@ open class CardForm : Parcelable {
 
         open fun setSessionId(sessionId: String) = apply { this.sessionId = sessionId }
 
-        fun <T: CardFormService> setCardFormHandler(handlerIntent: CardFormIntent<T>) = apply { requestHandler = handlerIntent }
+        fun <T: CardFormService> setCardFormHandler(handlerIntent: CardFormIntent<T>) = apply { cardFormIntent = handlerIntent }
 
         protected fun setPublicKey(publicKey: String) = apply { this.publicKey = publicKey }
 
@@ -113,7 +113,7 @@ open class CardForm : Parcelable {
         parcel.writeStringList(excludedTypes)
         parcel.writeString(flowId)
         parcel.writeString(sessionId)
-        parcel.writeParcelable(requestHandlerIntent, flags)
+        parcel.writeParcelable(cardFormIntent, flags)
     }
 
     override fun describeContents() = 0

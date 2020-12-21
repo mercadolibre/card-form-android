@@ -74,7 +74,7 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
             webViewClient.addCardFormWebViewListener(object : CardFormWebViewListener {
                 val uriWebUrl = URI(webUrl).path
                 override fun onPageFinished(url: String?) {
-                    if (URI(url).path == URI(webUrl).path) {
+                    if (URI(url).path == uriWebUrl) {
                         viewModel.showSuccessState()
                         postDelayed(1000) { viewModel.showWebViewScreen() }
                     }

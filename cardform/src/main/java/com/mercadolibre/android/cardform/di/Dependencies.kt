@@ -37,7 +37,7 @@ internal class Dependencies {
             cardForm.sessionId,
             behaviourModule!!.trackerBehaviour
         )
-        serviceModule = cardForm.requestHandlerIntent?.let { ServiceModule(context, it) }
+        serviceModule = cardForm.cardFormIntent?.let { ServiceModule(context, it) }
         viewModelModule = ViewModelModule(
             context,
             useCaseModule!!,
