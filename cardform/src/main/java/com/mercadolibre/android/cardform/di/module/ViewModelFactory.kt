@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.mercadolibre.android.cardform.data.model.esc.Device
 import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardFormWebViewModel
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
-import com.mercadolibre.android.cardform.service.CardFormServiceManager
 
 internal class ViewModelFactory(
     private val useCaseModule: UseCaseModule,
@@ -33,7 +32,6 @@ internal class ViewModelFactory(
                     CardFormWebViewModel(
                         useCaseModule.inscriptionUseCase,
                         useCaseModule.finishInscriptionUseCase,
-                        useCaseModule.tokenizeWebCardUseCase,
                         useCaseModule.cardAssociationUseCase,
                         trackerModule.tracker,
                         serviceModule?.cardFormServiceManager

@@ -24,15 +24,11 @@ internal class FinishInscriptionRepositoryImpl(
                     .resolveRetrofitResponse()
             }.mapCatching {
                 FinishInscriptionBusinessModel(
-                    it.id,
-                    it.number,
+                    it.cardTokenId,
                     it.firstSixDigits,
-                    it.length,
                     it.issuer.id,
                     it.paymentMethod.id,
-                    it.paymentMethod.paymentTypeId,
-                    it.expirationMonth,
-                    it.expirationYear
+                    it.paymentMethod.paymentTypeId
                 )
             }.fold(::Success, ::Failure)
         }

@@ -35,7 +35,6 @@ private const val TBK_TOKEN_KEY = "TBK_TOKEN"
 internal class CardFormWebViewModel(
     private val inscriptionUseCase: InscriptionUseCase,
     private val finishInscriptionUseCase: FinishInscriptionUseCase,
-    private val tokenizeWebCardUseCase: TokenizeWebCardUseCase,
     private val associatedCardUseCase: AssociatedCardUseCase,
     private val tracker: CardFormTracker,
     private val cardFormServiceManager: CardFormServiceManager?,
@@ -117,13 +116,10 @@ internal class CardFormWebViewModel(
     fun finishInscription() {
         finishInscriptionUseCase.execute(tokenData,
             success = {
-                tokenizeAndAssociateCard(
+                associateCard(
                     TokenizeAssociationModel(
-                        it.cardNumberId,
-                        it.truncCardNumber,
-                        it.expirationMonth,
-                        it.expirationYear,
-                        it.cardNumberLength,
+                        it.cardTokenId,
+                        it.bin,
                         it.issuerId,
                         it.paymentMethodId,
                         it.paymentMethodType
@@ -145,18 +141,14 @@ internal class CardFormWebViewModel(
             })
     }
 
-    private fun tokenizeAndAssociateCard(model: TokenizeAssociationModel) {
+    private fun associateCard(model: TokenizeAssociationModel) {
         CoroutineScope(contextProvider.Default).launch {
-            lateinit var cardTokenId: String
-            getCardToken(model)?.let {
-                cardTokenId = it
-                getCardAssociationId(cardTokenId, model)
-            }?.let { cardAssociationId ->
+            getCardAssociationId(model)?.let { cardAssociationId ->
                 withContext(Dispatchers.Main) {
                     coordinateResultCompletion(cardAssociationId)
                     tracker.trackEvent(
                         SuccessTrack(
-                            model.truncCardNumber.substring(0..5),
+                            model.bin,
                             model.issuerId,
                             model.paymentMethodId,
                             model.paymentMethodType
@@ -176,42 +168,12 @@ internal class CardFormWebViewModel(
         } ?: sendCardResult(cardAssociationId)
     }
 
-    private suspend fun getCardToken(model: TokenizeAssociationModel) = run {
-        tokenizeWebCardUseCase
-            .execute(
-                TokenizeWebCardParam(
-                    model.cardNumberId,
-                    model.truncCardNumber,
-                    userFullName,
-                    userIdentificationNumber,
-                    userIdentificationType,
-                    model.expirationMonth,
-                    model.expirationYear,
-                    model.cardNumberLength
-                )
-            )
-            .getOrElse { throwable ->
-                tracker.trackEvent(
-                    ErrorTrack(
-                        TrackApiSteps.TOKEN.getType(),
-                        throwable.localizedMessage.orEmpty()
-                    )
-                )
-                flowRetryProvider.setRetryFunction {
-                    showProgressBackScreen()
-                    tokenizeAndAssociateCard(model)
-                }
-                showErrorState()
-            }
-    }
-
     private suspend fun getCardAssociationId(
-        cardTokenId: String,
         model: TokenizeAssociationModel
     ) = run {
         associatedCardUseCase.execute(
             AssociatedCardParam(
-                cardTokenId,
+                model.cardTokenId,
                 model.paymentMethodId,
                 model.paymentMethodType,
                 model.issuerId
@@ -225,7 +187,7 @@ internal class CardFormWebViewModel(
             )
             flowRetryProvider.setRetryFunction {
                 showProgressBackScreen()
-                tokenizeAndAssociateCard(model)
+                associateCard(model)
             }
             showErrorState()
         }
@@ -233,6 +195,10 @@ internal class CardFormWebViewModel(
 
     private fun sendCardResult(cardId: String) {
         liveDataProvider.cardResultMutableLiveData.value = cardId
+    }
+
+    private fun showErrorState() {
+        liveDataProvider.webUiStateLiveData.postValue(WebUiState.WebError)
     }
 
     fun retry() {
@@ -245,10 +211,6 @@ internal class CardFormWebViewModel(
 
     fun finishProcessAssociationCard() {
         liveDataProvider.finishAssociationCardMutableLiveData.value = Unit
-    }
-
-    fun showErrorState() {
-        liveDataProvider.webUiStateLiveData.postValue(WebUiState.WebError)
     }
 
     fun showWebViewScreen() {

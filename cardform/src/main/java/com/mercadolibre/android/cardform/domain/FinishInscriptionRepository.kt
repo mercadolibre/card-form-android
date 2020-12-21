@@ -7,13 +7,9 @@ internal interface FinishInscriptionRepository {
 }
 
 data class FinishInscriptionBusinessModel(
-    val cardNumberId: String,
-    val lastFourDigits: String,
+    val cardTokenId: String,
     val firstSixDigits: String,
-    val cardNumberLength: Int,
     val issuerId: Int,
     val paymentMethodId: String,
-    val paymentMethodType: String,
-    val expirationMonth: Int,
-    val expirationYear: Int
+    val paymentMethodType: String
 )
