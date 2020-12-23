@@ -1,5 +1,6 @@
 package com.mercadolibre.android.cardform.di.module
 
+import com.mercadolibre.android.cardform.data.mapper.FinishInscriptionBodyMapper
 import com.mercadolibre.android.cardform.data.repository.*
 import com.mercadolibre.android.cardform.data.service.CardAssociationService
 import com.mercadolibre.android.cardform.data.service.CardService
@@ -36,6 +37,7 @@ internal class RepositoryModule(
     val finishInscriptionRepository by lazy {
         FinishInscriptionRepositoryImpl(
             accessToken,
+            FinishInscriptionBodyMapper(siteId),
             retrofit.create(FinishInscriptionService::class.java)
         )
     }

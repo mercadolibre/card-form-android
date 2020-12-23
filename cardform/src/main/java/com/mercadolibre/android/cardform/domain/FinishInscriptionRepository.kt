@@ -3,7 +3,7 @@ package com.mercadolibre.android.cardform.domain
 import com.mercadolibre.android.cardform.base.ResponseCallback
 
 internal interface FinishInscriptionRepository {
-    suspend fun getFinishInscriptionData(token: String): ResponseCallback<FinishInscriptionBusinessModel>
+    suspend fun getFinishInscriptionData(param: FinishInscriptionParam): ResponseCallback<FinishInscriptionBusinessModel>
 }
 
 data class FinishInscriptionBusinessModel(

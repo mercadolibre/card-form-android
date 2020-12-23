@@ -5,9 +5,9 @@ import com.mercadolibre.android.cardform.base.map
 
 internal class FinishInscriptionUseCase(
     private val finishInscriptionRepository: FinishInscriptionRepository
-) : UseCase<String, FinishInscriptionModel>() {
+) : UseCase<FinishInscriptionParam, FinishInscriptionModel>() {
 
-    override suspend fun doExecute(param: String) =
+    override suspend fun doExecute(param: FinishInscriptionParam) =
         finishInscriptionRepository.getFinishInscriptionData(param).map {
             FinishInscriptionModel(
                 it.cardTokenId,
@@ -18,6 +18,13 @@ internal class FinishInscriptionUseCase(
             )
         }
 }
+
+data class FinishInscriptionParam(
+    val token: String,
+    val userName: String,
+    val identificationNumber: String?,
+    val identificationType: String?
+)
 
 data class FinishInscriptionModel(
     val cardTokenId: String,

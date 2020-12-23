@@ -114,7 +114,13 @@ internal class CardFormWebViewModel(
     }
 
     fun finishInscription() {
-        finishInscriptionUseCase.execute(tokenData,
+        finishInscriptionUseCase.execute(
+            FinishInscriptionParam(
+                tokenData,
+                userFullName,
+                userIdentificationNumber,
+                userIdentificationType
+            ),
             success = {
                 associateCard(
                     TokenizeAssociationModel(
