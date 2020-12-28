@@ -18,6 +18,7 @@ internal class Dependencies {
         private set
     var behaviourModule: BehaviourModule? = null
         private set
+    var serviceModule: ServiceModule? = null
 
     var trackerModule: TrackerModule? = null
 
@@ -36,12 +37,14 @@ internal class Dependencies {
             cardForm.sessionId,
             behaviourModule!!.trackerBehaviour
         )
+        serviceModule = cardForm.cardFormIntent?.let { ServiceModule(context, it) }
         viewModelModule = ViewModelModule(
             context,
             useCaseModule!!,
             repositoryModule!!,
             behaviourModule!!,
-            trackerModule!!
+            trackerModule!!,
+            serviceModule
         )
     }
 
@@ -52,6 +55,7 @@ internal class Dependencies {
         localPreferences = null
         behaviourModule = null
         trackerModule = null
+        serviceModule = null
     }
 
     companion object {

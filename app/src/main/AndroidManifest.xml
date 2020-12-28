@@ -26,6 +26,8 @@
             android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="adjustResize"
             />
+
+        <service android:name="com.mercadolibre.android.example.SampleService"/>
     </application>
 
 </manifest>

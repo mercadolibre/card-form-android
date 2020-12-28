@@ -12,7 +12,8 @@ internal class ViewModelModule(
     useCaseModule: UseCaseModule,
     repositoryModule: RepositoryModule,
     behaviourModule: BehaviourModule,
-    trackerModule: TrackerModule
+    trackerModule: TrackerModule,
+    serviceModule: ServiceModule?
 ) {
 
     private val factory = ViewModelFactory(
@@ -20,7 +21,8 @@ internal class ViewModelModule(
         repositoryModule,
         behaviourModule,
         Device(context),
-        trackerModule
+        trackerModule,
+        serviceModule
     )
 
     fun <T : ViewModel?> get(fragment: Fragment, modelClass: Class<T>): T =

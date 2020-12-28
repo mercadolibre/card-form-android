@@ -5,13 +5,15 @@ import androidx.lifecycle.ViewModelProvider
 import com.mercadolibre.android.cardform.data.model.esc.Device
 import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardFormWebViewModel
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
+import com.mercadolibre.android.cardform.service.CardFormServiceManager
 
 internal class ViewModelFactory(
     private val useCaseModule: UseCaseModule,
     private val repositoryModule: RepositoryModule,
     private val behaviourModule: BehaviourModule,
     private val device: Device,
-    private val trackerModule: TrackerModule
+    private val trackerModule: TrackerModule,
+    private val serviceModule: ServiceModule?
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
@@ -33,7 +35,8 @@ internal class ViewModelFactory(
                         useCaseModule.finishInscriptionUseCase,
                         useCaseModule.tokenizeWebCardUseCase,
                         useCaseModule.cardAssociationUseCase,
-                        trackerModule.tracker
+                        trackerModule.tracker,
+                        serviceModule?.cardFormServiceManager
                     )
                 }
                 else -> {

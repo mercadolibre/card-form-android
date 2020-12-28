@@ -96,6 +96,15 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
         outState.putParcelable(WEB_VIEW_DATA_EXTRA, webViewData)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (android.os.Build.VERSION.SDK_INT >= 21)
+            CookieManager.getInstance().removeAllCookies(null);
+        else
+            CookieManager.getInstance().removeAllCookie();
+        webView.clearCache(true);
+    }
+
     companion object {
         const val TAG = "web_view"
         fun newInstance() = CardFormWebViewFragment()

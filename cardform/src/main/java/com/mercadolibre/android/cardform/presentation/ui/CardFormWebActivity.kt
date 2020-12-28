@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.mercadolibre.android.cardform.CARD_FORM_EXTRA
 import com.mercadolibre.android.cardform.CardForm
+import com.mercadolibre.android.cardform.CardForm.Companion.RESULT_CARD_ID_KEY
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.di.Dependencies
 import com.mercadolibre.android.cardform.di.viewModel
@@ -22,6 +23,8 @@ import com.mercadolibre.android.cardform.presentation.model.ScreenState
 import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardFormWebViewModel
 import com.mercadolibre.android.cardform.internal.CardFormWeb
 import com.mercadolibre.android.cardform.presentation.utils.ViewUtils
+
+private const val SUCCESS_RETURN_DELAY = 1000L
 
 internal class CardFormWebActivity : AppCompatActivity() {
 
@@ -83,17 +86,18 @@ internal class CardFormWebActivity : AppCompatActivity() {
                 }
             }
 
-            canGoBackViewLiveData.nonNullObserve(this@CardFormWebActivity) {
-                canGoBack = it
+            cardResultLiveData.nonNullObserve(this@CardFormWebActivity) { cardId ->
+                setResult(Activity.RESULT_OK, Intent().putExtra(RESULT_CARD_ID_KEY, cardId))
+                finishProcessAssociationCard()
             }
 
-            cardResultLiveData.nonNullObserve(this@CardFormWebActivity) { cardId ->
+            finishAssociationCardLiveData.nonNullObserve(this@CardFormWebActivity) {
                 showSuccessState()
-                cardFormWebContainer.postDelayed({
-                    val resultIntent = Intent().putExtra(CardForm.RESULT_CARD_ID_KEY, cardId)
-                    setResult(Activity.RESULT_OK, resultIntent)
-                    finish()
-                }, 1000)
+                cardFormWebContainer.postDelayed({ finish() }, SUCCESS_RETURN_DELAY)
+            }
+
+            canGoBackViewLiveData.nonNullObserve(this@CardFormWebActivity) {
+                canGoBack = it
             }
         }
     }
@@ -140,6 +144,11 @@ internal class CardFormWebActivity : AppCompatActivity() {
         fragment = fragment ?: let { CardFormWebViewFragment.newInstance() }
 
         return (fragment to CardFormWebViewFragment.TAG)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Dependencies.instance.clean()
     }
 
     companion object {
