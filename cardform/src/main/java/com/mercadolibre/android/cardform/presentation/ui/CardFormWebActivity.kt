@@ -24,7 +24,7 @@ import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardForm
 import com.mercadolibre.android.cardform.internal.CardFormWeb
 import com.mercadolibre.android.cardform.presentation.utils.ViewUtils
 
-private const val SUCCESS_RETURN_DELAY = 2000L
+private const val SUCCESS_RETURN_DELAY = 1000L
 
 internal class CardFormWebActivity : AppCompatActivity() {
 
