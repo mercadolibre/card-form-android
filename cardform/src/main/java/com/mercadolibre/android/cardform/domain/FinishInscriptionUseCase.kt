@@ -20,7 +20,7 @@ internal class FinishInscriptionUseCase(
 }
 
 data class FinishInscriptionParam(
-    val token: String,
+    val tbkToken: String,
     val userName: String,
     val identificationNumber: String?,
     val identificationType: String?

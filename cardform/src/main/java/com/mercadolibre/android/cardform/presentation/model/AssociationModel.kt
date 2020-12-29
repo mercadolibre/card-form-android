@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class TokenizeAssociationModel(
+data class AssociationModel(
     val cardTokenId: String,
     val bin: String,
     val issuerId: Int,

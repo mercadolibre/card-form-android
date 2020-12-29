@@ -9,7 +9,7 @@ import com.mercadolibre.android.cardform.domain.*
 import com.mercadolibre.android.cardform.domain.FinishInscriptionUseCase
 import com.mercadolibre.android.cardform.domain.InscriptionUseCase
 import com.mercadolibre.android.cardform.presentation.model.ScreenState
-import com.mercadolibre.android.cardform.presentation.model.TokenizeAssociationModel
+import com.mercadolibre.android.cardform.presentation.model.AssociationModel
 import com.mercadolibre.android.cardform.presentation.model.WebUiState
 import com.mercadolibre.android.cardform.service.CardFormServiceManager
 import com.mercadolibre.android.cardform.tracks.CardFormTracker
@@ -123,7 +123,7 @@ internal class CardFormWebViewModel(
             ),
             success = {
                 associateCard(
-                    TokenizeAssociationModel(
+                    AssociationModel(
                         it.cardTokenId,
                         it.bin,
                         it.issuerId,
@@ -147,7 +147,7 @@ internal class CardFormWebViewModel(
             })
     }
 
-    private fun associateCard(model: TokenizeAssociationModel) {
+    private fun associateCard(model: AssociationModel) {
         CoroutineScope(contextProvider.Default).launch {
             getCardAssociationId(model)?.let { cardAssociationId ->
                 withContext(Dispatchers.Main) {
@@ -175,7 +175,7 @@ internal class CardFormWebViewModel(
     }
 
     private suspend fun getCardAssociationId(
-        model: TokenizeAssociationModel
+        model: AssociationModel
     ) = run {
         associatedCardUseCase.execute(
             AssociatedCardParam(

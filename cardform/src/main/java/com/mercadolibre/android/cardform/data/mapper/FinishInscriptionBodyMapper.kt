@@ -8,11 +8,11 @@ import com.mercadolibre.android.cardform.domain.FinishInscriptionParam
 
 internal class FinishInscriptionBodyMapper(
     private val siteId: String
-): Mapper<FinishInscriptionBody, FinishInscriptionParam> {
+) : Mapper<FinishInscriptionBody, FinishInscriptionParam> {
 
     override fun map(model: FinishInscriptionParam) = FinishInscriptionBody(
         siteId,
-        model.token,
+        model.tbkToken,
         CardHolder(
             IdentificationBody(
                 model.identificationNumber,
