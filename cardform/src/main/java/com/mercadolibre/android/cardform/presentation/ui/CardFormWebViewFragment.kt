@@ -71,7 +71,7 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
             }
             webView.webViewClient = webViewClient
 
-            webViewClient.addCardFormWebViewListener(object : CardFormWebViewListener {
+            webViewClient.setCardFormWebViewListener(object : CardFormWebViewListener {
                 val uriWebUrl = URI(webUrl).path
                 override fun onPageFinished(url: String?) {
                     if (URI(url).path == uriWebUrl) {

@@ -25,7 +25,6 @@ import com.mercadolibre.android.cardform.presentation.ui.ErrorUtil
 import com.mercadolibre.android.cardform.presentation.ui.formentry.FormType
 import com.mercadolibre.android.cardform.tracks.Tracker
 import com.mercadolibre.android.cardform.tracks.model.TrackApiSteps
-import com.mercadolibre.android.cardform.tracks.model.TrackSteps
 import com.mercadolibre.android.cardform.tracks.model.bin.*
 import com.mercadolibre.android.cardform.tracks.model.flow.*
 import com.mercadopago.android.px.addons.ESCManagerBehaviour

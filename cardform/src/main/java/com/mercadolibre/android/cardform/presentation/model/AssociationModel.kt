@@ -4,12 +4,9 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class TokenizeAssociationModel(
-    val cardNumberId: String,
-    val truncCardNumber: String,
-    val expirationMonth: Int,
-    val expirationYear: Int,
-    val cardNumberLength: Int,
+data class AssociationModel(
+    val cardTokenId: String,
+    val bin: String,
     val issuerId: Int,
     val paymentMethodId: String,
     val paymentMethodType: String

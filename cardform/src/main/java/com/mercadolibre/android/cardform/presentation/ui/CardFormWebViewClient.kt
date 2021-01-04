@@ -54,7 +54,7 @@ internal class CardFormWebViewClient: WebViewClient() {
         webViewListener.onPageError(error?.url, error?.toString().orEmpty())
     }
 
-    fun addCardFormWebViewListener(webViewListener: CardFormWebViewListener) {
+    fun setCardFormWebViewListener(webViewListener: CardFormWebViewListener) {
         this.webViewListener = webViewListener
     }
 }

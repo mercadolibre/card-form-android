@@ -33,7 +33,6 @@ internal class ViewModelFactory(
                     CardFormWebViewModel(
                         useCaseModule.inscriptionUseCase,
                         useCaseModule.finishInscriptionUseCase,
-                        useCaseModule.tokenizeWebCardUseCase,
                         useCaseModule.cardAssociationUseCase,
                         trackerModule.tracker,
                         serviceModule?.cardFormServiceManager
