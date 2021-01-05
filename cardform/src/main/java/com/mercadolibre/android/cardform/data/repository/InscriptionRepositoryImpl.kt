@@ -28,8 +28,8 @@ internal class InscriptionRepositoryImpl(
                     it.redirectUrl,
                     it.user.firstName,
                     it.user.lastName,
-                    it.user.identifier.number,
-                    it.user.identifier.type
+                    it.user.identifier?.number,
+                    it.user.identifier?.type
                 )
             }.fold(::Success, ::Failure)
         }
