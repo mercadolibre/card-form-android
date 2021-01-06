@@ -1,3 +1,7 @@
+## VERSION 1.6.0
+_06_01_2021_
+- New flow for debit card in chile
+
 ## VERSION 1.5.2
 _21_10_2020_
 - Adjusted status bar color again.
