@@ -5,15 +5,18 @@ import android.content.Context
 import android.os.Bundle
 import com.mercadolibre.android.cardform.internal.LifecycleListener
 import com.mercadolibre.android.cardform.base.BaseViewModel
+import com.mercadolibre.android.cardform.base.getOrElse
 import com.mercadolibre.android.cardform.data.model.esc.Device
 import com.mercadolibre.android.cardform.data.model.response.CardUi
 import com.mercadolibre.android.cardform.data.model.response.Issuer
 import com.mercadolibre.android.cardform.data.model.response.PaymentMethod
 import com.mercadolibre.android.cardform.data.model.response.RegisterCard
 import com.mercadolibre.android.cardform.data.model.response.*
-import com.mercadolibre.android.cardform.data.repository.CardAssociationRepository
 import com.mercadolibre.android.cardform.data.repository.CardRepository
-import com.mercadolibre.android.cardform.data.repository.TokenizeRepository
+import com.mercadolibre.android.cardform.domain.AssociatedCardParam
+import com.mercadolibre.android.cardform.domain.AssociatedCardUseCase
+import com.mercadolibre.android.cardform.domain.CardTokenModel
+import com.mercadolibre.android.cardform.domain.TokenizeUseCase
 import com.mercadolibre.android.cardform.presentation.extensions.hasConnection
 import com.mercadolibre.android.cardform.presentation.mapper.*
 import com.mercadolibre.android.cardform.presentation.model.*
@@ -28,12 +31,13 @@ import com.mercadopago.android.px.addons.ESCManagerBehaviour
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.UnknownHostException
 
 internal class InputFormViewModel(
     private val cardRepository: CardRepository,
-    private val cardTokenRepository: TokenizeRepository,
-    private val cardAssociationRepository: CardAssociationRepository,
+    private val tokenizeUseCase: TokenizeUseCase,
+    private val associatedCardUseCase: AssociatedCardUseCase,
     private val escManager: ESCManagerBehaviour,
     private val device: Device,
     val tracker: Tracker
@@ -121,7 +125,7 @@ internal class InputFormViewModel(
     fun retryFetchCard(context: Context?) {
         if (context.hasConnection()) {
             stateUiLiveData.value = UiLoading
-            CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(contextProvider.IO).launch {
                 try {
                     cardRepository.getCardInfo(binValidator.bin!!)?.let {
                         loadRegisterCard(it)
@@ -157,7 +161,7 @@ internal class InputFormViewModel(
     }
 
     private fun fetchCard(bin: String) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(contextProvider.IO).launch {
             try {
                 cardRepository.getCardInfo(bin)?.let {
                     loadRegisterCard(it)
@@ -219,64 +223,70 @@ internal class InputFormViewModel(
         tokenizeAndAddNewCard()
     }
 
-    private fun tokenizeAndAddNewCard() {
-        CoroutineScope(Dispatchers.IO).launch {
-            var cardToken: CardToken? = null
-            try {
-                cardToken =
-                    cardTokenRepository.tokenizeCard(CardInfoMapper(device).map(cardStepInfo))
-            } catch (e: Exception) {
-                e.printStackTrace()
-                tracker.trackEvent(ErrorTrack(TrackApiSteps.TOKEN.getType(), e.message.orEmpty()))
-                stateUiLiveData.postValue(ErrorUtil.createError(e))
-            }
-
-            try {
-                if (cardToken != null) {
-                    val cardAssociated = cardAssociationRepository
-                        .associateCard(
-                            CardAssociationMapper.map(
-                                CardAssociationMapper.Model(
-                                    cardToken.id,
-                                    paymentMethod!!,
-                                    issuer!!.id
-                                )
-                            )
-                        )
-                    if (cardAssociated != null) {
-                        if (escEnabled) {
-                            escManager.saveESCWith(cardAssociated.id, cardToken.esc)
-                        }
-                        val onSuccess = {
-                            stateUiLiveData.postValue(UiResult.CardResult(cardAssociated.id))
-                        }
-                        lifecycleListener?.onCardAdded(
-                            cardAssociated.id,
-                            object : LifecycleListener.Callback {
-                                override fun onSuccess() {
-                                    onSuccess()
-                                }
-
-                                override fun onError() {
-                                    sendGenericError()
-                                }
-                            }) ?: onSuccess()
-                    } else {
-                        sendGenericError()
-                    }
-                } else {
-                    sendGenericError()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                tracker.trackEvent(
-                    ErrorTrack(
-                        TrackApiSteps.ASSOCIATION.getType(),
-                        e.message.orEmpty()
-                    )
+    private suspend fun getCardToken() = tokenizeUseCase
+        .execute(CardInfoMapper(device).map(cardStepInfo))
+        .getOrElse { throwable ->
+            tracker.trackEvent(
+                ErrorTrack(
+                    TrackApiSteps.TOKEN.getType(),
+                    throwable.message.orEmpty()
                 )
-                stateUiLiveData.postValue(ErrorUtil.createError(e))
-            }
+            )
+            stateUiLiveData.postValue(ErrorUtil.createError(throwable))
+        }
+
+    private suspend fun getCardAssociationId(cardTokenId: String) = associatedCardUseCase
+        .execute(AssociatedCardParam(
+            cardTokenId,
+            paymentMethod!!.paymentMethodId,
+            paymentMethod!!.paymentTypeId,
+            issuer!!.id
+        ))
+        .getOrElse { throwable ->
+            tracker.trackEvent(
+                ErrorTrack(
+                    TrackApiSteps.ASSOCIATION.getType(),
+                    throwable.message.orEmpty()
+                )
+            )
+            stateUiLiveData.postValue(ErrorUtil.createError(throwable))
+        }
+
+    private fun tokenizeAndAddNewCard() {
+        CoroutineScope(contextProvider.Default).launch {
+            lateinit var cardTokenModel: CardTokenModel
+            getCardToken()?.let {
+                cardTokenModel = it
+                getCardAssociationId(cardTokenModel.id)
+            }?.also { cardAssociationId ->
+
+                if (escEnabled) {
+                    escManager.saveESCWith(cardAssociationId, cardTokenModel.esc)
+                }
+                val onSuccess = {
+                    tracker.trackEvent(SuccessTrack(
+                        cardStepInfo.cardNumber.substring(0..5),
+                        issuer?.id ?: 0,
+                        paymentMethod?.paymentMethodId!!,
+                        paymentMethod?.paymentTypeId!!
+                    ))
+                    stateUiLiveData.postValue(UiResult.CardResult(cardAssociationId))
+                }
+
+                withContext(Dispatchers.Main) {
+                    lifecycleListener?.onCardAdded(
+                        cardAssociationId,
+                        object : LifecycleListener.Callback {
+                            override fun onSuccess() {
+                                onSuccess()
+                            }
+
+                            override fun onError() {
+                                sendGenericError()
+                            }
+                        }) ?: onSuccess()
+                }
+            } ?: sendGenericError()
         }
     }
 
@@ -285,7 +295,7 @@ internal class InputFormViewModel(
     }
 
     private fun loadInputData(registerCard: RegisterCard) {
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(contextProvider.Default).launch {
             registerCard.fieldsSetting.forEach { setting ->
 
                 when (setting.name) {
@@ -310,6 +320,14 @@ internal class InputFormViewModel(
                 }
             }
         }
+    }
+
+    fun trackInit() {
+        tracker.trackEvent(InitTrack())
+    }
+
+    fun trackBack() {
+        tracker.trackEvent(BackTrack())
     }
 
     companion object {

@@ -1,33 +1,36 @@
 package com.mercadolibre.android.cardform.data.repository
 
-import com.mercadolibre.android.cardform.BuildConfig
-import com.mercadolibre.android.cardform.data.model.response.AssociatedCard
+import com.mercadolibre.android.cardform.base.CoroutineContextProvider
+import com.mercadolibre.android.cardform.base.Response.Failure
+import com.mercadolibre.android.cardform.base.Response.Success
+import com.mercadolibre.android.cardform.base.resolveRetrofitResponse
+import com.mercadolibre.android.cardform.data.model.body.*
 import com.mercadolibre.android.cardform.data.model.body.AssociatedCardBody
+import com.mercadolibre.android.cardform.data.model.body.PaymentMethodBody
 import com.mercadolibre.android.cardform.data.service.CardAssociationService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.mercadolibre.android.cardform.domain.AssociatedCardParam
 import kotlinx.coroutines.withContext
-import org.json.JSONObject
-import java.io.IOException
 
-internal class CardAssociationRepositoryImpl(private val associationService: CardAssociationService,
-                                    private val accessToken: String) : CardAssociationRepository {
-    override suspend fun associateCard(associatedCardBody: AssociatedCardBody): AssociatedCard? {
-        return withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-            try {
-                with(associationService.associateCardAsync(BuildConfig.API_ENVIRONMENT,
-                    accessToken, associatedCardBody)) {
-                    if (isSuccessful) {
-                        body()
-                    } else {
-                        //https://github.com/square/retrofit/issues/3255
-                        val jsonError = JSONObject(errorBody()?.string())
-                        throw IOException(jsonError.getString("message"))
-                    }
-                }
-            } catch (e: Exception) {
-                throw e
-            }
+internal class CardAssociationRepositoryImpl(
+    private val associationService: CardAssociationService,
+    private val accessToken: String,
+    private val contextProvider: CoroutineContextProvider = CoroutineContextProvider()
+) : CardAssociationRepository {
+
+    override suspend fun associateCard(param: AssociatedCardParam) =
+        withContext(contextProvider.IO) {
+            runCatching {
+                associationService.associateCard(
+                    accessToken,
+                    AssociatedCardBody(
+                        param.cardTokenId,
+                        PaymentMethodBody(
+                            param.paymentMethodId,
+                            param.paymentMethodType
+                        ),
+                        IssuerBody(param.issuerId.toString())
+                    )
+                ).resolveRetrofitResponse()
+            }.fold(::Success, ::Failure)
         }
-    }
 }

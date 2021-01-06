@@ -1,8 +1,11 @@
 package com.mercadolibre.android.cardform.presentation.ui
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.mercadolibre.android.cardform.CARD_FORM_EXTRA
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.internal.CardFormWithFragment
@@ -15,7 +18,7 @@ internal class CardFormActivity : AppCompatActivity() {
         if (supportFragmentManager.findFragmentByTag(CardFormWithFragment.TAG) == null) {
             supportFragmentManager.beginTransaction().run {
                 replace(R.id.container,
-                    CardFormFragment.newInstance(false, intent.getParcelableExtra(EXTRA_CARD_FORM)),
+                    CardFormFragment.newInstance(false, intent.getParcelableExtra(CARD_FORM_EXTRA)),
                     CardFormWithFragment.TAG)
                 commitAllowingStateLoss()
             }
@@ -31,12 +34,20 @@ internal class CardFormActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val EXTRA_CARD_FORM = "card_form"
+
+        private fun getIntent(context: Context, cardForm: CardForm) =
+            Intent(context, CardFormActivity::class.java).also {
+                it.putExtra(CARD_FORM_EXTRA, cardForm)
+            }
+
+        fun start(fragment: Fragment, requestCode: Int, cardForm: CardForm) {
+            fragment.context?.let {
+                fragment.startActivityForResult(getIntent(it, cardForm), requestCode)
+            }
+        }
 
         fun start(activity: AppCompatActivity, requestCode: Int, cardForm: CardForm) {
-            val intent = Intent(activity, CardFormActivity::class.java)
-            intent.putExtra(EXTRA_CARD_FORM, cardForm)
-            activity.startActivityForResult(intent, requestCode)
+            activity.startActivityForResult(getIntent(activity, cardForm), requestCode)
         }
     }
 }

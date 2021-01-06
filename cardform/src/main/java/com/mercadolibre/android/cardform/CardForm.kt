@@ -1,11 +1,17 @@
 package com.mercadolibre.android.cardform
 
+import android.content.Intent
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.mercadolibre.android.cardform.presentation.ui.CardFormActivity
 import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationController
+import com.mercadolibre.android.cardform.service.CardFormIntent
+import com.mercadolibre.android.cardform.service.CardFormService
 import java.util.*
+
+internal const val CARD_FORM_EXTRA = "card_form"
 
 open class CardForm : Parcelable {
 
@@ -17,6 +23,7 @@ open class CardForm : Parcelable {
         protected set
     val sessionId: String
     val flowId: String
+    val cardFormIntent: Intent?
 
     protected constructor(builder: Builder) {
         siteId = builder.siteId
@@ -25,6 +32,7 @@ open class CardForm : Parcelable {
         excludedTypes = builder.excludedTypes
         flowId = builder.flowId
         sessionId = builder.sessionId ?: UUID.randomUUID().toString()
+        cardFormIntent = builder.cardFormIntent
     }
 
     protected constructor(parcel: Parcel) {
@@ -34,13 +42,24 @@ open class CardForm : Parcelable {
         excludedTypes = parcel.createStringArrayList()
         flowId = parcel.readString()!!
         sessionId = parcel.readString()!!
+        cardFormIntent = parcel.readParcelable(CardFormIntent::class.java.classLoader)
     }
 
-    fun start(activity: AppCompatActivity, requestCode: Int) {
+    open fun start(activity: AppCompatActivity, requestCode: Int) {
         this.requestCode = requestCode
         FragmentNavigationController.reset()
         CardFormActivity.start(activity, requestCode, this)
         activity.overridePendingTransition(
+            R.anim.slide_right_to_left_in,
+            R.anim.slide_right_to_left_out
+        )
+    }
+
+    open fun start(fragment: Fragment, requestCode: Int) {
+        this.requestCode = requestCode
+        FragmentNavigationController.reset()
+        CardFormActivity.start(fragment, requestCode, this)
+        fragment.activity?.overridePendingTransition(
             R.anim.slide_right_to_left_in,
             R.anim.slide_right_to_left_out
         )
@@ -59,11 +78,16 @@ open class CardForm : Parcelable {
         var sessionId: String? = null
             private set
 
+        var cardFormIntent: Intent? = null
+            private set
+
         open fun setExcludedTypes(excludedTypes: List<String>) = apply {
             this.excludedTypes = excludedTypes
         }
 
         open fun setSessionId(sessionId: String) = apply { this.sessionId = sessionId }
+
+        fun <T: CardFormService> setCardFormHandler(handlerIntent: CardFormIntent<T>) = apply { cardFormIntent = handlerIntent }
 
         protected fun setPublicKey(publicKey: String) = apply { this.publicKey = publicKey }
 
@@ -89,6 +113,7 @@ open class CardForm : Parcelable {
         parcel.writeStringList(excludedTypes)
         parcel.writeString(flowId)
         parcel.writeString(sessionId)
+        parcel.writeParcelable(cardFormIntent, flags)
     }
 
     override fun describeContents() = 0

@@ -14,9 +14,11 @@ import com.meli.android.carddrawer.configuration.DefaultCardConfiguration
 import com.meli.android.carddrawer.model.CardAnimationType
 import com.meli.android.carddrawer.model.CardDrawerView
 import com.meli.android.carddrawer.model.CardUI
+import com.mercadolibre.android.cardform.CARD_FORM_EXTRA
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.base.RootFragment
+import com.mercadolibre.android.cardform.di.viewModel
 import com.mercadolibre.android.cardform.presentation.extensions.*
 import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
 import com.mercadolibre.android.cardform.presentation.helpers.KeyboardHelper
@@ -25,8 +27,6 @@ import com.mercadolibre.android.cardform.presentation.model.StateUi.UiLoading
 import com.mercadolibre.android.cardform.presentation.ui.custom.ProgressFragment
 import com.mercadolibre.android.cardform.presentation.ui.formentry.FormType
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
-import com.mercadolibre.android.cardform.tracks.model.flow.InitTrack
-import com.mercadolibre.android.cardform.tracks.model.flow.SuccessTrack
 import kotlinx.android.synthetic.main.app_bar.*
 import kotlinx.android.synthetic.main.cf_card.*
 import kotlinx.android.synthetic.main.fragment_card_form.*
@@ -38,8 +38,8 @@ import kotlinx.android.synthetic.main.fragment_card_form.*
  */
 internal class CardFormFragment : RootFragment<InputFormViewModel>() {
 
-    override val viewModelClass = InputFormViewModel::class.java
     override val rootLayout = R.layout.fragment_card_form
+    override val viewModel: InputFormViewModel by viewModel()
 
     private var fromFragment = false
     private var requestCode = 0
@@ -52,7 +52,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
         super.onCreate(savedInstanceState)
         arguments?.apply {
             fromFragment = getBoolean(ARG_FROM_FRAGMENT, false)
-            requestCode = (getParcelable<CardForm>(ARG_CARD_FORM))!!.requestCode
+            requestCode = (getParcelable<CardForm>(CARD_FORM_EXTRA))!!.requestCode
         }
         defaultCardDrawerConfiguration = object : DefaultCardConfiguration(context!!) {
             override fun getNamePlaceHolder(): String {
@@ -96,7 +96,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
         cardDrawer = view.findViewById(R.id.cardDrawer)
 
         if (savedInstanceState == null) {
-            viewModel.tracker.trackEvent(InitTrack())
+            viewModel.trackInit()
             cardDrawer.show(object : DefaultCardConfiguration(context!!) {
                 override fun getNamePlaceHolder(): String {
                     return getString(R.string.cf_card_name_hint)
@@ -141,6 +141,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
             appBar.setOnBackListener {
                 KeyboardHelper.hideKeyboard(this@CardFormFragment)
                 postDelayed(100) {
+                    viewModel.trackBack()
                     onBackPressed()
                 }
             }
@@ -318,7 +319,6 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
                 setResult(resultCode, buildResultIntent(associatedCardId))
                 finish()
             }
-            viewModel.tracker.trackEvent(SuccessTrack())
         }
     }
 
@@ -348,7 +348,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
         fun newInstance(fromFragment: Boolean, cardForm: CardForm) = CardFormFragment().apply {
             arguments = Bundle().apply {
                 putBoolean(ARG_FROM_FRAGMENT, fromFragment)
-                putParcelable(ARG_CARD_FORM, cardForm)
+                putParcelable(CARD_FORM_EXTRA, cardForm)
             }
         }
     }

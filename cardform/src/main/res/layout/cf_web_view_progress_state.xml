@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:tint="@color/ui_components_android_color_accent"
+        android:src="@drawable/cf_web_view_icon_arrow_right"/>
+
+    <com.mercadolibre.android.andesui.progress.AndesProgressIndicatorIndeterminate
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:andesProgressTint="@color/ui_components_android_color_accent"
+        app:andesProgressStart="true"
+        app:andesProgressSize="xlarge"/>
+
+</FrameLayout>

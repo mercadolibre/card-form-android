@@ -7,6 +7,7 @@ import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.base.BaseFragment
+import com.mercadolibre.android.cardform.di.sharedViewModel
 import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationController
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
 
@@ -17,7 +18,7 @@ typealias MoveTo = ((position: Int) -> Unit)
  */
 
 internal abstract class InputFragment : BaseFragment<InputFormViewModel>() {
-    override val viewModelClass = InputFormViewModel::class.java
+    override val viewModel: InputFormViewModel by sharedViewModel { parentFragment!! }
     protected var isInputValid = false
     override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
         val parent = parentFragment

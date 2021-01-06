@@ -1,12 +1,14 @@
 package com.mercadolibre.android.cardform.di
 
-import androidx.fragment.app.Fragment
+import android.content.Context
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.di.module.*
 
 internal class Dependencies {
 
     var networkModule: NetworkModule? = null
+        private set
+    var useCaseModule: UseCaseModule? = null
         private set
     var repositoryModule: RepositoryModule? = null
         private set
@@ -16,30 +18,44 @@ internal class Dependencies {
         private set
     var behaviourModule: BehaviourModule? = null
         private set
+    var serviceModule: ServiceModule? = null
 
     var trackerModule: TrackerModule? = null
 
-    fun initialize(fragment: Fragment, cardForm: CardForm) {
-        val activity = fragment.activity!!
-        networkModule = NetworkModule(activity, cardForm.sessionId)
+    fun initialize(context: Context, cardForm: CardForm) {
+        networkModule = NetworkModule(context, cardForm.sessionId)
         behaviourModule = BehaviourModule(cardForm.sessionId)
-        repositoryModule = RepositoryModule(networkModule!!.retrofit, cardForm.accessToken!!,
-            cardForm.siteId, cardForm.excludedTypes)
-        localPreferences = LocalRepositoryModule(activity.applicationContext)
-        trackerModule = TrackerModule(cardForm.siteId,
+        repositoryModule = RepositoryModule(
+            networkModule!!.retrofit, cardForm.accessToken!!,
+            cardForm.siteId, cardForm.excludedTypes
+        )
+        useCaseModule = UseCaseModule(repositoryModule!!)
+        localPreferences = LocalRepositoryModule(context.applicationContext)
+        trackerModule = TrackerModule(
+            cardForm.siteId,
             cardForm.flowId,
             cardForm.sessionId,
-            behaviourModule!!.trackerBehaviour)
-        viewModelModule = ViewModelModule(fragment, repositoryModule!!, behaviourModule!!, trackerModule!!)
+            behaviourModule!!.trackerBehaviour
+        )
+        serviceModule = cardForm.cardFormIntent?.let { ServiceModule(context, it) }
+        viewModelModule = ViewModelModule(
+            context,
+            useCaseModule!!,
+            repositoryModule!!,
+            behaviourModule!!,
+            trackerModule!!,
+            serviceModule
+        )
     }
 
     fun clean() {
         networkModule = null
         repositoryModule = null
         viewModelModule = null
-        localPreferences =  null
+        localPreferences = null
         behaviourModule = null
         trackerModule = null
+        serviceModule = null
     }
 
     companion object {

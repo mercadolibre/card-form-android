@@ -15,4 +15,13 @@
     <string name="cf_retry">Try again</string>
     <string name="cf_complete_field">Complete this field</string>
     <string name="cf_label_back">back</string>
+    <string name="cf_web_view_platform_ml">Mercado Libre</string>
+    <string name="cf_web_view_platform_mp">Mercado Pago</string>
+    <string name="cf_web_view_back">Go back</string>
+    <string name="cf_web_view_retry">Try again</string>
+    <string name="cf_web_view_progress_start_title">Te estamos llevando al sitio de Webpay</string>
+    <string name="cf_web_view_progress_back_title">Te estamos llevando de vuelta a {0}</string>
+    <string name="cf_web_view_progress_description">En tu proxima compra podrás pagar usando la misma tarjeta sin tener que volver a cargarla.</string>
+    <string name="cf_web_view_progress_error_title">An error occurred</string>
+    <string name="cf_web_view_progress_error_description">Lo sentimos, no pudimos cargar tu tarjeta. \nPor favor intenta nuevamente.</string>
 </resources>
