@@ -1,5 +1,5 @@
 ## VERSION 1.6.0
-_6_01_2021_
+_06_01_2021_
 - New flow for debit card in chile
 
 ## VERSION 1.5.2
