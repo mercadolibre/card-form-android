@@ -16,11 +16,14 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.data.model.response.Issuer
+import com.mercadolibre.android.cardform.di.sharedViewModel
+import com.mercadolibre.android.cardform.internal.CardFormWithFragment
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.extensions.setAnimationListener
 import com.mercadolibre.android.cardform.presentation.extensions.setupForAccessibility
 import com.mercadolibre.android.cardform.presentation.helpers.KeyboardHelper
 import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationController
+import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
 import com.mercadolibre.android.cardform.tracks.model.issuers.IssuerCloseTrack
 import com.mercadolibre.android.cardform.tracks.model.issuers.IssuerSelectedTrack
 import com.mercadolibre.android.cardform.tracks.model.issuers.IssuersView
@@ -30,6 +33,7 @@ import kotlinx.android.synthetic.main.fragment_issuers.*
 
 internal class IssuersFragment : InputFragment() {
     override val rootLayout = R.layout.fragment_issuers
+    override val viewModel: InputFormViewModel by sharedViewModel { getViewModelFragment()!! }
 
     private lateinit var issuerAdapter: IssuerAdapter
     private var isIssuerSelected = false
@@ -194,6 +198,10 @@ internal class IssuersFragment : InputFragment() {
             }
         }
     }
+
+    private fun getViewModelFragment() = activity
+        ?.supportFragmentManager
+        ?.findFragmentByTag(CardFormWithFragment.TAG)
 
     companion object {
         private const val HEADER_TYPE = -2
