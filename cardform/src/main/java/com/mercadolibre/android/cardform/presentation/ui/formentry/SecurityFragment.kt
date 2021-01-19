@@ -225,6 +225,8 @@ internal class SecurityFragment : InputFragment() {
         viewModel.tracker.trackView(ExpirationSecurityView())
     }
 
+    override fun getSharedViewModelScope() = parentFragment!!
+
     companion object {
         private const val EXTRA_EXPIRATION_TEXT = "expiration_text"
         private const val EXTRA_CODE_TEXT = "code_text"

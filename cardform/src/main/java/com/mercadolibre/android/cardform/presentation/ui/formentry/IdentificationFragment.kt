@@ -248,6 +248,8 @@ internal class IdentificationFragment : InputFragment() {
         viewModel.tracker.trackView(IdentificationView(populate))
     }
 
+    override fun getSharedViewModelScope() = parentFragment!!
+
     companion object {
         private const val LAST_POSITION_EXTRA = "last_position"
         private const val TRACK_IDENTIFICATION_VIEW = "track_identification_view"

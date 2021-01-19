@@ -147,6 +147,8 @@ internal class CardNumberFragment : InputFragment() {
         viewModel.tracker.trackView(BinNumberView())
     }
 
+    override fun getSharedViewModelScope() = parentFragment!!
+
     override fun showError() {
         numberCardEditText.showError(if (!numberCardEditText.isComplete()) getString(R.string.cf_complete_field) else "")
     }
