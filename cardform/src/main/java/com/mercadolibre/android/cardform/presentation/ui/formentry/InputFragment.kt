@@ -1,5 +1,6 @@
 package com.mercadolibre.android.cardform.presentation.ui.formentry
 
+import android.content.ComponentCallbacks
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
@@ -18,7 +19,7 @@ typealias MoveTo = ((position: Int) -> Unit)
  */
 
 internal abstract class InputFragment : BaseFragment<InputFormViewModel>() {
-    override val viewModel: InputFormViewModel by sharedViewModel { parentFragment!! }
+    override val viewModel: InputFormViewModel by sharedViewModel { getSharedViewModelScope() }
     protected var isInputValid = false
     override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
         val parent = parentFragment
@@ -69,6 +70,7 @@ internal abstract class InputFragment : BaseFragment<InputFormViewModel>() {
     open fun getInputTag(): String = InputFragment::class.java.name
     open fun refreshData() = Unit
     abstract fun trackFragmentView()
+    abstract fun getSharedViewModelScope(): ComponentCallbacks
 
     companion object {
         private const val INPUT_VALID = "input_valid"

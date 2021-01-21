@@ -16,6 +16,7 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.data.model.response.Issuer
+import com.mercadolibre.android.cardform.internal.CardFormWithFragment
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.extensions.setAnimationListener
 import com.mercadolibre.android.cardform.presentation.extensions.setupForAccessibility
@@ -194,6 +195,10 @@ internal class IssuersFragment : InputFragment() {
             }
         }
     }
+
+    override fun getSharedViewModelScope() = activity
+        ?.supportFragmentManager
+        ?.findFragmentByTag(CardFormWithFragment.TAG)!!
 
     companion object {
         private const val HEADER_TYPE = -2

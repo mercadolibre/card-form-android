@@ -1,5 +1,6 @@
 package com.mercadolibre.android.cardform.presentation.ui.formentry
 
+import android.content.ComponentCallbacks
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
@@ -95,4 +96,6 @@ internal class CardNameFragment : InputFragment() {
     override fun trackFragmentView() {
         viewModel.tracker.trackView(NameView(populate))
     }
+
+    override fun getSharedViewModelScope() = parentFragment!!
 }
