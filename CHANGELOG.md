@@ -1,3 +1,7 @@
+## VERSION 1.6.1
+_21_01_2021_
+- Null pointer on view model in IssuerFragment
+
 ## VERSION 1.6.0
 _06_01_2021_
 - New flow for debit card in chile
