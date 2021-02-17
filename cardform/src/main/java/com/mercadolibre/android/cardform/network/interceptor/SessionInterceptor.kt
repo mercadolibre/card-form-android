@@ -16,6 +16,6 @@ internal class SessionInterceptor(private val sessionId: String): Interceptor {
     }
 
     companion object {
-        private const val SESSION_ID = "session-id"
+        private const val SESSION_ID = "X-Session-Id"
     }
 }
