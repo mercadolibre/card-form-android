@@ -1,3 +1,8 @@
+## VERSION 1.6.2
+_17_02_2021_
+- Change cache setting to default
+- Header session id fixed
+
 ## VERSION 1.6.1
 _21_01_2021_
 - Null pointer on view model in IssuerFragment
