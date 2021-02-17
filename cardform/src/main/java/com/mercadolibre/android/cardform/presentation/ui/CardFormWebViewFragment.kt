@@ -16,6 +16,7 @@ import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardForm
 import java.net.URI
 
 private const val WEB_VIEW_DATA_EXTRA = "web_view_data"
+private const val WEB_VIEW_SETTING_USER_AGENT = "NoIframe"
 
 internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
     override val rootLayout = R.layout.fragment_web_view
@@ -62,12 +63,12 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
             val webViewClient = CardFormWebViewClient()
             webView.settings.also { settings ->
                 settings.javaScriptEnabled = true
+                settings.userAgentString = settings.userAgentString+WEB_VIEW_SETTING_USER_AGENT
                 if (android.os.Build.VERSION.SDK_INT >= 21) {
                     CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true)
                 } else {
                     CookieManager.getInstance().setAcceptCookie(true)
                 }
-                settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
             }
             webView.webViewClient = webViewClient
 
