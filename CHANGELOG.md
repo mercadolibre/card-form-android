@@ -1,3 +1,7 @@
+## VERSION 1.7.0
+_25_02_2021_
+- Change MeliSnackbar for AndesSnackbar
+
 ## VERSION 1.6.2
 _17_02_2021_
 - Change cache setting to default
