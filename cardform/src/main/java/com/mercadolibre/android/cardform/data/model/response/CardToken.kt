@@ -19,5 +19,5 @@ internal data class CardToken(
     val requireEsc: Boolean,
     val securityCodeLength: Int,
     val status: String,
-    val esc: String
+    val esc: String?
 )
