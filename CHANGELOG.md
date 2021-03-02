@@ -1,3 +1,7 @@
+## VERSION 1.6.3
+_02_03_2021_
+- Card token model modified to support esc null, tokenize use case mapping fixed
+
 ## VERSION 1.6.2
 _17_02_2021_
 - Change cache setting to default
