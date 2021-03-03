@@ -1,6 +1,10 @@
 ## VERSION 1.7.0
-_25_02_2021_
+_3_03_2021_
 - Change MeliSnackbar for AndesSnackbar
+
+## VERSION 1.6.3
+_02_03_2021_
+- Card token model modified to support esc null, tokenize use case mapping fixed
 
 ## VERSION 1.6.2
 _17_02_2021_

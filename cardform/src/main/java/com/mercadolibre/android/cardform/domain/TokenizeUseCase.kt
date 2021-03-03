@@ -10,7 +10,7 @@ internal class TokenizeUseCase(
 ) : UseCase<CardInfoBody, CardTokenModel>() {
 
     override suspend fun doExecute(param: CardInfoBody) =
-        tokenizeRepository.tokenizeCard(param).map { CardTokenModel(it.id, it.esc) }
+        tokenizeRepository.tokenizeCard(param).map { CardTokenModel(it.id, it.esc.orEmpty()) }
 }
 
 data class CardTokenModel(
