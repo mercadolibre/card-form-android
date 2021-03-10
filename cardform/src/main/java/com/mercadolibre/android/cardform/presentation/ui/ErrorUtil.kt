@@ -1,13 +1,15 @@
 package com.mercadolibre.android.cardform.presentation.ui
 
 import android.annotation.SuppressLint
-import com.google.android.material.snackbar.Snackbar
 import android.view.View
+import com.mercadolibre.android.andesui.snackbar.AndesSnackbar
+import com.mercadolibre.android.andesui.snackbar.action.AndesSnackbarAction
+import com.mercadolibre.android.andesui.snackbar.duration.AndesSnackbarDuration
+import com.mercadolibre.android.andesui.snackbar.type.AndesSnackbarType
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.network.exceptions.CardFormException
 import com.mercadolibre.android.cardform.presentation.extensions.getStringOrEmpty
 import com.mercadolibre.android.cardform.presentation.model.UiError
-import com.mercadolibre.android.ui.widgets.MeliSnackbar
 import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -46,12 +48,12 @@ internal object ErrorUtil {
         } else {
             uiError.message
         }
-        MeliSnackbar
-            .make(
+        AndesSnackbar(
+                rootView.context,
                 rootView,
+                AndesSnackbarType.ERROR,
                 message,
-                Snackbar.LENGTH_LONG,
-                MeliSnackbar.SnackbarType.ERROR
-            ).apply { if (action != null) { setAction(R.string.cf_retry, action) } }.show()
+                AndesSnackbarDuration.LONG
+            ).apply { if (action != null) { AndesSnackbarAction(R.string.cf_retry.toString(), action) } }.show()
     }
 }
