@@ -12,7 +12,7 @@ import com.mercadolibre.android.cardform.service.CardFormService
 import java.util.*
 
 internal const val CARD_FORM_EXTRA = "card_form"
-internal const val OUT_ANIM_EXTRA = "out_anim"
+internal const val EXIT_ANIM_EXTRA = "exit_anim"
 
 open class CardForm : Parcelable {
 
@@ -56,10 +56,15 @@ open class CardForm : Parcelable {
         )
     }
 
-    open fun start(activity: AppCompatActivity, requestCode: Int, outAnim: Int?) {
+    open fun start(activity: AppCompatActivity, requestCode: Int, enterAnim: Int = R.anim.slide_right_to_left_in,
+                   exitAnim: Int = R.anim.slide_right_to_left_out) {
         this.requestCode = requestCode
         FragmentNavigationController.reset()
-        CardFormActivity.start(activity, requestCode, this, outAnim)
+        CardFormActivity.start(activity, requestCode, this, exitAnim)
+        activity.overridePendingTransition(
+            enterAnim,
+            exitAnim
+        )
     }
 
     open fun start(fragment: Fragment, requestCode: Int) {
@@ -94,7 +99,7 @@ open class CardForm : Parcelable {
 
         open fun setSessionId(sessionId: String) = apply { this.sessionId = sessionId }
 
-        fun <T: CardFormService> setCardFormHandler(handlerIntent: CardFormIntent<T>) = apply { cardFormIntent = handlerIntent }
+        fun <T : CardFormService> setCardFormHandler(handlerIntent: CardFormIntent<T>) = apply { cardFormIntent = handlerIntent }
 
         protected fun setPublicKey(publicKey: String) = apply { this.publicKey = publicKey }
 
