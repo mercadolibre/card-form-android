@@ -13,18 +13,14 @@ import com.mercadolibre.android.cardform.internal.CardFormWithFragment
 
 internal class CardFormActivity : AppCompatActivity() {
 
-
-    private var outAnim: Int = R.anim.slide_left_to_right_out
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card_form)
-        outAnim = intent.getIntExtra(OUT_ANIM_EXTRA, R.anim.slide_left_to_right_out)
         if (supportFragmentManager.findFragmentByTag(CardFormWithFragment.TAG) == null) {
             supportFragmentManager.beginTransaction().run {
                 replace(R.id.container,
                     CardFormFragment.newInstance(false, intent.getParcelableExtra(CARD_FORM_EXTRA),
-                        outAnim),
+                        intent.getIntExtra(OUT_ANIM_EXTRA, R.anim.slide_left_to_right_out)),
                     CardFormWithFragment.TAG)
                 commitAllowingStateLoss()
             }
