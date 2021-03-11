@@ -12,6 +12,7 @@ import com.mercadolibre.android.cardform.service.CardFormService
 import java.util.*
 
 internal const val CARD_FORM_EXTRA = "card_form"
+internal const val OUT_ANIM_EXTRA = "out_anim"
 
 open class CardForm : Parcelable {
 
@@ -48,11 +49,17 @@ open class CardForm : Parcelable {
     open fun start(activity: AppCompatActivity, requestCode: Int) {
         this.requestCode = requestCode
         FragmentNavigationController.reset()
-        CardFormActivity.start(activity, requestCode, this)
+        CardFormActivity.start(activity, requestCode, this, null)
         activity.overridePendingTransition(
             R.anim.slide_right_to_left_in,
             R.anim.slide_right_to_left_out
         )
+    }
+
+    open fun start(activity: AppCompatActivity, requestCode: Int, outAnim: Int?) {
+        this.requestCode = requestCode
+        FragmentNavigationController.reset()
+        CardFormActivity.start(activity, requestCode, this, outAnim)
     }
 
     open fun start(fragment: Fragment, requestCode: Int) {

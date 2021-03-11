@@ -16,6 +16,7 @@ import com.meli.android.carddrawer.model.CardDrawerView
 import com.meli.android.carddrawer.model.CardUI
 import com.mercadolibre.android.cardform.CARD_FORM_EXTRA
 import com.mercadolibre.android.cardform.CardForm
+import com.mercadolibre.android.cardform.OUT_ANIM_EXTRA
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.base.RootFragment
 import com.mercadolibre.android.cardform.di.viewModel
@@ -47,12 +48,14 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
     private var animationEnded = false
     private var progressFragment: ProgressFragment? = null
     private lateinit var cardDrawer: CardDrawerView
+    private var outAnim: Int = R.anim.slide_left_to_right_out
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.apply {
             fromFragment = getBoolean(ARG_FROM_FRAGMENT, false)
             requestCode = (getParcelable<CardForm>(CARD_FORM_EXTRA))!!.requestCode
+            outAnim = getInt(OUT_ANIM_EXTRA)
         }
         defaultCardDrawerConfiguration = object : DefaultCardConfiguration(context!!) {
             override fun getNamePlaceHolder(): String {
@@ -314,6 +317,10 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
             } else {
                 setResult(resultCode, buildResultIntent(associatedCardId))
                 finish()
+                overridePendingTransition(
+                    R.anim.slide_left_to_right_in,
+                    outAnim
+                )
             }
         }
     }
@@ -341,10 +348,11 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
          * @return A new instance of fragment CardFormFragment.
          */
 
-        fun newInstance(fromFragment: Boolean, cardForm: CardForm) = CardFormFragment().apply {
+        fun newInstance(fromFragment: Boolean, cardForm: CardForm, outAnim: Int) = CardFormFragment().apply {
             arguments = Bundle().apply {
                 putBoolean(ARG_FROM_FRAGMENT, fromFragment)
                 putParcelable(CARD_FORM_EXTRA, cardForm)
+                putInt(OUT_ANIM_EXTRA, outAnim)
             }
         }
     }
