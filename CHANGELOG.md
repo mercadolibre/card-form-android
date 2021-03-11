@@ -1,6 +1,7 @@
 ## VERSION 1.7.0
-_3_03_2021_
+_10_03_2021_
 - Change MeliSnackbar for AndesSnackbar
+- Soft keyboard behaviour fixed
 
 ## VERSION 1.6.3
 _02_03_2021_
