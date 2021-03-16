@@ -20,7 +20,7 @@ internal class CardFormActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction().run {
                 replace(R.id.container,
                     CardFormFragment.newInstance(false, intent.getParcelableExtra(CARD_FORM_EXTRA),
-                        intent.getIntExtra(EXIT_ANIM_EXTRA, R.anim.slide_left_to_right_out)),
+                        intent.getIntExtra(EXIT_ANIM_EXTRA, R.anim.slide_right_to_left_out)),
                     CardFormWithFragment.TAG)
                 commitAllowingStateLoss()
             }
@@ -43,9 +43,9 @@ internal class CardFormActivity : AppCompatActivity() {
                 it.putExtra(EXIT_ANIM_EXTRA, exitAnim)
             }
 
-        fun start(fragment: Fragment, requestCode: Int, cardForm: CardForm) {
+        fun start(fragment: Fragment, requestCode: Int, cardForm: CardForm, exitAnim: Int?) {
             fragment.context?.let {
-                fragment.startActivityForResult(getIntent(it, cardForm, null), requestCode)
+                fragment.startActivityForResult(getIntent(it, cardForm, exitAnim), requestCode)
             }
         }
 
