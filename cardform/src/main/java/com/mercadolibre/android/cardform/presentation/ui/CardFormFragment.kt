@@ -45,7 +45,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
     private var animationEnded = false
     private var progressFragment: ProgressFragment? = null
     private lateinit var cardDrawer: CardDrawerView
-    private var exitAnim: Int = R.anim.slide_left_to_right_out
+    private var exitAnim = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
