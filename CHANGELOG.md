@@ -1,3 +1,7 @@
+## VERSION 1.8.0
+_17_03_2021_
+- Added custom activity animation in start methods.
+
 ## VERSION 1.7.0
 _10_03_2021_
 - Change MeliSnackbar for AndesSnackbar
