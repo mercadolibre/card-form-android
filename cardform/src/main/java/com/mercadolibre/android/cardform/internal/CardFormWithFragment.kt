@@ -25,7 +25,8 @@ class CardFormWithFragment : CardForm {
             // Added from card form fragment
             replace(
                 containerId,
-                CardFormFragment.newInstance(true, this@CardFormWithFragment),
+                CardFormFragment.newInstance(true, this@CardFormWithFragment,
+                    R.anim.slide_right_to_left_out),
                 TAG
             )
 

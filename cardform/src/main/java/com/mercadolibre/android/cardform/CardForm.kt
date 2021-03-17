@@ -12,6 +12,7 @@ import com.mercadolibre.android.cardform.service.CardFormService
 import java.util.*
 
 internal const val CARD_FORM_EXTRA = "card_form"
+internal const val EXIT_ANIM_EXTRA = "exit_anim"
 
 open class CardForm : Parcelable {
 
@@ -45,23 +46,27 @@ open class CardForm : Parcelable {
         cardFormIntent = parcel.readParcelable(CardFormIntent::class.java.classLoader)
     }
 
-    open fun start(activity: AppCompatActivity, requestCode: Int) {
+    @JvmOverloads
+    fun start(activity: AppCompatActivity, requestCode: Int, enterAnim: Int = R.anim.slide_right_to_left_in,
+        exitAnim: Int = R.anim.slide_right_to_left_out) {
         this.requestCode = requestCode
         FragmentNavigationController.reset()
-        CardFormActivity.start(activity, requestCode, this)
+        CardFormActivity.start(activity, requestCode, this, exitAnim)
         activity.overridePendingTransition(
-            R.anim.slide_right_to_left_in,
-            R.anim.slide_right_to_left_out
+            enterAnim,
+            exitAnim
         )
     }
 
-    open fun start(fragment: Fragment, requestCode: Int) {
+    @JvmOverloads
+    fun start(fragment: Fragment, requestCode: Int, enterAnim: Int = R.anim.slide_right_to_left_in,
+        exitAnim: Int = R.anim.slide_right_to_left_out) {
         this.requestCode = requestCode
         FragmentNavigationController.reset()
-        CardFormActivity.start(fragment, requestCode, this)
+        CardFormActivity.start(fragment, requestCode, this, exitAnim)
         fragment.activity?.overridePendingTransition(
-            R.anim.slide_right_to_left_in,
-            R.anim.slide_right_to_left_out
+            enterAnim,
+            exitAnim
         )
     }
 
@@ -87,7 +92,7 @@ open class CardForm : Parcelable {
 
         open fun setSessionId(sessionId: String) = apply { this.sessionId = sessionId }
 
-        fun <T: CardFormService> setCardFormHandler(handlerIntent: CardFormIntent<T>) = apply { cardFormIntent = handlerIntent }
+        fun <T : CardFormService> setCardFormHandler(handlerIntent: CardFormIntent<T>) = apply { cardFormIntent = handlerIntent }
 
         protected fun setPublicKey(publicKey: String) = apply { this.publicKey = publicKey }
 
