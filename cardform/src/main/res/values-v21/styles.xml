@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme" parent="Theme.Base">
-        <item name="android:statusBarColor">@color/cf_status_bar</item>
+    <style name="CardFormStyle" parent="Theme.MLTheme">
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:colorBackground">?attr/colorBackgroundFloating</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowBackground">@color/ui_transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
     </style>
 </resources>
