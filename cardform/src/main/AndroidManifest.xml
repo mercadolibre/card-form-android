@@ -11,7 +11,7 @@
             android:windowSoftInputMode="adjustResize">
         </activity>
         <activity android:name=".presentation.ui.CardFormWebActivity"
-            android:theme="@style/AppTheme"
+            android:theme="@style/CardFormStyle"
             android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="adjustResize"/>
     </application>
