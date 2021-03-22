@@ -2,14 +2,14 @@ package com.mercadolibre.android.cardform.presentation.ui
 
 import android.app.Activity
 import android.content.Intent
-import androidx.lifecycle.Observer
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.core.content.ContextCompat
-import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.view.animation.Animation
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
 import com.meli.android.carddrawer.configuration.DefaultCardConfiguration
 import com.meli.android.carddrawer.model.CardAnimationType
 import com.meli.android.carddrawer.model.CardDrawerView
@@ -202,14 +202,14 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
                         contentDescription = "${cardData.name} ${cardData.issuerName}"
                     }
                     FragmentNavigationController.setAdditionalSteps(cardData.additionalSteps)
-                    appBar.setTitle(TitleBar.fromType(cardData.paymentTypeId).getTitle())
+                    appBar.setTitle(cardData.formTitle)
                     cardData.cardUi!!.let {
                         maxLengthBin = it.cardNumberLength
                         CardDrawerData(context!!, it)
                     }
                 } else {
                     cardContainer?.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
-                    appBar.setTitle(TitleBar.NONE_TITLE.getTitle())
+                    appBar.setTitle(R.string.cf_generic_title_app_bar)
                     with(cardDrawer.card) {
                         secCode = ""
                         expiration = ""

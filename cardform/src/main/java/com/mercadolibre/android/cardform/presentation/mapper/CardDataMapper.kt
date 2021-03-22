@@ -5,11 +5,14 @@ import com.mercadolibre.android.cardform.data.model.response.RegisterCard
 import com.mercadolibre.android.cardform.presentation.model.CardData
 
 internal object CardDataMapper : Mapper<CardData, RegisterCard> {
-    override fun map(model: RegisterCard) = CardData(
-        model.cardUi,
-        model.paymentMethod.paymentTypeId,
-        model.paymentMethod.name,
-        model.issuers.first().name,
-        model.additionalSteps
-    )
+    override fun map(model: RegisterCard) = with(model) {
+        CardData(
+            formTitle,
+            cardUi,
+            paymentMethod.paymentTypeId,
+            paymentMethod.name,
+            issuers.first().name,
+            additionalSteps
+        )
+    }
 }

@@ -4,8 +4,6 @@
     <string name="cf_card_number_info_hint">Número do cartão inválido</string>
     <string name="cf_card_name_hint">Nome do titular</string>
     <string name="cf_generic_title_app_bar">Novo cartão</string>
-    <string name="cf_credit_title_app_bar">Novo cartão de crédito</string>
-    <string name="cf_debit_title_app_bar">Novo cartão de débito</string>
     <string name="cf_issuers_header_title">Quem emitiu o seu cartão?</string>
     <string name="cf_without_connection">Confire sua conexão com a internet.</string>
     <string name="cf_generic_error">Ocorreu um erro</string>
