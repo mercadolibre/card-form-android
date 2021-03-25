@@ -7,7 +7,7 @@ import com.mercadolibre.android.cardform.presentation.model.CardData
 internal object CardDataMapper : Mapper<CardData, RegisterCard> {
     override fun map(model: RegisterCard) = with(model) {
         CardData(
-            formTitle,
+            otherTexts.cardFormTitle,
             cardUi,
             paymentMethod.paymentTypeId,
             paymentMethod.name,
