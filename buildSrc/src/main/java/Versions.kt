@@ -25,5 +25,5 @@ object Versions {
     const val pxAddons = "4.+"
     const val andesUi = "2.+"
 
-    const val versionToDeploy = "1.8.0"
+    const val versionToDeploy = "1.8.1"
 }
