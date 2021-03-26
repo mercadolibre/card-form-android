@@ -1,3 +1,7 @@
+## VERSION 1.8.1
+_26_03_2021_
+- Fixes some styles issues.
+
 ## VERSION 1.8.0
 _17_03_2021_
 - Added custom activity animation in start methods.

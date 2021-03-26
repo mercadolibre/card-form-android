@@ -15,13 +15,13 @@ internal object FragmentNavigationController {
     private const val PROGRESS_DEFAULT = 80
     private var parentRootViewId: Int = 0
 
-    fun init(rootFragment: Fragment?, viewPager: InputFormViewPager) {
+    fun init(rootFragment: Fragment, viewPager: InputFormViewPager) {
         formViewPager = viewPager
-        parentRootViewId = (rootFragment?.view?.parent as ViewGroup?)?.id ?: 0
+        parentRootViewId = (rootFragment.view?.parent as ViewGroup?)?.id ?: 0
 
         with(formViewPager) {
             setScrollEnable(false)
-            adapter = FormInputViewPagerAdapter(rootFragment?.childFragmentManager)
+            adapter = FormInputViewPagerAdapter(rootFragment.childFragmentManager)
 
             addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrollStateChanged(position: Int) = Unit
