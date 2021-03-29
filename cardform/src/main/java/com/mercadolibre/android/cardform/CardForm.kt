@@ -46,9 +46,11 @@ open class CardForm : Parcelable {
         cardFormIntent = parcel.readParcelable(CardFormIntent::class.java.classLoader)
     }
 
-    @JvmOverloads
-    fun start(activity: AppCompatActivity, requestCode: Int, enterAnim: Int = R.anim.slide_right_to_left_in,
-        exitAnim: Int = R.anim.slide_right_to_left_out) {
+    open fun start(activity: AppCompatActivity, requestCode: Int) {
+        start(activity, requestCode, R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out)
+    }
+
+    fun start(activity: AppCompatActivity, requestCode: Int, enterAnim: Int, exitAnim: Int) {
         this.requestCode = requestCode
         FragmentNavigationController.reset()
         CardFormActivity.start(activity, requestCode, this, exitAnim)
@@ -58,9 +60,11 @@ open class CardForm : Parcelable {
         )
     }
 
-    @JvmOverloads
-    fun start(fragment: Fragment, requestCode: Int, enterAnim: Int = R.anim.slide_right_to_left_in,
-        exitAnim: Int = R.anim.slide_right_to_left_out) {
+    open fun start(fragment: Fragment, requestCode: Int) {
+        start(fragment, requestCode, R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out)
+    }
+
+    fun start(fragment: Fragment, requestCode: Int, enterAnim: Int, exitAnim: Int) {
         this.requestCode = requestCode
         FragmentNavigationController.reset()
         CardFormActivity.start(fragment, requestCode, this, exitAnim)
