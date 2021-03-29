@@ -25,9 +25,10 @@ internal class Dependencies {
     fun initialize(context: Context, cardForm: CardForm) {
         networkModule = NetworkModule(context, cardForm.sessionId)
         behaviourModule = BehaviourModule(cardForm.sessionId)
+
         repositoryModule = RepositoryModule(
             networkModule!!.retrofit, cardForm.accessToken!!,
-            cardForm.siteId, cardForm.excludedTypes
+            cardForm.siteId, cardForm.excludedTypes, cardForm.flowId, cardForm.cardInfo
         )
         useCaseModule = UseCaseModule(repositoryModule!!)
         localPreferences = LocalRepositoryModule(context.applicationContext)

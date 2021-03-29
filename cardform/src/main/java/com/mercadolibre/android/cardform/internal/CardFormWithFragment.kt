@@ -4,6 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.fragment.app.FragmentManager
 import com.mercadolibre.android.cardform.CardForm
+import com.mercadolibre.android.cardform.CardInfoDto
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.presentation.ui.CardFormFragment
 import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationController
@@ -40,6 +41,8 @@ class CardFormWithFragment : CardForm {
             apply { super.setExcludedTypes(excludedTypes) }
 
         override fun setSessionId(sessionId: String) = apply { super.setSessionId(sessionId) }
+
+        fun setCardInfoNew(cardInfo: CardInfoDto) = apply { super.setCardInfo(cardInfo) }
 
         override fun build() = CardFormWithFragment(this)
 

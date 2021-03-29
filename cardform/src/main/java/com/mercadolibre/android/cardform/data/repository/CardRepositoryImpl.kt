@@ -1,6 +1,7 @@
 package com.mercadolibre.android.cardform.data.repository
 
 import com.mercadolibre.android.cardform.BuildConfig
+import com.mercadolibre.android.cardform.CardInfoDto
 import com.mercadolibre.android.cardform.data.model.response.RegisterCard
 import com.mercadolibre.android.cardform.data.service.CardService
 import com.mercadolibre.android.cardform.network.exceptions.ExcludePaymentException
@@ -10,8 +11,13 @@ import kotlinx.coroutines.async
 import org.json.JSONObject
 import java.io.IOException
 
-internal class CardRepositoryImpl(private val cardService: CardService, private val siteId: String,
-                         private val excludedPaymentTypes: List<String>?) : CardRepository {
+internal class CardRepositoryImpl(
+    private val cardService: CardService,
+    private val siteId: String,
+    private val excludedPaymentTypes: List<String>?,
+    private val flowId: String,
+    private val cardInfo: CardInfoDto?
+) : CardRepository {
 
     private val cache = mutableMapOf<String, RegisterCard>()
     private val queue = mutableListOf<String>()
@@ -27,8 +33,14 @@ internal class CardRepositoryImpl(private val cardService: CardService, private 
         queue.add(bin)
         return CoroutineScope(Dispatchers.IO).async {
             try {
-                val response = cardService.getCardInfoAsync(BuildConfig.API_ENVIRONMENT, bin,
-                    siteId, excludedPaymentTypes)
+                val response = if (flowId.startsWith("chekout-on") && cardInfo != null) {
+                    cardInfo.bin = bin
+                    cardService.getCardInfoAsyncFromMarketplace(BuildConfig.API_ENVIRONMENT, cardInfo!!)
+                } else {
+                    cardService.getCardInfoAsync(BuildConfig.API_ENVIRONMENT, bin,
+                            siteId, excludedPaymentTypes)
+                }
+
                 response.run {
                     if (isSuccessful) {
                         body()?.let {

@@ -1,5 +1,6 @@
 package com.mercadolibre.android.cardform.di.module
 
+import com.mercadolibre.android.cardform.CardInfoDto
 import com.mercadolibre.android.cardform.data.mapper.FinishInscriptionBodyMapper
 import com.mercadolibre.android.cardform.data.repository.*
 import com.mercadolibre.android.cardform.data.service.CardAssociationService
@@ -10,13 +11,15 @@ import com.mercadolibre.android.cardform.data.service.TokenizeService
 import retrofit2.Retrofit
 
 internal class RepositoryModule(
-    retrofit: Retrofit,
-    accessToken: String,
-    siteId: String,
-    excludedPaymentTypes: List<String>?
+        retrofit: Retrofit,
+        accessToken: String,
+        siteId: String,
+        excludedPaymentTypes: List<String>?,
+        flowId: String,
+        cardInfo: CardInfoDto?
 ) {
     val cardRepository by lazy {
-        CardRepositoryImpl(retrofit.create(CardService::class.java), siteId, excludedPaymentTypes)
+        CardRepositoryImpl(retrofit.create(CardService::class.java), siteId, excludedPaymentTypes, flowId, cardInfo)
     }
     val tokenizeRepository by lazy {
         TokenizeRepositoryImpl(accessToken, retrofit.create(TokenizeService::class.java))
