@@ -12,11 +12,11 @@ class CardFormWeb : CardForm {
     private constructor(builder: Builder) : super(builder)
     private constructor(parcel: Parcel) : super(parcel)
 
-    fun start(activity: AppCompatActivity, requestCode: Int) {
+    override fun start(activity: AppCompatActivity, requestCode: Int) {
         CardFormWebActivity.start(activity, requestCode, this)
     }
 
-    fun start(fragment: Fragment, requestCode: Int) {
+    override fun start(fragment: Fragment, requestCode: Int) {
         CardFormWebActivity.start(fragment, requestCode, this)
     }
 
