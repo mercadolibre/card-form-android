@@ -1,3 +1,7 @@
+## VERSION 1.8.2
+_29_03_2021_
+- Fixes web start signature.
+
 ## VERSION 1.8.1
 _26_03_2021_
 - Fixes some styles issues.
