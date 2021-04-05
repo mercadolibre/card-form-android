@@ -109,7 +109,7 @@ open class CardForm : Parcelable {
 
         protected fun setAccessToken(accessToken: String) = apply { this.accessToken = accessToken }
 
-        fun setCardInfo(cardInfo: CardInfoDto) = apply { this.cardInfo = cardInfo }
+        open fun setCardInfo(cardInfo: CardInfoDto) = apply { this.cardInfo = cardInfo }
 
         open fun build() = CardForm(this)
 

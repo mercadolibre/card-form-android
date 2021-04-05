@@ -42,8 +42,6 @@ class CardFormWithFragment : CardForm {
 
         override fun setSessionId(sessionId: String) = apply { super.setSessionId(sessionId) }
 
-        fun setCardInfoNew(cardInfo: CardInfoDto) = apply { super.setCardInfo(cardInfo) }
-
         override fun build() = CardFormWithFragment(this)
 
         companion object {
