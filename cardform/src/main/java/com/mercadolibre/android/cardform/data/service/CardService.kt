@@ -1,10 +1,9 @@
 package com.mercadolibre.android.cardform.data.service
 
+import com.mercadolibre.android.cardform.CardInfoDto
 import com.mercadolibre.android.cardform.data.model.response.RegisterCard
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 internal interface CardService {
 
@@ -15,5 +14,11 @@ internal interface CardService {
         @Query("site_id") siteId : String,
         @Query("excluded_payment_types") excludedPaymentTypes : List<String>? = null,
         @Query("odr") odrFlag : Boolean = true
+    ): Response<RegisterCard>
+
+    @POST("/{environment}/px_mobile/v1/card/marketplace")
+    suspend fun getCardInfoAsyncFromMarketplace(
+            @Path("environment") environment : String,
+            @Body cardInfo: CardInfoDto
     ): Response<RegisterCard>
 }

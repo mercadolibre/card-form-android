@@ -9,6 +9,7 @@ import com.mercadolibre.android.cardform.presentation.ui.CardFormActivity
 import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationController
 import com.mercadolibre.android.cardform.service.CardFormIntent
 import com.mercadolibre.android.cardform.service.CardFormService
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 internal const val CARD_FORM_EXTRA = "card_form"
@@ -25,6 +26,7 @@ open class CardForm : Parcelable {
     val sessionId: String
     val flowId: String
     val cardFormIntent: Intent?
+    val cardInfo: CardInfoDto?
 
     protected constructor(builder: Builder) {
         siteId = builder.siteId
@@ -34,6 +36,7 @@ open class CardForm : Parcelable {
         flowId = builder.flowId
         sessionId = builder.sessionId ?: UUID.randomUUID().toString()
         cardFormIntent = builder.cardFormIntent
+        cardInfo = builder.cardInfo
     }
 
     protected constructor(parcel: Parcel) {
@@ -44,6 +47,7 @@ open class CardForm : Parcelable {
         flowId = parcel.readString()!!
         sessionId = parcel.readString()!!
         cardFormIntent = parcel.readParcelable(CardFormIntent::class.java.classLoader)
+        cardInfo = parcel.readParcelable(CardInfoDto::class.java.classLoader)
     }
 
     open fun start(activity: AppCompatActivity, requestCode: Int) {
@@ -90,6 +94,9 @@ open class CardForm : Parcelable {
         var cardFormIntent: Intent? = null
             private set
 
+        var cardInfo: CardInfoDto? = null
+            private set
+
         open fun setExcludedTypes(excludedTypes: List<String>) = apply {
             this.excludedTypes = excludedTypes
         }
@@ -101,6 +108,8 @@ open class CardForm : Parcelable {
         protected fun setPublicKey(publicKey: String) = apply { this.publicKey = publicKey }
 
         protected fun setAccessToken(accessToken: String) = apply { this.accessToken = accessToken }
+
+        fun setCardInfo(cardInfo: CardInfoDto) = apply { this.cardInfo = cardInfo }
 
         open fun build() = CardForm(this)
 
@@ -123,6 +132,7 @@ open class CardForm : Parcelable {
         parcel.writeString(flowId)
         parcel.writeString(sessionId)
         parcel.writeParcelable(cardFormIntent, flags)
+        parcel.writeParcelable(cardInfo, flags)
     }
 
     override fun describeContents() = 0
@@ -137,3 +147,21 @@ open class CardForm : Parcelable {
         }
     }
 }
+
+@Parcelize
+data class CardInfoDto(
+        val flowId: String,
+        val vertical: String,
+        val flowType: String,
+        var bin: String,
+        val callerId: String,
+        val clientId: String,
+        val siteId: String,
+        val odr: Boolean,
+        val items: List<ItemDto>
+) : Parcelable
+
+@Parcelize
+data class ItemDto(
+    val id: String
+) : Parcelable
