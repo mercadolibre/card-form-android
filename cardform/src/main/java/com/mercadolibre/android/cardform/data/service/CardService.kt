@@ -16,7 +16,7 @@ internal interface CardService {
         @Query("odr") odrFlag : Boolean = true
     ): Response<RegisterCard>
 
-    @POST("/{environment}/px_mobile/v2/card")
+    @POST("/{environment}/px_mobile/v1/card/marketplace")
     suspend fun getCardInfoAsyncFromMarketplace(
             @Path("environment") environment : String,
             @Body cardInfo: CardInfoDto

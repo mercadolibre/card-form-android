@@ -4,7 +4,6 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.fragment.app.FragmentManager
 import com.mercadolibre.android.cardform.CardForm
-import com.mercadolibre.android.cardform.CardInfoDto
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.presentation.ui.CardFormFragment
 import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationController
