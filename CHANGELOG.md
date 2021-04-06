@@ -1,3 +1,8 @@
+## VERSION 1.9.0
+_06_04_2021_
+- Adds new endpoint getCardInfo from marketplace.
+- Gets title from backend.
+
 ## VERSION 1.8.2
 _29_03_2021_
 - Fixes web start signature.
