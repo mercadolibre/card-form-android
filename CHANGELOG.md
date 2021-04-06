@@ -1,3 +1,7 @@
+## VERSION 1.9.1
+_06_04_2021_
+- Fixes marketplace flowId.
+
 ## VERSION 1.9.0
 _06_04_2021_
 - Adds new endpoint getCardInfo from marketplace.
