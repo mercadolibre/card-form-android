@@ -33,7 +33,7 @@ internal class CardRepositoryImpl(
         queue.add(bin)
         return CoroutineScope(Dispatchers.IO).async {
             try {
-                val response = if (flowId.startsWith("chekout-on") && cardInfo != null) {
+                val response = if (flowId.startsWith("checkout-on") && cardInfo != null) {
                     cardInfo.bin = bin
                     cardService.getCardInfoAsyncFromMarketplace(BuildConfig.API_ENVIRONMENT, cardInfo!!)
                 } else {
