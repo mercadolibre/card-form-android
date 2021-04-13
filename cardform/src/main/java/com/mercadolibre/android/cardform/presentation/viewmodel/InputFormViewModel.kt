@@ -1,32 +1,36 @@
 package com.mercadolibre.android.cardform.presentation.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import android.content.Context
 import android.os.Bundle
-import com.mercadolibre.android.cardform.internal.LifecycleListener
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.mercadolibre.android.cardform.base.BaseViewModel
 import com.mercadolibre.android.cardform.base.getOrElse
 import com.mercadolibre.android.cardform.data.model.esc.Device
-import com.mercadolibre.android.cardform.data.model.response.CardUi
-import com.mercadolibre.android.cardform.data.model.response.Issuer
-import com.mercadolibre.android.cardform.data.model.response.PaymentMethod
-import com.mercadolibre.android.cardform.data.model.response.RegisterCard
 import com.mercadolibre.android.cardform.data.model.response.*
 import com.mercadolibre.android.cardform.data.repository.CardRepository
 import com.mercadolibre.android.cardform.domain.AssociatedCardParam
 import com.mercadolibre.android.cardform.domain.AssociatedCardUseCase
 import com.mercadolibre.android.cardform.domain.CardTokenModel
 import com.mercadolibre.android.cardform.domain.TokenizeUseCase
+import com.mercadolibre.android.cardform.internal.LifecycleListener
 import com.mercadolibre.android.cardform.presentation.extensions.hasConnection
-import com.mercadolibre.android.cardform.presentation.mapper.*
+import com.mercadolibre.android.cardform.presentation.mapper.CardDataMapper
+import com.mercadolibre.android.cardform.presentation.mapper.CardInfoMapper
+import com.mercadolibre.android.cardform.presentation.mapper.IdentificationMapper
+import com.mercadolibre.android.cardform.presentation.mapper.InputMapper
 import com.mercadolibre.android.cardform.presentation.model.*
 import com.mercadolibre.android.cardform.presentation.model.StateUi.UiLoading
 import com.mercadolibre.android.cardform.presentation.ui.ErrorUtil
 import com.mercadolibre.android.cardform.presentation.ui.formentry.FormType
 import com.mercadolibre.android.cardform.tracks.Tracker
 import com.mercadolibre.android.cardform.tracks.model.TrackApiSteps
-import com.mercadolibre.android.cardform.tracks.model.bin.*
-import com.mercadolibre.android.cardform.tracks.model.flow.*
+import com.mercadolibre.android.cardform.tracks.model.bin.BinRecognizedTrack
+import com.mercadolibre.android.cardform.tracks.model.bin.BinUnknownTrack
+import com.mercadolibre.android.cardform.tracks.model.flow.BackTrack
+import com.mercadolibre.android.cardform.tracks.model.flow.ErrorTrack
+import com.mercadolibre.android.cardform.tracks.model.flow.InitTrack
+import com.mercadolibre.android.cardform.tracks.model.flow.SuccessTrack
 import com.mercadopago.android.px.addons.ESCManagerBehaviour
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -274,8 +278,12 @@ internal class InputFormViewModel(
                 }
 
                 withContext(Dispatchers.Main) {
+                    Log.v("CRIS", "Listener available? ${lifecycleListener != null}")
                     lifecycleListener?.onCardAdded(
                         cardAssociationId,
+                        cardTokenModel.pan,
+                        cardTokenModel.exp,
+                        cardTokenModel.cvv,
                         object : LifecycleListener.Callback {
                             override fun onSuccess() {
                                 onSuccess()
