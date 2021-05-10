@@ -8,6 +8,7 @@ import android.view.View
 import android.view.accessibility.AccessibilityEvent
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Spinner
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.di.Dependencies
 import com.mercadolibre.android.cardform.di.preferences.IdentificationPreferences
@@ -37,6 +38,7 @@ internal class IdentificationFragment : InputFragment() {
     private var isIdentificationTracked = false
     private var populate = false
     private var identificationEditText: InputFormEditText? = null
+    private lateinit var identificationTypes: Spinner
 
     private val onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
         override fun onNothingSelected(parent: AdapterView<*>?) = Unit
@@ -57,6 +59,7 @@ internal class IdentificationFragment : InputFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         preferences = Dependencies.instance.localPreferences!!.identificationPreferences
+        identificationTypes = view.findViewById(R.id.identificationTypes)
         identificationEditText = view.findViewById(R.id.identificationEditText)
         if (savedInstanceState == null) {
             isFirstTime = true
