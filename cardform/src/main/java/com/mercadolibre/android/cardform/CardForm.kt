@@ -139,6 +139,8 @@ open class CardForm : Parcelable {
 
     companion object {
         const val RESULT_CARD_ID_KEY = "associated_card_id"
+        const val RESULT_BIN_KEY = "associated_bin"
+        const val RESULT_PAYMENT_TYPE_KEY = "associated_payment_type"
 
         @JvmField
         val CREATOR: Parcelable.Creator<CardForm> = object : Parcelable.Creator<CardForm> {
@@ -164,4 +166,11 @@ data class CardInfoDto(
 @Parcelize
 data class ItemDto(
     val id: String
+) : Parcelable
+
+@Parcelize
+data class CardResultDto(
+    val cardId: String,
+    val bin: String,
+    val paymentType: String
 ) : Parcelable

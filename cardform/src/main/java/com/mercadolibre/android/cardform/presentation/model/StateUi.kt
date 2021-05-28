@@ -1,5 +1,7 @@
 package com.mercadolibre.android.cardform.presentation.model
 
+import com.mercadolibre.android.cardform.CardResultDto
+
 internal sealed class StateUi {
     object UiLoading: StateUi()
 }
@@ -13,5 +15,5 @@ internal open class UiError(val message: String = "", val messageResource: Int =
 
 internal open class UiResult: StateUi() {
     object EmptyResult: UiResult()
-    data class CardResult(val data: String): UiResult()
+    data class CardResult(val data: CardResultDto): UiResult()
 }
