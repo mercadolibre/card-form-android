@@ -141,6 +141,7 @@ open class CardForm : Parcelable {
         const val RESULT_CARD_ID_KEY = "associated_card_id"
         const val RESULT_BIN_KEY = "associated_bin"
         const val RESULT_PAYMENT_TYPE_KEY = "associated_payment_type"
+        const val RESULT_LAST_FOUR_DIGITS_KEY = "result_last_four_digits_key"
 
         @JvmField
         val CREATOR: Parcelable.Creator<CardForm> = object : Parcelable.Creator<CardForm> {
@@ -172,5 +173,6 @@ data class ItemDto(
 data class CardResultDto(
     val cardId: String,
     val bin: String,
-    val paymentType: String
+    val paymentType: String,
+    val lastFourDigits: String
 ) : Parcelable
