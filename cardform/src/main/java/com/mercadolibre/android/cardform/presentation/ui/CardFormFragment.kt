@@ -326,6 +326,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
         putExtra(CardForm.RESULT_CARD_ID_KEY, result.cardId)
         putExtra(CardForm.RESULT_BIN_KEY, result.bin)
         putExtra(CardForm.RESULT_PAYMENT_TYPE_KEY, result.paymentType)
+        putExtra(CardForm.RESULT_LAST_FOUR_DIGITS_KEY, result.lastFourDigits)
     }
 
     private fun getCurrentFragment(manager: FragmentManager): Fragment? = try {

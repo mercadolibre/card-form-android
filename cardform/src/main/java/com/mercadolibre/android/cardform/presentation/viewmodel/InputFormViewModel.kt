@@ -275,7 +275,8 @@ internal class InputFormViewModel(
                             CardResultDto(
                                     cardAssociationId,
                                     binValidator.bin!!,
-                                    paymentMethod?.paymentTypeId!!
+                                    paymentMethod?.paymentTypeId!!,
+                                    cardTokenModel.lastFourDigits
                             )
                     ))
                 }
