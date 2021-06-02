@@ -302,17 +302,17 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
         }
     }
 
-    private fun returnResult(associatedCardId: String, resultCode: Int) {
+    private fun returnResult(data: CardResultDto, resultCode: Int) {
         activity?.apply {
             if (fromFragment) {
                 supportFragmentManager.popBackStackImmediate()
                 getCurrentFragment(supportFragmentManager)?.onActivityResult(
                     requestCode,
                     resultCode,
-                    buildResultIntent(associatedCardId)
+                    buildResultIntent(data)
                 )
             } else {
-                setResult(resultCode, buildResultIntent(associatedCardId))
+                setResult(resultCode, buildResultIntent(data))
                 finish()
                 overridePendingTransition(
                     0,
@@ -322,8 +322,10 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
         }
     }
 
-    private fun buildResultIntent(associatedCardId: String) = Intent().apply {
-        putExtra(CardForm.RESULT_CARD_ID_KEY, associatedCardId)
+    private fun buildResultIntent(result: CardResultDto) = Intent().apply {
+        putExtra(CardForm.RESULT_CARD_ID_KEY, result.cardId)
+        putExtra(CardForm.RESULT_BIN_KEY, result.bin)
+        putExtra(CardForm.RESULT_PAYMENT_TYPE_KEY, result.paymentType)
     }
 
     private fun getCurrentFragment(manager: FragmentManager): Fragment? = try {

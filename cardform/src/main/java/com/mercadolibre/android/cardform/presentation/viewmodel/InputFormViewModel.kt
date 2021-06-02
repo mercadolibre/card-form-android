@@ -3,6 +3,7 @@ package com.mercadolibre.android.cardform.presentation.viewmodel
 import androidx.lifecycle.MutableLiveData
 import android.content.Context
 import android.os.Bundle
+import com.mercadolibre.android.cardform.CardResultDto
 import com.mercadolibre.android.cardform.internal.LifecycleListener
 import com.mercadolibre.android.cardform.base.BaseViewModel
 import com.mercadolibre.android.cardform.base.getOrElse
@@ -270,7 +271,13 @@ internal class InputFormViewModel(
                         paymentMethod?.paymentMethodId!!,
                         paymentMethod?.paymentTypeId!!
                     ))
-                    stateUiLiveData.postValue(UiResult.CardResult(cardAssociationId))
+                    stateUiLiveData.postValue(UiResult.CardResult(
+                            CardResultDto(
+                                    cardAssociationId,
+                                    binValidator.bin!!,
+                                    paymentMethod?.paymentTypeId!!
+                            )
+                    ))
                 }
 
                 withContext(Dispatchers.Main) {
