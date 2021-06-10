@@ -27,7 +27,7 @@
             android:textSize="@dimen/ui_2m"
             android:text="@string/cf_generic_title_app_bar"
             android:textColor="@color/cf_action_bar_text"
-            style="@style/MLFont.Bold.Semi"
+            style="@style/ToolbarTextView"
             android:layout_marginEnd="@dimen/ui_2m" />
 
     </androidx.appcompat.widget.Toolbar>
