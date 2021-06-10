@@ -37,4 +37,8 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="ToolbarTextView" parent="MLFont.Bold.Semi">
+        <!-- Customize your style here. -->
+    </style>
+
 </resources>
