@@ -1,3 +1,8 @@
+## VERSION 1.10.0
+_16_06_2021_
+- Adds more parameters to result.
+- Customizable toolbar text style.
+
 ## VERSION 1.9.1
 _06_04_2021_
 - Fixes marketplace flowId.
