@@ -207,10 +207,12 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
                     }
 
                     update(this, newText.substringBefore('$')) {
-                        if (substring(it.length -1, it.length) == " ")
-                            setText(it.substring(0, it.length - 1))
-                        else
-                            setText(it)
+                        setText(
+                            if (it.takeLast(1).isBlank())
+                                it.dropLast(1)
+                            else
+                                it
+                        )
                     }
                 }
             }
