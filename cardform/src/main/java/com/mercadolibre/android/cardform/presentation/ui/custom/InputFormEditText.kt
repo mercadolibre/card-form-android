@@ -169,7 +169,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     fun setText(text: String) {
         with(input) {
             setText(text)
-            setSelection(text.length)
+            this.text?.let { setSelection(it.length) }
         }
     }
 
