@@ -169,7 +169,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     fun setText(text: String) {
         with(input) {
             setText(text)
-            setSelection(text.length)
+            this.text?.let { setSelection(it.length) }
         }
     }
 
@@ -207,12 +207,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
                     }
 
                     update(this, newText.substringBefore('$')) {
-                        setText(
-                            if (it.takeLast(1).isBlank())
-                                it.dropLast(1)
-                            else
-                                it
-                        )
+                        setText(it)
                     }
                 }
             }
