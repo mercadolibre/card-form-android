@@ -1,3 +1,7 @@
+## VERSION 1.10.1
+_24_06_2021_
+- Fixes card number mask processing crash.
+
 ## VERSION 1.10.0
 _16_06_2021_
 - Adds more parameters to result.
