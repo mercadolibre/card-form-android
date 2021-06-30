@@ -1,3 +1,7 @@
+## VERSION 1.11.0
+_30_06_2021_
+- Uses android synced id in esc fingerprint.
+
 ## VERSION 1.10.1
 _24_06_2021_
 - Fixes card number mask processing crash.
