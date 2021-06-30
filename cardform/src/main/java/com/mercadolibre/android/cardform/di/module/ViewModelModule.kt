@@ -20,7 +20,7 @@ internal class ViewModelModule(
         useCaseModule,
         repositoryModule,
         behaviourModule,
-        Device(context),
+        Device(context, behaviourModule.escManager),
         trackerModule,
         serviceModule
     )

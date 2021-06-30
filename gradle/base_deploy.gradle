@@ -74,7 +74,7 @@ afterEvaluate {
         repositories {
             maven {
                 name = 'releases'
-                url = 'https://artifacts.mercadolibre.com/repository/android-releases/'
+                url = 'https://artifacts.mercadolibre.com/repository/android-releases'
                 credentials {
                     username = "$System.env.NEXUS_DEPLOYER_USER"
                     password = "$System.env.NEXUS_DEPLOYER_PASSWORD"
