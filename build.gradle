@@ -19,7 +19,11 @@ ext {
 allprojects {
     repositories {
         google()
+        maven {
+            url 'https://artifacts.mercadolibre.com/repository/android-releases/'
+        }
         jcenter()
+        mavenLocal()
     }
 }
 

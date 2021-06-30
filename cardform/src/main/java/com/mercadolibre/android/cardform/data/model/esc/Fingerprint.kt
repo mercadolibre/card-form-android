@@ -4,9 +4,9 @@ import android.content.Context
 import android.os.Build
 import android.os.Environment
 import android.os.StatFs
-import android.provider.Settings
 import android.text.TextUtils
 import android.view.WindowManager
+import com.mercadopago.android.px.addons.ESCManagerBehaviour
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -16,8 +16,8 @@ import java.security.SecureRandom
 import java.util.*
 import java.util.regex.Pattern
 
-internal class Fingerprint(context: Context) {
-    val vendorIds = getVendorIds(context)
+internal class Fingerprint(context: Context, escManagerBehaviour: ESCManagerBehaviour) {
+    val vendorIds = getVendorIds(context, escManagerBehaviour)
     val model: String? = Build.MODEL
     val os = "android"
     val systemVersion = Build.VERSION.RELEASE
@@ -27,11 +27,11 @@ internal class Fingerprint(context: Context) {
     val freeDiskSpace = getDeviceFreeDiskSpace()
     val vendorSpecificAttributes = VendorSpecificAttributes(context)
 
-    private fun getVendorIds(context: Context): List<VendorId> {
+    private fun getVendorIds(context: Context, escManagerBehaviour: ESCManagerBehaviour): List<VendorId> {
         val vendorIds = ArrayList<VendorId>()
 
         // android_id
-        val androidId = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+        val androidId = escManagerBehaviour.getSyncedAndroidId(context)
         vendorIds.add(VendorId("android_id", androidId))
 
         if (!TextUtils.isEmpty(Build.SERIAL) && "unknown" != Build.SERIAL) {
