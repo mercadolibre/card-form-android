@@ -1,6 +1,6 @@
 package com.mercadolibre.android.cardform.presentation.model
 
-import com.mercadolibre.android.cardform.CardResultDto
+import com.mercadolibre.android.cardform.data.model.response.CardResultDto
 
 internal sealed class StateUi {
     object UiLoading: StateUi()

@@ -16,6 +16,7 @@ import com.meli.android.carddrawer.model.CardDrawerView
 import com.meli.android.carddrawer.model.CardUI
 import com.mercadolibre.android.cardform.*
 import com.mercadolibre.android.cardform.base.RootFragment
+import com.mercadolibre.android.cardform.data.model.response.CardResultDto
 import com.mercadolibre.android.cardform.di.viewModel
 import com.mercadolibre.android.cardform.presentation.extensions.*
 import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
