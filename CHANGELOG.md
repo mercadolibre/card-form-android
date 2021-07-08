@@ -1,3 +1,7 @@
+## VERSION 1.12.0
+_08_07_2021_
+- Moves new data classes to model package.
+
 ## VERSION 1.11.0
 _30_06_2021_
 - Uses android synced id in esc fingerprint.
