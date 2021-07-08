@@ -5,11 +5,11 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.mercadolibre.android.cardform.data.model.body.CardInfoDto
 import com.mercadolibre.android.cardform.presentation.ui.CardFormActivity
 import com.mercadolibre.android.cardform.presentation.ui.FragmentNavigationController
 import com.mercadolibre.android.cardform.service.CardFormIntent
 import com.mercadolibre.android.cardform.service.CardFormService
-import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 internal const val CARD_FORM_EXTRA = "card_form"
@@ -150,29 +150,3 @@ open class CardForm : Parcelable {
         }
     }
 }
-
-@Parcelize
-data class CardInfoDto(
-        val flowId: String,
-        val vertical: String,
-        val flowType: String,
-        var bin: String,
-        val callerId: String,
-        val clientId: String,
-        val siteId: String,
-        val odr: Boolean,
-        val items: List<ItemDto>
-) : Parcelable
-
-@Parcelize
-data class ItemDto(
-    val id: String
-) : Parcelable
-
-@Parcelize
-data class CardResultDto(
-    val cardId: String,
-    val bin: String,
-    val paymentType: String,
-    val lastFourDigits: String
-) : Parcelable

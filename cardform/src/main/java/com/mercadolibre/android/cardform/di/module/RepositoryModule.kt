@@ -1,6 +1,5 @@
 package com.mercadolibre.android.cardform.di.module
 
-import com.mercadolibre.android.cardform.CardInfoDto
 import com.mercadolibre.android.cardform.data.mapper.FinishInscriptionBodyMapper
 import com.mercadolibre.android.cardform.data.repository.*
 import com.mercadolibre.android.cardform.data.service.CardAssociationService
@@ -8,6 +7,7 @@ import com.mercadolibre.android.cardform.data.service.CardService
 import com.mercadolibre.android.cardform.data.service.FinishInscriptionService
 import com.mercadolibre.android.cardform.data.service.InscriptionService
 import com.mercadolibre.android.cardform.data.service.TokenizeService
+import com.mercadolibre.android.cardform.data.model.body.CardInfoDto
 import retrofit2.Retrofit
 
 internal class RepositoryModule(

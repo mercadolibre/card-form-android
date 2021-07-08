@@ -3,10 +3,10 @@ package com.mercadolibre.android.cardform.presentation.viewmodel
 import androidx.lifecycle.MutableLiveData
 import android.content.Context
 import android.os.Bundle
-import com.mercadolibre.android.cardform.CardResultDto
 import com.mercadolibre.android.cardform.internal.LifecycleListener
 import com.mercadolibre.android.cardform.base.BaseViewModel
 import com.mercadolibre.android.cardform.base.getOrElse
+import com.mercadolibre.android.cardform.data.model.response.CardResultDto
 import com.mercadolibre.android.cardform.data.model.esc.Device
 import com.mercadolibre.android.cardform.data.model.response.CardUi
 import com.mercadolibre.android.cardform.data.model.response.Issuer

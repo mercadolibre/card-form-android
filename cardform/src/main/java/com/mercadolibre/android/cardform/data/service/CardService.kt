@@ -1,7 +1,7 @@
 package com.mercadolibre.android.cardform.data.service
 
-import com.mercadolibre.android.cardform.CardInfoDto
 import com.mercadolibre.android.cardform.data.model.response.RegisterCard
+import com.mercadolibre.android.cardform.data.model.body.CardInfoDto
 import retrofit2.Response
 import retrofit2.http.*
 
