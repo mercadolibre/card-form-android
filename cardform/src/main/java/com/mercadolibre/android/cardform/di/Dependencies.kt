@@ -28,7 +28,7 @@ internal class Dependencies {
 
         repositoryModule = RepositoryModule(
             networkModule!!.retrofit, cardForm.accessToken!!,
-            cardForm.siteId, cardForm.excludedTypes, cardForm.flowId, cardForm.cardInfo
+            cardForm.siteId, cardForm.excludedTypes, cardForm.flowId, cardForm.cardInfo, cardForm.acceptThirdPartyCard, cardForm.activateCard
         )
         useCaseModule = UseCaseModule(repositoryModule!!)
         localPreferences = LocalRepositoryModule(context.applicationContext)

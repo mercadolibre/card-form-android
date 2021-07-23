@@ -27,6 +27,10 @@ open class CardForm : Parcelable {
     val flowId: String
     val cardFormIntent: Intent?
     val cardInfo: CardInfoDto?
+    /* default */
+    val acceptThirdPartyCard: Boolean = true
+    /* default */
+    val activateCard: Boolean = true
 
     protected constructor(builder: Builder) {
         siteId = builder.siteId
@@ -78,7 +82,9 @@ open class CardForm : Parcelable {
         )
     }
 
-    open class Builder protected constructor(val siteId: String, val flowId: String) {
+    open class Builder protected constructor(val siteId: String, val flowId: String, val acceptThirdPartyCard: Boolean,
+        val activateCard: Boolean) {
+
         var excludedTypes: List<String>? = null
             private set
 
@@ -115,12 +121,12 @@ open class CardForm : Parcelable {
 
         companion object {
             @JvmStatic
-            fun withPublicKey(publicKey: String, siteId: String, flowId: String) =
-                Builder(siteId, flowId).setPublicKey(publicKey)
+            fun withPublicKey(publicKey: String, siteId: String, flowId: String, acceptThirdPartyCard: Boolean, activateCard: Boolean) =
+                Builder(siteId, flowId, acceptThirdPartyCard, activateCard).setPublicKey(publicKey)
 
             @JvmStatic
-            fun withAccessToken(accessToken: String, siteId: String, flowId: String) =
-                Builder(siteId, flowId).setAccessToken(accessToken)
+            fun withAccessToken(accessToken: String, siteId: String, flowId: String, acceptThirdPartyCard: Boolean, activateCard: Boolean) =
+                Builder(siteId, flowId, acceptThirdPartyCard, activateCard).setAccessToken(accessToken)
         }
     }
 

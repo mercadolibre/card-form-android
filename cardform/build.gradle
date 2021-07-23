@@ -22,8 +22,9 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField "String", "API_ENVIRONMENT", "\"production\""
+            buildConfigField "String", "API_ENVIRONMENT", "\"beta\""
             buildConfigField "boolean", "HTTP_CLIENT_LOG", "true"
+            multiDexEnabled true
         }
 
         release {
@@ -69,6 +70,8 @@ dependencies {
     implementation Dependencies.livedataCore
     implementation Dependencies.viewmodel
     implementation Dependencies.pxAddons
+
+    implementation 'com.android.support:multidex:2.0.1'
 
     testImplementation Dependencies.junit
     androidTestImplementation Dependencies.runner

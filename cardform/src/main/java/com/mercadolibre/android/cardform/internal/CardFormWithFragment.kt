@@ -25,8 +25,10 @@ class CardFormWithFragment : CardForm {
             // Added from card form fragment
             replace(
                 containerId,
-                CardFormFragment.newInstance(true, this@CardFormWithFragment,
-                    R.anim.slide_right_to_left_out),
+                CardFormFragment.newInstance(
+                    true, this@CardFormWithFragment,
+                    R.anim.slide_right_to_left_out
+                ),
                 TAG
             )
 
@@ -35,7 +37,12 @@ class CardFormWithFragment : CardForm {
         }
     }
 
-    class Builder private constructor(siteId: String, flowId: String) : CardForm.Builder(siteId, flowId) {
+    class Builder private constructor(
+        siteId: String,
+        flowId: String,
+        acceptThirdPartyCard: Boolean,
+        activateCard: Boolean
+    ) : CardForm.Builder(siteId, flowId, acceptThirdPartyCard, activateCard) {
         override fun setExcludedTypes(excludedTypes: List<String>) =
             apply { super.setExcludedTypes(excludedTypes) }
 
@@ -45,12 +52,12 @@ class CardFormWithFragment : CardForm {
 
         companion object {
             @JvmStatic
-            fun withPublicKey(publicKey: String, siteId: String, flowId: String) =
-                Builder(siteId, flowId).setPublicKey(publicKey) as Builder
+            fun withPublicKey(publicKey: String, siteId: String, flowId: String, acceptThirdPartyCard: Boolean, activateCard: Boolean) =
+                Builder(siteId, flowId, acceptThirdPartyCard, activateCard).setPublicKey(publicKey) as Builder
 
             @JvmStatic
-            fun withAccessToken(accessToken: String, siteId: String, flowId: String) =
-                Builder(siteId, flowId).setAccessToken(accessToken) as Builder
+            fun withAccessToken(accessToken: String, siteId: String, flowId: String, acceptThirdPartyCard: Boolean, activateCard: Boolean) =
+                Builder(siteId, flowId, acceptThirdPartyCard, activateCard).setAccessToken(accessToken) as Builder
         }
     }
 

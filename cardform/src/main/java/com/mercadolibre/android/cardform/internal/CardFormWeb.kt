@@ -20,17 +20,26 @@ class CardFormWeb : CardForm {
         CardFormWebActivity.start(fragment, requestCode, this)
     }
 
-    class Builder private constructor(siteId: String, flowId: String) : CardForm.Builder(siteId, flowId) {
+    class Builder private constructor(
+        siteId: String, flowId: String, acceptThirdPartyCard: Boolean,
+        activateCard: Boolean
+    ) : CardForm.Builder(siteId, flowId, acceptThirdPartyCard, activateCard) {
         override fun build() = CardFormWeb(this)
 
         companion object {
             @JvmStatic
-            fun withPublicKey(publicKey: String, siteId: String, flowId: String) =
-                Builder(siteId, flowId).setPublicKey(publicKey) as Builder
+            fun withPublicKey(
+                publicKey: String, siteId: String, flowId: String, acceptThirdPartyCard: Boolean,
+                activateCard: Boolean
+            ) =
+                Builder(siteId, flowId, acceptThirdPartyCard, activateCard).setPublicKey(publicKey) as Builder
 
             @JvmStatic
-            fun withAccessToken(accessToken: String, siteId: String, flowId: String) =
-                Builder(siteId, flowId).setAccessToken(accessToken) as Builder
+            fun withAccessToken(
+                accessToken: String, siteId: String, flowId: String, acceptThirdPartyCard: Boolean,
+                activateCard: Boolean
+            ) =
+                Builder(siteId, flowId, acceptThirdPartyCard, activateCard).setAccessToken(accessToken) as Builder
         }
     }
 

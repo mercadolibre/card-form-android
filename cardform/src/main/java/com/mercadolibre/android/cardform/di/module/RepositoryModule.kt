@@ -16,7 +16,9 @@ internal class RepositoryModule(
         siteId: String,
         excludedPaymentTypes: List<String>?,
         flowId: String,
-        cardInfo: CardInfoDto?
+        cardInfo: CardInfoDto?,
+        acceptThirdPartyCard: Boolean,
+        activateCard: Boolean
 ) {
     val cardRepository by lazy {
         CardRepositoryImpl(retrofit.create(CardService::class.java), siteId, excludedPaymentTypes, flowId, cardInfo)
@@ -27,7 +29,7 @@ internal class RepositoryModule(
     val cardAssociationRepository by lazy {
         CardAssociationRepositoryImpl(
             retrofit.create(CardAssociationService::class.java),
-            accessToken
+            accessToken, acceptThirdPartyCard, activateCard
         )
     }
     val inscriptionRepository by lazy {
