@@ -32,9 +32,11 @@ internal class CardAssociationRepositoryImpl(
                             param.paymentMethodType
                         ),
                         IssuerBody(param.issuerId.toString()),
-                        acceptThirdPartyCard,
-                        activateCard,
-                        flowId
+                        FeaturesBody(
+                            acceptThirdPartyCard,
+                            activateCard
+                        )
+//                        flowId
                     )
                 ).resolveRetrofitResponse()
             }.fold(::Success, ::Failure)

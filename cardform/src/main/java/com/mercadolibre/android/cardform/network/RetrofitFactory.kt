@@ -6,8 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 internal object RetrofitFactory {
 
-//    private const val MP_API_BASE_URL = "https://api.mercadopago.com"
-    private const val MP_API_BASE_URL = "https://internal-api.mercadopago.com"
+    private const val MP_API_BASE_URL = "https://api.mercadopago.com"
     private const val DEFAULT_READ_TIMEOUT = 20
     private const val DEFAULT_CONNECT_TIMEOUT = 10
     private const val DEFAULT_WRITE_TIMEOUT = 20
