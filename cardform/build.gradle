@@ -71,8 +71,6 @@ dependencies {
     implementation Dependencies.viewmodel
     implementation Dependencies.pxAddons
 
-    implementation 'com.android.support:multidex:2.0.1'
-
     testImplementation Dependencies.junit
     androidTestImplementation Dependencies.runner
 }
