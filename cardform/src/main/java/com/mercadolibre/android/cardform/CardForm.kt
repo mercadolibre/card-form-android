@@ -28,9 +28,10 @@ open class CardForm : Parcelable {
     val cardFormIntent: Intent?
     val cardInfo: CardInfoDto?
     /* default */
-    val acceptThirdPartyCard: Boolean = true
+    var acceptThirdPartyCard: Boolean = true
+
     /* default */
-    val activateCard: Boolean = true
+    var activateCard: Boolean = true
 
     protected constructor(builder: Builder) {
         siteId = builder.siteId
@@ -41,6 +42,8 @@ open class CardForm : Parcelable {
         sessionId = builder.sessionId ?: UUID.randomUUID().toString()
         cardFormIntent = builder.cardFormIntent
         cardInfo = builder.cardInfo
+        acceptThirdPartyCard = builder.acceptThirdPartyCard
+        activateCard = builder.activateCard
     }
 
     protected constructor(parcel: Parcel) {
@@ -82,8 +85,7 @@ open class CardForm : Parcelable {
         )
     }
 
-    open class Builder protected constructor(val siteId: String, val flowId: String, val acceptThirdPartyCard: Boolean,
-        val activateCard: Boolean) {
+    open class Builder protected constructor(val siteId: String, val flowId: String) {
 
         var excludedTypes: List<String>? = null
             private set
@@ -103,11 +105,23 @@ open class CardForm : Parcelable {
         var cardInfo: CardInfoDto? = null
             private set
 
+        var acceptThirdPartyCard: Boolean = true
+            private set
+
+        var activateCard: Boolean = true
+            private set
+
+
         open fun setExcludedTypes(excludedTypes: List<String>) = apply {
             this.excludedTypes = excludedTypes
         }
 
         open fun setSessionId(sessionId: String) = apply { this.sessionId = sessionId }
+
+        open fun setThirdPartyCard(acceptThirdPartyCard: Boolean, activateCard: Boolean) = apply {
+            this.acceptThirdPartyCard = acceptThirdPartyCard
+            this.activateCard = activateCard
+        }
 
         fun <T : CardFormService> setCardFormHandler(handlerIntent: CardFormIntent<T>) = apply { cardFormIntent = handlerIntent }
 
@@ -121,12 +135,12 @@ open class CardForm : Parcelable {
 
         companion object {
             @JvmStatic
-            fun withPublicKey(publicKey: String, siteId: String, flowId: String, acceptThirdPartyCard: Boolean, activateCard: Boolean) =
-                Builder(siteId, flowId, acceptThirdPartyCard, activateCard).setPublicKey(publicKey)
+            fun withPublicKey(publicKey: String, siteId: String, flowId: String) =
+                Builder(siteId, flowId).setPublicKey(publicKey)
 
             @JvmStatic
-            fun withAccessToken(accessToken: String, siteId: String, flowId: String, acceptThirdPartyCard: Boolean, activateCard: Boolean) =
-                Builder(siteId, flowId, acceptThirdPartyCard, activateCard).setAccessToken(accessToken)
+            fun withAccessToken(accessToken: String, siteId: String, flowId: String) =
+                Builder(siteId, flowId).setAccessToken(accessToken)
         }
     }
 

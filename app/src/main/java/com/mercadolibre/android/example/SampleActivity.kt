@@ -20,7 +20,8 @@ class SampleActivity : AppCompatActivity() {
         fromCardAssociation.setOnClickListener {
             CardForm.Builder.withAccessToken(
                 "APP_USR-3671576383500204-072117-d275735575b2b95458be231afc00f14c-506902649",
-                "MLA", "test_flow", false, false).build()
+                "MLA", "test_flow")
+                .build()
                 .start(this, REQUEST_CODE)
         }
 
@@ -33,7 +34,7 @@ class SampleActivity : AppCompatActivity() {
                 .Builder
                 .withAccessToken(
                 "TEST-5476935244572826-112116-4dfe0023f3a444c1e42013b05336f027-675049545",
-                "MLC", "test_flow", false, false)
+                "MLC", "test_flow")
                 .setCardFormHandler(CardFormIntent(this, SampleService::class.java))
                 .build()
                 .start(this, REQUEST_CODE)

@@ -39,25 +39,27 @@ class CardFormWithFragment : CardForm {
 
     class Builder private constructor(
         siteId: String,
-        flowId: String,
-        acceptThirdPartyCard: Boolean,
-        activateCard: Boolean
-    ) : CardForm.Builder(siteId, flowId, acceptThirdPartyCard, activateCard) {
+        flowId: String
+    ) : CardForm.Builder(siteId, flowId) {
         override fun setExcludedTypes(excludedTypes: List<String>) =
             apply { super.setExcludedTypes(excludedTypes) }
 
         override fun setSessionId(sessionId: String) = apply { super.setSessionId(sessionId) }
 
+        override fun setThirdPartyCard(acceptThirdPartyCard: Boolean, activateCard: Boolean) = apply {
+            super.setThirdPartyCard(acceptThirdPartyCard, activateCard)
+        }
+
         override fun build() = CardFormWithFragment(this)
 
         companion object {
             @JvmStatic
-            fun withPublicKey(publicKey: String, siteId: String, flowId: String, acceptThirdPartyCard: Boolean, activateCard: Boolean) =
-                Builder(siteId, flowId, acceptThirdPartyCard, activateCard).setPublicKey(publicKey) as Builder
+            fun withPublicKey(publicKey: String, siteId: String, flowId: String) =
+                Builder(siteId, flowId).setPublicKey(publicKey) as Builder
 
             @JvmStatic
-            fun withAccessToken(accessToken: String, siteId: String, flowId: String, acceptThirdPartyCard: Boolean, activateCard: Boolean) =
-                Builder(siteId, flowId, acceptThirdPartyCard, activateCard).setAccessToken(accessToken) as Builder
+            fun withAccessToken(accessToken: String, siteId: String, flowId: String) =
+                Builder(siteId, flowId).setAccessToken(accessToken) as Builder
         }
     }
 
