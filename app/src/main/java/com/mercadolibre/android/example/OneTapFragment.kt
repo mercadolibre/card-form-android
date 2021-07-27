@@ -2,12 +2,12 @@ package com.mercadolibre.android.example
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.mercadolibre.android.cardform.internal.CardFormWithFragment
 import com.mercadolibre.android.cardform.internal.LifecycleListener
 
@@ -18,6 +18,7 @@ import com.mercadolibre.android.cardform.internal.LifecycleListener
  */
 class OneTapFragment : Fragment(), LifecycleListener {
 
+    private val PRODUCT_ID = "bh31umv10flg01nmhg60"
     private lateinit var button: Button
 
     override fun onCreateView(

@@ -27,11 +27,8 @@ open class CardForm : Parcelable {
     val flowId: String
     val cardFormIntent: Intent?
     val cardInfo: CardInfoDto?
-    /* default */
-    var acceptThirdPartyCard: Boolean = true
-
-    /* default */
-    var activateCard: Boolean = true
+    val acceptThirdPartyCard: Boolean
+    val activateCard: Boolean
 
     protected constructor(builder: Builder) {
         siteId = builder.siteId
@@ -55,6 +52,8 @@ open class CardForm : Parcelable {
         sessionId = parcel.readString()!!
         cardFormIntent = parcel.readParcelable(CardFormIntent::class.java.classLoader)
         cardInfo = parcel.readParcelable(CardInfoDto::class.java.classLoader)
+        acceptThirdPartyCard = parcel.readBoolean()
+        activateCard = parcel.readBoolean()
     }
 
     open fun start(activity: AppCompatActivity, requestCode: Int) {
@@ -105,12 +104,13 @@ open class CardForm : Parcelable {
         var cardInfo: CardInfoDto? = null
             private set
 
+        /* default */
         var acceptThirdPartyCard: Boolean = true
             private set
 
+        /* default */
         var activateCard: Boolean = true
             private set
-
 
         open fun setExcludedTypes(excludedTypes: List<String>) = apply {
             this.excludedTypes = excludedTypes
@@ -153,6 +153,8 @@ open class CardForm : Parcelable {
         parcel.writeString(sessionId)
         parcel.writeParcelable(cardFormIntent, flags)
         parcel.writeParcelable(cardInfo, flags)
+        parcel.writeBoolean(acceptThirdPartyCard)
+        parcel.writeBoolean(activateCard)
     }
 
     override fun describeContents() = 0

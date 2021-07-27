@@ -5,5 +5,6 @@ internal data class AssociatedCardBody(
     val paymentMethod: PaymentMethodBody,
     val issuer: IssuerBody,
     val acceptThirdPartyCard: Boolean,
-    val activateCard: Boolean
+    val activateCard: Boolean,
+    val flowId: String
 )

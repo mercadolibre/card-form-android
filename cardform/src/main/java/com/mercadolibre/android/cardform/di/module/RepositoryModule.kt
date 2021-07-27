@@ -29,7 +29,7 @@ internal class RepositoryModule(
     val cardAssociationRepository by lazy {
         CardAssociationRepositoryImpl(
             retrofit.create(CardAssociationService::class.java),
-            accessToken, acceptThirdPartyCard, activateCard
+            accessToken, acceptThirdPartyCard, activateCard, flowId
         )
     }
     val inscriptionRepository by lazy {
