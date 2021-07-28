@@ -8,7 +8,8 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 internal interface TokenizeService {
-    @POST("/v1/card_tokens")
+    ///todo
+    @POST("/v1/card_tokens/zeta")
     suspend fun createTokenAsync(
         @Query("access_token") accessToken : String,
         @Body cardInfoBody: CardInfoBody

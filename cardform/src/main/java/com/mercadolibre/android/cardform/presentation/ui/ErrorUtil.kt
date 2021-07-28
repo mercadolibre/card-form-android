@@ -8,6 +8,7 @@ import com.mercadolibre.android.andesui.snackbar.duration.AndesSnackbarDuration
 import com.mercadolibre.android.andesui.snackbar.type.AndesSnackbarType
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.network.exceptions.CardFormException
+import com.mercadolibre.android.cardform.network.exceptions.ThirdPartyException
 import com.mercadolibre.android.cardform.presentation.extensions.getStringOrEmpty
 import com.mercadolibre.android.cardform.presentation.model.UiError
 import java.io.IOException
@@ -32,6 +33,10 @@ internal object ErrorUtil {
             }
 
             is CardFormException -> {
+                UiError.BusinessError(e.message)
+            }
+
+            is ThirdPartyException -> {
                 UiError.BusinessError(e.message)
             }
 

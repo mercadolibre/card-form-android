@@ -250,6 +250,7 @@ internal class InputFormViewModel(
                     throwable.message.orEmpty()
                 )
             )
+//            NetworkException(throwable.message, throwable.hashCode(),throwable.message, "")
             stateUiLiveData.postValue(ErrorUtil.createError(throwable))
         }
 
@@ -294,7 +295,7 @@ internal class InputFormViewModel(
                             }
                         }) ?: onSuccess()
                 }
-            } ?: sendGenericError()
+            }
         }
     }
 
