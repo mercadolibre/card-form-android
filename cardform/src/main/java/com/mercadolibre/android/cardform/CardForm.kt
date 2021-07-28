@@ -52,8 +52,8 @@ open class CardForm : Parcelable {
         sessionId = parcel.readString()!!
         cardFormIntent = parcel.readParcelable(CardFormIntent::class.java.classLoader)
         cardInfo = parcel.readParcelable(CardInfoDto::class.java.classLoader)
-        acceptThirdPartyCard = parcel.readBoolean()
-        activateCard = parcel.readBoolean()
+        acceptThirdPartyCard = parcel.readByte() != 0.toByte()
+        activateCard = parcel.readByte() != 0.toByte()
     }
 
     open fun start(activity: AppCompatActivity, requestCode: Int) {
@@ -151,8 +151,8 @@ open class CardForm : Parcelable {
         parcel.writeString(sessionId)
         parcel.writeParcelable(cardFormIntent, flags)
         parcel.writeParcelable(cardInfo, flags)
-        parcel.writeBoolean(acceptThirdPartyCard)
-        parcel.writeBoolean(activateCard)
+        parcel.writeByte(if(acceptThirdPartyCard) 1 else 0)
+        parcel.writeByte(if(activateCard) 1 else 0)
     }
 
     override fun describeContents() = 0
