@@ -14,6 +14,8 @@ import kotlinx.coroutines.withContext
 internal class CardAssociationRepositoryImpl(
     private val associationService: CardAssociationService,
     private val accessToken: String,
+    private val acceptThirdPartyCard: Boolean,
+    private val activateCard: Boolean,
     private val contextProvider: CoroutineContextProvider = CoroutineContextProvider()
 ) : CardAssociationRepository {
 
@@ -28,7 +30,11 @@ internal class CardAssociationRepositoryImpl(
                             param.paymentMethodId,
                             param.paymentMethodType
                         ),
-                        IssuerBody(param.issuerId.toString())
+                        IssuerBody(param.issuerId.toString()),
+                        Features(
+                            acceptThirdPartyCard,
+                            activateCard
+                        )
                     )
                 ).resolveRetrofitResponse()
             }.fold(::Success, ::Failure)

@@ -2,12 +2,12 @@ package com.mercadolibre.android.example
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.mercadolibre.android.cardform.internal.CardFormWithFragment
 import com.mercadolibre.android.cardform.internal.LifecycleListener
 
@@ -34,8 +34,9 @@ class OneTapFragment : Fragment(), LifecycleListener {
         button.setOnClickListener {
             activity?.apply {
                 CardFormWithFragment.Builder.withAccessToken(
-                    "TEST-8395553183432240-112213-78d68d4be7b3c86042aae6314097c08f-658879489",
+                    "TEST-3510478914010328-072812-fca99ed95a163ad9a0640d390f899c6b-798240981",
                     "MLA", "test_flow")
+                    .setThirdPartyCard(true, true)
                     .build()
                     .start(supportFragmentManager, REQUEST_CODE, R.id.container)
             }

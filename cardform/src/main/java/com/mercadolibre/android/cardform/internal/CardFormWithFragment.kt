@@ -25,8 +25,10 @@ class CardFormWithFragment : CardForm {
             // Added from card form fragment
             replace(
                 containerId,
-                CardFormFragment.newInstance(true, this@CardFormWithFragment,
-                    R.anim.slide_right_to_left_out),
+                CardFormFragment.newInstance(
+                    true, this@CardFormWithFragment,
+                    R.anim.slide_right_to_left_out
+                ),
                 TAG
             )
 
@@ -35,11 +37,18 @@ class CardFormWithFragment : CardForm {
         }
     }
 
-    class Builder private constructor(siteId: String, flowId: String) : CardForm.Builder(siteId, flowId) {
+    class Builder private constructor(
+        siteId: String,
+        flowId: String
+    ) : CardForm.Builder(siteId, flowId) {
         override fun setExcludedTypes(excludedTypes: List<String>) =
             apply { super.setExcludedTypes(excludedTypes) }
 
         override fun setSessionId(sessionId: String) = apply { super.setSessionId(sessionId) }
+
+        override fun setThirdPartyCard(acceptThirdPartyCard: Boolean, activateCard: Boolean) = apply {
+            super.setThirdPartyCard(acceptThirdPartyCard, activateCard)
+        }
 
         override fun build() = CardFormWithFragment(this)
 

@@ -27,6 +27,8 @@ open class CardForm : Parcelable {
     val flowId: String
     val cardFormIntent: Intent?
     val cardInfo: CardInfoDto?
+    val acceptThirdPartyCard: Boolean
+    val activateCard: Boolean
 
     protected constructor(builder: Builder) {
         siteId = builder.siteId
@@ -37,6 +39,8 @@ open class CardForm : Parcelable {
         sessionId = builder.sessionId ?: UUID.randomUUID().toString()
         cardFormIntent = builder.cardFormIntent
         cardInfo = builder.cardInfo
+        acceptThirdPartyCard = builder.acceptThirdPartyCard
+        activateCard = builder.activateCard
     }
 
     protected constructor(parcel: Parcel) {
@@ -48,6 +52,8 @@ open class CardForm : Parcelable {
         sessionId = parcel.readString()!!
         cardFormIntent = parcel.readParcelable(CardFormIntent::class.java.classLoader)
         cardInfo = parcel.readParcelable(CardInfoDto::class.java.classLoader)
+        acceptThirdPartyCard = parcel.readByte() != 0.toByte()
+        activateCard = parcel.readByte() != 0.toByte()
     }
 
     open fun start(activity: AppCompatActivity, requestCode: Int) {
@@ -79,6 +85,7 @@ open class CardForm : Parcelable {
     }
 
     open class Builder protected constructor(val siteId: String, val flowId: String) {
+
         var excludedTypes: List<String>? = null
             private set
 
@@ -97,11 +104,22 @@ open class CardForm : Parcelable {
         var cardInfo: CardInfoDto? = null
             private set
 
+        var acceptThirdPartyCard: Boolean = true
+            private set
+
+        var activateCard: Boolean = true
+            private set
+
         open fun setExcludedTypes(excludedTypes: List<String>) = apply {
             this.excludedTypes = excludedTypes
         }
 
         open fun setSessionId(sessionId: String) = apply { this.sessionId = sessionId }
+
+        open fun setThirdPartyCard(acceptThirdPartyCard: Boolean, activateCard: Boolean) = apply {
+            this.acceptThirdPartyCard = acceptThirdPartyCard
+            this.activateCard = activateCard
+        }
 
         fun <T : CardFormService> setCardFormHandler(handlerIntent: CardFormIntent<T>) = apply { cardFormIntent = handlerIntent }
 
@@ -133,6 +151,8 @@ open class CardForm : Parcelable {
         parcel.writeString(sessionId)
         parcel.writeParcelable(cardFormIntent, flags)
         parcel.writeParcelable(cardInfo, flags)
+        parcel.writeByte(if(acceptThirdPartyCard) 1 else 0)
+        parcel.writeByte(if(activateCard) 1 else 0)
     }
 
     override fun describeContents() = 0
