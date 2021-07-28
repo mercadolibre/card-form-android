@@ -28,8 +28,7 @@ class CardFormWeb : CardForm {
         companion object {
             @JvmStatic
             fun withPublicKey(
-                publicKey: String, siteId: String, flowId: String, acceptThirdPartyCard: Boolean,
-                activateCard: Boolean
+                publicKey: String, siteId: String, flowId: String
             ) =
                 Builder(siteId, flowId).setPublicKey(publicKey) as Builder
 

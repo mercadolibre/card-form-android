@@ -24,7 +24,6 @@ android {
         debug {
             buildConfigField "String", "API_ENVIRONMENT", "\"alpha\""
             buildConfigField "boolean", "HTTP_CLIENT_LOG", "true"
-            multiDexEnabled true
         }
 
         release {

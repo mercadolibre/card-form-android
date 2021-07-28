@@ -18,7 +18,6 @@ import com.mercadolibre.android.cardform.internal.LifecycleListener
  */
 class OneTapFragment : Fragment(), LifecycleListener {
 
-    private val PRODUCT_ID = "bh31umv10flg01nmhg60"
     private lateinit var button: Button
 
     override fun onCreateView(
@@ -35,9 +34,9 @@ class OneTapFragment : Fragment(), LifecycleListener {
         button.setOnClickListener {
             activity?.apply {
                 CardFormWithFragment.Builder.withAccessToken(
-                    "TEST-8395553183432240-112213-78d68d4be7b3c86042aae6314097c08f-658879489",
+                    "TEST-3510478914010328-072812-fca99ed95a163ad9a0640d390f899c6b-798240981",
                     "MLA", "test_flow")
-                    .setThirdPartyCard(true, false)
+                    .setThirdPartyCard(true, true)
                     .build()
                     .start(supportFragmentManager, REQUEST_CODE, R.id.container)
             }

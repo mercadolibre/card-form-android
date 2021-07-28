@@ -104,11 +104,9 @@ open class CardForm : Parcelable {
         var cardInfo: CardInfoDto? = null
             private set
 
-        /* default */
         var acceptThirdPartyCard: Boolean = true
             private set
 
-        /* default */
         var activateCard: Boolean = true
             private set
 

@@ -16,7 +16,6 @@ internal class CardAssociationRepositoryImpl(
     private val accessToken: String,
     private val acceptThirdPartyCard: Boolean,
     private val activateCard: Boolean,
-    private val flowId: String,
     private val contextProvider: CoroutineContextProvider = CoroutineContextProvider()
 ) : CardAssociationRepository {
 
@@ -32,11 +31,10 @@ internal class CardAssociationRepositoryImpl(
                             param.paymentMethodType
                         ),
                         IssuerBody(param.issuerId.toString()),
-                        FeaturesBody(
+                        Features(
                             acceptThirdPartyCard,
                             activateCard
                         )
-//                        flowId
                     )
                 ).resolveRetrofitResponse()
             }.fold(::Success, ::Failure)
