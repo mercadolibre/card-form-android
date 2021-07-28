@@ -1,3 +1,7 @@
+## VERSION 1.13.0
+_28_07_2021_
+- Adds enabled third party card setter on builder.
+
 ## VERSION 1.12.0
 _08_07_2021_
 - Moves new data classes to model package.
