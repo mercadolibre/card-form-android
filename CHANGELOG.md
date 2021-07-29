@@ -1,3 +1,7 @@
+## VERSION 1.13.1
+_29_07_2021_
+- Parses user error message from backend.
+
 ## VERSION 1.13.0
 _28_07_2021_
 - Adds enabled third party card setter on builder.
