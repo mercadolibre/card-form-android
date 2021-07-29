@@ -294,7 +294,7 @@ internal class InputFormViewModel(
                             }
                         }) ?: onSuccess()
                 }
-            } ?: sendGenericError()
+            }
         }
     }
 
