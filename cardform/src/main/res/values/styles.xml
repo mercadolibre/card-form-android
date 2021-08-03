@@ -38,6 +38,8 @@
     </style>
 
     <style name="ToolbarTextView" parent="MLFont.Bold.Semi">
+        <item name="android:textSize">@dimen/ui_2m</item>
+        <item name="android:layout_marginEnd">@dimen/ui_2m</item>
         <!-- Customize your style here. -->
     </style>
 

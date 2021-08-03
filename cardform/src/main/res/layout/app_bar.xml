@@ -22,13 +22,11 @@
 
         <TextView
             android:id="@+id/title"
+            style="@style/ToolbarTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/ui_2m"
             android:text="@string/cf_generic_title_app_bar"
-            android:textColor="@color/cf_action_bar_text"
-            style="@style/ToolbarTextView"
-            android:layout_marginEnd="@dimen/ui_2m" />
+            android:textColor="@color/cf_action_bar_text" />
 
     </androidx.appcompat.widget.Toolbar>
 
