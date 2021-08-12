@@ -1,3 +1,7 @@
+## VERSION 1.14.0
+_12_08_2021_
+- Modified toolbar text style
+
 ## VERSION 1.13.1
 _29_07_2021_
 - Parses user error message from backend.
