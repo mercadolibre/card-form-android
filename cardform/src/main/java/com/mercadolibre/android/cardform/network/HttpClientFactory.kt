@@ -42,7 +42,6 @@ internal object HttpClientFactory {
 
         client.addInterceptor(LocaleInterceptor(context.applicationContext))
         client.addInterceptor(UserAgentInterceptor())
-        client.addInterceptor(ProductIdInterceptor())
         client.addInterceptor(ScreenDensityInterceptor(context.applicationContext))
         client.addInterceptor(SessionInterceptor(sessionId))
         client.addInterceptor(FlowIdInterceptor(flowId))
