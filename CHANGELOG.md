@@ -1,3 +1,7 @@
+## VERSION 1.15.0
+_26_08_2021_
+- Removed the productId header and added the flowId header.
+
 ## VERSION 1.14.0
 _12_08_2021_
 - Modified toolbar text style
