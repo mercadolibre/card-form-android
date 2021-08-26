@@ -23,7 +23,7 @@ internal class Dependencies {
     var trackerModule: TrackerModule? = null
 
     fun initialize(context: Context, cardForm: CardForm) {
-        networkModule = NetworkModule(context, cardForm.sessionId)
+        networkModule = NetworkModule(context, cardForm.sessionId, cardForm.flowId)
         behaviourModule = BehaviourModule(cardForm.sessionId)
 
         repositoryModule = RepositoryModule(

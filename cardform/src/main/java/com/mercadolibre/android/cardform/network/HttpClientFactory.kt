@@ -29,7 +29,8 @@ internal object HttpClientFactory {
     fun get(
         context: Context, connectTimeout: Int, readTimeout: Int,
         writeTimeout: Int,
-        sessionId: String
+        sessionId: String,
+        flowId: String
     ): OkHttpClient {
         val cacheFile = getCacheDir(context)
 
@@ -41,9 +42,9 @@ internal object HttpClientFactory {
 
         client.addInterceptor(LocaleInterceptor(context.applicationContext))
         client.addInterceptor(UserAgentInterceptor())
-        client.addInterceptor(ProductIdInterceptor())
         client.addInterceptor(ScreenDensityInterceptor(context.applicationContext))
         client.addInterceptor(SessionInterceptor(sessionId))
+        client.addInterceptor(FlowIdInterceptor(flowId))
 
         // add logging interceptor (should be last interceptor)
         val loginInterceptor = HttpLoggingInterceptor()
