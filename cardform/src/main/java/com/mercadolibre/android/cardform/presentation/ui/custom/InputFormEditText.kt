@@ -163,7 +163,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     }
 
     fun getText(): String {
-        return input.text.toString()
+        return input.text.toString().trim()
     }
 
     fun setText(text: String) {
@@ -288,7 +288,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
         input.isSaveEnabled = savedState
     }
 
-    private fun configureInternalInput(text: String, textChanged: (s: String) -> Unit) {
+    private fun configureInternalInput(text: String, textChanged: OnTextChanged) {
         if (showIcons && text.isNotEmpty()) {
             addRightCancelDrawable(R.drawable.cf_icon_close)
         } else {
