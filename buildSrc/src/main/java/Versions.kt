@@ -22,6 +22,6 @@ object Versions {
     const val pxAddons = "4.+"
     const val andesUi = "3.+"
 
-    const val libraryVersion = "1.15.0"
+    const val libraryVersion = "1.16.0"
     const val multidex = "2.0.1"
 }
