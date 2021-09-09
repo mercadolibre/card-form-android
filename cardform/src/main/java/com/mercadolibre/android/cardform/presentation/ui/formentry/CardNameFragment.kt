@@ -57,7 +57,6 @@ internal class CardNameFragment : InputFragment() {
                 nameCardEditText?.apply {
                     configure(data) {
                         updateInputData(CardFilledData.Name(it))
-                        isInputValid = validate()
                         clearError()
                     }
                 }
@@ -66,8 +65,8 @@ internal class CardNameFragment : InputFragment() {
     }
 
     override fun toNext(position: Int, move: MoveTo) {
-        super.toNext(position, move)
-        if (isInputValid) {
+        if (isInputValid && nameCardEditText?.validate() == true) {
+            move.invoke(position)
             nameCardEditText?.getText()?.let { nameOwner ->
                 with(viewModel) {
                     tracker.trackEvent(NameValidTrack())
@@ -76,6 +75,8 @@ internal class CardNameFragment : InputFragment() {
                 }
                 preferences.saveNameOwner(nameOwner)
             }
+        } else {
+            showError()
         }
     }
 

@@ -192,8 +192,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     fun getMaxLength() = maxLength
 
     fun addMaskWatcher(mask: String, textChanged: OnTextChanged) {
-
-        maskWatcher.takeIf { it != null }?.apply {
+        maskWatcher?.apply {
             input.removeTextChangedListener(this)
 
             addWatcher(mask, textChanged)
@@ -211,7 +210,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
                     }
                 }
             }
-        } ?: apply { addWatcher(mask, textChanged) }
+        } ?: addWatcher(mask, textChanged)
     }
 
     private fun addWatcher(mask: String, textChanged: OnTextChanged) {
