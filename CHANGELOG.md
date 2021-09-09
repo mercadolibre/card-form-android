@@ -1,3 +1,8 @@
+## VERSION 1.16.0
+_09_09_2021_
+- Improves watcher validation to avoid ANR.
+- Trims white spaces from input.
+
 ## VERSION 1.15.0
 _26_08_2021_
 - Removed the productId header and added the flowId header.
