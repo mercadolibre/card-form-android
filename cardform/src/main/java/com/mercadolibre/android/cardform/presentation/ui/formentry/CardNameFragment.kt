@@ -65,7 +65,7 @@ internal class CardNameFragment : InputFragment() {
     }
 
     override fun toNext(position: Int, move: MoveTo) {
-        if (isInputValid && nameCardEditText?.validate() == true) {
+        if (nameCardEditText?.validate() == true) {
             move.invoke(position)
             nameCardEditText?.getText()?.let { nameOwner ->
                 with(viewModel) {
