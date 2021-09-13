@@ -1,3 +1,7 @@
+## VERSION 1.16.1
+_13_09_2021_
+- Fixes bug introduced in the watcher validation improvement.
+
 ## VERSION 1.16.0
 _09_09_2021_
 - Improves watcher validation to avoid ANR.
