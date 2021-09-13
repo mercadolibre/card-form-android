@@ -17,9 +17,10 @@ internal class CardFormActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card_form)
         if (supportFragmentManager.findFragmentByTag(CardFormWithFragment.TAG) == null) {
+            val cardForm: CardForm = intent.getParcelableExtra(CARD_FORM_EXTRA) ?: error("missing card form parameter")
             supportFragmentManager.beginTransaction().run {
                 replace(R.id.container,
-                    CardFormFragment.newInstance(false, intent.getParcelableExtra(CARD_FORM_EXTRA),
+                    CardFormFragment.newInstance(false, cardForm,
                         intent.getIntExtra(EXIT_ANIM_EXTRA, R.anim.slide_right_to_left_out)),
                     CardFormWithFragment.TAG)
                 commitAllowingStateLoss()

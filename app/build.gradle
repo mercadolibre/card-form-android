@@ -46,8 +46,6 @@ dependencies {
     implementation Dependencies.livedataCore
     implementation Dependencies.viewmodel
 
-    implementation Dependencies.multidex
-
     testImplementation Dependencies.junit
     androidTestImplementation Dependencies.runner
 }
