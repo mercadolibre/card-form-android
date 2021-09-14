@@ -1,3 +1,7 @@
+## VERSION 2.0.0
+_16_09_2021_
+- Migrates to min api 21 and target 30.
+
 ## VERSION 1.16.1
 _13_09_2021_
 - Fixes bug introduced in the watcher validation improvement.

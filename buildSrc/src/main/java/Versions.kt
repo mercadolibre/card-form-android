@@ -10,9 +10,9 @@ object Versions {
     const val lifecycle = "2.0.0"
     const val material = "1.0.0"
     const val okHttp = "3.12.10"
-    const val sdkVersion = 29
-    const val minSdkVersion = 19
-    const val buildTools = "29.0.2"
+    const val sdkVersion = 30
+    const val minSdkVersion = 21
+    const val buildTools = "30.0.2"
 
     const val constraintLayout = "2.0.4"
     const val gradlePlugin = "4.0.1"
@@ -22,6 +22,5 @@ object Versions {
     const val pxAddons = "4.+"
     const val andesUi = "3.+"
 
-    const val libraryVersion = "1.16.1"
-    const val multidex = "2.0.1"
+    const val libraryVersion = "2.0.0"
 }

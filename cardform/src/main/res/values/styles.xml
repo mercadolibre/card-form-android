@@ -34,6 +34,7 @@
     </style>
 
     <style name="CardFormStyle" parent="Theme.MLTheme">
+        <item name="android:statusBarColor">@color/cf_status_bar</item>
         <!-- Customize your theme here. -->
     </style>
 
