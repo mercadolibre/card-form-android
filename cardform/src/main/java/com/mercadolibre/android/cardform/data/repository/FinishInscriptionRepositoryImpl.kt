@@ -6,13 +6,12 @@ import com.mercadolibre.android.cardform.base.Response.Success
 import com.mercadolibre.android.cardform.base.resolveRetrofitResponse
 import com.mercadolibre.android.cardform.data.mapper.FinishInscriptionBodyMapper
 import com.mercadolibre.android.cardform.data.service.FinishInscriptionService
-import com.mercadolibre.android.cardform.domain.FinishInscriptionRepository
 import com.mercadolibre.android.cardform.domain.FinishInscriptionBusinessModel
 import com.mercadolibre.android.cardform.domain.FinishInscriptionParam
+import com.mercadolibre.android.cardform.domain.FinishInscriptionRepository
 import kotlinx.coroutines.withContext
 
 internal class FinishInscriptionRepositoryImpl(
-    private val accessToken: String,
     private val finishInscriptionBodyMapper: FinishInscriptionBodyMapper,
     private val finishInscriptionService: FinishInscriptionService,
     private val contextProvider: CoroutineContextProvider = CoroutineContextProvider()
@@ -23,7 +22,6 @@ internal class FinishInscriptionRepositoryImpl(
             runCatching {
                 finishInscriptionService
                     .getFinishInscription(
-                        accessToken,
                         finishInscriptionBodyMapper.map(param)
                     )
                     .resolveRetrofitResponse()

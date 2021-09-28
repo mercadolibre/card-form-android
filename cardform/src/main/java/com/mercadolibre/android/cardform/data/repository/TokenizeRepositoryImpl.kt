@@ -9,7 +9,6 @@ import com.mercadolibre.android.cardform.data.service.TokenizeService
 import kotlinx.coroutines.withContext
 
 internal class TokenizeRepositoryImpl(
-    private val accessToken: String,
     private val tokenizeService: TokenizeService,
     private val contextProvider: CoroutineContextProvider = CoroutineContextProvider()
 ) : TokenizeRepository {
@@ -18,7 +17,7 @@ internal class TokenizeRepositoryImpl(
         withContext(contextProvider.IO) {
             runCatching {
                 tokenizeService
-                    .createTokenAsync(accessToken, cardInfoBody)
+                    .createTokenAsync(cardInfoBody)
                     .resolveRetrofitResponse()
             }.fold(::Success, ::Failure)
         }

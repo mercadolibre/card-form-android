@@ -10,7 +10,6 @@ import com.mercadolibre.android.cardform.domain.InscriptionRepository
 import kotlinx.coroutines.withContext
 
 internal class InscriptionRepositoryImpl(
-    private val accessToken: String,
     private val inscriptionService: InscriptionService,
     private val contextProvider: CoroutineContextProvider = CoroutineContextProvider()
 ) : InscriptionRepository {
@@ -19,7 +18,7 @@ internal class InscriptionRepositoryImpl(
         withContext(contextProvider.IO) {
             runCatching {
                 inscriptionService
-                    .getInscription(accessToken)
+                    .getInscription()
                     .resolveRetrofitResponse()
             }.mapCatching {
                 InscriptionBusinessModel(

@@ -13,7 +13,6 @@ private const val ENVIRONMENT = BuildConfig.API_ENVIRONMENT
 internal interface CardAssociationService {
     @POST("/$ENVIRONMENT/px_mobile/v1/card")
     suspend fun associateCard(
-        @Query("access_token") accessToken: String,
         @Body associatedCardBody: AssociatedCardBody
     ): Response<AssociatedCard>
 }

@@ -12,6 +12,5 @@ internal interface InscriptionService {
 
     @GET("/$ENVIRONMENT/px_mobile/v1/card_webpay/inscription/init")
     suspend fun getInscription(
-        @Query("access_token") accessToken: String
     ): Response<InscriptionDataModel>
 }
