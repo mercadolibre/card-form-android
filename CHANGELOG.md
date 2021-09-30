@@ -1,4 +1,4 @@
-## VERSION 2.0.0
+## VERSION 2.1.0
 _30_09_2021_
 - Access token is passed in the header calls.
 
