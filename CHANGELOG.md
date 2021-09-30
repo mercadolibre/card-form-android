@@ -1,3 +1,7 @@
+## VERSION 2.1.0
+_30_09_2021_
+- Access token is passed in the header calls.
+
 ## VERSION 2.0.0
 _16_09_2021_
 - Migrates to min api 21 and target 30.

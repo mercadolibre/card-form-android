@@ -22,5 +22,5 @@ object Versions {
     const val pxAddons = "4.+"
     const val andesUi = "3.+"
 
-    const val libraryVersion = "2.0.0"
+    const val libraryVersion = "2.1.0"
 }
