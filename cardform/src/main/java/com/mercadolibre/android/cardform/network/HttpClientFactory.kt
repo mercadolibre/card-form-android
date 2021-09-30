@@ -31,7 +31,7 @@ internal object HttpClientFactory {
         writeTimeout: Int,
         sessionId: String,
         flowId: String,
-        privateKey: String?
+        accessToken: String?
     ): OkHttpClient {
         val cacheFile = getCacheDir(context)
 
@@ -46,7 +46,7 @@ internal object HttpClientFactory {
         client.addInterceptor(ScreenDensityInterceptor(context.applicationContext))
         client.addInterceptor(SessionInterceptor(sessionId))
         client.addInterceptor(FlowIdInterceptor(flowId))
-        client.addInterceptor(AuthorizationInterceptor(privateKey))
+        accessToken?.also { client.addInterceptor(AuthorizationInterceptor(it)) }
 
         // add logging interceptor (should be last interceptor)
         val loginInterceptor = HttpLoggingInterceptor()
