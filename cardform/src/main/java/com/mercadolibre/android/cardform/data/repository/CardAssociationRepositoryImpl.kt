@@ -13,7 +13,6 @@ import kotlinx.coroutines.withContext
 
 internal class CardAssociationRepositoryImpl(
     private val associationService: CardAssociationService,
-    private val accessToken: String,
     private val acceptThirdPartyCard: Boolean,
     private val activateCard: Boolean,
     private val contextProvider: CoroutineContextProvider = CoroutineContextProvider()
@@ -23,7 +22,6 @@ internal class CardAssociationRepositoryImpl(
         withContext(contextProvider.IO) {
             runCatching {
                 associationService.associateCard(
-                    accessToken,
                     AssociatedCardBody(
                         param.cardTokenId,
                         PaymentMethodBody(
