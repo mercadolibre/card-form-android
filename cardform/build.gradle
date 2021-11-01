@@ -22,13 +22,13 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField "String", "API_ENVIRONMENT", "\"production\""
+            buildConfigField "String", "API_ENVIRONMENT", "\"alpha\""
             buildConfigField "boolean", "HTTP_CLIENT_LOG", "true"
         }
 
         release {
-            buildConfigField "String", "API_ENVIRONMENT", "\"production\""
-            buildConfigField "boolean", "HTTP_CLIENT_LOG", "false"
+            buildConfigField "String", "API_ENVIRONMENT", "\"alpha\""
+            buildConfigField "boolean", "HTTP_CLIENT_LOG", "true"
         }
     }
 
