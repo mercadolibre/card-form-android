@@ -1,3 +1,7 @@
+## VERSION 2.1.1
+_04_11_2021_
+- Fix - removed the "/" in the customer identifier when sending the api.
+
 ## VERSION 2.1.0
 _30_09_2021_
 - Access token is passed in the header calls.
