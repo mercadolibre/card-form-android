@@ -11,8 +11,8 @@ import retrofit2.http.Query
 private const val ENVIRONMENT = BuildConfig.API_ENVIRONMENT
 
 internal interface CardAssociationService {
-    //@POST("/$ENVIRONMENT/px_mobile/v1/card")
     @POST("/gamma/px_mobile/v1/card")
+    //@POST("/gamma/px_mobile/v1/card")
     suspend fun associateCard(
         @Body associatedCardBody: AssociatedCardBody
     ): Response<AssociatedCard>
