@@ -1,5 +1,5 @@
-## VERSION 2.1.0
-_04_10_2021_
+## VERSION 2.1.1
+_04_11_2021_
 - Fix - removed the "/" in the customer identifier when sending the api.
 
 ## VERSION 2.1.0
