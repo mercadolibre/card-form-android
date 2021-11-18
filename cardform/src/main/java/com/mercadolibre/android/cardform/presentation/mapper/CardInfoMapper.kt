@@ -14,7 +14,7 @@ internal class CardInfoMapper(private val device: Device): Mapper<CardInfoBody, 
             model.cardNumber.replace("\\s+".toRegex(), ""),
             CardHolder(
                 IdentificationBody(
-                    model.identificationNumber.replace("[^A-Za-z0-9]".toRegex(), ""),
+                    model.identificationNumber.replace(".", "").replace("/", ""),
                     model.identificationId
                 ),
                 model.nameOwner
