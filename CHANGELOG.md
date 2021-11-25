@@ -1,6 +1,6 @@
 ## VERSION 2.1.2
 _25_11_2021_
-- Fix - Included regex to remove special characters and punctuation.
+- Fix - added regex to remove special characters and punctuation.
 
 ## VERSION 2.1.1
 _04_11_2021_
