@@ -1,3 +1,7 @@
+## VERSION 2.1.2
+_25_11_2021_
+- Fix - added regex to remove special characters and punctuation.
+
 ## VERSION 2.1.1
 _04_11_2021_
 - Fix - removed the "/" in the customer identifier when sending the api.
