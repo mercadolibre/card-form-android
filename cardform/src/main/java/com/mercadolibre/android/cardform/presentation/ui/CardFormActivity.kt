@@ -28,6 +28,10 @@ internal class CardFormActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        finish()
+    }
+
     override fun finish() {
         super.finish()
         overridePendingTransition(
