@@ -9,16 +9,16 @@ internal interface CardService {
 
     @GET("/{environment}/px_mobile/v1/card")
     suspend fun getCardInfoAsync(
-        @Path("environment") environment : String,
-        @Query("bin") bin : String,
-        @Query("site_id") siteId : String,
-        @Query("excluded_payment_types") excludedPaymentTypes : List<String>? = null,
-        @Query("odr") odrFlag : Boolean = true
+        @Path("environment") environment: String,
+        @Query("bin") bin: String,
+        @Query("site_id") siteId: String,
+        @Query("excluded_payment_types") excludedPaymentTypes: List<String>? = null,
+        @Query("odr") odrFlag: Boolean = true
     ): Response<RegisterCard>
 
     @POST("/{environment}/px_mobile/v1/card/marketplace")
     suspend fun getCardInfoAsyncFromMarketplace(
-            @Path("environment") environment : String,
-            @Body cardInfo: CardInfoDto
+        @Path("environment") environment: String,
+        @Body cardInfo: CardInfoDto
     ): Response<RegisterCard>
 }

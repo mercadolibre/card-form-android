@@ -1,6 +1,6 @@
-package com.mercadolibre.android.cardform.data.model.request
+package com.mercadolibre.android.cardform.domain.model.params
 
-internal data class AssociatedCardParam(
+internal data class AssociateCardParam(
     val cardTokenId: String,
     val paymentMethodId: String,
     val paymentMethodType: String,

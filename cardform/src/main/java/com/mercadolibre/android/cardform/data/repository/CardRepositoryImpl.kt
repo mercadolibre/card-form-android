@@ -5,6 +5,7 @@ import com.mercadolibre.android.cardform.data.model.response.RegisterCard
 import com.mercadolibre.android.cardform.data.service.CardService
 import com.mercadolibre.android.cardform.network.exceptions.ExcludePaymentException
 import com.mercadolibre.android.cardform.data.model.body.CardInfoDto
+import com.mercadolibre.android.cardform.domain.CardRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async

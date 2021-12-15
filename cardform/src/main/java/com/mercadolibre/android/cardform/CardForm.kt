@@ -29,6 +29,7 @@ open class CardForm : Parcelable {
     val cardInfo: CardInfoDto?
     val acceptThirdPartyCard: Boolean
     val activateCard: Boolean
+    val tokenizationFlowEnabled: Boolean
 
     protected constructor(builder: Builder) {
         siteId = builder.siteId
@@ -41,6 +42,7 @@ open class CardForm : Parcelable {
         cardInfo = builder.cardInfo
         acceptThirdPartyCard = builder.acceptThirdPartyCard
         activateCard = builder.activateCard
+        tokenizationFlowEnabled = builder.tokenizationFlowEnabled
     }
 
     protected constructor(parcel: Parcel) {
@@ -54,6 +56,7 @@ open class CardForm : Parcelable {
         cardInfo = parcel.readParcelable(CardInfoDto::class.java.classLoader)
         acceptThirdPartyCard = parcel.readByte() != 0.toByte()
         activateCard = parcel.readByte() != 0.toByte()
+        tokenizationFlowEnabled = parcel.readByte() != 0.toByte()
     }
 
     open fun start(activity: AppCompatActivity, requestCode: Int) {
@@ -110,6 +113,9 @@ open class CardForm : Parcelable {
         var activateCard: Boolean = true
             private set
 
+        var tokenizationFlowEnabled = true
+            private set
+
         open fun setExcludedTypes(excludedTypes: List<String>) = apply {
             this.excludedTypes = excludedTypes
         }
@@ -120,6 +126,8 @@ open class CardForm : Parcelable {
             this.acceptThirdPartyCard = acceptThirdPartyCard
             this.activateCard = activateCard
         }
+
+        open fun setTokenizationFlowEnabled(enabled: Boolean) = apply { tokenizationFlowEnabled = enabled }
 
         fun <T : CardFormService> setCardFormHandler(handlerIntent: CardFormIntent<T>) = apply { cardFormIntent = handlerIntent }
 
@@ -153,6 +161,7 @@ open class CardForm : Parcelable {
         parcel.writeParcelable(cardInfo, flags)
         parcel.writeByte(if(acceptThirdPartyCard) 1 else 0)
         parcel.writeByte(if(activateCard) 1 else 0)
+        parcel.writeByte(if(tokenizationFlowEnabled) 1 else 0)
     }
 
     override fun describeContents() = 0
