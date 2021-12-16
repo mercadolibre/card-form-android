@@ -21,6 +21,6 @@ object Versions {
     const val picassoDiskCache = "1.+"
     const val pxAddons = "4.+"
     const val andesUi = "3.+"
-git ch
+
     const val libraryVersion = "2.1.3"
 }
