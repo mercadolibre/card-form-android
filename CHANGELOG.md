@@ -1,3 +1,7 @@
+## VERSION 2.1.3
+_16_12_2021_
+- Fixes null pointer exception in onBackPressed.
+
 ## VERSION 2.1.2
 _25_11_2021_
 - Fix - added regex to remove special characters and punctuation.
