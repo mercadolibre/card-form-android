@@ -28,6 +28,7 @@ object Dependencies {
     // Okhttp
     const val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.okHttp}"
 
+    // Tests
     const val junit = "junit:junit:${Versions.junit}"
     const val runner = "com.android.support.test:runner:${Versions.testRunner}"
 
