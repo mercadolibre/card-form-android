@@ -43,15 +43,16 @@ android {
         freeCompilerArgs = ['-Xjvm-default=enable']
     }
 
-//    testOptions {
-//        unitTests.includeAndroidResources = true
-//        unitTests.all {
-//            reports {
-//                junitXml.enabled = true
-//                html.enabled = false
-//            }
-//        }
-//    }
+    testOptions {
+        unitTests.includeAndroidResources = true
+        unitTests.returnDefaultValues = true
+        unitTests.all {
+            reports {
+                junitXml.enabled = true
+                html.enabled = false
+            }
+        }
+    }
 }
 
 dependencies {
@@ -81,10 +82,10 @@ dependencies {
     implementation Dependencies.viewmodel
     implementation Dependencies.pxAddons
 
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.0'
-    testImplementation "io.mockk:mockk:1.10.0"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$Versions.kotlinCoroutines"
+    testImplementation Dependencies.junit
+    testRuntimeOnly Dependencies.junitEngine
+    testImplementation Dependencies.mockk
+    testImplementation Dependencies.coroutinesTest
 }
 
 apply from: "$rootDir/gradle/deploy_card_form.gradle"

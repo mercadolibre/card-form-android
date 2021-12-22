@@ -45,7 +45,4 @@ dependencies {
     implementation Dependencies.extensions
     implementation Dependencies.livedataCore
     implementation Dependencies.viewmodel
-
-    testImplementation Dependencies.junit
-    androidTestImplementation Dependencies.runner
 }

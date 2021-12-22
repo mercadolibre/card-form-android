@@ -1,107 +1,96 @@
 package com.mercadolibre.android.cardform.data.repository
 
-import com.mercadolibre.android.cardform.CoroutinesTestExtension
 import com.mercadolibre.android.cardform.data.model.body.CardInfoDto
 import com.mercadolibre.android.cardform.data.model.response.RegisterCard
 import com.mercadolibre.android.cardform.data.service.CardService
-import com.mercadolibre.android.cardform.network.exceptions.BusinessException
 import com.mercadolibre.android.cardform.network.exceptions.ExcludePaymentException
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
-import okhttp3.MediaType
 import okhttp3.ResponseBody
 import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.extension.RegisterExtension
 import retrofit2.Response
-import android.accounts.Account
-import io.mockk.MockKStaticScope
-import org.json.JSONObject
+import java.io.IOException
 
 
 internal class CardRepositoryImplTest {
 
-    @JvmField
-    @RegisterExtension
-    val coroutinesTestExtension = CoroutinesTestExtension()
-
     @Nested
     @DisplayName("Given an MP user makes a request")
-    inner class TestUserMP {
+    inner class GivenAnMPUserMakesARequest {
 
         @Nested
         @DisplayName("When get search infos cards")
-        inner class InfoCards {
+        inner class WhenGetSearchInfosCards {
 
             private val cardService: CardService = mockk(relaxed = true)
             private val registerCard = mockk<RegisterCard>(relaxed = true)
-            private val responseBody = mockk<ResponseBody>(relaxed = true)
+            private val subject = CardRepositoryImpl(cardService, "MLA", null, "instore", null)
+
+            @Test
+            fun `Get card information with success`() {
+                coEvery { cardService.getCardInfoAsync(any(), any(), any()) } returns Response.success(registerCard)
+                runBlocking {
+                    Assertions.assertNotNull(subject.getCardInfo(""))
+                }
+            }
+
+            @Test
+            fun `Get card information with exception`() {
+                runBlocking {
+                    assertThrows<Exception> { subject.getCardInfo("") }
+                }
+            }
+        }
+
+        // TODO: Melhorar class repository
+        @Nested
+        @DisplayName("When search card info return error ExcludePaymentException")
+        inner class WhenSearchCardInfoReturnExcludePaymentException {
+
+            private val cardService: CardService = mockk(relaxed = true)
+            val response =  mockk<Response<RegisterCard>>(relaxed = true)
+            val responseBody = mockk<ResponseBody>(relaxed = true)
             private val subject = CardRepositoryImpl(cardService, "MLA", null, "instore", null)
 
             @BeforeEach
             fun setUp() {
-                MockKAnnotations.init(this)
+                every { response.code() } returns 400
+                every { response.errorBody() } returns responseBody
+                coEvery { cardService.getCardInfoAsync(any(), any(), any()) } returns response
             }
 
             @Test
-            fun `Get card information`() {
+            fun `Then return an ExcludePaymentException`() {
                 runBlocking {
-                    coEvery { cardService.getCardInfoAsync(any(), any(), any()) } returns Response.success(registerCard)
-
-                    val retorno: RegisterCard?
-                    subject.getCardInfo("").let {
-                        retorno = it
-                    }
-                    Assertions.assertNotNull(retorno)
+                    assertThrows<ExcludePaymentException> { subject.getCardInfo("") }
                 }
             }
+        }
 
-            @Test
-            fun `Get info card error throw ExcludePaymentException`() {
-                runBlocking {
+        // TODO: Melhorar class repository
+        @Nested
+        @DisplayName("When search card info return error IOException")
+        inner class WhenSearchCardInfoReturnIOException {
 
-                    val aResponse: Response<RegisterCard> = Response.error(
-                        400,
-                        ResponseBody.create(
-                            MediaType.parse("application/json"),
-                            "{}"
-//                            "{\"message\": \"The transaction does not accept this payment method\",\"error\": \"excluded_payment_type_error\",\"status\": 400,\"user_error_message\": \"\"}"
-                        )
-                    )
+            private val cardService: CardService = mockk(relaxed = true)
+            private val subject = CardRepositoryImpl(cardService, "MLA", null, "instore", null)
 
-                    coEvery { cardService.getCardInfoAsync(any(), any(), any()) } returns aResponse
-
-                    assertThrows<Exception> {
-                        runBlocking {
-                            subject.getCardInfo("")
-                        }
-                    }
-                }
-
-//                ResponseBody.create(
-//                    MediaType.parse("application/json;charset=utf-8"),
-//                    "{\"message\":\"The transaction does not accept this payment method.\"," +
-//                            "\"error\":\"excluded_payment_type_error\"," +
-//                            "\"status\":400," +
-//                            "\"user_error_message\":\"\"}\"")
+            @BeforeEach
+            fun setUp() {
+                val response =  mockk<Response<RegisterCard>>(relaxed = true)
+                val responseBody = mockk<ResponseBody>(relaxed = true)
+                every { response.code() } returns 404
+                every { response.errorBody() } returns responseBody
+                coEvery { cardService.getCardInfoAsync(any(), any(), any()) } returns response
             }
 
             @Test
-            fun `Get info card error`() {
+            fun `Then return an IOException`() {
                 runBlocking {
-
-                    coEvery { cardService.getCardInfoAsync(any(), any(), any()) } returns Response.error(
-                        404,
-                        ResponseBody.create(null, "")
-                    )
-
-                    assertThrows<Exception> {
-                        runBlocking {
-                            subject.getCardInfo("")
-                        }
-                    }
+                    assertThrows<IOException> { subject.getCardInfo("") }
                 }
             }
         }
@@ -109,70 +98,79 @@ internal class CardRepositoryImplTest {
 
     @Nested
     @DisplayName("Given an ML user makes a request")
-    inner class TestUserML {
+    inner class GivenAnMLUserMakesARequest {
 
         @Nested
         @DisplayName("When get search infos cards")
-        inner class InfoCards {
+        inner class WhenGetSearchInfosCards {
 
             private val cardService: CardService = mockk(relaxed = true)
             private val cardInfoDto: CardInfoDto = mockk(relaxed = true)
             private val registerCard = mockk<RegisterCard>(relaxed = true)
             private val subject = CardRepositoryImpl(cardService, "MLA", null, "checkout-on", cardInfoDto)
 
+            @Test
+            fun `Get card information with success`() {
+                runBlocking {
+                    coEvery { cardService.getCardInfoAsyncFromMarketplace(any(), any()) } returns Response.success(registerCard)
+                    Assertions.assertNotNull(subject.getCardInfo("424242"))
+                }
+            }
+
+            @Test
+            fun `Get card information with exception`() {
+                runBlocking {
+                    assertThrows<Exception> { subject.getCardInfo("") }
+                }
+            }
+        }
+
+        // TODO: Melhorar class repository
+        @Nested
+        @DisplayName("When search card info return error ExcludePaymentException")
+        inner class WhenSearchCardInfoReturnExcludePaymentException {
+
+            private val cardService: CardService = mockk(relaxed = true)
+            val response =  mockk<Response<RegisterCard>>(relaxed = true)
+            val responseBody = mockk<ResponseBody>(relaxed = true)
+            private val subject = CardRepositoryImpl(cardService, "MLA", null, "instore", null)
+
             @BeforeEach
             fun setUp() {
-                MockKAnnotations.init(this)
+                every { response.code() } returns 400
+                every { response.errorBody() } returns responseBody
+                coEvery { cardService.getCardInfoAsyncFromMarketplace(any(), any()) } returns response
             }
 
             @Test
-            fun `Get card information`() {
+            fun `Then return an ExcludePaymentException`() {
                 runBlocking {
-
-                    coEvery { cardService.getCardInfoAsyncFromMarketplace(any(), any()) } returns Response.success(
-                        registerCard
-                    )
-
-                    val retorno: RegisterCard?
-                    subject.getCardInfo("424242").let {
-                        retorno = it
-                    }
-
-                    Assertions.assertNotNull(retorno)
+                    assertThrows<ExcludePaymentException> { subject.getCardInfo("") }
                 }
             }
+        }
 
-            @Test
-            fun `Get info card error throw ExcludePaymentException`() {
-                runBlocking {
+        // TODO: Melhorar class repository
+        @Nested
+        @DisplayName("When search card info return error IOException")
+        inner class WhenSearchCardInfoReturnIOException {
 
-                    coEvery { cardService.getCardInfoAsyncFromMarketplace(any(), any()) } returns Response.error(
-                        400,
-                        ResponseBody.create(null, "")
-                    )
+            private val cardService: CardService = mockk(relaxed = true)
+            private val subject = CardRepositoryImpl(cardService, "MLA", null, "instore", null)
 
-                    assertThrows<Exception> {
-                        runBlocking {
-                            subject.getCardInfo("")
-                        }
-                    }
-                }
+            @BeforeEach
+            fun setUp() {
+                val response =  mockk<Response<RegisterCard>>(relaxed = true)
+                val responseBody = mockk<ResponseBody>(relaxed = true)
+                every { response.code() } returns 404
+                every { response.errorBody() } returns responseBody
+                coEvery { cardService.getCardInfoAsyncFromMarketplace(any(), any()) } returns response
             }
 
             @Test
-            fun `Get info card error`() {
+            fun `Then return an IOException`() {
                 runBlocking {
-
-                    coEvery { cardService.getCardInfoAsyncFromMarketplace(any(), any()) } returns Response.error(
-                        404,
-                        ResponseBody.create(null, "")
-                    )
-
-                    assertThrows<Exception> {
-                        runBlocking {
-                            subject.getCardInfo("")
-                        }
-                    }
+                    assertThrows<IOException> { subject.getCardInfo("") }
                 }
             }
         }
