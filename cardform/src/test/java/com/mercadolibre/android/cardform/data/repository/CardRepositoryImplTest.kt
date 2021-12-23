@@ -51,8 +51,8 @@ internal class CardRepositoryImplTest {
         inner class WhenSearchCardInfoReturnExcludePaymentException {
 
             private val cardService: CardService = mockk(relaxed = true)
-            val response =  mockk<Response<RegisterCard>>(relaxed = true)
-            val responseBody = mockk<ResponseBody>(relaxed = true)
+            private val response =  mockk<Response<RegisterCard>>(relaxed = true)
+            private val responseBody = mockk<ResponseBody>(relaxed = true)
             private val subject = CardRepositoryImpl(cardService, "MLA", null, "instore", null)
 
             @BeforeEach
