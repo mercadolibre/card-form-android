@@ -30,7 +30,7 @@ internal class CardRepositoryImplTest {
             private val subject = CardRepositoryImpl(cardService, "MLA", null, "instore", null)
 
             @Test
-            fun `Get card information with success`() {
+            fun `then get card information with success`() {
                 coEvery { cardService.getCardInfoAsync(any(), any(), any()) } returns Response.success(registerCard)
                 runBlocking {
                     Assertions.assertNotNull(subject.getCardInfo(""))
@@ -38,7 +38,7 @@ internal class CardRepositoryImplTest {
             }
 
             @Test
-            fun `Get card information with exception`() {
+            fun `Then get card information with exception`() {
                 runBlocking {
                     assertThrows<Exception> { subject.getCardInfo("") }
                 }
@@ -110,7 +110,7 @@ internal class CardRepositoryImplTest {
             private val subject = CardRepositoryImpl(cardService, "MLA", null, "checkout-on", cardInfoDto)
 
             @Test
-            fun `Get card information with success`() {
+            fun `Then return card information with success`() {
                 runBlocking {
                     coEvery { cardService.getCardInfoAsyncFromMarketplace(any(), any()) } returns Response.success(registerCard)
                     Assertions.assertNotNull(subject.getCardInfo("424242"))
@@ -118,7 +118,7 @@ internal class CardRepositoryImplTest {
             }
 
             @Test
-            fun `Get card information with exception`() {
+            fun `Then return card information with exception`() {
                 runBlocking {
                     assertThrows<Exception> { subject.getCardInfo("") }
                 }
