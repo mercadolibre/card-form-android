@@ -4,7 +4,6 @@ import com.mercadolibre.android.cardform.data.model.body.CardInfoDto
 import com.mercadolibre.android.cardform.data.model.response.RegisterCard
 import com.mercadolibre.android.cardform.data.service.CardService
 import com.mercadolibre.android.cardform.network.exceptions.ExcludePaymentException
-import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -13,7 +12,6 @@ import okhttp3.ResponseBody
 import org.junit.jupiter.api.*
 import retrofit2.Response
 import java.io.IOException
-
 
 internal class CardRepositoryImplTest {
 
