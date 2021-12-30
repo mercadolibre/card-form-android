@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import retrofit2.Response
 
 internal class TokenizeRepositoryImplTest {
@@ -66,7 +67,7 @@ internal class TokenizeRepositoryImplTest {
             @Test
             fun `Then tokenize card with failure`() {
                 runBlocking {
-                    subject.tokenizeCard(cardInfoBody)
+                    assertThrows<Exception> { subject.tokenizeCard(cardInfoBody) }
                 }
             }
         }
