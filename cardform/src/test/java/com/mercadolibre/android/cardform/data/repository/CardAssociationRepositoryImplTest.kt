@@ -5,7 +5,10 @@ import com.mercadolibre.android.cardform.data.service.CardAssociationService
 import com.mercadolibre.android.cardform.domain.AssociatedCardParam
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 internal class CardAssociationRepositoryImplTest {
 

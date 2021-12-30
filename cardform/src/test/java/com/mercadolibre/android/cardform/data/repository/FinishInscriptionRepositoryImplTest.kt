@@ -1,17 +1,15 @@
 package com.mercadolibre.android.cardform.data.repository
 
 import com.mercadolibre.android.cardform.TestContextProvider
-import com.mercadolibre.android.cardform.base.CoroutineContextProvider
 import com.mercadolibre.android.cardform.data.mapper.FinishInscriptionBodyMapper
 import com.mercadolibre.android.cardform.data.service.FinishInscriptionService
 import com.mercadolibre.android.cardform.domain.FinishInscriptionParam
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 internal class FinishInscriptionRepositoryImplTest {
 
@@ -30,7 +28,7 @@ internal class FinishInscriptionRepositoryImplTest {
             private val subject = FinishInscriptionRepositoryImpl(finishInscriptionBodyMapper, finishInscriptionService, contextProvider)
 
             @Test
-            fun `When performed successfully`() {
+            fun `Then performed successfully`() {
                 runBlocking {
                     assertNotNull(subject.getFinishInscriptionData(finishInscriptionParam))
                 }

@@ -24,7 +24,7 @@ internal class InscriptionRepositoryImplTest {
             private val subject = InscriptionRepositoryImpl(inscriptionService, contextProvider)
 
             @Test
-            fun `get registration data successfully`() {
+            fun `Then get registration data successfully`() {
                 runBlocking {
                     assertNotNull(subject.getInscriptionData())
                 }
