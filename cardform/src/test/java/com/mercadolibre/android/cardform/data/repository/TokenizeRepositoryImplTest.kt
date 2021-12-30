@@ -56,12 +56,15 @@ internal class TokenizeRepositoryImplTest {
             private val contextProvider = TestContextProvider()
             private val subject = TokenizeRepositoryImpl(tokenizeService, contextProvider)
 
-            @Test
-            fun `Then tokenize card with failure`() {
+            @BeforeEach
+            fun setUp() {
                 every { response.code() } returns 400
                 every { response.errorBody() } returns responseBody
                 coEvery { tokenizeService.createTokenAsync(any()) } returns response
+            }
 
+            @Test
+            fun `Then tokenize card with failure`() {
                 runBlocking {
                     subject.tokenizeCard(cardInfoBody)
                 }
