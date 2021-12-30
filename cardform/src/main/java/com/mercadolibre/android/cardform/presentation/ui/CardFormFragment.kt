@@ -137,10 +137,8 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
             appBar.configureToolbar(this)
             appBar.setOnBackListener {
                 KeyboardHelper.hideKeyboard(this@CardFormFragment)
-                postDelayed(100) {
-                    viewModel.trackBack()
-                    onBackPressed()
-                }
+                viewModel.trackBack()
+                onBackPressed()
             }
         }
     }
