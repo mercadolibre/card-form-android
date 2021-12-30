@@ -5,10 +5,7 @@ import com.mercadolibre.android.cardform.data.service.CardAssociationService
 import com.mercadolibre.android.cardform.domain.AssociatedCardParam
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
 
 internal class CardAssociationRepositoryImplTest {
 
@@ -23,16 +20,16 @@ internal class CardAssociationRepositoryImplTest {
             private val cardAssociationService = mockk<CardAssociationService>(relaxed = true)
             private val associatedCardParam = mockk<AssociatedCardParam>(relaxed = true)
             private val contextProvider = TestContextProvider()
-            private val subject = CardAssociationRepositoryImpl(cardAssociationService, true, true, contextProvider)
-
-            @BeforeEach
-            fun setUp() {
-            }
+            private val subject = CardAssociationRepositoryImpl(cardAssociationService,
+                acceptThirdPartyCard = true,
+                activateCard = true,
+                contextProvider = contextProvider
+            )
 
             @Test
             fun `Then the associated card is activated`() {
                 runBlocking {
-                    subject.associateCard(associatedCardParam)
+                    Assertions.assertNotNull(subject.associateCard(associatedCardParam))
                 }
             }
         }
@@ -41,11 +38,19 @@ internal class CardAssociationRepositoryImplTest {
         @DisplayName("When the card associated is not activated")
         inner class WhenTheCardAssociatedIsNotSuccessful {
             private val cardAssociationService = mockk<CardAssociationService>(relaxed = true)
+            private val associatedCardParam = mockk<AssociatedCardParam>(relaxed = true)
             private val contextProvider = TestContextProvider()
-            private val subject = CardAssociationRepositoryImpl(cardAssociationService, true, false, contextProvider)
+            private val subject = CardAssociationRepositoryImpl(cardAssociationService,
+                acceptThirdPartyCard = true,
+                activateCard = false,
+                contextProvider = contextProvider
+            )
 
             @Test
             fun `Then the associated card is not activated`() {
+                runBlocking {
+                    Assertions.assertNotNull(subject.associateCard(associatedCardParam))
+                }
             }
         }
 
@@ -54,11 +59,19 @@ internal class CardAssociationRepositoryImplTest {
         inner class WhenTheCardNotAssociatedIsNotSuccessful {
 
             private val cardAssociationService = mockk<CardAssociationService>(relaxed = true)
+            private val associatedCardParam = mockk<AssociatedCardParam>(relaxed = true)
             private val contextProvider = TestContextProvider()
-            private val subject = CardAssociationRepositoryImpl(cardAssociationService, false, false, contextProvider)
+            private val subject = CardAssociationRepositoryImpl(cardAssociationService,
+                acceptThirdPartyCard = false,
+                activateCard = false,
+                contextProvider = contextProvider
+            )
 
             @Test
             fun `Then the unassociated card is not unactivated`() {
+                runBlocking {
+                    Assertions.assertNotNull(subject.associateCard(associatedCardParam))
+                }
             }
         }
     }

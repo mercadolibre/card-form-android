@@ -35,13 +35,14 @@ internal class TokenizeRepositoryImplTest {
 
             @Test
             fun ThenTokenizeCardWithSuccess() {
+                coEvery { tokenizeService.createTokenAsync(any()) } returns Response.success(cardToken)
+
                 runBlocking {
-                    coEvery { tokenizeService.createTokenAsync(any()) } returns Response.success(cardToken)
                     assertNotNull(subject.tokenizeCard(cardInfoBody))
                 }
             }
 
-            //TODO: Não sei como testar falhar nesse cenraio
+            //TODO: Não sei como testar falhar nesse cenario
             @Test
             fun ThenTokenizeCardWithFailure() {
                 every { response.code() } returns 400
