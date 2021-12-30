@@ -25,6 +25,7 @@ object Versions {
     const val junitEngine = "5.8.0"
     const val mockk = "1.10.0"
     const val coroutinesTest = "1.3.0"
+    const val gradleJunit = "1.8.0.0"
 
     const val libraryVersion = "2.1.2"
 }

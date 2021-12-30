@@ -33,6 +33,7 @@ object Dependencies {
     const val junitEngine = "org.junit.jupiter:junit-jupiter-engine:${Versions.junitEngine}"
     const val mockk = "io.mockk:mockk:${Versions.mockk}"
     const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutinesTest}"
+    const val gradleJunit = "de.mannodermaus.gradle.plugins:android-junit5:${Versions.gradleJunit}"
 
     // Mercado libre
     const val ui = "com.mercadolibre.android:ui:${Versions.ui}"
