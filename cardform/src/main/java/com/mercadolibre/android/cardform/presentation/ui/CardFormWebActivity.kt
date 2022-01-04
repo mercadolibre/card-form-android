@@ -3,10 +3,9 @@ package com.mercadolibre.android.cardform.presentation.ui
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.mercadolibre.android.cardform.CARD_FORM_EXTRA
@@ -15,14 +14,11 @@ import com.mercadolibre.android.cardform.CardForm.Companion.RESULT_CARD_ID_KEY
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.di.Dependencies
 import com.mercadolibre.android.cardform.di.viewModel
-import com.mercadolibre.android.cardform.presentation.extensions.*
-import com.mercadolibre.android.cardform.presentation.extensions.gone
-import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
-import com.mercadolibre.android.cardform.presentation.extensions.visible
-import com.mercadolibre.android.cardform.presentation.model.ScreenState
-import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardFormWebViewModel
 import com.mercadolibre.android.cardform.internal.CardFormWeb
+import com.mercadolibre.android.cardform.presentation.extensions.*
+import com.mercadolibre.android.cardform.presentation.model.ScreenState
 import com.mercadolibre.android.cardform.presentation.utils.ViewUtils
+import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardFormWebViewModel
 
 private const val SUCCESS_RETURN_DELAY = 1000L
 
@@ -41,9 +37,8 @@ internal class CardFormWebActivity : AppCompatActivity() {
         cardFormWebContainer = findViewById(R.id.card_form_web)
         webViewContainer = findViewById(R.id.web_view_fragment_container)
         progressStateContainer = findViewById(R.id.progress_state_fragment_container)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            defaultStatusBarColor = window.statusBarColor
-        }
+        defaultStatusBarColor = window.statusBarColor
+
         intent.extras?.let { extras ->
             val cardFormData = extras.getParcelable<CardForm>(CARD_FORM_EXTRA)!!
             Dependencies.instance.initialize(this, cardFormData)
