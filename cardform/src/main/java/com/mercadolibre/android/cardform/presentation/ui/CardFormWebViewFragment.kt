@@ -3,7 +3,8 @@ package com.mercadolibre.android.cardform.presentation.ui
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
-import android.webkit.*
+import android.webkit.CookieManager
+import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.mercadolibre.android.cardform.R
@@ -63,12 +64,8 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
             val webViewClient = CardFormWebViewClient()
             webView.settings.also { settings ->
                 settings.javaScriptEnabled = true
-                settings.userAgentString = settings.userAgentString+WEB_VIEW_SETTING_USER_AGENT
-                if (android.os.Build.VERSION.SDK_INT >= 21) {
-                    CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true)
-                } else {
-                    CookieManager.getInstance().setAcceptCookie(true)
-                }
+                settings.userAgentString = settings.userAgentString + WEB_VIEW_SETTING_USER_AGENT
+                CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true)
             }
             webView.webViewClient = webViewClient
 
@@ -99,10 +96,7 @@ internal class CardFormWebViewFragment : BaseFragment<CardFormWebViewModel>() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        if (android.os.Build.VERSION.SDK_INT >= 21)
-            CookieManager.getInstance().removeAllCookies(null);
-        else
-            CookieManager.getInstance().removeAllCookie();
+        CookieManager.getInstance().removeAllCookies(null);
         webView.clearCache(true);
     }
 
