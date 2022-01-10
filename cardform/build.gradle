@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'de.mannodermaus.android-junit5'
 
 def user_agent = "CardForm/Android/" + Versions.libraryVersion
 
@@ -41,6 +42,17 @@ android {
         jvmTarget = "1.8"
         freeCompilerArgs = ['-Xjvm-default=enable']
     }
+
+    testOptions {
+        unitTests.includeAndroidResources = true
+        unitTests.returnDefaultValues = true
+        unitTests.all {
+            reports {
+                junitXml.enabled = true
+                html.enabled = true
+            }
+        }
+    }
 }
 
 dependencies {
@@ -71,7 +83,9 @@ dependencies {
     implementation Dependencies.pxAddons
 
     testImplementation Dependencies.junit
-    androidTestImplementation Dependencies.runner
+    testRuntimeOnly Dependencies.junitEngine
+    testImplementation Dependencies.mockk
+    testImplementation Dependencies.coroutinesTest
 }
 
 apply from: "$rootDir/gradle/deploy_card_form.gradle"

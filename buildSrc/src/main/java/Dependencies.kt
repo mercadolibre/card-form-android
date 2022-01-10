@@ -28,9 +28,12 @@ object Dependencies {
     // Okhttp
     const val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.okHttp}"
 
-    const val junit = "junit:junit:${Versions.junit}"
-    const val runner = "com.android.support.test:runner:${Versions.testRunner}"
-
+    // Tests
+    const val junit = "org.junit.jupiter:junit-jupiter:${Versions.junit}"
+    const val junitEngine = "org.junit.jupiter:junit-jupiter-engine:${Versions.junitEngine}"
+    const val mockk = "io.mockk:mockk:${Versions.mockk}"
+    const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutinesTest}"
+    const val gradleJunit = "de.mannodermaus.gradle.plugins:android-junit5:${Versions.gradleJunit}"
 
     // Mercado libre
     const val ui = "com.mercadolibre.android:ui:${Versions.ui}"

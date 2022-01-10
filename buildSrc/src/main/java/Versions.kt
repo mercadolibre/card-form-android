@@ -3,8 +3,6 @@ object Versions {
     const val retrofit = "2.6.4"
     const val gson = "2.8.5"
     const val carddrawer = "2.+"
-    const val testRunner = "1.1.1"
-    const val junit = "4.+"
     const val ui ="9.+"
     const val appCompat = "1.2.0"
     const val lifecycle = "2.0.0"
@@ -21,6 +19,13 @@ object Versions {
     const val picassoDiskCache = "1.+"
     const val pxAddons = "4.+"
     const val andesUi = "3.+"
+
+    // Tests
+    const val junit = "5.8.0"
+    const val junitEngine = "5.8.0"
+    const val mockk = "1.10.0"
+    const val coroutinesTest = "1.3.0"
+    const val gradleJunit = "1.8.0.0"
 
     const val libraryVersion = "2.1.3"
 }
