@@ -5,9 +5,9 @@ import com.mercadolibre.android.cardform.base.Response.Failure
 import com.mercadolibre.android.cardform.base.Response.Success
 import com.mercadolibre.android.cardform.base.resolveRetrofitResponse
 import com.mercadolibre.android.cardform.data.mapper.FinishInscriptionBodyMapper
+import com.mercadolibre.android.cardform.data.model.request.FinishInscriptionParam
+import com.mercadolibre.android.cardform.data.model.response.finishinscription.FinishInscriptionBusinessModel
 import com.mercadolibre.android.cardform.data.service.FinishInscriptionService
-import com.mercadolibre.android.cardform.domain.FinishInscriptionBusinessModel
-import com.mercadolibre.android.cardform.domain.FinishInscriptionParam
 import kotlinx.coroutines.withContext
 
 internal class FinishInscriptionRepositoryImpl(

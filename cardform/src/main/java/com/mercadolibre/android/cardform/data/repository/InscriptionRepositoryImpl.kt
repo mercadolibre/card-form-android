@@ -4,8 +4,8 @@ import com.mercadolibre.android.cardform.base.CoroutineContextProvider
 import com.mercadolibre.android.cardform.base.Response.Failure
 import com.mercadolibre.android.cardform.base.Response.Success
 import com.mercadolibre.android.cardform.base.resolveRetrofitResponse
+import com.mercadolibre.android.cardform.data.model.response.initinscription.InscriptionBusinessModel
 import com.mercadolibre.android.cardform.data.service.InscriptionService
-import com.mercadolibre.android.cardform.domain.InscriptionBusinessModel
 import kotlinx.coroutines.withContext
 
 internal class InscriptionRepositoryImpl(
