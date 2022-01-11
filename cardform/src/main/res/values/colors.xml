@@ -3,11 +3,13 @@
     <color name="cf_action_bar">#00ffffff</color>
     <color name="cf_action_bar_text">#333333</color>
     <color name="cf_status_bar">#ffffff</color>
-    <color name="cf_input_accent">#3483fa</color>
+    <color name="cf_input_accent">#4555FA</color>
     <color name="cf_button_navigation_background">#f5f5f5</color>
-    <color name="cf_back">#3483fa</color>
+    <color name="cf_back">#4555FA</color>
     <color name="cf_hint_input_text">#73000000</color>
     <color name="cf_radio_button_disable">#19000000</color>
     <color name="cf_progress_background">#0a000000</color>
-    <color name="cf_progress_color">#3483fa</color>
+    <color name="cf_progress_color">#4555FA</color>
+    <color name="ui_components_primary_color">#4555FA</color>
+    <color name="ui_components_error_color">#B94455</color>
 </resources>
