@@ -2,6 +2,7 @@ package com.mercadolibre.android.cardform.domain
 
 import com.mercadolibre.android.cardform.base.UseCase
 import com.mercadolibre.android.cardform.base.map
+import com.mercadolibre.android.cardform.data.repository.FinishInscriptionRepository
 
 internal class FinishInscriptionUseCase(
     private val finishInscriptionRepository: FinishInscriptionRepository
@@ -29,6 +30,14 @@ data class FinishInscriptionParam(
 data class FinishInscriptionModel(
     val cardTokenId: String,
     val bin: String,
+    val issuerId: Int,
+    val paymentMethodId: String,
+    val paymentMethodType: String
+)
+
+data class FinishInscriptionBusinessModel(
+    val cardTokenId: String,
+    val firstSixDigits: String,
     val issuerId: Int,
     val paymentMethodId: String,
     val paymentMethodType: String

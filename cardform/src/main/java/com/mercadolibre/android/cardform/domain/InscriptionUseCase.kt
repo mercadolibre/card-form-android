@@ -2,6 +2,7 @@ package com.mercadolibre.android.cardform.domain
 
 import com.mercadolibre.android.cardform.base.UseCase
 import com.mercadolibre.android.cardform.base.map
+import com.mercadolibre.android.cardform.data.repository.InscriptionRepository
 
 internal class InscriptionUseCase(
     private val inscriptionRepository: InscriptionRepository
@@ -27,3 +28,13 @@ data class InscriptionModel(
     val fullName: String,
     val identifierNumber: String?,
     val identifierType: String?)
+
+data class InscriptionBusinessModel(
+    val token: String,
+    val urlWebPay: String,
+    val redirectUrl: String,
+    val userName: String,
+    val userLastName: String,
+    val identifierNumber: String?,
+    val identifierType: String?
+)
