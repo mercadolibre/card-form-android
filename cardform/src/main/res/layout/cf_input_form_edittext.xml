@@ -9,6 +9,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/inputLayout"
+        android:textColorHint="@color/cf_input_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/InputFormTheme"
