@@ -1,6 +1,6 @@
 package com.mercadolibre.android.cardform.data.mapper
 
-import com.mercadolibre.android.cardform.domain.FinishInscriptionParam
+import com.mercadolibre.android.cardform.data.model.request.FinishInscriptionParam
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested

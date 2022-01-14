@@ -1,6 +1,7 @@
 package com.mercadolibre.android.cardform.domain
 
 import com.mercadolibre.android.cardform.TestContextProvider
+import com.mercadolibre.android.cardform.data.model.request.AssociatedCardParam
 import com.mercadolibre.android.cardform.data.repository.CardAssociationRepositoryImpl
 import com.mercadolibre.android.cardform.data.service.CardAssociationService
 import io.mockk.mockk

@@ -65,6 +65,76 @@ internal class CardDataMapperTest {
             fun `RegisterCard to mapper CardData verify cardFormTitle`() {
                 assertEquals(expected.otherTexts.cardFormTitle, cardData.formTitle)
             }
+
+            @Test
+            fun `RegisterCard to mapper CardData verify cardUi cardNumberLength`() {
+                assertEquals(expected.cardUi.cardNumberLength, cardData.cardUi!!.cardNumberLength)
+            }
+
+            @Test
+            fun `RegisterCard to mapper CardData verify cardUi cardColor`() {
+                assertEquals(expected.cardUi.cardColor, cardData.cardUi!!.cardColor)
+            }
+
+            @Test
+            fun `RegisterCard to mapper CardData verify cardUi cardFontColor`() {
+                assertEquals(expected.cardUi.cardFontColor, cardData.cardUi!!.cardFontColor)
+            }
+
+            @Test
+            fun `RegisterCard to mapper CardData verify cardUi securityCodeLength`() {
+                assertEquals(expected.cardUi.securityCodeLength, cardData.cardUi!!.securityCodeLength)
+            }
+
+            @Test
+            fun `RegisterCard to mapper CardData verify cardUi securityCodeLocation`() {
+                assertEquals(expected.cardUi.securityCodeLocation, cardData.cardUi!!.securityCodeLocation)
+            }
+
+            @Test
+            fun `RegisterCard to mapper CardData verify cardUi paymentMethodImageUrl`() {
+                assertEquals(expected.cardUi.paymentMethodImageUrl, cardData.cardUi!!.paymentMethodImageUrl)
+            }
+
+            @Test
+            fun `RegisterCard to mapper CardData verify cardUi issuerImageUrl`() {
+                assertEquals(expected.cardUi.issuerImageUrl, cardData.cardUi!!.issuerImageUrl)
+            }
+
+            @Test
+            fun `RegisterCard to mapper CardData verify cardUi cardPattern`() {
+                assertEquals(expected.cardUi.cardPattern, cardData.cardUi!!.cardPattern)
+            }
+
+            @Test
+            fun `RegisterCard to mapper CardData verify cardUi validation`() {
+                assertEquals(expected.cardUi.validation, cardData.cardUi!!.validation)
+            }
+
+            @Test
+            fun `RegisterCard to mapper CardData verify cardUi extraValidations`() {
+                assertEquals(expected.cardUi.extraValidations, cardData.cardUi!!.extraValidations)
+            }
+
+            @Test
+            fun `RegisterCard to mapper CardData verify paymentMethod paymentTypeId`() {
+                assertEquals(expected.paymentMethod.paymentTypeId, cardData.paymentTypeId)
+            }
+
+            @Test
+            fun `RegisterCard to mapper CardData verify paymentMethod name`() {
+                assertEquals(expected.paymentMethod.name, cardData.name)
+            }
+
+            @Test
+            fun `RegisterCard to mapper CardData verify issuerName`() {
+                assertEquals(expected.issuers.first().name, cardData.issuerName)
+            }
+
+            @Test
+            fun `RegisterCard to mapper CardData verify additionalSteps`() {
+                assertEquals(expected.additionalSteps, cardData.additionalSteps)
+            }
         }
     }
 }
