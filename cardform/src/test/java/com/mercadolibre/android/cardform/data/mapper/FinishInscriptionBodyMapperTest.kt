@@ -1,13 +1,10 @@
 package com.mercadolibre.android.cardform.data.mapper
 
-import com.mercadolibre.android.cardform.data.model.body.FinishInscriptionBody
 import com.mercadolibre.android.cardform.domain.FinishInscriptionParam
-import io.mockk.mockk
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 internal class FinishInscriptionBodyMapperTest {
 
@@ -16,20 +13,47 @@ internal class FinishInscriptionBodyMapperTest {
     inner class GivenFinishConversionIsRequestedInscriptionBody {
 
         @Nested
-        @DisplayName("")
-        inner class When {
+        @DisplayName("When requested a conversion")
+        inner class WhenRequestedConversion {
 
-            private lateinit var finishInscriptionBody: FinishInscriptionBody
-            private val finishInscriptionParam = FinishInscriptionParam(
+
+            private val expectedSite = "MLA"
+            private val expected = FinishInscriptionParam(
                 "12345678", "user name",
                 "1234123412341234", "visa-credit"
             )
-            private val subject = FinishInscriptionBodyMapper("MLA")
+            private val subject = FinishInscriptionBodyMapper(expectedSite)
+            private val finishInscriptionBody = subject.map(expected)
 
             @Test
-            fun map() {
-                finishInscriptionBody = subject.map(finishInscriptionParam)
-                assertEquals(finishInscriptionParam.identificationNumber, finishInscriptionBody.cardHolder.identification.number)
+            fun `FinishInscriptionParam to mapper FinishInscriptionBody verify site`() {
+                assertEquals(expectedSite, finishInscriptionBody.siteId)
+            }
+
+            @Test
+            fun `FinishInscriptionParam to mapper FinishInscriptionBody verify tbkToken`() {
+                assertEquals(expected.tbkToken, finishInscriptionBody.tbkToken)
+            }
+
+            @Test
+            fun `FinishInscriptionParam to mapper FinishInscriptionBody verify identification number`() {
+                assertEquals(
+                    expected.identificationNumber,
+                    finishInscriptionBody.cardHolder.identification.number
+                )
+            }
+
+            @Test
+            fun `FinishInscriptionParam to mapper FinishInscriptionBody verify identification type`() {
+                assertEquals(
+                    expected.identificationType,
+                    finishInscriptionBody.cardHolder.identification.type
+                )
+            }
+
+            @Test
+            fun `FinishInscriptionParam to mapper FinishInscriptionBody verify name`() {
+                assertEquals(expected.userName, finishInscriptionBody.cardHolder.name)
             }
         }
     }
