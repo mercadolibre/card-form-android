@@ -3,9 +3,8 @@ package com.mercadolibre.android.cardform.di.module
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.mercadolibre.android.cardform.data.model.esc.Device
-import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardFormWebViewModel
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
-import com.mercadolibre.android.cardform.service.CardFormServiceManager
+import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardFormWebViewModel
 
 internal class ViewModelFactory(
     private val useCaseModule: UseCaseModule,

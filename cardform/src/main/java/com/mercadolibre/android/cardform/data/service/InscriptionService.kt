@@ -4,7 +4,6 @@ import com.mercadolibre.android.cardform.BuildConfig
 import com.mercadolibre.android.cardform.data.model.response.initinscription.InscriptionDataModel
 import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.Query
 
 private const val ENVIRONMENT = BuildConfig.API_ENVIRONMENT
 

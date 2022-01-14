@@ -2,7 +2,7 @@
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath Dependencies.gradle
@@ -24,7 +24,7 @@ allprojects {
             url 'https://artifacts.mercadolibre.com/repository/android-releases/'
         }
         jcenter()
-        mavenLocal()
+        mavenCentral()
     }
 }
 
