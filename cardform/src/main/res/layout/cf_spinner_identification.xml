@@ -8,7 +8,7 @@
         android:id="@+id/identificationText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/cf_hint_input_text"
+        android:textColor="@color/cf_input_text"
         android:textSize="@dimen/ui_fontsize_xsmall"
         android:ellipsize="end"
         android:maxLines="1"
