@@ -1,7 +1,6 @@
 package com.mercadolibre.android.cardform.presentation.extensions
 
 import android.content.Context
-import android.os.Build
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -28,9 +27,7 @@ internal fun <T : View> T.showKeyboard() {
 internal fun <T : View> T.getStringOrEmpty(id: Int): String = resources?.getString(id) ?: ""
 
 internal fun Window.changeStatusBarColor(@ColorInt color: Int) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        statusBarColor = color
-    }
+    addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+    statusBarColor = color
 }
 
