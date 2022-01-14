@@ -40,12 +40,7 @@ internal class CardFormWebViewClient: WebViewClient() {
         errorResponse: WebResourceResponse?
     ) {
         super.onReceivedHttpError(view, request, errorResponse)
-        val (url, errorMessage) = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            request?.url?.path to errorResponse?.reasonPhrase.orIfEmpty("unknown error")
-        } else {
-            null to "unknown error"
-        }
-
+        val (url, errorMessage) = request?.url?.path to errorResponse?.reasonPhrase.orIfEmpty("unknown error")
         webViewListener.onPageError(url, errorMessage)
     }
 

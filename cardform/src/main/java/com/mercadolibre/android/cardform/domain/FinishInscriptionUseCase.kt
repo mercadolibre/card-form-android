@@ -2,6 +2,9 @@ package com.mercadolibre.android.cardform.domain
 
 import com.mercadolibre.android.cardform.base.UseCase
 import com.mercadolibre.android.cardform.base.map
+import com.mercadolibre.android.cardform.data.model.request.FinishInscriptionParam
+import com.mercadolibre.android.cardform.data.model.response.finishinscription.FinishInscriptionModel
+import com.mercadolibre.android.cardform.data.repository.FinishInscriptionRepository
 
 internal class FinishInscriptionUseCase(
     private val finishInscriptionRepository: FinishInscriptionRepository
@@ -18,18 +21,3 @@ internal class FinishInscriptionUseCase(
             )
         }
 }
-
-data class FinishInscriptionParam(
-    val tbkToken: String,
-    val userName: String,
-    val identificationNumber: String?,
-    val identificationType: String?
-)
-
-data class FinishInscriptionModel(
-    val cardTokenId: String,
-    val bin: String,
-    val issuerId: Int,
-    val paymentMethodId: String,
-    val paymentMethodType: String
-)
