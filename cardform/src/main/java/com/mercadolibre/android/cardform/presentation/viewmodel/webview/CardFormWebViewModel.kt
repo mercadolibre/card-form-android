@@ -5,12 +5,15 @@ import androidx.lifecycle.LiveData
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.base.BaseViewModel
 import com.mercadolibre.android.cardform.base.getOrElse
-import com.mercadolibre.android.cardform.domain.*
+import com.mercadolibre.android.cardform.data.model.request.AssociatedCardParam
+import com.mercadolibre.android.cardform.data.model.request.FinishInscriptionParam
+import com.mercadolibre.android.cardform.domain.AssociatedCardUseCase
 import com.mercadolibre.android.cardform.domain.FinishInscriptionUseCase
 import com.mercadolibre.android.cardform.domain.InscriptionUseCase
-import com.mercadolibre.android.cardform.presentation.model.ScreenState
 import com.mercadolibre.android.cardform.presentation.model.AssociationModel
+import com.mercadolibre.android.cardform.presentation.model.ScreenState
 import com.mercadolibre.android.cardform.presentation.model.WebUiState
+import com.mercadolibre.android.cardform.presentation.model.WebViewData
 import com.mercadolibre.android.cardform.service.CardFormServiceManager
 import com.mercadolibre.android.cardform.tracks.CardFormTracker
 import com.mercadolibre.android.cardform.tracks.model.TrackApiSteps
@@ -19,7 +22,6 @@ import com.mercadolibre.android.cardform.tracks.model.flow.BackTrack
 import com.mercadolibre.android.cardform.tracks.model.flow.ErrorTrack
 import com.mercadolibre.android.cardform.tracks.model.flow.InitTrack
 import com.mercadolibre.android.cardform.tracks.model.flow.SuccessTrack
-import com.mercadolibre.android.cardform.presentation.model.WebViewData
 import com.mercadolibre.android.cardform.tracks.model.webview.WebViewTrack
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
