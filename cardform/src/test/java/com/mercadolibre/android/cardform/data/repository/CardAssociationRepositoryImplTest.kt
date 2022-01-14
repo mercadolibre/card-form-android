@@ -1,8 +1,8 @@
 package com.mercadolibre.android.cardform.data.repository
 
 import com.mercadolibre.android.cardform.TestContextProvider
+import com.mercadolibre.android.cardform.data.model.request.AssociatedCardParam
 import com.mercadolibre.android.cardform.data.service.CardAssociationService
-import com.mercadolibre.android.cardform.domain.AssociatedCardParam
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
