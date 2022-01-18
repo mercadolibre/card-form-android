@@ -10,12 +10,12 @@ import org.junit.jupiter.api.Nested
 internal class InputMapperTest {
 
     @Nested
-    @DisplayName("Given a Fields Setting conversion is requested Step Data")
-    inner class GivenFieldsSettingConversionIsRequestedStepData {
+    @DisplayName("Given a request to convert from FieldsSetting to StepData")
+    inner class GivenARequestToConvertFromFieldsSettingToStepData {
 
         @Nested
-        @DisplayName("When requested a conversion")
-        inner class WhenRequestedConversion {
+        @DisplayName("When requested a successful FieldsSetting to stepData conversion")
+        inner class WhenRequestedASuccessfulFieldsSettingToStepDataConversion {
 
             private val subject = InputMapper
             private val expected = FieldsSetting(
@@ -32,42 +32,42 @@ internal class InputMapperTest {
             val stepData = subject.map(expected)
 
             @Test
-            fun `FieldsSetting to mapper StepData verify name`() {
+            fun `Then check the name field received the correct value`() {
                 assertEquals(expected.name, stepData.name)
             }
 
             @Test
-            fun `FieldsSetting to mapper StepData verify maxLength`() {
+            fun `Then check the maxLength field received the correct value`() {
                 assertEquals(expected.length, stepData.maxLength)
             }
 
             @Test
-            fun `FieldsSetting to mapper StepData verify type`() {
+            fun `Then check the type field received the correct value`() {
                 assertEquals(expected.type, stepData.type)
             }
 
             @Test
-            fun `FieldsSetting to mapper StepData verify title`() {
+            fun `Then check the title field received the correct value`() {
                 assertEquals(expected.title, stepData.title)
             }
 
             @Test
-            fun `FieldsSetting to mapper StepData verify hintMessage`() {
+            fun `Then check the hintMessage field received the correct value`() {
                 assertEquals(expected.hintMessage, stepData.hintMessage)
             }
 
             @Test
-            fun `FieldsSetting to mapper StepData verify validationPattern`() {
+            fun `Then check the validationPattern field received the correct value`() {
                 assertEquals(expected.validationPattern, stepData.validationPattern)
             }
 
             @Test
-            fun `FieldsSetting to mapper StepData verify validationMessage`() {
+            fun `Then check the validationMessage field received the correct value`() {
                 assertEquals(expected.validationMessage, stepData.validationMessage)
             }
 
             @Test
-            fun `FieldsSetting to mapper StepData verify mask`() {
+            fun `Then check the mask field received the correct value`() {
                 assertEquals(expected.mask, stepData.mask)
             }
         }
