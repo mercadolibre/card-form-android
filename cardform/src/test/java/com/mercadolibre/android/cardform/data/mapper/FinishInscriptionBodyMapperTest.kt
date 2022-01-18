@@ -9,13 +9,12 @@ import org.junit.jupiter.api.Test
 internal class FinishInscriptionBodyMapperTest {
 
     @Nested
-    @DisplayName("Given a finish conversion is requested inscription body")
-    inner class GivenFinishConversionIsRequestedInscriptionBody {
+    @DisplayName("Given that a map is requested for FinishInscriptionBody")
+    inner class GivenThatAMapIsRequestedForFinishInscriptionBody {
 
         @Nested
-        @DisplayName("When requested a conversion")
-        inner class WhenRequestedConversion {
-
+        @DisplayName("When prompted for a conversion from FinishInscriptionParam to FinishInscriptionBody")
+        inner class WhenPromptedForAConversionFromFinishInscriptionParamToFinishInscriptionBody {
 
             private val expectedSite = "MLA"
             private val expected = FinishInscriptionParam(
@@ -26,17 +25,17 @@ internal class FinishInscriptionBodyMapperTest {
             private val finishInscriptionBody = subject.map(expected)
 
             @Test
-            fun `FinishInscriptionParam to mapper FinishInscriptionBody verify site`() {
+            fun `Then check the site field received the correct value`() {
                 assertEquals(expectedSite, finishInscriptionBody.siteId)
             }
 
             @Test
-            fun `FinishInscriptionParam to mapper FinishInscriptionBody verify tbkToken`() {
+            fun `Then check the tbkToken field received the correct value`() {
                 assertEquals(expected.tbkToken, finishInscriptionBody.tbkToken)
             }
 
             @Test
-            fun `FinishInscriptionParam to mapper FinishInscriptionBody verify identification number`() {
+            fun `Then check the number field received the correct value`() {
                 assertEquals(
                     expected.identificationNumber,
                     finishInscriptionBody.cardHolder.identification.number
@@ -44,7 +43,7 @@ internal class FinishInscriptionBodyMapperTest {
             }
 
             @Test
-            fun `FinishInscriptionParam to mapper FinishInscriptionBody verify identification type`() {
+            fun `Then check the type field received the correct value`() {
                 assertEquals(
                     expected.identificationType,
                     finishInscriptionBody.cardHolder.identification.type
@@ -52,7 +51,7 @@ internal class FinishInscriptionBodyMapperTest {
             }
 
             @Test
-            fun `FinishInscriptionParam to mapper FinishInscriptionBody verify name`() {
+            fun `Then check the name field received the correct valuee`() {
                 assertEquals(expected.userName, finishInscriptionBody.cardHolder.name)
             }
         }
