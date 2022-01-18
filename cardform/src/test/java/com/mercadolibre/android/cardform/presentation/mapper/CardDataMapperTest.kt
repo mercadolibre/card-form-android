@@ -22,8 +22,8 @@ internal class CardDataMapperTest {
     inner class GivenCardStepConversionIsRequestedCardBody {
 
         @Nested
-        @DisplayName("When requested a conversion")
-        inner class WhenRequestedConversion {
+        @DisplayName("When prompted for a conversion from RegisterCard to CardData with success")
+        inner class WhenPromptedForAConversionFromRegisterCardToCardDataWithSuccess {
 
             private val subject = CardDataMapper
             private val expected = RegisterCard(
@@ -62,77 +62,77 @@ internal class CardDataMapperTest {
             private val cardData = subject.map(expected)
 
             @Test
-            fun `RegisterCard to mapper CardData verify cardFormTitle`() {
+            fun `Then check the formTitle field received the correct value`() {
                 assertEquals(expected.otherTexts.cardFormTitle, cardData.formTitle)
             }
 
             @Test
-            fun `RegisterCard to mapper CardData verify cardUi cardNumberLength`() {
+            fun `Then check the cardNumberLength field received the correct value`() {
                 assertEquals(expected.cardUi.cardNumberLength, cardData.cardUi!!.cardNumberLength)
             }
 
             @Test
-            fun `RegisterCard to mapper CardData verify cardUi cardColor`() {
+            fun `Then check the cardColor field received the correct value`() {
                 assertEquals(expected.cardUi.cardColor, cardData.cardUi!!.cardColor)
             }
 
             @Test
-            fun `RegisterCard to mapper CardData verify cardUi cardFontColor`() {
+            fun `Then check the cardFontColor field received the correct value`() {
                 assertEquals(expected.cardUi.cardFontColor, cardData.cardUi!!.cardFontColor)
             }
 
             @Test
-            fun `RegisterCard to mapper CardData verify cardUi securityCodeLength`() {
+            fun `Then check the securityCodeLength field received the correct value`() {
                 assertEquals(expected.cardUi.securityCodeLength, cardData.cardUi!!.securityCodeLength)
             }
 
             @Test
-            fun `RegisterCard to mapper CardData verify cardUi securityCodeLocation`() {
+            fun `Then check the securityCodeLocation field received the correct value`() {
                 assertEquals(expected.cardUi.securityCodeLocation, cardData.cardUi!!.securityCodeLocation)
             }
 
             @Test
-            fun `RegisterCard to mapper CardData verify cardUi paymentMethodImageUrl`() {
+            fun `Then check the paymentMethodImageUrl field received the correct value`() {
                 assertEquals(expected.cardUi.paymentMethodImageUrl, cardData.cardUi!!.paymentMethodImageUrl)
             }
 
             @Test
-            fun `RegisterCard to mapper CardData verify cardUi issuerImageUrl`() {
+            fun `Then check the issuerImageUrl field received the correct value`() {
                 assertEquals(expected.cardUi.issuerImageUrl, cardData.cardUi!!.issuerImageUrl)
             }
 
             @Test
-            fun `RegisterCard to mapper CardData verify cardUi cardPattern`() {
+            fun `Then check the cardPattern field received the correct value`() {
                 assertEquals(expected.cardUi.cardPattern, cardData.cardUi!!.cardPattern)
             }
 
             @Test
-            fun `RegisterCard to mapper CardData verify cardUi validation`() {
+            fun `Then check the validation field received the correct value`() {
                 assertEquals(expected.cardUi.validation, cardData.cardUi!!.validation)
             }
 
             @Test
-            fun `RegisterCard to mapper CardData verify cardUi extraValidations`() {
+            fun `Then check the extraValidations field received the correct value`() {
                 assertEquals(expected.cardUi.extraValidations, cardData.cardUi!!.extraValidations)
             }
 
             @Test
-            fun `RegisterCard to mapper CardData verify paymentMethod paymentTypeId`() {
+            fun `Then check the paymentTypeId field received the correct value`() {
                 assertEquals(expected.paymentMethod.paymentTypeId, cardData.paymentTypeId)
             }
 
             @Test
-            fun `RegisterCard to mapper CardData verify paymentMethod name`() {
+            fun `Then check the name field received the correct value`() {
                 assertEquals(expected.paymentMethod.name, cardData.name)
             }
 
             @Test
-            fun `RegisterCard to mapper CardData verify issuerName`() {
+            fun `Then check the ìssuerName field received the correct value`() {
                 assertEquals(expected.issuers.first().name, cardData.issuerName)
             }
 
             @Test
-            fun `RegisterCard to mapper CardData verify additionalSteps`() {
+            fun `Then check the addintionalSteps field received the correct value`() {
                 assertEquals(expected.additionalSteps, cardData.additionalSteps)
             }
         }
