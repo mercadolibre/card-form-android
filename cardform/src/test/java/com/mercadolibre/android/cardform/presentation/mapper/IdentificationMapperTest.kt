@@ -13,12 +13,12 @@ import org.junit.jupiter.api.Nested
 internal class IdentificationMapperTest {
 
     @Nested
-    @DisplayName("Given a List<IdentificationTypes> conversion is requested IdentificationData")
-    inner class GivenCardStepConversionIsRequestedCardBody {
+    @DisplayName("Given a conversion of the Identification Types, the Identification Data is requested")
+    inner class GivenAConversionOfTheIdentificationTypesTheIdentificationDataIsRequested {
 
         @Nested
-        @DisplayName("When requested a conversion")
-        inner class WhenRequestedConversion {
+        @DisplayName("When prompted for a conversion from list IdentificationTypes to identificationData with success")
+        inner class WhenPromptedForAConversionFromListIdentificationTypesToIdentificationDataWithSuccess {
 
             private val fieldsSetting = mockk<FieldsSetting>(relaxed = true)
             private val subject = IdentificationMapper(fieldsSetting)
@@ -34,32 +34,32 @@ internal class IdentificationMapperTest {
             private val identificationData = subject.map(expected)
 
             @Test
-            fun `List of IdentificationTypes to mapper IdentificationData verify identification id`() {
+            fun `Then check the id field received the correct value`() {
                 assertEquals(expected[0].id, identificationData.identifications[0].id)
             }
 
             @Test
-            fun `List of IdentificationTypes to mapper IdentificationData verify identification name`() {
+            fun `Then check the name field received the correct value`() {
                 assertEquals(expected[0].name, identificationData.identifications[0].name)
             }
 
             @Test
-            fun `List of IdentificationTypes to mapper IdentificationData verify identification type`() {
+            fun `Then check the type field received the correct value`() {
                 assertEquals(expected[0].type, identificationData.identifications[0].type)
             }
 
             @Test
-            fun `List of IdentificationTypes to mapper IdentificationData verify identification mask`() {
+            fun `Then check the mask field received the correct value`() {
                 assertEquals(expected[0].mask, identificationData.identifications[0].mask)
             }
 
             @Test
-            fun `List of IdentificationTypes to mapper IdentificationData verify identification min length`() {
+            fun `Then check the minLength field received the correct value`() {
                 assertEquals(expected[0].minLength, identificationData.identifications[0].minLength)
             }
 
             @Test
-            fun `List of IdentificationTypes to mapper IdentificationData verify identification max length`() {
+            fun `Then check the maxLength field received the correct value`() {
                 assertEquals(expected[0].maxLength, identificationData.identifications[0].maxLength)
             }
         }
