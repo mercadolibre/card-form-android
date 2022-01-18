@@ -13,8 +13,8 @@ internal class FinishInscriptionBodyMapperTest {
     inner class GivenThatAMapIsRequestedForFinishInscriptionBody {
 
         @Nested
-        @DisplayName("When prompted for a conversion from FinishInscriptionParam to FinishInscriptionBody")
-        inner class WhenPromptedForAConversionFromFinishInscriptionParamToFinishInscriptionBody {
+        @DisplayName("When prompted for a conversion from FinishInscriptionParam to FinishInscriptionBody with success")
+        inner class WhenPromptedForAConversionFromFinishInscriptionParamToFinishInscriptionBodyWithSuccess {
 
             private val expectedSite = "MLA"
             private val expected = FinishInscriptionParam(

@@ -15,12 +15,12 @@ import org.junit.jupiter.api.Test
 internal class FinishInscriptionUseCaseTest {
 
     @Nested
-    @DisplayName("Given a user get completion record data")
-    inner class GivenAUserGetCompletionRecordData {
+    @DisplayName("Given that registration data is requested")
+    inner class GivenThatRegistrationDataIsRequested {
 
         @Nested
-        @DisplayName("When get completion record data with success")
-        inner class WhenGetCompletionRecordDataWithSuccess {
+        @DisplayName("When the log data was successfully retrieved")
+        inner class WhenTheLogDataWasSuccessfullyRetrieved {
 
             private val finishInscriptionBodyMapper = mockk<FinishInscriptionBodyMapper>(relaxed = true)
             private val finishInscriptionService = mockk<FinishInscriptionService>(relaxed = true)
