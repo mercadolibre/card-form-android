@@ -19,7 +19,7 @@ internal class CardDataMapperTest {
 
     @Nested
     @DisplayName("Given a register card conversion is requested card data")
-    inner class GivenCardStepConversionIsRequestedCardBody {
+    inner class GivenARegisterCardConversionIsRequestedCardData {
 
         @Nested
         @DisplayName("When prompted for a conversion from RegisterCard to CardData with success")
