@@ -13,4 +13,6 @@
     <color name="cf_progress_color">#4555FA</color>
     <color name="ui_components_primary_color">#4555FA</color>
     <color name="ui_components_error_color">#B94455</color>
+    <color name="cf_check_color">#007811</color>
+    <color name="cf_close_color">#696969</color>
 </resources>
