@@ -11,12 +11,12 @@ import org.junit.jupiter.api.Test
 internal class CardInfoMapperTest {
 
     @Nested
-    @DisplayName("Given a card step conversion is requested card body")
-    inner class GivenCardStepConversionIsRequestedCardBody {
+    @DisplayName("Given a request to convert Card Step Info to Card Info Body")
+    inner class GivenARequestToConvertCardStepInfoToCardInfoBody {
 
         @Nested
-        @DisplayName("When requested a conversion")
-        inner class WhenRequestedConversion {
+        @DisplayName("When requested a successful conversion from CardStepInfo to CardInfoBody")
+        inner class WhenRequestedASuccessfulConversionFromCardStepInfoToCardInfoBody {
             private val device = mockk<Device>(relaxed = true)
             private val subject = CardInfoMapper(device)
             private val expectedMonth = 12
@@ -28,37 +28,37 @@ internal class CardInfoMapperTest {
             private val cardInfoBody = subject.map(expected)
 
             @Test
-            fun `CardStepInfo to mapper CardInfoBody verify cardNumber`() {
+            fun `Then check the cardNumber field received the correct value`() {
                 assertEquals(expected.cardNumber, cardInfoBody.cardNumber)
             }
 
             @Test
-            fun `CardStepInfo to mapper CardInfoBody verify name`() {
+            fun `Then check the name field received the correct value`() {
                 assertEquals(expected.nameOwner, cardInfoBody.cardHolder.name)
             }
 
             @Test
-            fun `CardStepInfo to mapper CardInfoBody verify month`() {
+            fun `Then check the expirationMonth field received the correct value`() {
                 assertEquals(expectedMonth, cardInfoBody.expirationMonth)
             }
 
             @Test
-            fun `CardStepInfo to mapper CardInfoBody verify year`() {
+            fun `Then check the expirationYear field received the correct value`() {
                 assertEquals(expectedYear, cardInfoBody.expirationYear)
             }
 
             @Test
-            fun `CardStepInfo to mapper CardInfoBody verify securityCode`() {
+            fun `Then check the securityCode field received the correct value`() {
                 assertEquals(expected.code, cardInfoBody.securityCode)
             }
 
             @Test
-            fun `CardStepInfo to mapper CardInfoBody verify type`() {
+            fun `Then check the type field received the correct value`() {
                 assertEquals(expected.identificationId, cardInfoBody.cardHolder.identification.type)
             }
 
             @Test
-            fun `CardStepInfo to mapper CardInfoBody verify number`() {
+            fun `Then check the number field received the correct value`() {
                 assertEquals(expected.identificationNumber, cardInfoBody.cardHolder.identification.number)
             }
         }
