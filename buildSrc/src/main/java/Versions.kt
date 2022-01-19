@@ -5,7 +5,7 @@ object Versions {
     const val carddrawer = "2.+"
     const val ui ="9.+"
     const val appCompat = "1.2.0"
-    const val lifecycle = "2.0.0"
+    const val lifecycle = "2.2.0"
     const val material = "1.0.0"
     const val okHttp = "3.12.10"
     const val sdkVersion = 30

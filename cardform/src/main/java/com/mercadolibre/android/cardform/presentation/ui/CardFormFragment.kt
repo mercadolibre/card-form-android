@@ -59,7 +59,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentCardFormBinding.inflate(inflater, container, false)
-        appBarBinding = AppBarBinding.bind(binding.appBar)
+        appBarBinding = AppBarBinding.bind(binding.root)
         cfCardBinding = CfCardBinding.bind(binding.root)
         return binding.root
     }
