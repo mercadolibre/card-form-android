@@ -3,7 +3,9 @@ package com.mercadolibre.android.cardform.presentation.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -17,6 +19,7 @@ import com.meli.android.carddrawer.model.CardUI
 import com.mercadolibre.android.cardform.*
 import com.mercadolibre.android.cardform.base.RootFragment
 import com.mercadolibre.android.cardform.data.model.response.CardResultDto
+import com.mercadolibre.android.cardform.databinding.FragmentCardFormBinding
 import com.mercadolibre.android.cardform.di.viewModel
 import com.mercadolibre.android.cardform.presentation.extensions.*
 import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
@@ -28,7 +31,7 @@ import com.mercadolibre.android.cardform.presentation.ui.formentry.FormType
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
 import kotlinx.android.synthetic.main.app_bar.*
 import kotlinx.android.synthetic.main.cf_card.*
-import kotlinx.android.synthetic.main.fragment_card_form.*
+
 
 /**
  * A simple [Fragment] subclass.
@@ -36,6 +39,9 @@ import kotlinx.android.synthetic.main.fragment_card_form.*
  * create an instance of this fragment.
  */
 internal class CardFormFragment : RootFragment<InputFormViewModel>() {
+
+    private var _binding: FragmentCardFormBinding? = null
+    private val binding get() = _binding!!
 
     override val rootLayout = R.layout.fragment_card_form
     override val viewModel: InputFormViewModel by viewModel()
@@ -47,6 +53,12 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
     private var progressFragment: ProgressFragment? = null
     private lateinit var cardDrawer: CardDrawerView
     private var exitAnim = 0
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = FragmentCardFormBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,7 +85,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
             if (enter) {
                 if (!animationEnded) {
                     cardContainer?.pushUpIn()
-                    buttonContainer.fadeIn()
+                    binding.buttonContainer.fadeIn()
                     inputViewPager.slideLeftIn(offset)
                     progress.slideRightIn(offset)
                     toolbar.fadeIn(duration, offset, onFinish = {
@@ -83,7 +95,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
             } else {
                 cardContainer?.pushDownOut()
                 inputViewPager.slideRightOut()
-                buttonContainer.goneDuringAnimation()
+                binding.buttonContainer.goneDuringAnimation()
                 progress.fadeOut()
                 toolbar.fadeOut()
             }
@@ -121,21 +133,21 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
         cardDrawer.hideSecCircle()
         enableBackButton()
 
-        next.setOnClickListener {
+        binding.next.setOnClickListener {
             if (!FragmentNavigationController.toNext()) {
                 viewModel.associateCard()
             }
             enableBackButton()
         }
 
-        back.setOnClickListener {
+        binding.back.setOnClickListener {
             FragmentNavigationController.toBack()
             enableBackButton()
         }
 
         (activity as AppCompatActivity?)?.apply {
-            appBar.configureToolbar(this)
-            appBar.setOnBackListener {
+            binding.appBar.configureToolbar(this)
+            binding.appBar.setOnBackListener {
                 KeyboardHelper.hideKeyboard(this@CardFormFragment)
                 viewModel.trackBack()
                 onBackPressed()
@@ -144,7 +156,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
     }
 
     private fun enableBackButton() {
-        with(back) {
+        with(binding.back) {
             inputViewPager.post {
                 isEnabled = inputViewPager.currentItem != 0
                 setTextColor(
@@ -186,7 +198,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
             }
 
             progressLiveData.nonNullObserve(viewLifecycleOwner) {
-                appBar.updateProgress(it)
+                binding.appBar.updateProgress(it)
             }
 
             cardLiveData.observe(viewLifecycleOwner, Observer { cardData ->
@@ -197,14 +209,14 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
                         contentDescription = "${cardData.name} ${cardData.issuerName}"
                     }
                     FragmentNavigationController.setAdditionalSteps(cardData.additionalSteps)
-                    appBar.setTitle(cardData.formTitle)
+                    binding.appBar.setTitle(cardData.formTitle)
                     cardData.cardUi!!.let {
                         maxLengthBin = it.cardNumberLength
                         CardDrawerData(context!!, it)
                     }
                 } else {
                     cardContainer?.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
-                    appBar.setTitle(R.string.cf_generic_title_app_bar)
+                    binding.appBar.setTitle(R.string.cf_generic_title_app_bar)
                     with(cardDrawer.card) {
                         secCode = ""
                         expiration = ""
@@ -283,7 +295,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
         hideProgress()
         if (error.showError) {
             ErrorUtil.resolveError(
-                rootCardForm,
+                binding.rootCardForm,
                 error,
                 if (error is UiError.ConnectionError) View.OnClickListener {
                     viewModel.retryFetchCard(context)
@@ -334,6 +346,11 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
         }
     } catch (e: Exception) {
         null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     companion object {
