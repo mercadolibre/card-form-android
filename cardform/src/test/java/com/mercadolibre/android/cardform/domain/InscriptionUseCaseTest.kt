@@ -13,12 +13,12 @@ import org.junit.jupiter.api.Test
 internal class InscriptionUseCaseTest {
 
     @Nested
-    @DisplayName("Given a user get record data")
-    inner class GivenAUserGetCompletionRecordData {
+    @DisplayName("Given a user initialize the registration of cadastral data")
+    inner class GivenAUserInitializeTheRegistrationOfCadastralData {
 
         @Nested
-        @DisplayName("When get record data with success")
-        inner class WhenGetCompletionRecordDataWithSuccess {
+        @DisplayName("When registration data was successfully entered")
+        inner class WhenRegistrationDataWasSuccessfullyEntered {
 
             private val contextProvider = TestContextProvider()
             private val inscriptionService = mockk<InscriptionService>(relaxed = true)
