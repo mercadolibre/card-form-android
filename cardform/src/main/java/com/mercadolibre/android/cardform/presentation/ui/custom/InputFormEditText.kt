@@ -6,27 +6,29 @@ import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.os.Parcel
 import android.os.Parcelable
-import androidx.annotation.DrawableRes
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import android.text.*
+import android.text.InputFilter
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.LinearLayout
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import com.mercadolibre.android.cardform.R
+import com.mercadolibre.android.cardform.databinding.CfInputFormEdittextBinding
 import com.mercadolibre.android.cardform.presentation.model.InputData
 import com.mercadolibre.android.cardform.presentation.model.TypeInput
 import com.mercadolibre.android.ui.font.Font
 import com.mercadolibre.android.ui.font.TypefaceHelper
-import kotlinx.android.synthetic.main.cf_input_form_edittext.view.*
 
 typealias OnTextChanged = (s: String) -> Unit
 
 internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     LinearLayout(context, attrs, defStyleAttr) {
+
+    private lateinit var binding: CfInputFormEdittextBinding
 
     private var infoHint: String = ""
     private var infoErrorHint: String = ""
@@ -53,14 +55,15 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     private fun configureView(context: Context) {
         orientation = VERTICAL
         inflate(context, R.layout.cf_input_form_edittext, this)
+        binding = CfInputFormEdittextBinding.bind(this)
 
-        input.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
+        binding.input.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
             if (isTouched) {
                 isTouched = false
                 touchListener()
             }
             if (hasFocus) {
-                input.setSelection(getText().length)
+                binding.input.setSelection(getText().length)
             }
         }
     }
@@ -78,7 +81,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
             info: AccessibilityNodeInfo?
         ) -> Unit
     ) {
-        input.setAccessibilityDelegate(object : View.AccessibilityDelegate() {
+        binding.input.setAccessibilityDelegate(object : View.AccessibilityDelegate() {
             override fun onInitializeAccessibilityNodeInfo(
                 host: View?,
                 info: AccessibilityNodeInfo?
@@ -90,13 +93,13 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     }
 
     fun setInputType(inputType: Int) {
-        input.inputType = inputType
+        binding.input.inputType = inputType
     }
 
     fun setHint(hint: String) {
         //for accessibility
         contentDescription = hint
-        inputLayout.hint = hint
+        binding.inputLayout.hint = hint
     }
 
     fun setInfoHint(info: String) {
@@ -104,7 +107,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     }
 
     fun setFilters(filters: Array<InputFilter>) {
-        input.filters = filters
+        binding.input.filters = filters
     }
 
     fun hasError() = hasError
@@ -121,20 +124,20 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     )
 
     fun showError(message: String? = null) {
-        infoInput.post {
-            infoInput.text = if (message.isNullOrEmpty()) infoErrorHint else message
-            infoInput.setTextColor(
+        binding.infoInput.post {
+            binding.infoInput.text = if (message.isNullOrEmpty()) infoErrorHint else message
+            binding.infoInput.setTextColor(
                 ContextCompat.getColor(
                     context,
                     R.color.ui_components_error_color
                 )
             )
-            TypefaceHelper.setTypeface(infoInput, Font.SEMI_BOLD)
+            TypefaceHelper.setTypeface(binding.infoInput, Font.SEMI_BOLD)
             ViewCompat.setBackgroundTintList(
-                input,
+                binding.input,
                 getColorStateUnderLine(R.color.ui_components_error_color)
             )
-            errorMessage = infoInput.text.toString()
+            errorMessage = binding.infoInput.text.toString()
             announceForAccessibility(errorMessage)
         }
         hasError = true
@@ -146,11 +149,11 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
 
     fun clearError() {
         if (hasError) {
-            infoInput.text = infoHint
-            infoInput.setTextColor(ContextCompat.getColor(context, R.color.cf_hint_input_text))
-            TypefaceHelper.setTypeface(infoInput, Font.REGULAR)
+            binding.infoInput.text = infoHint
+            binding.infoInput.setTextColor(ContextCompat.getColor(context, R.color.cf_hint_input_text))
+            TypefaceHelper.setTypeface(binding.infoInput, Font.REGULAR)
             ViewCompat.setBackgroundTintList(
-                input,
+                binding.input,
                 getColorStateUnderLine(R.color.ui_components_primary_color)
             )
             errorMessage = null
@@ -163,11 +166,11 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     }
 
     fun getText(): String {
-        return input.text.toString().trim()
+        return binding.input.text.toString().trim()
     }
 
     fun setText(text: String) {
-        with(input) {
+        with(binding.input) {
             setText(text)
             this.text?.let { setSelection(it.length) }
         }
@@ -182,22 +185,22 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     }
 
     fun isNotEmpty(): Boolean {
-        return input.text?.isNotEmpty() ?: false
+        return binding.input.text?.isNotEmpty() ?: false
     }
 
     fun isComplete(): Boolean {
-        return input.text?.trim()?.length == maxLength
+        return binding.input.text?.trim()?.length == maxLength
     }
 
     fun getMaxLength() = maxLength
 
     fun addMaskWatcher(mask: String, textChanged: OnTextChanged) {
         maskWatcher?.apply {
-            input.removeTextChangedListener(this)
+            binding.input.removeTextChangedListener(this)
 
             addWatcher(mask, textChanged)
 
-            input.text?.apply {
+            binding.input.text?.apply {
                 if (isNotEmpty() && mask.isNotEmpty()) {
                     var newText = mask
                     val holdText = replace("[^A-Za-z0-9]+".toRegex(), "")
@@ -227,7 +230,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
                 } ?: addRightCancelDrawable(0)
             }
         }
-        input.addTextChangedListener(maskWatcher)
+        binding.input.addTextChangedListener(maskWatcher)
     }
 
     fun configure(data: InputData, textChanged: OnTextChanged) {
@@ -240,7 +243,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
         if (hasError) {
             showError(errorMessage)
         } else {
-            infoInput.text = infoHint
+            binding.infoInput.text = infoHint
         }
 
         var mask = ""
@@ -276,7 +279,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     }
 
     fun addFilters(newFilters: Array<InputFilter>) {
-        with(input) {
+        with(binding.input) {
             val newSetFilters = filters.toMutableSet()
             newSetFilters.addAll(newFilters)
             filters = newSetFilters.toTypedArray()
@@ -284,7 +287,7 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     }
 
     fun saveState(savedState: Boolean) {
-        input.isSaveEnabled = savedState
+        binding.input.isSaveEnabled = savedState
     }
 
     private fun configureInternalInput(text: String, textChanged: OnTextChanged) {
@@ -300,8 +303,8 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
     fun addRightCheckDrawable(@DrawableRes iconCancel: Int) {
         val check: Drawable? = ContextCompat.getDrawable(context, iconCancel)
         check?.setBounds(0, 0, check.intrinsicWidth, check.intrinsicHeight)
-        input.setCompoundDrawables(null, null, check, null)
-        input.addRightDrawableClicked(null)
+        binding.input.setCompoundDrawables(null, null, check, null)
+        binding.input.addRightDrawableClicked(null)
         icon = Icon.CHECK
     }
 
@@ -311,12 +314,12 @@ internal class InputFormEditText(context: Context, attrs: AttributeSet?, defStyl
         icon = if (iconCancel > 0) {
             cancel = ContextCompat.getDrawable(context, iconCancel)
             cancel?.setBounds(0, 0, cancel.intrinsicWidth, cancel.intrinsicHeight)
-            input.addRightDrawableClicked { clearError(); it.setText(""); iconClickListener() }
+            binding.input.addRightDrawableClicked { clearError(); it.setText(""); iconClickListener() }
             Icon.CLEAR
         } else {
             Icon.EMPTY
         }
-        input.setCompoundDrawables(null, null, cancel, null)
+        binding.input.setCompoundDrawables(null, null, cancel, null)
     }
 
     override fun onRestoreInstanceState(state: Parcelable?) {

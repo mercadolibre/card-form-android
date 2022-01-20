@@ -1,11 +1,15 @@
 package com.mercadolibre.android.cardform.presentation.ui.formentry
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.text.InputFilter
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.data.model.response.Validation
+import com.mercadolibre.android.cardform.databinding.CfInputFormEdittextBinding
+import com.mercadolibre.android.cardform.databinding.FragmentNumberCardBinding
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.extensions.postDelayed
 import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
@@ -20,16 +24,24 @@ import com.mercadolibre.android.cardform.tracks.model.bin.BinNumberView
 import com.mercadolibre.android.cardform.tracks.model.bin.BinValidTrack
 import com.mercadolibre.android.cardform.tracks.model.flow.BackTrack
 import com.mercadolibre.android.cardform.tracks.model.flow.NextTrack
-import kotlinx.android.synthetic.main.cf_input_form_edittext.*
-import kotlinx.android.synthetic.main.fragment_number_card.*
 
 /**
  * A simple [Fragment] subclass.
  */
 internal class CardNumberFragment : InputFragment() {
 
+    private var _binding: FragmentNumberCardBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var bindingEditText: CfInputFormEdittextBinding
+
     override val rootLayout = R.layout.fragment_number_card
     private var validations = listOf<Validation>()
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = FragmentNumberCardBinding.inflate(inflater, container, false)
+        bindingEditText = CfInputFormEdittextBinding.bind(binding.root)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,13 +50,13 @@ internal class CardNumberFragment : InputFragment() {
             setDefaultConfiguration()
             postDelayed((resources.getInteger(R.integer.cf_anim_duration) * 1.5).toLong()) {
                 if (isVisible) {
-                    input.requestFocus()
-                    KeyboardHelper.showKeyboard(input)
+                    bindingEditText.input.requestFocus()
+                    KeyboardHelper.showKeyboard(bindingEditText.input)
                 }
             }
         }
 
-        numberCardEditText.addOnIconClickListener {
+        binding.numberCardEditText.addOnIconClickListener {
             viewModel.tracker.trackEvent(BinClearTrack())
         }
 
@@ -58,18 +70,18 @@ internal class CardNumberFragment : InputFragment() {
             null
         }
 
-        numberCardEditText.addFilters(arrayOf(filter))
+        binding.numberCardEditText.addFilters(arrayOf(filter))
     }
 
     private fun setDefaultConfiguration() {
-        numberCardEditText.configure(
+        binding.numberCardEditText.configure(
             ObjectStepFactory.createDefaultStepFrom(
                 resources,
                 FormType.CARD_NUMBER.getType()
             )
         ) {
             resolveState(it)
-            numberCardEditText.clearError()
+            binding.numberCardEditText.clearError()
             isInputValid = sanitizeBin(it).length >= MIN_LENGTH_BIN
         }
     }
@@ -80,7 +92,7 @@ internal class CardNumberFragment : InputFragment() {
                 validations = it
             }
             numberLiveData.nonNullObserve(viewLifecycleOwner) { data ->
-                numberCardEditText.configure(data) {
+                binding.numberCardEditText.configure(data) {
                     resolveValidation()
                     resolveState(it)
                 }
@@ -99,29 +111,31 @@ internal class CardNumberFragment : InputFragment() {
 
     private fun resolveValidation() {
         with(viewModel) {
-            val cardNumber = numberCardEditText.getText()
+            val cardNumber = binding.numberCardEditText.getText()
 
             isInputValid = ValidationHelper
                 .validateWith(ValidationType.ExtraValidation(cardNumber, validations),
-                    blockValid = { numberCardEditText.clearError() },
+                    blockValid = { binding.numberCardEditText.clearError() },
                     blockInvalid = {
-                    tracker.trackEvent(BinInvalidTrack(cardNumber))
-                    numberCardEditText.showError(it) })
-                .validateWith(ValidationType.Complete(cardNumber, numberCardEditText.getMaxLength()))
+                        tracker.trackEvent(BinInvalidTrack(cardNumber))
+                        binding.numberCardEditText.showError(it)
+                    })
+                .validateWith(ValidationType.Complete(cardNumber, binding.numberCardEditText.getMaxLength()))
                 .validateWith(ValidationType.Luhn(cardNumber, hasLuhnValidation()),
                     blockValid = {
-                    numberCardEditText.clearError()
-                    numberCardEditText.addRightCheckDrawable(R.drawable.cf_icon_check)
-                    tracker.trackEvent(BinValidTrack()) },
+                        binding.numberCardEditText.clearError()
+                        binding.numberCardEditText.addRightCheckDrawable(R.drawable.cf_icon_check)
+                        tracker.trackEvent(BinValidTrack())
+                    },
                     blockInvalid = {
-                    tracker.trackEvent(BinInvalidTrack(cardNumber))
-                    showError()
-                }).validate()
+                        tracker.trackEvent(BinInvalidTrack(cardNumber))
+                        showError()
+                    }).validate()
         }
     }
 
     override fun toNext(position: Int, move: MoveTo) {
-        val cardNumber = numberCardEditText.getText()
+        val cardNumber = binding.numberCardEditText.getText()
         if (isInputValid) {
             with(viewModel) {
                 tracker.trackEvent(NextTrack(TrackSteps.BIN_NUMBER.getType()))
@@ -150,7 +164,12 @@ internal class CardNumberFragment : InputFragment() {
     override fun getSharedViewModelScope() = parentFragment!!
 
     override fun showError() {
-        numberCardEditText.showError(if (!numberCardEditText.isComplete()) getString(R.string.cf_complete_field) else "")
+        binding.numberCardEditText.showError(if (!binding.numberCardEditText.isComplete()) getString(R.string.cf_complete_field) else "")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     companion object {

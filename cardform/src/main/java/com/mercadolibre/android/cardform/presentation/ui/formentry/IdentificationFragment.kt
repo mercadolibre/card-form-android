@@ -4,11 +4,14 @@ import android.os.Bundle
 import com.google.android.material.textfield.TextInputEditText
 import androidx.fragment.app.Fragment
 import android.text.InputFilter
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.mercadolibre.android.cardform.R
+import com.mercadolibre.android.cardform.databinding.FragmentIdentificationBinding
 import com.mercadolibre.android.cardform.di.Dependencies
 import com.mercadolibre.android.cardform.di.preferences.IdentificationPreferences
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
@@ -23,7 +26,7 @@ import com.mercadolibre.android.cardform.tracks.model.flow.NextTrack
 import com.mercadolibre.android.cardform.tracks.model.identification.IdentificationInvalidTrack
 import com.mercadolibre.android.cardform.tracks.model.identification.IdentificationValidTrack
 import com.mercadolibre.android.cardform.tracks.model.identification.IdentificationView
-import kotlinx.android.synthetic.main.fragment_identification.*
+
 
 /**
  * A simple [Fragment] subclass.
@@ -31,6 +34,10 @@ import kotlinx.android.synthetic.main.fragment_identification.*
 internal class IdentificationFragment : InputFragment() {
 
     override val rootLayout = R.layout.fragment_identification
+
+    private var _binding: FragmentIdentificationBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var preferences: IdentificationPreferences
     private var lastPositionSelected = 0
     private var isFirstTime = false
@@ -38,13 +45,18 @@ internal class IdentificationFragment : InputFragment() {
     private var populate = false
     private var identificationEditText: InputFormEditText? = null
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = FragmentIdentificationBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     private val onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
         override fun onNothingSelected(parent: AdapterView<*>?) = Unit
         override fun onItemSelected(
             parent: AdapterView<*>?, view: View?, position: Int,
             id: Long
         ) {
-            (identificationTypes.adapter.getItem(position) as Identification?)?.let {
+            (binding.identificationTypes.adapter.getItem(position) as Identification?)?.let {
                 if (position != lastPositionSelected) {
                     lastPositionSelected = position
                     identificationEditText?.setText("")
@@ -113,8 +125,8 @@ internal class IdentificationFragment : InputFragment() {
                 listIdentification
             )
             identificationAdapter.setDropDownViewResource(R.layout.cf_custom_drop_down_spinner)
-            identificationTypes.adapter = identificationAdapter
-            identificationTypes.onItemSelectedListener = onItemSelectedListener
+            binding.identificationTypes.adapter = identificationAdapter
+            binding.identificationTypes.onItemSelectedListener = onItemSelectedListener
 
             if (isFirstTime) {
                 with(preferences) {
@@ -123,26 +135,26 @@ internal class IdentificationFragment : InputFragment() {
                     }
                 }
             } else {
-                identificationTypes.setSelection(lastPositionSelected)
+                binding.identificationTypes.setSelection(lastPositionSelected)
             }
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(LAST_POSITION_EXTRA, identificationTypes.selectedItemPosition)
+        outState.putInt(LAST_POSITION_EXTRA, binding.identificationTypes.selectedItemPosition)
         outState.putBoolean(TRACK_IDENTIFICATION_VIEW, populate)
         outState.putBoolean(POPULATE, populate)
     }
 
     private fun selectSpinnerItemByValue(id: String, number: String) {
-        val adapter = identificationTypes.adapter
+        val adapter = binding.identificationTypes.adapter
         for (position in 0 until adapter.count) {
             val identification = (adapter.getItem(position) as Identification)
             if (identification.id == id) {
                 identificationEditText?.apply {
                     lastPositionSelected = position
-                    identificationTypes.setSelection(lastPositionSelected)
+                    binding.identificationTypes.setSelection(lastPositionSelected)
                     setText(number)
                     setMaxLength(number.length)
                     isInputValid =
@@ -249,6 +261,11 @@ internal class IdentificationFragment : InputFragment() {
     }
 
     override fun getSharedViewModelScope() = parentFragment!!
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 
     companion object {
         private const val LAST_POSITION_EXTRA = "last_position"
