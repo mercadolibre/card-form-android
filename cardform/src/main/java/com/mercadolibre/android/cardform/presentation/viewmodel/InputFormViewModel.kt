@@ -197,7 +197,14 @@ internal class InputFormViewModel(
             cardLiveData.postValue(CardDataMapper.map(this))
             issuersLiveData.postValue(ArrayList(issuers))
             loadInputData(this)
-            tracker.trackEvent(BinRecognizedTrack())
+            tracker.trackEvent(
+                BinRecognizedTrack(
+                    binValidator.getLastValidBin().substring(0..5),
+                    issuer?.id ?: 0,
+                    paymentMethod?.paymentMethodId!!,
+                    paymentMethod?.paymentTypeId!!
+                )
+            )
         }
     }
 
@@ -225,7 +232,11 @@ internal class InputFormViewModel(
             tracker.trackEvent(
                 ErrorTrack(
                     TrackApiSteps.TOKEN.getType(),
-                    throwable.message.orEmpty()
+                    throwable.message.orEmpty(),
+                    binValidator.getLastValidBin(),
+                    issuer?.id ?: 0,
+                    paymentMethod?.paymentMethodId!!,
+                    paymentMethod?.paymentTypeId!!
                 )
             )
             stateUiLiveData.postValue(ErrorUtil.createError(throwable))
@@ -244,7 +255,11 @@ internal class InputFormViewModel(
             tracker.trackEvent(
                 ErrorTrack(
                     TrackApiSteps.ASSOCIATION.getType(),
-                    throwable.message.orEmpty()
+                    throwable.message.orEmpty(),
+                    binValidator.getLastValidBin(),
+                    issuer?.id ?: 0,
+                    paymentMethod?.paymentMethodId!!,
+                    paymentMethod?.paymentTypeId!!
                 )
             )
             stateUiLiveData.postValue(ErrorUtil.createError(throwable))
@@ -337,6 +352,15 @@ internal class InputFormViewModel(
 
     fun trackBack() {
         tracker.trackEvent(BackTrack())
+    }
+
+    fun trackValidBinNumber(){
+        tracker.trackEvent(BinValidTrack(
+            binValidator.getLastValidBin(),
+            issuer?.id?: 0,
+            paymentMethod?.paymentMethodId!!,
+            paymentMethod?.paymentTypeId!!
+        ))
     }
 
     companion object {
