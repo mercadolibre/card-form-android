@@ -199,7 +199,7 @@ internal class InputFormViewModel(
             loadInputData(this)
             tracker.trackEvent(
                 BinRecognizedTrack(
-                    binValidator.getLastValidBin().substring(0..5),
+                    binValidator?.bin!!,
                     issuer?.id ?: 0,
                     paymentMethod?.paymentMethodId!!,
                     paymentMethod?.paymentTypeId!!
@@ -233,7 +233,7 @@ internal class InputFormViewModel(
                 ErrorTrack(
                     TrackApiSteps.TOKEN.getType(),
                     throwable.message.orEmpty(),
-                    binValidator.getLastValidBin(),
+                    binValidator?.bin!!,
                     issuer?.id ?: 0,
                     paymentMethod?.paymentMethodId!!,
                     paymentMethod?.paymentTypeId!!
@@ -256,7 +256,7 @@ internal class InputFormViewModel(
                 ErrorTrack(
                     TrackApiSteps.ASSOCIATION.getType(),
                     throwable.message.orEmpty(),
-                    binValidator.getLastValidBin(),
+                    binValidator?.bin!!,
                     issuer?.id ?: 0,
                     paymentMethod?.paymentMethodId!!,
                     paymentMethod?.paymentTypeId!!
@@ -356,7 +356,7 @@ internal class InputFormViewModel(
 
     fun trackValidBinNumber(){
         tracker.trackEvent(BinValidTrack(
-            binValidator.getLastValidBin(),
+            binValidator?.bin!!,
             issuer?.id?: 0,
             paymentMethod?.paymentMethodId!!,
             paymentMethod?.paymentTypeId!!
