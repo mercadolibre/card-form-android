@@ -22,7 +22,7 @@ internal sealed class ValidationType {
 
         override fun validate(): Boolean {
             var result = true
-            extraValidation.forEach {
+            extraValidation.iterator().forEach {
 
                 result = DigitValidation
                     .fromType(it.name)
