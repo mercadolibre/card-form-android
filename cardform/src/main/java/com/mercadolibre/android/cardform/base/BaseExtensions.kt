@@ -9,3 +9,7 @@ internal fun <T: CharSequence> T?.orIfEmpty(default: String): String {
         default
     }
 }
+
+internal fun Boolean.toInt() = if (this) 1 else 0
+
+internal fun Int.toBoolean() = this == 1

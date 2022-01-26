@@ -1,6 +1,6 @@
 package com.mercadolibre.android.cardform.presentation.mapper
 
-import com.mercadolibre.android.cardform.data.model.response.FieldsSetting
+import com.mercadolibre.android.cardform.FieldsSettingProvider
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
@@ -18,18 +18,9 @@ internal class InputMapperTest {
         inner class WhenRequestedASuccessfulFieldsSettingToStepDataConversion {
 
             private val subject = InputMapper
-            private val expected = FieldsSetting(
-                "name",
-                40,
-                "text",
-                "Card holder's name, hintMessage=As it shows on the card",
-                "",
-                "^[a-zA-ZñÑáàâãéèêẽíìîóòôõúùûÁÀÂÃÉÈÊẼÍÌÎÓÒÔÕÚÙÛ]+(([',. -][a-zA-ZñÑáàâãéèêẽíìîóòôõúùûÁÀÂÃÉÈÊẼÍÌÎÓÒÔÕÚÙÛ ])?[a-zA-ZñÑáàâãéèêẽíìîóòôõúùûÁÀÂÃÉÈÊẼÍÌÎÓÒÔÕÚÙÛ]*)*$",
-                "Complete using only letters",
-                ""
-            )
+            private val expected = FieldsSettingProvider.makeFieldSetting(true)
 
-            val stepData = subject.map(expected)
+            private val stepData = subject.map(expected)
 
             @Test
             fun `Then check the name field received the correct value`() {
@@ -69,6 +60,41 @@ internal class InputMapperTest {
             @Test
             fun `Then check the mask field received the correct value`() {
                 assertEquals(expected.mask, stepData.mask)
+            }
+
+            @Test
+            fun `Then check the autocomplete field received the correct value`() {
+                assertEquals(expected.autocomplete, stepData.autocomplete)
+            }
+        }
+
+        @Nested
+        @DisplayName("When requested a FieldsSetting to stepData conversion with null autocomplete")
+        inner class WhenRequestedAFieldSettingToStepDataConversionWithNullAutocomplete {
+
+            private val subject = InputMapper
+            private val fieldsSetting = FieldsSettingProvider.makeFieldSetting(null)
+
+            private val stepData = subject.map(fieldsSetting)
+
+            @Test
+            fun `Then check the step data autocomplete field defaults to true`() {
+                assertEquals(true, stepData.autocomplete)
+            }
+        }
+
+        @Nested
+        @DisplayName("When requested a FieldsSetting to stepData conversion with autocomplete as false")
+        inner class WhenRequestedAFieldSettingToStepDataConversionWithAutocompleteAsTrue {
+
+            private val subject = InputMapper
+            private val fieldsSetting = FieldsSettingProvider.makeFieldSetting(false)
+
+            private val stepData = subject.map(fieldsSetting)
+
+            @Test
+            fun `Then check the step data autocomplete field is false`() {
+                assertEquals(false, stepData.autocomplete)
             }
         }
     }
