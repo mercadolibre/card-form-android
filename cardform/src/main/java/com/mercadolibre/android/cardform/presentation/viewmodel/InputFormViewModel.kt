@@ -199,10 +199,10 @@ internal class InputFormViewModel(
             loadInputData(this)
             tracker.trackEvent(
                 BinRecognizedTrack(
-                    binValidator?.bin!!,
+                    binValidator.bin.orEmpty(),
                     issuer?.id ?: 0,
-                    paymentMethod?.paymentMethodId!!,
-                    paymentMethod?.paymentTypeId!!
+                    paymentMethod.paymentMethodId,
+                    paymentMethod.paymentTypeId
                 )
             )
         }
@@ -233,10 +233,10 @@ internal class InputFormViewModel(
                 ErrorTrack(
                     TrackApiSteps.TOKEN.getType(),
                     throwable.message.orEmpty(),
-                    binValidator?.bin!!,
+                    binValidator.bin.orEmpty(),
                     issuer?.id ?: 0,
-                    paymentMethod?.paymentMethodId!!,
-                    paymentMethod?.paymentTypeId!!
+                    paymentMethod?.paymentMethodId.orEmpty(),
+                    paymentMethod?.paymentTypeId.orEmpty()
                 )
             )
             stateUiLiveData.postValue(ErrorUtil.createError(throwable))
@@ -256,10 +256,10 @@ internal class InputFormViewModel(
                 ErrorTrack(
                     TrackApiSteps.ASSOCIATION.getType(),
                     throwable.message.orEmpty(),
-                    binValidator?.bin!!,
+                    binValidator.bin.orEmpty(),
                     issuer?.id ?: 0,
-                    paymentMethod?.paymentMethodId!!,
-                    paymentMethod?.paymentTypeId!!
+                    paymentMethod?.paymentMethodId.orEmpty(),
+                    paymentMethod?.paymentTypeId.orEmpty()
                 )
             )
             stateUiLiveData.postValue(ErrorUtil.createError(throwable))
@@ -356,10 +356,10 @@ internal class InputFormViewModel(
 
     fun trackValidBinNumber(){
         tracker.trackEvent(BinValidTrack(
-            binValidator?.bin!!,
+            binValidator.bin.orEmpty(),
             issuer?.id?: 0,
-            paymentMethod?.paymentMethodId!!,
-            paymentMethod?.paymentTypeId!!
+            paymentMethod?.paymentMethodId.orEmpty(),
+            paymentMethod?.paymentTypeId.orEmpty()
         ))
     }
 

@@ -36,4 +36,5 @@ internal class ErrorTrack(
         private const val PAYMENT_METHOD_ID = "payment_method_id"
         private const val PAYMENT_METHOD_TYPE = "payment_type_id"
     }
+
 }
