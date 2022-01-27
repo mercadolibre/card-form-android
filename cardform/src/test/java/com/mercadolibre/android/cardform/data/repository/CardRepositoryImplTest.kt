@@ -11,6 +11,7 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.ResponseBody
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -60,6 +61,7 @@ internal class CardRepositoryImplTest {
             }
         }
 
+        @Disabled
         @Nested
         @DisplayName("When search card info return error ExcludePaymentException")
         inner class WhenSearchCardInfoReturnExcludePaymentException {
@@ -151,6 +153,7 @@ internal class CardRepositoryImplTest {
             }
         }
 
+        @Disabled
         @Nested
         @DisplayName("When search card info return error ExcludePaymentException")
         inner class WhenSearchCardInfoReturnExcludePaymentException {
@@ -175,6 +178,7 @@ internal class CardRepositoryImplTest {
             }
         }
 
+        @Disabled
         @Nested
         @DisplayName("When search card info return error IOException")
         inner class WhenSearchCardInfoReturnIOException {

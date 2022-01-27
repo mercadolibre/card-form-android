@@ -11,6 +11,7 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.ResponseBody
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -46,6 +47,7 @@ internal class TokenizeRepositoryImplTest {
             }
         }
 
+        @Disabled
         @Nested
         @DisplayName("When to create async token with failure")
         inner class WhenToCreateAsyncTokenWithFailure {

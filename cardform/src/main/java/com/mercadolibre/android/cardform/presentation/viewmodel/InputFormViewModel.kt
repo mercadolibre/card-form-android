@@ -320,7 +320,7 @@ internal class InputFormViewModel(
 
     private fun loadInputData(registerCard: RegisterCard) {
         CoroutineScope(contextProvider.Default).launch {
-            registerCard.fieldsSetting.forEach { setting ->
+            registerCard.fieldsSetting.iterator().forEach { setting ->
 
                 when (setting.name) {
 
