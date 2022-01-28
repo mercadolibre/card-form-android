@@ -5,6 +5,7 @@ import com.mercadolibre.android.cardform.tracks.TrackData
 
 internal class BinUnknownTrack(private val bin: String): TrackData {
     override val pathEvent = "$BASE_PATH/bin_number/unknown"
+    override val trackGA = false
     override fun addTrackData(data: MutableMap<String, Any>) {
         data[BIN_NUMBER] = bin
     }

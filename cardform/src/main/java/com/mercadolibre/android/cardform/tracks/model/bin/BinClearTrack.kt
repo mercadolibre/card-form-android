@@ -5,4 +5,5 @@ import com.mercadolibre.android.cardform.tracks.Track.Companion.BASE_PATH
 
 internal class BinClearTrack: Track {
     override val pathEvent = "$BASE_PATH/bin_number/clear"
+    override val trackGA = false
 }

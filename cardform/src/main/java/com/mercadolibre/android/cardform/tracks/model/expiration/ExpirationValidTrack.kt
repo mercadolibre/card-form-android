@@ -5,4 +5,5 @@ import com.mercadolibre.android.cardform.tracks.Track.Companion.BASE_PATH
 
 internal class ExpirationValidTrack: Track {
     override val pathEvent = "$BASE_PATH/expiration_security/date/valid"
+    override val trackGA = false
 }

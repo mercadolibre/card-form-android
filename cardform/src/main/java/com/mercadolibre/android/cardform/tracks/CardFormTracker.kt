@@ -28,17 +28,37 @@ internal class CardFormTracker(baseData: TrackerData, private val behaviour: Tra
         trackerListener(data)
     }
 
+    private fun trackMelidataGA(track: Track,
+                                trackerMap: MutableMap<String, Any>,
+                                type: com.mercadopago.android.px.addons.model.Track.Type
+    ) {
+        val trackers: List<com.mercadopago.android.px.addons.tracking.Tracker> = if (track.trackGA)
+            listOf(com.mercadopago.android.px.addons.tracking.Tracker.GOOGLE_ANALYTICS_V2,
+                com.mercadopago.android.px.addons.tracking.Tracker.CUSTOM)
+        else listOf(com.mercadopago.android.px.addons.tracking.Tracker.CUSTOM)
+
+        val myTrackView = com.mercadopago.android.px.addons.model.Track.Builder(
+            com.mercadopago.android.px.addons.tracking.Tracker.MELIDATA,
+            "CARD_FORM",
+            type, track.pathEvent)
+            .addTrackers(trackers)
+            .addData(trackerMap)
+            .build()
+
+        behaviour.track(myTrackView)
+    }
+
     override fun trackView(track: Track) {
         addDataTrack(track) {
             logDebug(track.pathEvent, it.toString())
-            behaviour.onView(track.pathEvent, it)
+            trackMelidataGA(track, it, com.mercadopago.android.px.addons.model.Track.Type.VIEW)
         }
     }
 
     override fun trackEvent(track: Track) {
         addDataTrack(track) {
             logDebug(track.pathEvent, it.toString())
-            behaviour.onEvent(track.pathEvent, it)
+            trackMelidataGA(track, it, com.mercadopago.android.px.addons.model.Track.Type.EVENT)
         }
     }
 
