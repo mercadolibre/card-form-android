@@ -10,6 +10,7 @@ internal class InitTrack(private val type: String = TrackSteps.TRADITIONAL.getTy
     }
 
     override val pathEvent = "$BASE_PATH/init"
+    override val trackGA = false
 
     companion object {
         private const val TYPE = "type"

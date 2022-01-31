@@ -5,6 +5,7 @@ import com.mercadolibre.android.cardform.tracks.TrackData
 
 internal class IdentificationView(private val prepopulate: Boolean) : TrackData {
     override val pathEvent = "$BASE_PATH/identification"
+    override val trackGA = true
 
     override fun addTrackData(data: MutableMap<String, Any>) {
         data[PREPOPULATE] = prepopulate

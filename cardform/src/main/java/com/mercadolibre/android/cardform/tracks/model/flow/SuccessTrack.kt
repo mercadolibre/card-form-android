@@ -17,6 +17,7 @@ internal class SuccessTrack(
     }
 
     override val pathEvent = "$BASE_PATH/success"
+    override val trackGA = false
 
     companion object {
         private const val BIN = "bin"

@@ -8,6 +8,7 @@ internal class WebViewTrack(private val url: String): TrackData {
     }
 
     override val pathEvent = "/card_form/web_view"
+    override val trackGA = false
 
     companion object {
         private const val URL = "url"
