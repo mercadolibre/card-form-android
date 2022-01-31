@@ -47,7 +47,6 @@ internal class CardFormTrackerTest {
 
     @Test
     fun trackView() {
-        //track = BinInvalidTrack("bintest")
         cardFormTracker.trackView(track)
         verify {
             trackingBehaviour.track(any())
@@ -63,17 +62,5 @@ internal class CardFormTrackerTest {
             trackingBehaviour.track(any())
         }
     }
-
-    /*@Test
-    fun ajsdk() {
-        val map = mutableMapOf<String, Any>()
-        val mockMap = mutableMapOf<String, Any>("bin_number" to "bintest", "category" to "CHECKOUT", "action" to "BIN_NUMBER_INVALID")
-        track.addTrackData(map)
-
-        assert(mockMap.size == map.size)
-        assert("/card_form/bin_number/invalid" == track.pathEvent)
-
-    }*/
-
 
 }
