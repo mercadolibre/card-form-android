@@ -17,7 +17,7 @@ object Versions {
     const val kotlin = "1.3.71"
     const val kotlinCoroutines = "1.3.0"
     const val picassoDiskCache = "1.+"
-    const val pxAddons = "4.+"
+    const val pxAddons = "4.102.0"
     const val andesUi = "3.+"
 
     // Tests
