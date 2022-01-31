@@ -5,6 +5,8 @@ import com.mercadolibre.android.cardform.BuildConfig
 import com.mercadopago.android.px.addons.TrackingBehaviour
 import java.util.*
 import kotlin.collections.HashMap
+import com.mercadopago.android.px.addons.model.Track as PXTrack
+import com.mercadopago.android.px.addons.tracking.Tracker as PXTracker
 
 internal class CardFormTracker(baseData: TrackerData, private val behaviour: TrackingBehaviour) :
     Tracker {
@@ -28,17 +30,17 @@ internal class CardFormTracker(baseData: TrackerData, private val behaviour: Tra
         trackerListener(data)
     }
 
-    private fun trackMelidataGA(track: Track,
-                                trackerMap: MutableMap<String, Any>,
-                                type: com.mercadopago.android.px.addons.model.Track.Type
+    private fun track(track: Track,
+                      trackerMap: MutableMap<String, Any>,
+                      type: PXTrack.Type
     ) {
-        val trackers: List<com.mercadopago.android.px.addons.tracking.Tracker> = if (track.trackGA)
-            listOf(com.mercadopago.android.px.addons.tracking.Tracker.GOOGLE_ANALYTICS_V2,
-                com.mercadopago.android.px.addons.tracking.Tracker.CUSTOM)
-        else listOf(com.mercadopago.android.px.addons.tracking.Tracker.CUSTOM)
+        val trackers: List<PXTracker> = if (track.trackGA)
+            listOf(PXTracker.GOOGLE_ANALYTICS_V2,
+                PXTracker.CUSTOM)
+        else listOf(PXTracker.CUSTOM)
 
-        val myTrackView = com.mercadopago.android.px.addons.model.Track.Builder(
-            com.mercadopago.android.px.addons.tracking.Tracker.MELIDATA,
+        val myTrackView = PXTrack.Builder(
+            PXTracker.MELIDATA,
             "CARD_FORM",
             type, track.pathEvent)
             .addTrackers(trackers)
@@ -51,14 +53,14 @@ internal class CardFormTracker(baseData: TrackerData, private val behaviour: Tra
     override fun trackView(track: Track) {
         addDataTrack(track) {
             logDebug(track.pathEvent, it.toString())
-            trackMelidataGA(track, it, com.mercadopago.android.px.addons.model.Track.Type.VIEW)
+            track(track, it, PXTrack.Type.VIEW)
         }
     }
 
     override fun trackEvent(track: Track) {
         addDataTrack(track) {
             logDebug(track.pathEvent, it.toString())
-            trackMelidataGA(track, it, com.mercadopago.android.px.addons.model.Track.Type.EVENT)
+            track(track, it, PXTrack.Type.EVENT)
         }
     }
 
