@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/ui_dialog_title_height"
     android:background="?selectableItemBackground"
-    android:paddingBottom="24dp"
-    android:paddingTop="24dp"
+    android:paddingBottom="@dimen/ui_3m"
+    android:paddingTop="@dimen/ui_3m"
     tools:layout_height="@dimen/ui_dialog_title_height">
 
     <ImageView
