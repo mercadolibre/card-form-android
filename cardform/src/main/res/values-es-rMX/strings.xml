@@ -5,6 +5,7 @@
     <string name="cf_card_name_hint">Nombre del titular</string>
     <string name="cf_generic_title_app_bar">Nueva tarjeta</string>
     <string name="cf_issuers_header_title">¿Quién emitió tu tarjeta?</string>
+    <string name="cf_issuers_name_bank">Nombre del banco</string>
     <string name="cf_without_connection">Revisa tu conexión a internet.</string>
     <string name="cf_generic_error">Algo salió mal</string>
     <string name="cf_back">Anterior</string>

@@ -2,10 +2,6 @@ package com.mercadolibre.android.cardform.presentation.ui.formentry
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.appcompat.widget.AppCompatRadioButton
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +10,11 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.widget.AppCompatRadioButton
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.data.model.response.Issuer
 import com.mercadolibre.android.cardform.internal.CardFormWithFragment
@@ -132,7 +133,7 @@ internal class IssuersFragment : InputFragment() {
                 val issuer = issuers[validPosition]
 
                 holder.isChecked(lastPositionSelected != null && lastPositionSelected == validPosition)
-                holder.loadImage(issuer.imageUrl)
+                holder.loadImage(issuer.imageUrl, issuer.name)
                 holder.setContentDescription(issuer.name)
                 holder.setOnClickListener { radioButton ->
                     lastIssuerSelected
@@ -156,12 +157,24 @@ internal class IssuersFragment : InputFragment() {
     inner class IssuerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val radioButton: AppCompatRadioButton = itemView.findViewById(R.id.radioButton)
         private val issuerImage: ImageView = itemView.findViewById(R.id.issuerImage)
+        private val issuerText: TextView = itemView.findViewById(R.id.issuerText)
 
-        fun loadImage(imageUrl: String?) {
+        fun loadImage(imageUrl: String?, name: String) {
             PicassoDiskLoader
                 .get(issuerImage.context)
                 .load(imageUrl)
-                .into(issuerImage)
+                .into(issuerImage, object: com.squareup.picasso.Callback {
+                    override fun onSuccess() {
+                        issuerImage.visibility = View.VISIBLE
+                        issuerText.visibility = View.GONE
+                    }
+
+                    override fun onError() {
+                        issuerText.text = name
+                        issuerImage.visibility = View.GONE
+                        issuerText.visibility = View.VISIBLE
+                    }
+                })
         }
 
         fun isChecked(isChecked: Boolean) {

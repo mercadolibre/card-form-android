@@ -1,23 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/ui_dialog_title_height"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?selectableItemBackground"
-    android:paddingTop="24dp"
     android:paddingBottom="24dp"
+    android:paddingTop="24dp"
     tools:layout_height="@dimen/ui_dialog_title_height">
-
-    <RadioButton
-        android:id="@+id/radioButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="@dimen/ui_2m"
-        android:layout_marginEnd="@dimen/ui_2m"
-        app:buttonTint="@color/cf_radio_button_selector"
-        android:clickable="false" />
 
     <ImageView
         android:id="@+id/issuerImage"
@@ -25,6 +15,29 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/radioButton"
+        android:visibility="gone"
         tools:src="@drawable/cf_issuer_sample" />
+
+    <RadioButton
+        android:id="@+id/radioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/ui_2m"
+        android:layout_marginStart="@dimen/ui_2m"
+        android:clickable="false"
+        app:buttonTint="@color/cf_radio_button_selector" />
+
+    <TextView
+        android:id="@+id/issuerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/radioButton"
+        android:text="@string/cf_issuers_name_bank"
+        android:textAppearance="@style/MLFont.Bold.Semi"
+        android:textSize="@dimen/ui_fontsize_xlarge"
+        android:visibility="gone"
+        tools:text="@string/cf_issuers_name_bank" />
 
 </RelativeLayout>

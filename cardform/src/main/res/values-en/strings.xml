@@ -5,6 +5,7 @@
     <string name="cf_card_name_hint">Owner’s name</string>
     <string name="cf_generic_title_app_bar">New card</string>
     <string name="cf_issuers_header_title">Which is your bank?</string>
+    <string name="cf_issuers_name_bank">Bank name</string>
     <string name="cf_without_connection">Review your internet connection.</string>
     <string name="cf_generic_error">Something went wrong</string>
     <string name="cf_back">Previous</string>
