@@ -34,12 +34,10 @@ internal class CardFormTracker(baseData: TrackerData, private val behaviour: Tra
                       trackerMap: MutableMap<String, Any>,
                       type: PXTrack.Type
     ) {
-        val trackers: List<PXTracker> = if (track.trackGA)
-            listOf(PXTracker.GOOGLE_ANALYTICS_V2,
-                PXTracker.CUSTOM)
+        val trackers: List<PXTracker> = if (track.trackGA) listOf(PXTracker.GOOGLE_ANALYTICS_V2, PXTracker.CUSTOM)
         else listOf(PXTracker.CUSTOM)
 
-        val myTrackView = PXTrack.Builder(
+        val pxTrack = PXTrack.Builder(
             PXTracker.MELIDATA,
             "CARD_FORM",
             type, track.pathEvent)
@@ -47,7 +45,7 @@ internal class CardFormTracker(baseData: TrackerData, private val behaviour: Tra
             .addData(trackerMap)
             .build()
 
-        behaviour.track(myTrackView)
+        behaviour.track(pxTrack)
     }
 
     override fun trackView(track: Track) {
