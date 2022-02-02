@@ -39,7 +39,7 @@ internal class CardFormTracker(baseData: TrackerData, private val behaviour: Tra
 
         val pxTrack = PXTrack.Builder(
             PXTracker.MELIDATA,
-            "CARD_FORM",
+            APPLICATION_CONTEXT,
             type, track.pathEvent)
             .addTrackers(trackers)
             .addData(trackerMap)
@@ -73,5 +73,6 @@ internal class CardFormTracker(baseData: TrackerData, private val behaviour: Tra
         private const val FLOW_ID = "flow_id"
         private const val SESSION_ID = "session_id"
         private const val SESSION_TIME = "session_time"
+        private const val APPLICATION_CONTEXT = "CARD_FORM"
     }
 }
