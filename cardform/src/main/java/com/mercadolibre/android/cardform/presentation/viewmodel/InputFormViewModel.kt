@@ -1,23 +1,18 @@
 package com.mercadolibre.android.cardform.presentation.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import android.content.Context
 import android.os.Bundle
-import com.mercadolibre.android.cardform.internal.LifecycleListener
+import androidx.lifecycle.MutableLiveData
 import com.mercadolibre.android.cardform.base.BaseViewModel
 import com.mercadolibre.android.cardform.base.getOrElse
-import com.mercadolibre.android.cardform.data.model.response.CardResultDto
 import com.mercadolibre.android.cardform.data.model.esc.Device
-import com.mercadolibre.android.cardform.data.model.response.CardUi
-import com.mercadolibre.android.cardform.data.model.response.Issuer
-import com.mercadolibre.android.cardform.data.model.response.PaymentMethod
-import com.mercadolibre.android.cardform.data.model.response.RegisterCard
+import com.mercadolibre.android.cardform.data.model.request.AssociatedCardParam
 import com.mercadolibre.android.cardform.data.model.response.*
+import com.mercadolibre.android.cardform.data.model.response.tokenize.CardTokenModel
 import com.mercadolibre.android.cardform.data.repository.CardRepository
-import com.mercadolibre.android.cardform.domain.AssociatedCardParam
 import com.mercadolibre.android.cardform.domain.AssociatedCardUseCase
-import com.mercadolibre.android.cardform.domain.CardTokenModel
 import com.mercadolibre.android.cardform.domain.TokenizeUseCase
+import com.mercadolibre.android.cardform.internal.LifecycleListener
 import com.mercadolibre.android.cardform.presentation.extensions.hasConnection
 import com.mercadolibre.android.cardform.presentation.mapper.*
 import com.mercadolibre.android.cardform.presentation.model.*
@@ -202,7 +197,14 @@ internal class InputFormViewModel(
             cardLiveData.postValue(CardDataMapper.map(this))
             issuersLiveData.postValue(ArrayList(issuers))
             loadInputData(this)
-            tracker.trackEvent(BinRecognizedTrack())
+            tracker.trackEvent(
+                BinRecognizedTrack(
+                    binValidator.bin.orEmpty(),
+                    issuer?.id ?: 0,
+                    paymentMethod.paymentMethodId,
+                    paymentMethod.paymentTypeId
+                )
+            )
         }
     }
 
@@ -230,24 +232,34 @@ internal class InputFormViewModel(
             tracker.trackEvent(
                 ErrorTrack(
                     TrackApiSteps.TOKEN.getType(),
-                    throwable.message.orEmpty()
+                    throwable.message.orEmpty(),
+                    binValidator.bin.orEmpty(),
+                    issuer?.id ?: 0,
+                    paymentMethod?.paymentMethodId.orEmpty(),
+                    paymentMethod?.paymentTypeId.orEmpty()
                 )
             )
             stateUiLiveData.postValue(ErrorUtil.createError(throwable))
         }
 
     private suspend fun getCardAssociationId(cardTokenId: String) = associatedCardUseCase
-        .execute(AssociatedCardParam(
-            cardTokenId,
-            paymentMethod!!.paymentMethodId,
-            paymentMethod!!.paymentTypeId,
-            issuer!!.id
-        ))
+        .execute(
+            AssociatedCardParam(
+                cardTokenId,
+                paymentMethod!!.paymentMethodId,
+                paymentMethod!!.paymentTypeId,
+                issuer!!.id
+            )
+        )
         .getOrElse { throwable ->
             tracker.trackEvent(
                 ErrorTrack(
                     TrackApiSteps.ASSOCIATION.getType(),
-                    throwable.message.orEmpty()
+                    throwable.message.orEmpty(),
+                    binValidator.bin.orEmpty(),
+                    issuer?.id ?: 0,
+                    paymentMethod?.paymentMethodId.orEmpty(),
+                    paymentMethod?.paymentTypeId.orEmpty()
                 )
             )
             stateUiLiveData.postValue(ErrorUtil.createError(throwable))
@@ -265,20 +277,24 @@ internal class InputFormViewModel(
                     escManager.saveESCWith(cardAssociationId, cardTokenModel.esc)
                 }
                 val onSuccess = {
-                    tracker.trackEvent(SuccessTrack(
-                        cardStepInfo.cardNumber.substring(0..5),
-                        issuer?.id ?: 0,
-                        paymentMethod?.paymentMethodId!!,
-                        paymentMethod?.paymentTypeId!!
-                    ))
-                    stateUiLiveData.postValue(UiResult.CardResult(
+                    tracker.trackEvent(
+                        SuccessTrack(
+                            cardStepInfo.cardNumber.substring(0..5),
+                            issuer?.id ?: 0,
+                            paymentMethod?.paymentMethodId!!,
+                            paymentMethod?.paymentTypeId!!
+                        )
+                    )
+                    stateUiLiveData.postValue(
+                        UiResult.CardResult(
                             CardResultDto(
-                                    cardAssociationId,
-                                    binValidator.bin!!,
-                                    paymentMethod?.paymentTypeId!!,
-                                    cardTokenModel.lastFourDigits
+                                cardAssociationId,
+                                binValidator.bin!!,
+                                paymentMethod?.paymentTypeId!!,
+                                cardTokenModel.lastFourDigits
                             )
-                    ))
+                        )
+                    )
                 }
 
                 withContext(Dispatchers.Main) {
@@ -304,7 +320,7 @@ internal class InputFormViewModel(
 
     private fun loadInputData(registerCard: RegisterCard) {
         CoroutineScope(contextProvider.Default).launch {
-            registerCard.fieldsSetting.forEach { setting ->
+            registerCard.fieldsSetting.iterator().forEach { setting ->
 
                 when (setting.name) {
 
@@ -336,6 +352,15 @@ internal class InputFormViewModel(
 
     fun trackBack() {
         tracker.trackEvent(BackTrack())
+    }
+
+    fun trackValidBinNumber(){
+        tracker.trackEvent(BinValidTrack(
+            binValidator.bin.orEmpty(),
+            issuer?.id?: 0,
+            paymentMethod?.paymentMethodId.orEmpty(),
+            paymentMethod?.paymentTypeId.orEmpty()
+        ))
     }
 
     companion object {
