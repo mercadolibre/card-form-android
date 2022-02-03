@@ -7,60 +7,71 @@ import com.mercadopago.android.px.addons.TrackingBehaviour
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+
 
 internal class CardFormTrackerTest {
 
-    private lateinit var cardFormTracker: CardFormTracker
-    private lateinit var trackingBehaviour: TrackingBehaviour
-    private lateinit var trackerModule: TrackerModule
-    private lateinit var track: BinInvalidTrack
+    @Nested
+    @DisplayName("Given Initialized Tracker")
+    internal inner class GivenInitializedTracker {
 
-    @BeforeEach
-    fun doBefore() {
-        trackingBehaviour = mockk<TrackingBehaviour>(relaxed = true)
-        track = BinInvalidTrack("bintest")
+        @Nested
+        @DisplayName("When user clicked an option track event or enter a view")
+        inner class WhenUserClickedAnOptionOrEnterView {
 
-        val trackerData = TrackerData(
-            "siteIdMock",
-            "flowIdMock",
-            "sessionIdMock"
-        )
+            private lateinit var cardFormTracker: CardFormTracker
+            private lateinit var trackingBehaviour: TrackingBehaviour
+            private lateinit var trackerModule: TrackerModule
+            private lateinit var track: BinInvalidTrack
 
-        cardFormTracker = CardFormTracker(trackerData, trackingBehaviour)
-        trackerModule = TrackerModule("siteIdMock",
-            "flowIdMock",
-            "sessionIdMock",
-            trackingBehaviour
-        )
+            @BeforeEach
+            fun setUp() {
+                trackingBehaviour = mockk<TrackingBehaviour>(relaxed = true)
+                track = BinInvalidTrack("bintest")
 
-    }
+                val trackerData = TrackerData(
+                    "siteIdMock",
+                    "flowIdMock",
+                    "sessionIdMock"
+                )
 
-    @Test
-    fun trackEvent() {
+                cardFormTracker = CardFormTracker(trackerData, trackingBehaviour)
+                trackerModule = TrackerModule("siteIdMock",
+                    "flowIdMock",
+                    "sessionIdMock",
+                    trackingBehaviour
+                )
 
-        cardFormTracker.trackEvent(track)
-        verify {
-            trackingBehaviour.track(any())
+            }
+
+            @Test
+            fun `Then Track event on analytics and melidata`() {
+                cardFormTracker.trackEvent(track)
+                verify {
+                    trackingBehaviour.track(any())
+                }
+            }
+
+            @Test
+            fun `Then Track view on analytics and melidata`() {
+                cardFormTracker.trackView(track)
+                verify {
+                    trackingBehaviour.track(any())
+                }
+            }
+
+            @Test
+            fun `Then Track view on melidata`() {
+                val trackTest = BinClearTrack()
+                cardFormTracker.trackView(trackTest)
+
+                verify {
+                    trackingBehaviour.track(any())
+                }
+            }
         }
     }
-
-    @Test
-    fun trackView() {
-        cardFormTracker.trackView(track)
-        verify {
-            trackingBehaviour.track(any())
-        }
-    }
-
-    @Test
-    fun trackViewNoGa() {
-        val trackTest = BinClearTrack()
-        cardFormTracker.trackView(trackTest)
-
-        verify {
-            trackingBehaviour.track(any())
-        }
-    }
-
 }
