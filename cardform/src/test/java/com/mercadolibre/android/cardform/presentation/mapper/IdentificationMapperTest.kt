@@ -1,9 +1,9 @@
 package com.mercadolibre.android.cardform.presentation.mapper
 
+import com.mercadolibre.android.cardform.FieldsSettingProvider
 import com.mercadolibre.android.cardform.data.model.response.FieldsSetting
 import com.mercadolibre.android.cardform.data.model.response.IdentificationTypes
 import io.mockk.mockk
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -61,6 +61,21 @@ internal class IdentificationMapperTest {
             @Test
             fun `Then check the maxLength field received the correct value`() {
                 assertEquals(expected[0].maxLength, identificationData.identifications[0].maxLength)
+            }
+        }
+
+        @Nested
+        @DisplayName("When requested a FieldsSetting to IdentificationData conversion with null autocomplete")
+        inner class WhenRequestedAFieldSettingToIdentificationDataConversionWithNullAutocomplete {
+
+            private val fieldsSetting = FieldsSettingProvider.makeFieldSetting(null)
+            private val subject = IdentificationMapper(fieldsSetting)
+
+            private val stepData = subject.map(mockk(relaxed = true))
+
+            @Test
+            fun `Then check the step data autocomplete field defaults to true`() {
+                assertEquals(true, stepData.autocomplete)
             }
         }
     }

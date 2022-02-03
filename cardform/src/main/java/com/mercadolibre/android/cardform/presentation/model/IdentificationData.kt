@@ -2,6 +2,8 @@ package com.mercadolibre.android.cardform.presentation.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.mercadolibre.android.cardform.base.toBoolean
+import com.mercadolibre.android.cardform.base.toInt
 
 internal data class IdentificationData(
     override val name: String,
@@ -12,6 +14,7 @@ internal data class IdentificationData(
     override val validationPattern: String? = null,
     override val validationMessage: String,
     override val mask: String? = null,
+    override val autocomplete: Boolean,
     val identifications: List<Identification>
 ) : InputData, Parcelable {
     constructor(parcel: Parcel) : this(
@@ -23,6 +26,7 @@ internal data class IdentificationData(
         parcel.readString(),
         parcel.readString()!!,
         parcel.readString(),
+        parcel.readInt().toBoolean(),
         parcel.createTypedArrayList(Identification)!!
     )
 
@@ -35,6 +39,7 @@ internal data class IdentificationData(
         parcel.writeString(validationPattern)
         parcel.writeString(validationMessage)
         parcel.writeString(mask)
+        parcel.writeInt(autocomplete.toInt())
         parcel.writeTypedList(identifications)
     }
 

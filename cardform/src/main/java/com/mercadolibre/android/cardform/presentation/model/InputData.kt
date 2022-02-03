@@ -9,4 +9,5 @@ internal interface InputData {
     val validationPattern: String?
     val validationMessage: String
     val mask: String?
+    val autocomplete: Boolean
 }

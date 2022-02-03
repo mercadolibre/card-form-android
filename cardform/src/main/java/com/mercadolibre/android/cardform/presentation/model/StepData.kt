@@ -2,6 +2,8 @@ package com.mercadolibre.android.cardform.presentation.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.mercadolibre.android.cardform.base.toBoolean
+import com.mercadolibre.android.cardform.base.toInt
 
 internal class StepData(
     override var name: String,
@@ -11,7 +13,8 @@ internal class StepData(
     override var hintMessage: String? = null,
     override var validationPattern: String? = null,
     override var validationMessage: String,
-    override var mask: String?
+    override var mask: String?,
+    override var autocomplete: Boolean
 ) : InputData, Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
@@ -21,7 +24,8 @@ internal class StepData(
         parcel.readString(),
         parcel.readString(),
         parcel.readString()!!,
-        parcel.readString()
+        parcel.readString(),
+        parcel.readInt().toBoolean()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -33,6 +37,7 @@ internal class StepData(
         parcel.writeString(validationPattern)
         parcel.writeString(validationMessage)
         parcel.writeString(mask)
+        parcel.writeInt(autocomplete.toInt())
     }
 
     override fun describeContents() = 0

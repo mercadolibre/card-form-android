@@ -32,7 +32,8 @@ internal object ObjectStepFactory : StepFactory {
                         builder.append('$')
                     }
                     builder
-                }
+                },
+                false
             )
         } else {
             StepData(
@@ -43,7 +44,8 @@ internal object ObjectStepFactory : StepFactory {
                 "",
                 null,
                 "",
-                null
+                null,
+                false
             )
         }
     }

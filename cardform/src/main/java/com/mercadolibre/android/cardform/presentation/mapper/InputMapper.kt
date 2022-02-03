@@ -15,7 +15,8 @@ internal object InputMapper : Mapper<StepData, FieldsSetting> {
             model.hintMessage,
             model.validationPattern,
             model.validationMessage,
-            model.mask
+            model.mask,
+            model.autocomplete ?: true
         )
     }
 }
