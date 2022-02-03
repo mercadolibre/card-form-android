@@ -4,7 +4,7 @@
 
 Add this line to your app's `build.gradle` inside the `dependencies` section:
 
-    implementation 'com.mercadolibre.android:cardform:1.+'
+    implementation 'com.mercadolibre.android:cardform:2.+'
 
 ### Local deployment
 
