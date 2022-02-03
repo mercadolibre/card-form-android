@@ -105,18 +105,20 @@ internal class CardNumberFragment : InputFragment() {
                 .validateWith(ValidationType.ExtraValidation(cardNumber, validations),
                     blockValid = { numberCardEditText.clearError() },
                     blockInvalid = {
-                    tracker.trackEvent(BinInvalidTrack(cardNumber))
-                    numberCardEditText.showError(it) })
+                        tracker.trackEvent(BinInvalidTrack(cardNumber))
+                        numberCardEditText.showError(it)
+                    })
                 .validateWith(ValidationType.Complete(cardNumber, numberCardEditText.getMaxLength()))
                 .validateWith(ValidationType.Luhn(cardNumber, hasLuhnValidation()),
                     blockValid = {
-                    numberCardEditText.clearError()
-                    numberCardEditText.addRightCheckDrawable(R.drawable.cf_icon_check)
-                    tracker.trackEvent(BinValidTrack()) },
+                        numberCardEditText.clearError()
+                        numberCardEditText.addRightCheckDrawable(R.drawable.cf_icon_check)
+                        viewModel.trackValidBinNumber()
+                    },
                     blockInvalid = {
-                    tracker.trackEvent(BinInvalidTrack(cardNumber))
-                    showError()
-                }).validate()
+                        tracker.trackEvent(BinInvalidTrack(cardNumber))
+                        showError()
+                    }).validate()
         }
     }
 
