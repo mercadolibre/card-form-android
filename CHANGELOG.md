@@ -1,3 +1,7 @@
+## VERSION 2.2.1
+_03_02_2022_
+- Fix - Adjusting version card-drawer.
+
 ## VERSION 2.2.0
 _03_02_2022_
 - Fix - Calibre config.
