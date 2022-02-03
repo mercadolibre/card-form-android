@@ -1,3 +1,7 @@
+## VERSION 2.2.2
+_03_02_2022_
+- Fix - Remove junit 5 gradle plugins.
+
 ## VERSION 2.2.1
 _03_02_2022_
 - Fix - Adjusting version card-drawer.
