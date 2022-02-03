@@ -21,11 +21,10 @@ object Versions {
     const val andesUi = "3.+"
 
     // Tests
-    const val junit = "5.8.0"
-    const val junitEngine = "5.8.0"
+    const val junit = "5.8.2"
+    const val junitEngine = "5.8.2"
     const val mockk = "1.10.0"
     const val coroutinesTest = "1.3.0"
-    const val gradleJunit = "1.8.0.0"
 
     const val libraryVersion = "2.2.1"
 }

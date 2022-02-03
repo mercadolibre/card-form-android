@@ -7,7 +7,7 @@ internal class BinValidTrack(
     private val bin: String,
     private val issuer: Int,
     private val paymentMethodId: String,
-    private val paymentMethodType: String,
+    private val paymentMethodType: String
 ): TrackData {
     override fun addTrackData(data: MutableMap<String, Any>) {
         data[BIN]  = bin
