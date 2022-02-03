@@ -27,5 +27,5 @@ object Versions {
     const val coroutinesTest = "1.3.0"
     const val gradleJunit = "1.8.0.0"
 
-    const val libraryVersion = "2.2.0"
+    const val libraryVersion = "2.2.1"
 }
