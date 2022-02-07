@@ -17,6 +17,7 @@ internal class BinRecognizedTrack(
     }
 
     override val pathEvent = "$BASE_PATH/bin_number/recognized"
+    override val trackGA = false
 
     companion object {
         private const val BIN = "bin"

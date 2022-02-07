@@ -13,6 +13,7 @@ internal class ErrorTrack(
     private val paymentMethodType: String = ""
 ) : TrackData {
     override val pathEvent = "${BASE_PATH}/error"
+    override val trackGA = false
 
     override fun addTrackData(data: MutableMap<String, Any>) {
         data[ERROR_STEP] = errorStep
