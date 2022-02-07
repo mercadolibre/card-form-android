@@ -23,6 +23,6 @@ internal class SuccessTrack(
         private const val BIN = "bin"
         private const val ISSUER = "issuer"
         private const val PAYMENT_METHOD_ID = "payment_method_id"
-        private const val PAYMENT_METHOD_TYPE = "payment_type_id"
+        private const val PAYMENT_METHOD_TYPE = "payment_method_type"
     }
 }
