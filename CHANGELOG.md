@@ -1,7 +1,3 @@
-## VERSION 2.3.0 (Unpublished)
-_10_02_2022_
-- Fix - Adjust the tracks
-
 ## VERSION 2.2.2
 _03_02_2022_
 - Fix - Remove junit 5 gradle plugins.
