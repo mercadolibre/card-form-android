@@ -65,7 +65,6 @@ dependencies {
     implementation Dependencies.material
     implementation Dependencies.andesUi
 
-
     implementation Dependencies.gson
     implementation Dependencies.retrofit
     implementation(Dependencies.retrofitGsonConverter) {
@@ -86,6 +85,11 @@ dependencies {
     testRuntimeOnly Dependencies.junitEngine
     testImplementation Dependencies.mockk
     testImplementation Dependencies.coroutinesTest
+
+    androidTestImplementation Dependencies.junit4
+    androidTestImplementation Dependencies.espresso
+    androidTestImplementation Dependencies.runner
+    androidTestImplementation Dependencies.junitExt
 }
 
 apply from: "$rootDir/gradle/deploy_card_form.gradle"

@@ -34,6 +34,12 @@ object Dependencies {
     const val mockk = "io.mockk:mockk:${Versions.mockk}"
     const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutinesTest}"
 
+    // Instrumentation Tests
+    const val junit4 = "junit:junit:${Versions.junit4}"
+    const val espresso = "androidx.test.espresso:espresso-core:${Versions.espresso}"
+    const val runner = "androidx.test:runner:${Versions.runner}"
+    const val junitExt = "androidx.test.ext:junit:${Versions.extJunit}"
+
     // Mercado libre
     const val ui = "com.mercadolibre.android:ui:${Versions.ui}"
     const val carddrawer = "com.mercadolibre.android:carddrawer:${Versions.carddrawer}"

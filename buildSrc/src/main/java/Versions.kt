@@ -26,5 +26,11 @@ object Versions {
     const val mockk = "1.10.0"
     const val coroutinesTest = "1.3.0"
 
+    // Instrumentation Tests
+    const val espresso = "3.1.0"
+    const val runner = "1.1.0"
+    const val extJunit = "1.1.3"
+    const val junit4 = "4.+"
+
     const val libraryVersion = "2.2.2"
 }
