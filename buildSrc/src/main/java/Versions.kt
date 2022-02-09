@@ -26,5 +26,5 @@ object Versions {
     const val mockk = "1.10.0"
     const val coroutinesTest = "1.3.0"
 
-    const val libraryVersion = "2.2.2"
+    const val libraryVersion = "2.3.0"
 }
