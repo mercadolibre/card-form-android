@@ -31,6 +31,7 @@ object Versions {
     const val runner = "1.1.0"
     const val extJunit = "1.1.3"
     const val junit4 = "4.+"
+    const val orchestrator = "1.4.1"
 
     const val libraryVersion = "2.2.2"
 }

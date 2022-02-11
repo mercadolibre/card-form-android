@@ -39,6 +39,7 @@ object Dependencies {
     const val espresso = "androidx.test.espresso:espresso-core:${Versions.espresso}"
     const val runner = "androidx.test:runner:${Versions.runner}"
     const val junitExt = "androidx.test.ext:junit:${Versions.extJunit}"
+    const val orchestrator = "androidx.test:orchestrator:${Versions.orchestrator}"
 
     // Mercado libre
     const val ui = "com.mercadolibre.android:ui:${Versions.ui}"
