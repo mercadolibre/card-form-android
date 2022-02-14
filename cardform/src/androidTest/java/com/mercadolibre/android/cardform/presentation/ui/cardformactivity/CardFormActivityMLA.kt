@@ -134,7 +134,7 @@ class CardFormActivityMLA: CardFormActivityTest() {
         val le = "0"
         initializeScreenToDocumentInsertion()
         onView(withId(R.id.identificationTypes)).perform(click())
-        onData(Matchers.anything()).atPosition(2).perform(click())
+        onData(Matchers.anything()).atPosition(3).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.identificationEditText))))
             .perform(typeText(le), closeSoftKeyboard())
         onView(withId(R.id.next)).perform(click())
@@ -147,7 +147,7 @@ class CardFormActivityMLA: CardFormActivityTest() {
         val otro = "0"
         initializeScreenToDocumentInsertion()
         onView(withId(R.id.identificationTypes)).perform(click())
-        onData(Matchers.anything()).atPosition(2).perform(click())
+        onData(Matchers.anything()).atPosition(4).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.identificationEditText))))
             .perform(typeText(otro), closeSoftKeyboard())
         onView(withId(R.id.next)).perform(click())
