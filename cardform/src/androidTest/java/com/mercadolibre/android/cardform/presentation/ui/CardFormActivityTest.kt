@@ -35,6 +35,8 @@ class CardFormActivityTest : UIBaseTest() {
 
     private val cardNumberValid = "5067268650517446"
     private val cardNameValid = "JOSE SILVA"
+    private val cardExpirationValid = "1029"
+    private val cardCVV = "123"
 
     @get:Rule
     internal var activityScenarioRule = ActivityScenarioRule<CardFormActivity>(intent)
@@ -61,6 +63,42 @@ class CardFormActivityTest : UIBaseTest() {
     }
 
     @Test
+    fun when_insert_a_valid_expiration_then_not_displayed_hint() {
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
+            .perform(typeText(cardNumberValid), closeSoftKeyboard())
+        await()
+        onView(withId(R.id.next)).perform(click())
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.nameCardEditText))))
+            .perform(typeText(cardNameValid), closeSoftKeyboard())
+        await()
+        onView(withId(R.id.next)).perform(click())
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.expirationEditText))))
+            .perform(typeText(cardExpirationValid), closeSoftKeyboard())
+        onView(withId(R.id.next)).perform(click())
+        onView(allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.expirationEditText))))
+            .check(matches(withText("MM/YY")))
+    }
+
+    @Test
+    fun when_insert_cvv_then_not_displayed_hint() {
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
+            .perform(typeText(cardNumberValid), closeSoftKeyboard())
+        await()
+        onView(withId(R.id.next)).perform(click())
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.nameCardEditText))))
+            .perform(typeText(cardNameValid), closeSoftKeyboard())
+        await()
+        onView(withId(R.id.next)).perform(click())
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.expirationEditText))))
+            .perform(typeText(cardExpirationValid), closeSoftKeyboard())
+        onView(withId(R.id.next)).perform(click())
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.cvvCodeEditText))))
+            .perform(typeText(cardCVV), closeSoftKeyboard())
+        onView(allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.cvvCodeEditText))))
+            .check(matches(withText("CVV")))
+    }
+
+    @Test
     fun when_insert_card_number_then_complete_the_card_drawer() {
         val expectedCard = "5067  2686  5051  7446"
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
@@ -76,9 +114,40 @@ class CardFormActivityTest : UIBaseTest() {
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.nameCardEditText))))
             .perform(typeText(cardNameValid), closeSoftKeyboard())
+        onView(withId(com.meli.android.carddrawer.R.id.cho_card_name)).check(matches(withText(cardNameValid)))
+    }
+
+    @Test
+    fun when_insert_card_expiration_then_complete_the_card_drawer() {
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
+            .perform(typeText(cardNumberValid), closeSoftKeyboard())
         await()
-        onView(allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.nameCardEditText))))
-            .check(matches(withText("As it shows on the card")))
+        onView(withId(R.id.next)).perform(click())
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.nameCardEditText))))
+            .perform(typeText(cardNameValid), closeSoftKeyboard())
+        await()
+        onView(withId(R.id.next)).perform(click())
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.expirationEditText))))
+            .perform(typeText(cardExpirationValid), closeSoftKeyboard())
+        onView(withId(com.meli.android.carddrawer.R.id.cho_card_date)).check(matches(withText("10/29")))
+    }
+
+    @Test
+    fun when_insert_card_cvv_then_complete_the_card_drawer() {
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
+            .perform(typeText(cardNumberValid), closeSoftKeyboard())
+        await()
+        onView(withId(R.id.next)).perform(click())
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.nameCardEditText))))
+            .perform(typeText(cardNameValid), closeSoftKeyboard())
+        await()
+        onView(withId(R.id.next)).perform(click())
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.expirationEditText))))
+            .perform(typeText(cardExpirationValid), closeSoftKeyboard())
+        onView(withId(R.id.next)).perform(click())
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.cvvCodeEditText))))
+            .perform(typeText(cardCVV), closeSoftKeyboard())
+        onView(withId(com.meli.android.carddrawer.R.id.cho_card_code_front)).check(matches(withText(cardCVV)))
     }
 
     @Test
@@ -102,6 +171,23 @@ class CardFormActivityTest : UIBaseTest() {
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.nameCardEditText))))
             .check(matches(withText("Complete using only letters")))
+    }
+
+    @Test
+    fun when_insert_card_expiration_invalid_then_displayed_hint() {
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
+            .perform(typeText(cardNumberValid), closeSoftKeyboard())
+        await()
+        onView(withId(R.id.next)).perform(click())
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.nameCardEditText))))
+            .perform(typeText(cardNameValid), closeSoftKeyboard())
+        await()
+        onView(withId(R.id.next)).perform(click())
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.expirationEditText))))
+            .perform(typeText("1019"), closeSoftKeyboard())
+        onView(withId(R.id.next)).perform(click())
+        onView(allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.expirationEditText))))
+            .check(matches(withText("Invalid date")))
     }
 
 }
