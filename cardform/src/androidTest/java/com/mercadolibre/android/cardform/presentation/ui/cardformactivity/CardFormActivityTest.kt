@@ -18,10 +18,11 @@ import org.junit.Test
 
 open class CardFormActivityTest : UIBaseTest() {
 
-    protected val cardNumberValid = "5067268650517446"
-    protected val cardNameValid = "JOSE SILVA"
-    protected val cardExpirationValid = "1029"
-    protected val cardCVV = "123"
+    private val cardNumberValid = "5067268650517446"
+    private val cardNameValid = "JOSE SILVA"
+    private val cardExpirationValid = "1029"
+    private val cardCVV = "123"
+    protected val invalidIDHint = "Invalid ID"
 
     @Test
     fun when_insert_a_valid_card_number_then_not_displayed_hint() {
@@ -136,7 +137,7 @@ open class CardFormActivityTest : UIBaseTest() {
     fun when_insert_card_number_invalid_then_displayed_hint() {
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
             .perform(typeText("5067 2686 5051 0000"), closeSoftKeyboard())
-        await()
+        onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.numberCardEditText))))
             .check(matches(withText(R.string.cf_card_number_info_hint)))
     }
@@ -188,4 +189,20 @@ open class CardFormActivityTest : UIBaseTest() {
             .check(matches(isDisplayed()))
     }
 
+    protected fun initializeScreenToDocumentInsertion() {
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
+            .perform(typeText(cardNumberValid), closeSoftKeyboard())
+        await()
+        onView(withId(R.id.next)).perform(click())
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.nameCardEditText))))
+            .perform(typeText(cardNameValid), closeSoftKeyboard())
+        await()
+        onView(withId(R.id.next)).perform(click())
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.expirationEditText))))
+            .perform(typeText(cardExpirationValid), closeSoftKeyboard())
+        onView(withId(R.id.next)).perform(click())
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.cvvCodeEditText))))
+            .perform(typeText(cardCVV), closeSoftKeyboard())
+        onView(withId(R.id.next)).perform(click())
+    }
 }
