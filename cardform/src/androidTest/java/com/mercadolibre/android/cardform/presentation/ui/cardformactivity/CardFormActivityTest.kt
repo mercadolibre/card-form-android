@@ -1,45 +1,27 @@
-package com.mercadolibre.android.cardform.presentation.ui
+package com.mercadolibre.android.cardform.presentation.ui.cardformactivity
 
-import android.app.Application
-import android.content.Intent
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
+import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.rules.ActivityScenarioRule
-import com.mercadolibre.android.cardform.CARD_FORM_EXTRA
-import com.mercadolibre.android.cardform.CardForm
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.presentation.ui.base.UIBaseTest
+import org.hamcrest.Matchers.not
 import org.hamcrest.core.AllOf.allOf
-import org.junit.Rule
 import org.junit.Test
 
-class CardFormActivityTest : UIBaseTest() {
+open class CardFormActivityTest : UIBaseTest() {
 
-    private val cardForm by lazy {
-        CardForm.Builder.withAccessToken(
-            accessToken = "APP_USR-3671576383500204-072117-d275735575b2b95458be231afc00f14c-506902649",
-            siteId = "MLB",
-            flowId = "test_flow"
-        ).build()
-    }
-
-    private val intent by lazy {
-        Intent(
-            ApplicationProvider.getApplicationContext<Application>(),
-            CardFormActivity::class.java
-        ).putExtra(CARD_FORM_EXTRA, cardForm)
-    }
-
-    private val cardNumberValid = "5067268650517446"
-    private val cardNameValid = "JOSE SILVA"
-    private val cardExpirationValid = "1029"
-    private val cardCVV = "123"
-
-    @get:Rule
-    internal var activityScenarioRule = ActivityScenarioRule<CardFormActivity>(intent)
+    protected val cardNumberValid = "5067268650517446"
+    protected val cardNameValid = "JOSE SILVA"
+    protected val cardExpirationValid = "1029"
+    protected val cardCVV = "123"
 
     @Test
     fun when_insert_a_valid_card_number_then_not_displayed_hint() {
@@ -188,6 +170,22 @@ class CardFormActivityTest : UIBaseTest() {
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.expirationEditText))))
             .check(matches(withText("Invalid date")))
+    }
+
+    @Test
+    fun when_entering_card_number_then_card_number_should_be_disabled() {
+        onView(withId(R.id.back)).check(matches(not(ViewMatchers.isEnabled())))
+    }
+
+    @Test
+    fun when_entering_card_name_and_press_back_then_should_come_back() {
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
+            .perform(typeText(cardNumberValid), closeSoftKeyboard())
+        await()
+        onView(withId(R.id.next)).perform(click())
+        onView(withId(R.id.back)).perform(click())
+        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
+            .check(matches(isDisplayed()))
     }
 
 }
