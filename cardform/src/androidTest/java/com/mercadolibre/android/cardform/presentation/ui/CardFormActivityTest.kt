@@ -48,7 +48,7 @@ class CardFormActivityTest : UIBaseTest() {
     }
 
     @Test
-    fun when_insert_a_valid_card_name_then_not_displayed_error() {
+    fun when_insert_a_valid_card_name_then_not_displayed_hint() {
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
             .perform(typeText(cardNumberValid), closeSoftKeyboard())
         await()
@@ -68,7 +68,7 @@ class CardFormActivityTest : UIBaseTest() {
         onView(withId(com.meli.android.carddrawer.R.id.cho_card_number)).check(matches(withText(expectedCard)))
     }
 
-    /*@Test
+    @Test
     fun when_insert_card_name_then_complete_the_card_drawer() {
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
             .perform(typeText(cardNumberValid), closeSoftKeyboard())
@@ -79,10 +79,7 @@ class CardFormActivityTest : UIBaseTest() {
         await()
         onView(allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.nameCardEditText))))
             .check(matches(withText("As it shows on the card")))
-
-        /*await()
-        onView(withId(com.meli.android.carddrawer.R.id.cho_card_name)).check(matches(withText(cardNameValid)))*/
-    }*/
+    }
 
     @Test
     fun when_insert_card_number_invalid_then_displayed_hint() {
@@ -92,7 +89,7 @@ class CardFormActivityTest : UIBaseTest() {
         onView(allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.numberCardEditText))))
             .check(matches(withText(R.string.cf_card_number_info_hint)))
     }
-    /*
+
     @Test
     fun when_insert_card_name_invalid_then_displayed_hint() {
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
@@ -106,5 +103,5 @@ class CardFormActivityTest : UIBaseTest() {
         onView(allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.nameCardEditText))))
             .check(matches(withText("Complete using only letters")))
     }
-    */
+
 }
