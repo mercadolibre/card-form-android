@@ -174,7 +174,7 @@ open class CardFormActivityTest : UIBaseTest() {
     }
 
     @Test
-    fun when_entering_card_number_then_card_number_should_be_disabled() {
+    fun when_entering_card_number_then_back_button_should_be_disabled() {
         onView(withId(R.id.back)).check(matches(not(ViewMatchers.isEnabled())))
     }
 
