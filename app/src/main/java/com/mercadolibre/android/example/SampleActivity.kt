@@ -19,8 +19,8 @@ class SampleActivity : AppCompatActivity() {
 
         fromCardAssociation.setOnClickListener {
             CardForm.Builder.withAccessToken(
-                "APP_USR-3671576383500204-072117-d275735575b2b95458be231afc00f14c-506902649",
-                "MLA", "test_flow")
+                "APP_USR-3964778276245137-021513-74efe11fd763bc23f136336969ef6d5b-1074687404",
+                "MCO", "test_flow")
                 .build()
                 .start(this, REQUEST_CODE)
         }
