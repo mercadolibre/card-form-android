@@ -205,4 +205,6 @@ open class CardFormActivityTest : UIBaseTest() {
             .perform(typeText(cardCVV), closeSoftKeyboard())
         onView(withId(R.id.next)).perform(click())
     }
+
 }
+
