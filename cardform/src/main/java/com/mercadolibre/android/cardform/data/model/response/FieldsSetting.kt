@@ -8,5 +8,6 @@ internal data class FieldsSetting (
     val hintMessage : String,
     val validationPattern : String,
     val validationMessage : String,
-    val mask: String
+    val mask: String,
+    val autocomplete: Boolean? = null
 )

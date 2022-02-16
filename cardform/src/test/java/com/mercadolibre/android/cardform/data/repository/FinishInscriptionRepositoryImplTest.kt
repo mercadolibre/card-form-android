@@ -2,8 +2,8 @@ package com.mercadolibre.android.cardform.data.repository
 
 import com.mercadolibre.android.cardform.TestContextProvider
 import com.mercadolibre.android.cardform.data.mapper.FinishInscriptionBodyMapper
+import com.mercadolibre.android.cardform.data.model.request.FinishInscriptionParam
 import com.mercadolibre.android.cardform.data.service.FinishInscriptionService
-import com.mercadolibre.android.cardform.domain.FinishInscriptionParam
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertNotNull

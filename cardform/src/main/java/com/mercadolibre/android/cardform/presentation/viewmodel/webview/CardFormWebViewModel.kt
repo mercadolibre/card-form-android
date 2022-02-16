@@ -190,7 +190,11 @@ internal class CardFormWebViewModel(
             tracker.trackEvent(
                 ErrorTrack(
                     TrackApiSteps.ASSOCIATION.getType(),
-                    throwable.localizedMessage.orEmpty()
+                    throwable.localizedMessage.orEmpty(),
+                    model.bin,
+                    model.issuerId,
+                    model.paymentMethodId,
+                    model.paymentMethodType
                 )
             )
             flowRetryProvider.setRetryFunction {

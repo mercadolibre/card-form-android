@@ -5,6 +5,7 @@ import com.mercadolibre.android.cardform.tracks.TrackData
 
 internal class NextTrack(private val stepName: String): TrackData {
     override val pathEvent = "$BASE_PATH/next"
+    override val trackGA = false
     override fun addTrackData(data: MutableMap<String, Any>) {
         data[CURRENT_STEP] = stepName
     }

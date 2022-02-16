@@ -125,7 +125,7 @@ internal class CardNumberFragment : InputFragment() {
                     blockValid = {
                         binding.numberCardEditText.clearError()
                         binding.numberCardEditText.addRightCheckDrawable(R.drawable.cf_icon_check)
-                        tracker.trackEvent(BinValidTrack())
+                        viewModel.trackValidBinNumber()
                     },
                     blockInvalid = {
                         tracker.trackEvent(BinInvalidTrack(cardNumber))

@@ -8,6 +8,7 @@ internal class BackTrack(
     private val stepName: String = TrackSteps.TRADITIONAL.getType()
 ) : TrackData {
     override val pathEvent = "${BASE_PATH}/back"
+    override val trackGA = false
 
     override fun addTrackData(data: MutableMap<String, Any>) {
         data[CURRENT_STEP] = stepName

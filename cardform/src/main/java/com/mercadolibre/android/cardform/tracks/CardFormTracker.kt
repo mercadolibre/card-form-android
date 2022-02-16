@@ -5,6 +5,8 @@ import com.mercadolibre.android.cardform.BuildConfig
 import com.mercadopago.android.px.addons.TrackingBehaviour
 import java.util.*
 import kotlin.collections.HashMap
+import com.mercadopago.android.px.addons.model.Track as PXTrack
+import com.mercadopago.android.px.addons.tracking.Tracker as PXTracker
 
 internal class CardFormTracker(baseData: TrackerData, private val behaviour: TrackingBehaviour) :
     Tracker {
@@ -28,17 +30,39 @@ internal class CardFormTracker(baseData: TrackerData, private val behaviour: Tra
         trackerListener(data)
     }
 
+    private fun track(
+        track: Track,
+        trackerMap: MutableMap<String, Any>,
+        type: PXTrack.Type
+    ) {
+        val trackers: List<PXTracker> = if (track.trackGA) {
+            listOf(PXTracker.GOOGLE_ANALYTICS_V2, PXTracker.CUSTOM)
+        } else {
+            listOf(PXTracker.CUSTOM)
+        }
+
+        val pxTrack = PXTrack.Builder(
+            PXTracker.MELIDATA,
+            APPLICATION_CONTEXT,
+            type, track.pathEvent)
+            .addTrackers(trackers)
+            .addData(trackerMap)
+            .build()
+
+        behaviour.track(pxTrack)
+    }
+
     override fun trackView(track: Track) {
         addDataTrack(track) {
             logDebug(track.pathEvent, it.toString())
-            behaviour.onView(track.pathEvent, it)
+            track(track, it, PXTrack.Type.VIEW)
         }
     }
 
     override fun trackEvent(track: Track) {
         addDataTrack(track) {
             logDebug(track.pathEvent, it.toString())
-            behaviour.onEvent(track.pathEvent, it)
+            track(track, it, PXTrack.Type.EVENT)
         }
     }
 
@@ -53,5 +77,6 @@ internal class CardFormTracker(baseData: TrackerData, private val behaviour: Tra
         private const val FLOW_ID = "flow_id"
         private const val SESSION_ID = "session_id"
         private const val SESSION_TIME = "session_time"
+        private const val APPLICATION_CONTEXT = "CARD_FORM"
     }
 }

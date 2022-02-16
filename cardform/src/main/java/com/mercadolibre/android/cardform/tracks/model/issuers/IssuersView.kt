@@ -5,6 +5,7 @@ import com.mercadolibre.android.cardform.tracks.TrackData
 
 internal class IssuersView(private val issuersQuantity: Int) : TrackData {
     override val pathEvent = "$BASE_PATH/issuers"
+    override val trackGA = true
 
     override fun addTrackData(data: MutableMap<String, Any>) {
         data[ISSUERS_QUANTITY] = issuersQuantity

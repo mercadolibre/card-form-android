@@ -37,13 +37,7 @@ internal class CardNameFragment : InputFragment() {
                 ObjectStepFactory.createDefaultStepFrom(resources, FormType.CARD_NAME.getType())
         }
         with(viewModel) {
-
             nameCardEditText?.let {
-                populate = false
-                if (it.getText().isEmpty()) {
-                    it.post { it.setText(preferences.getNameOwner()); populate = true }
-                }
-
                 it.addOnIconClickListener {
                     tracker.trackEvent(NameClearTrack())
                 }
@@ -55,6 +49,10 @@ internal class CardNameFragment : InputFragment() {
         with(viewModel) {
             nameLiveData.nonNullObserve(viewLifecycleOwner) { data ->
                 nameCardEditText?.apply {
+                    populate = false
+                    if (getText().isEmpty() && data.autocomplete) {
+                        post { setText(preferences.getNameOwner()); populate = true }
+                    }
                     configure(data) {
                         updateInputData(CardFilledData.Name(it))
                         clearError()

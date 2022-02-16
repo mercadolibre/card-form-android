@@ -6,6 +6,7 @@ import com.mercadolibre.android.cardform.tracks.TrackData
 internal class IdentificationInvalidTrack(private val type: String,
                                  private val value: String): TrackData {
     override val pathEvent = "$BASE_PATH/identification/invalid"
+    override val trackGA = true
 
     override fun addTrackData(data: MutableMap<String, Any>) {
         data[IDENTIFICATION_TYPE] = type

@@ -15,6 +15,7 @@ internal class IdentificationMapper(private val fieldsSetting: FieldsSetting) :
                 type = type,
                 title = title,
                 validationMessage = validationMessage,
+                autocomplete = autocomplete ?: true,
                 identifications = model.map {
                     Identification(it.id, it.name, it.type, it.minLength, it.maxLength, it.mask)
                 }

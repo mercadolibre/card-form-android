@@ -1,3 +1,26 @@
+## VERSION 2.3.0
+_09_02_2022_
+- Fix - Adjust the tracks
+
+## VERSION 2.2.2
+_03_02_2022_
+- Fix - Remove junit 5 gradle plugins.
+
+## VERSION 2.2.1
+_03_02_2022_
+- Fix - Adjusting version card-drawer.
+
+## VERSION 2.2.0
+_03_02_2022_
+- Fix - Calibre config.
+- Fix - issuer image null.
+- Fix - Correction lint.
+- Enhancement - Autocomplete field on field settings.
+- Feature - Add payment method fields in tracks.  
+- Enhancement - Refactor class.
+- Enhancement - Removed obsolete sdk_int version check.
+- Feature - Create test junit.
+
 ## VERSION 2.1.3
 _16_12_2021_
 - Fixes null pointer exception in onBackPressed.

@@ -130,7 +130,7 @@ internal class IdentificationFragment : InputFragment() {
 
             if (isFirstTime) {
                 with(preferences) {
-                    if (getIdentificationId().isNotEmpty() && getIdentificationNumber().isNotEmpty()) {
+                    if (getIdentificationId().isNotEmpty() && getIdentificationNumber().isNotEmpty() && data.autocomplete) {
                         selectSpinnerItemByValue(getIdentificationId(), getIdentificationNumber())
                     }
                 }
