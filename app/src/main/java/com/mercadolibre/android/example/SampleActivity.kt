@@ -8,17 +8,17 @@ import androidx.appcompat.app.AppCompatActivity
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.CardForm.Companion.RESULT_CARD_ID_KEY
 import com.mercadolibre.android.cardform.internal.CardFormWeb
+import com.mercadolibre.android.cardform.presentation.delegate.viewBinding
 import com.mercadolibre.android.cardform.service.CardFormIntent
 import com.mercadolibre.android.example.databinding.ActivitySampleBinding
 
 class SampleActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivitySampleBinding
+    private val binding: ActivitySampleBinding by viewBinding()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySampleBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
 
         binding.fromCardAssociation.setOnClickListener {
             CardForm.Builder.withAccessToken(

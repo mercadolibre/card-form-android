@@ -10,6 +10,7 @@ import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.data.model.response.Validation
 import com.mercadolibre.android.cardform.databinding.CfInputFormEdittextBinding
 import com.mercadolibre.android.cardform.databinding.FragmentNumberCardBinding
+import com.mercadolibre.android.cardform.presentation.delegate.viewBinding
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.extensions.postDelayed
 import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
@@ -30,21 +31,19 @@ import com.mercadolibre.android.cardform.tracks.model.flow.NextTrack
  */
 internal class CardNumberFragment : InputFragment() {
 
-    private var _binding: FragmentNumberCardBinding? = null
-    private val binding get() = _binding!!
+    private val fragmentNumberCardBinding by viewBinding(FragmentNumberCardBinding::bind)
     private lateinit var bindingEditText: CfInputFormEdittextBinding
 
     override val rootLayout = R.layout.fragment_number_card
     private var validations = listOf<Validation>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentNumberCardBinding.inflate(inflater, container, false)
-        bindingEditText = CfInputFormEdittextBinding.bind(binding.root)
-        return binding.root
+        return inflater.inflate(rootLayout, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bindingEditText = CfInputFormEdittextBinding.bind(fragmentNumberCardBinding.root)
         if (savedInstanceState == null) {
             trackFragmentView()
             setDefaultConfiguration()
@@ -56,7 +55,7 @@ internal class CardNumberFragment : InputFragment() {
             }
         }
 
-        binding.numberCardEditText.addOnIconClickListener {
+        fragmentNumberCardBinding.numberCardEditText.addOnIconClickListener {
             viewModel.tracker.trackEvent(BinClearTrack())
         }
 
@@ -70,18 +69,18 @@ internal class CardNumberFragment : InputFragment() {
             null
         }
 
-        binding.numberCardEditText.addFilters(arrayOf(filter))
+        fragmentNumberCardBinding.numberCardEditText.addFilters(arrayOf(filter))
     }
 
     private fun setDefaultConfiguration() {
-        binding.numberCardEditText.configure(
+        fragmentNumberCardBinding.numberCardEditText.configure(
             ObjectStepFactory.createDefaultStepFrom(
                 resources,
                 FormType.CARD_NUMBER.getType()
             )
         ) {
             resolveState(it)
-            binding.numberCardEditText.clearError()
+            fragmentNumberCardBinding.numberCardEditText.clearError()
             isInputValid = sanitizeBin(it).length >= MIN_LENGTH_BIN
         }
     }
@@ -92,7 +91,7 @@ internal class CardNumberFragment : InputFragment() {
                 validations = it
             }
             numberLiveData.nonNullObserve(viewLifecycleOwner) { data ->
-                binding.numberCardEditText.configure(data) {
+                fragmentNumberCardBinding.numberCardEditText.configure(data) {
                     resolveValidation()
                     resolveState(it)
                 }
@@ -111,20 +110,20 @@ internal class CardNumberFragment : InputFragment() {
 
     private fun resolveValidation() {
         with(viewModel) {
-            val cardNumber = binding.numberCardEditText.getText()
+            val cardNumber = fragmentNumberCardBinding.numberCardEditText.getText()
 
             isInputValid = ValidationHelper
                 .validateWith(ValidationType.ExtraValidation(cardNumber, validations),
-                    blockValid = { binding.numberCardEditText.clearError() },
+                    blockValid = { fragmentNumberCardBinding.numberCardEditText.clearError() },
                     blockInvalid = {
                         tracker.trackEvent(BinInvalidTrack(cardNumber))
-                        binding.numberCardEditText.showError(it)
+                        fragmentNumberCardBinding.numberCardEditText.showError(it)
                     })
-                .validateWith(ValidationType.Complete(cardNumber, binding.numberCardEditText.getMaxLength()))
+                .validateWith(ValidationType.Complete(cardNumber, fragmentNumberCardBinding.numberCardEditText.getMaxLength()))
                 .validateWith(ValidationType.Luhn(cardNumber, hasLuhnValidation()),
                     blockValid = {
-                        binding.numberCardEditText.clearError()
-                        binding.numberCardEditText.addRightCheckDrawable(R.drawable.cf_icon_check)
+                        fragmentNumberCardBinding.numberCardEditText.clearError()
+                        fragmentNumberCardBinding.numberCardEditText.addRightCheckDrawable(R.drawable.cf_icon_check)
                         viewModel.trackValidBinNumber()
                     },
                     blockInvalid = {
@@ -135,7 +134,7 @@ internal class CardNumberFragment : InputFragment() {
     }
 
     override fun toNext(position: Int, move: MoveTo) {
-        val cardNumber = binding.numberCardEditText.getText()
+        val cardNumber = fragmentNumberCardBinding.numberCardEditText.getText()
         if (isInputValid) {
             with(viewModel) {
                 tracker.trackEvent(NextTrack(TrackSteps.BIN_NUMBER.getType()))
@@ -164,12 +163,7 @@ internal class CardNumberFragment : InputFragment() {
     override fun getSharedViewModelScope() = parentFragment!!
 
     override fun showError() {
-        binding.numberCardEditText.showError(if (!binding.numberCardEditText.isComplete()) getString(R.string.cf_complete_field) else "")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
+        fragmentNumberCardBinding.numberCardEditText.showError(if (!fragmentNumberCardBinding.numberCardEditText.isComplete()) getString(R.string.cf_complete_field) else "")
     }
 
     companion object {

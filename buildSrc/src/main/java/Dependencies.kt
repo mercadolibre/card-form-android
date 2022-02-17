@@ -20,6 +20,8 @@ object Dependencies {
     const val extensions = "androidx.lifecycle:lifecycle-extensions:${Versions.lifecycle}"
     const val livedataCore = "androidx.lifecycle:lifecycle-livedata-core:${Versions.lifecycle}"
     const val viewmodel = "androidx.lifecycle:lifecycle-viewmodel:${Versions.lifecycle}"
+    const val viewmodelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
+    const val commonJava8 = "androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycle}"
 
     const val gson = "com.google.code.gson:gson:${Versions.gson}"
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"

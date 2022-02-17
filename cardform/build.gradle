@@ -84,6 +84,8 @@ dependencies {
     implementation Dependencies.extensions
     implementation Dependencies.livedataCore
     implementation Dependencies.viewmodel
+    implementation Dependencies.viewmodelKtx
+    implementation Dependencies.commonJava8
     implementation Dependencies.pxAddons
 
     testImplementation Dependencies.junit

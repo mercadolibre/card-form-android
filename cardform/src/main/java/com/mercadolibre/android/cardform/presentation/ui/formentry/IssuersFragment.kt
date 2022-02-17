@@ -19,6 +19,7 @@ import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.data.model.response.Issuer
 import com.mercadolibre.android.cardform.databinding.FragmentIssuersBinding
 import com.mercadolibre.android.cardform.internal.CardFormWithFragment
+import com.mercadolibre.android.cardform.presentation.delegate.viewBinding
 import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
 import com.mercadolibre.android.cardform.presentation.extensions.setAnimationListener
 import com.mercadolibre.android.cardform.presentation.extensions.setupForAccessibility
@@ -33,8 +34,7 @@ import com.mercadolibre.android.ui.widgets.MeliButton
 internal class IssuersFragment : InputFragment() {
     override val rootLayout = R.layout.fragment_issuers
 
-    private var _binding: FragmentIssuersBinding? = null
-    private val binding get() = _binding!!
+    private val issuersFragmentBinding by viewBinding(FragmentIssuersBinding::bind)
 
     private lateinit var issuerAdapter: IssuerAdapter
     private var isIssuerSelected = false
@@ -42,15 +42,14 @@ internal class IssuersFragment : InputFragment() {
     private var isIssuerViewTracked = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentIssuersBinding.inflate(inflater, container, false)
-        return binding.root
+        return inflater.inflate(rootLayout, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.issuerList.layoutManager = LinearLayoutManager(context)
-        binding.issuerList.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-        binding.select.setOnClickListener {
+        issuersFragmentBinding.issuerList.layoutManager = LinearLayoutManager(context)
+        issuersFragmentBinding.issuerList.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        issuersFragmentBinding.select.setOnClickListener {
             isIssuerSelected = true
             issuerSelected?.let {
                 with(viewModel) {
@@ -64,7 +63,7 @@ internal class IssuersFragment : InputFragment() {
             isIssuerViewTracked = it.getBoolean(TRACK_ISSUER_VIEW, false)
         }
         setupForAccessibility()
-        binding.issuerList.apply {
+        issuersFragmentBinding.issuerList.apply {
             viewTreeObserver
                 .addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
                     override fun onGlobalLayout() {
@@ -79,7 +78,7 @@ internal class IssuersFragment : InputFragment() {
         viewModel.issuersLiveData.nonNullObserve(viewLifecycleOwner) { list ->
             val filterList = list.filter { !it.imageUrl.isNullOrEmpty() }
             issuerAdapter = IssuerAdapter(filterList)
-            binding.issuerList.adapter = issuerAdapter
+            issuersFragmentBinding.issuerList.adapter = issuerAdapter
             if (!isIssuerViewTracked) {
                 isIssuerViewTracked = true
                 viewModel.tracker.trackView(IssuersView(filterList.size))
@@ -150,7 +149,7 @@ internal class IssuersFragment : InputFragment() {
 
                     lastIssuerSelected = holder
                     lastPositionSelected = validPosition
-                    binding.select.state = MeliButton.State.NORMAL
+                    issuersFragmentBinding.select.state = MeliButton.State.NORMAL
                     radioButton.isChecked = true
                     issuerSelected = issuer
                 }
