@@ -18,6 +18,7 @@ android {
         consumerProguardFiles 'proguard-rules.pro'
 
         buildConfigField "String", "USER_AGENT", "\"$user_agent\""
+        testInstrumentationRunnerArguments clearPackageData: 'true'
     }
 
     buildTypes {
@@ -56,6 +57,8 @@ android {
                 html.enabled = true
             }
         }
+        animationsDisabled = true
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 }
 
@@ -68,7 +71,6 @@ dependencies {
     implementation Dependencies.appCompat
     implementation Dependencies.material
     implementation Dependencies.andesUi
-
 
     implementation Dependencies.gson
     implementation Dependencies.retrofit
@@ -92,6 +94,12 @@ dependencies {
     testRuntimeOnly Dependencies.junitEngine
     testImplementation Dependencies.mockk
     testImplementation Dependencies.coroutinesTest
+
+    androidTestImplementation Dependencies.junit4
+    androidTestImplementation Dependencies.espresso
+    androidTestImplementation Dependencies.runner
+    androidTestImplementation Dependencies.junitExt
+    androidTestUtil Dependencies.orchestrator
 }
 
 apply from: "$rootDir/gradle/deploy_card_form.gradle"
