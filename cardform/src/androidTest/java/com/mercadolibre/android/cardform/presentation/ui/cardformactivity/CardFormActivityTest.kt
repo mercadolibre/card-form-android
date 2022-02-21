@@ -209,4 +209,3 @@ open class CardFormActivityTest : UIBaseTest() {
     }
 
 }
-
