@@ -11,9 +11,9 @@ import org.junit.Rule
 
 class CardFormActivityMLM: CardFormActivityTest() {
 
-    private val cardFormMLA by lazy {
+    private val cardFormMLM by lazy {
         CardForm.Builder.withAccessToken(
-            accessToken = "APP_USR-5229115741788366-021722-2ae878852a13533ff1a23fb85b8f5135-1076275106",
+            accessToken = "APP_USR-3964778276245137-021513-74efe11fd763bc23f136336969ef6d5b-1074687404",
             siteId = "MLM",
             flowId = "test_flow"
         ).build()
@@ -23,7 +23,7 @@ class CardFormActivityMLM: CardFormActivityTest() {
         Intent(
             ApplicationProvider.getApplicationContext<Application>(),
             CardFormActivity::class.java
-        ).putExtra(CARD_FORM_EXTRA, cardFormMLA)
+        ).putExtra(CARD_FORM_EXTRA, cardFormMLM)
     }
 
     @get:Rule
