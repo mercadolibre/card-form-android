@@ -18,16 +18,10 @@ import org.junit.Test
 
 open class CardFormActivityTest : UIBaseTest() {
 
-    private val cardNumberValid = "5067268650517446"
-    private val cardNameValid = "JOSE SILVA"
-    private val cardExpirationValid = "1029"
-    private val cardCVV = "123"
-    protected val invalidIDHint = "Invalid ID"
-
     @Test
     fun when_insert_a_valid_card_number_then_not_displayed_hint() {
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
-            .perform(typeText(cardNumberValid), closeSoftKeyboard())
+            .perform(typeText(CARD_NUMBER_VALID), closeSoftKeyboard())
         onView(allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.numberCardEditText))))
             .check(matches(withText("")))
     }
@@ -35,11 +29,11 @@ open class CardFormActivityTest : UIBaseTest() {
     @Test
     fun when_insert_a_valid_card_name_then_not_displayed_hint() {
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
-            .perform(typeText(cardNumberValid), closeSoftKeyboard())
+            .perform(typeText(CARD_NUMBER_VALID), closeSoftKeyboard())
         await()
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.nameCardEditText))))
-            .perform(typeText(cardNameValid), closeSoftKeyboard())
+            .perform(typeText(CARD_NAME_VALID), closeSoftKeyboard())
         await()
         onView(allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.nameCardEditText))))
             .check(matches(withText("As it shows on the card")))
@@ -48,15 +42,15 @@ open class CardFormActivityTest : UIBaseTest() {
     @Test
     fun when_insert_a_valid_expiration_then_not_displayed_hint() {
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
-            .perform(typeText(cardNumberValid), closeSoftKeyboard())
+            .perform(typeText(CARD_NUMBER_VALID), closeSoftKeyboard())
         await()
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.nameCardEditText))))
-            .perform(typeText(cardNameValid), closeSoftKeyboard())
+            .perform(typeText(CARD_NAME_VALID), closeSoftKeyboard())
         await()
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.expirationEditText))))
-            .perform(typeText(cardExpirationValid), closeSoftKeyboard())
+            .perform(typeText(CARD_EXPIRATION_VALID), closeSoftKeyboard())
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.expirationEditText))))
             .check(matches(withText("MM/YY")))
@@ -65,18 +59,18 @@ open class CardFormActivityTest : UIBaseTest() {
     @Test
     fun when_insert_cvv_then_not_displayed_hint() {
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
-            .perform(typeText(cardNumberValid), closeSoftKeyboard())
+            .perform(typeText(CARD_NUMBER_VALID), closeSoftKeyboard())
         await()
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.nameCardEditText))))
-            .perform(typeText(cardNameValid), closeSoftKeyboard())
+            .perform(typeText(CARD_NAME_VALID), closeSoftKeyboard())
         await()
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.expirationEditText))))
-            .perform(typeText(cardExpirationValid), closeSoftKeyboard())
+            .perform(typeText(CARD_EXPIRATION_VALID), closeSoftKeyboard())
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.cvvCodeEditText))))
-            .perform(typeText(cardCVV), closeSoftKeyboard())
+            .perform(typeText(CARD_CVV), closeSoftKeyboard())
         onView(allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.cvvCodeEditText))))
             .check(matches(withText("CVV")))
     }
@@ -85,52 +79,52 @@ open class CardFormActivityTest : UIBaseTest() {
     fun when_insert_card_number_then_complete_the_card_drawer() {
         val expectedCard = "5067  2686  5051  7446"
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
-            .perform(typeText(cardNumberValid), closeSoftKeyboard())
+            .perform(typeText(CARD_NUMBER_VALID), closeSoftKeyboard())
         onView(withId(com.meli.android.carddrawer.R.id.cho_card_number)).check(matches(withText(expectedCard)))
     }
 
     @Test
     fun when_insert_card_name_then_complete_the_card_drawer() {
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
-            .perform(typeText(cardNumberValid), closeSoftKeyboard())
+            .perform(typeText(CARD_NUMBER_VALID), closeSoftKeyboard())
         await()
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.nameCardEditText))))
-            .perform(typeText(cardNameValid), closeSoftKeyboard())
-        onView(withId(com.meli.android.carddrawer.R.id.cho_card_name)).check(matches(withText(cardNameValid)))
+            .perform(typeText(CARD_NAME_VALID), closeSoftKeyboard())
+        onView(withId(com.meli.android.carddrawer.R.id.cho_card_name)).check(matches(withText(CARD_NAME_VALID)))
     }
 
     @Test
     fun when_insert_card_expiration_then_complete_the_card_drawer() {
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
-            .perform(typeText(cardNumberValid), closeSoftKeyboard())
+            .perform(typeText(CARD_NUMBER_VALID), closeSoftKeyboard())
         await()
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.nameCardEditText))))
-            .perform(typeText(cardNameValid), closeSoftKeyboard())
+            .perform(typeText(CARD_NAME_VALID), closeSoftKeyboard())
         await()
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.expirationEditText))))
-            .perform(typeText(cardExpirationValid), closeSoftKeyboard())
+            .perform(typeText(CARD_EXPIRATION_VALID), closeSoftKeyboard())
         onView(withId(com.meli.android.carddrawer.R.id.cho_card_date)).check(matches(withText("10/29")))
     }
 
     @Test
     fun when_insert_card_cvv_then_complete_the_card_drawer() {
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
-            .perform(typeText(cardNumberValid), closeSoftKeyboard())
+            .perform(typeText(CARD_NUMBER_VALID), closeSoftKeyboard())
         await()
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.nameCardEditText))))
-            .perform(typeText(cardNameValid), closeSoftKeyboard())
+            .perform(typeText(CARD_NAME_VALID), closeSoftKeyboard())
         await()
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.expirationEditText))))
-            .perform(typeText(cardExpirationValid), closeSoftKeyboard())
+            .perform(typeText(CARD_EXPIRATION_VALID), closeSoftKeyboard())
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.cvvCodeEditText))))
-            .perform(typeText(cardCVV), closeSoftKeyboard())
-        onView(withId(com.meli.android.carddrawer.R.id.cho_card_code_front)).check(matches(withText(cardCVV)))
+            .perform(typeText(CARD_CVV), closeSoftKeyboard())
+        onView(withId(com.meli.android.carddrawer.R.id.cho_card_code_front)).check(matches(withText(CARD_CVV)))
     }
 
     @Test
@@ -147,7 +141,7 @@ open class CardFormActivityTest : UIBaseTest() {
     @Test
     fun when_insert_card_name_invalid_then_displayed_hint() {
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
-            .perform(typeText(cardNumberValid), closeSoftKeyboard())
+            .perform(typeText(CARD_NUMBER_VALID), closeSoftKeyboard())
         await()
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.nameCardEditText))))
@@ -161,11 +155,11 @@ open class CardFormActivityTest : UIBaseTest() {
     @Test
     fun when_insert_card_expiration_invalid_then_displayed_hint() {
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
-            .perform(typeText(cardNumberValid), closeSoftKeyboard())
+            .perform(typeText(CARD_NUMBER_VALID), closeSoftKeyboard())
         await()
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.nameCardEditText))))
-            .perform(typeText(cardNameValid), closeSoftKeyboard())
+            .perform(typeText(CARD_NAME_VALID), closeSoftKeyboard())
         await()
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.expirationEditText))))
@@ -183,7 +177,7 @@ open class CardFormActivityTest : UIBaseTest() {
     @Test
     fun when_entering_card_name_and_press_back_then_should_come_back() {
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
-            .perform(typeText(cardNumberValid), closeSoftKeyboard())
+            .perform(typeText(CARD_NUMBER_VALID), closeSoftKeyboard())
         await()
         onView(withId(R.id.next)).perform(click())
         onView(withId(R.id.back)).perform(click())
@@ -193,20 +187,27 @@ open class CardFormActivityTest : UIBaseTest() {
 
     protected fun initializeScreenToDocumentInsertion() {
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
-            .perform(typeText(cardNumberValid), closeSoftKeyboard())
+            .perform(typeText(CARD_NUMBER_VALID), closeSoftKeyboard())
         await()
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.nameCardEditText))))
-            .perform(typeText(cardNameValid), closeSoftKeyboard())
+            .perform(typeText(CARD_NAME_VALID), closeSoftKeyboard())
         await()
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.expirationEditText))))
-            .perform(typeText(cardExpirationValid), closeSoftKeyboard())
+            .perform(typeText(CARD_EXPIRATION_VALID), closeSoftKeyboard())
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.cvvCodeEditText))))
-            .perform(typeText(cardCVV), closeSoftKeyboard())
+            .perform(typeText(CARD_CVV), closeSoftKeyboard())
         onView(withId(R.id.next)).perform(click())
     }
 
-}
+    companion object {
+        private const val CARD_NUMBER_VALID = "5067268650517446"
+        private const val CARD_NAME_VALID = "JOSE SILVA"
+        private const val CARD_EXPIRATION_VALID = "1029"
+        private const val CARD_CVV = "123"
+        const val INVALID_ID_HINT = "Invalid ID"
+    }
 
+}
