@@ -74,7 +74,7 @@ class CardFormActivityMLB: CardFormActivityTest() {
             .perform(typeText(cpf), closeSoftKeyboard())
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.identificationEditText))))
-            .check(matches(withText(invalidIDHint)))
+            .check(matches(withText(INVALID_ID_HINT)))
     }
 
     @Test
@@ -87,7 +87,7 @@ class CardFormActivityMLB: CardFormActivityTest() {
             .perform(typeText(cnpj), closeSoftKeyboard())
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.identificationEditText))))
-            .check(matches(withText(invalidIDHint)))
+            .check(matches(withText(INVALID_ID_HINT)))
     }
 
 }
