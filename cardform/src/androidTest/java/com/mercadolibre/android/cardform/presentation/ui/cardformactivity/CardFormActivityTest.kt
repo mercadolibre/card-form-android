@@ -137,7 +137,9 @@ open class CardFormActivityTest : UIBaseTest() {
     fun when_insert_card_number_invalid_then_displayed_hint() {
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
             .perform(typeText("5067 2686 5051 0000"), closeSoftKeyboard())
+        await()
         onView(withId(R.id.next)).perform(click())
+        await()
         onView(allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.numberCardEditText))))
             .check(matches(withText(R.string.cf_card_number_info_hint)))
     }
