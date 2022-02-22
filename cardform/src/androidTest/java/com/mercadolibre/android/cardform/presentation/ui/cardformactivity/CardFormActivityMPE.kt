@@ -147,3 +147,4 @@ class CardFormActivityMPE: CardFormActivityTest() {
         onView(withId(R.id.next)).perform(click())
     }
 }
+
