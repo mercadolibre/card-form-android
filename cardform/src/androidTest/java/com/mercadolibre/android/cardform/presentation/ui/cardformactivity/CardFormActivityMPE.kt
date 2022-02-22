@@ -122,26 +122,26 @@ class CardFormActivityMPE: CardFormActivityTest() {
     }
 
     @Test
-    fun when_insert_a_valid_otro_then_not_displayed_hint() {
-        val otro = "168755228"
+    fun when_insert_a_valid_other_then_not_displayed_hint() {
+        val other = "168755228"
         initializeScreenToDocumentInsertion()
         onView(withId(R.id.identificationTypes)).perform(click())
         Espresso.onData(Matchers.anything()).atPosition(3).perform(click())
         onView(AllOf.allOf(withId(R.id.input), isDescendantOfA(withId(R.id.identificationEditText))))
-            .perform(typeText(otro), closeSoftKeyboard())
+            .perform(typeText(other), closeSoftKeyboard())
         onView(AllOf.allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.identificationEditText))))
             .check(matches(withText("")))
         onView(withId(R.id.next)).perform(click())
     }
 
     @Test
-    fun when_insert_a_invalid_otro_then_displayed_hint() {
-        val otro = "0"
+    fun when_insert_a_invalid_other_then_displayed_hint() {
+        val other = "0"
         initializeScreenToDocumentInsertion()
         onView(withId(R.id.identificationTypes)).perform(click())
         Espresso.onData(Matchers.anything()).atPosition(3).perform(click())
         onView(AllOf.allOf(withId(R.id.input), isDescendantOfA(withId(R.id.identificationEditText))))
-            .perform(typeText(otro), closeSoftKeyboard())
+            .perform(typeText(other), closeSoftKeyboard())
         onView(AllOf.allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.identificationEditText))))
             .check(matches(withText("")))
         onView(withId(R.id.next)).perform(click())
