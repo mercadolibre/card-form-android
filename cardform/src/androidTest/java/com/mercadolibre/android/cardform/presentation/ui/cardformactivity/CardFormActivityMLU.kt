@@ -70,7 +70,7 @@ class CardFormActivityMLU: CardFormActivityTest() {
             .perform(typeText(ci), closeSoftKeyboard())
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.identificationEditText))))
-            .check(matches(withText(invalidIDHint)))
+            .check(matches(withText(INVALID_ID_HINT)))
     }
 
     @Test
@@ -81,7 +81,8 @@ class CardFormActivityMLU: CardFormActivityTest() {
             .perform(typeText(otro), closeSoftKeyboard())
         onView(withId(R.id.next)).perform(click())
         onView(allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.identificationEditText))))
-            .check(matches(withText(invalidIDHint)))
+            .check(matches(withText(INVALID_ID_HINT)))
     }
 
 }
+
