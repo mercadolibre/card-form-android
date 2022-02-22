@@ -23,12 +23,12 @@ import org.hamcrest.core.AllOf
 import org.junit.Rule
 import org.junit.Test
 
-class CardFormActivityMLC: CardFormActivityTest() {
+class CardFormActivityMPE: CardFormActivityTest() {
 
     private val cardFormMLC by lazy {
         CardForm.Builder.withAccessToken(
-            accessToken = "APP_USR-3964778276245137-021513-74efe11fd763bc23f136336969ef6d5b-1074687404",
-            siteId = "MLC",
+            accessToken = "APP_USR-4376526476119283-022217-b6fe04f6f0ae0b17068fbe9d0e24c264-1078773957",
+            siteId = "MPE",
             flowId = "test_flow"
         ).build()
     }
@@ -44,29 +44,81 @@ class CardFormActivityMLC: CardFormActivityTest() {
     internal var activityScenarioRule = ActivityScenarioRule<CardFormActivity>(intent)
 
     @Test
-    fun when_insert_a_valid_rut_then_not_displayed_hint() {
-        val rut = "132031967"
+    fun when_insert_a_valid_dni_then_not_displayed_hint() {
+        val dni = "13203196"
         initializeScreenToDocumentInsertion()
         onView(withId(R.id.identificationTypes)).perform(click())
         Espresso.onData(Matchers.anything()).atPosition(0).perform(click())
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.identificationEditText))))
-            .perform(typeText(rut), closeSoftKeyboard())
+            .perform(typeText(dni), closeSoftKeyboard())
         onView(allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.identificationEditText))))
             .check(matches(withText("")))
         onView(withId(R.id.next)).perform(click())
     }
 
     @Test
-    fun when_insert_a_invalid_rut_then_displayed_hint() {
-        val rut = "11111"
+    fun when_insert_a_invalid_dni_then_displayed_hint() {
+        val dni = "000000"
         initializeScreenToDocumentInsertion()
         onView(withId(R.id.identificationTypes)).perform(click())
         Espresso.onData(Matchers.anything()).atPosition(0).perform(click())
         onView(AllOf.allOf(withId(R.id.input), isDescendantOfA(withId(R.id.identificationEditText))))
-            .perform(typeText(rut), closeSoftKeyboard())
+            .perform(typeText(dni), closeSoftKeyboard())
         onView(withId(R.id.next)).perform(click())
         onView(AllOf.allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.identificationEditText))))
             .check(matches(withText(INVALID_ID_HINT)))
+    }
+
+    @Test
+    fun when_insert_a_valid_ce_then_not_displayed_hint() {
+        val ce = "168755228"
+        initializeScreenToDocumentInsertion()
+        onView(withId(R.id.identificationTypes)).perform(click())
+        Espresso.onData(Matchers.anything()).atPosition(1).perform(click())
+        onView(AllOf.allOf(withId(R.id.input), isDescendantOfA(withId(R.id.identificationEditText))))
+            .perform(typeText(ce), closeSoftKeyboard())
+        onView(AllOf.allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.identificationEditText))))
+            .check(matches(withText("")))
+        onView(withId(R.id.next)).perform(click())
+    }
+
+    @Test
+    fun when_insert_a_invalid_ce_then_displayed_hint() {
+        val ce = "000000"
+        initializeScreenToDocumentInsertion()
+        onView(withId(R.id.identificationTypes)).perform(click())
+        Espresso.onData(Matchers.anything()).atPosition(1).perform(click())
+        onView(AllOf.allOf(withId(R.id.input), isDescendantOfA(withId(R.id.identificationEditText))))
+            .perform(typeText(ce), closeSoftKeyboard())
+        onView(AllOf.allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.identificationEditText))))
+            .check(matches(withText("")))
+        onView(withId(R.id.next)).perform(click())
+    }
+
+    @Test
+    fun when_insert_a_valid_ruc_then_not_displayed_hint() {
+        val ruc = "16875522822"
+        initializeScreenToDocumentInsertion()
+        onView(withId(R.id.identificationTypes)).perform(click())
+        Espresso.onData(Matchers.anything()).atPosition(2).perform(click())
+        onView(AllOf.allOf(withId(R.id.input), isDescendantOfA(withId(R.id.identificationEditText))))
+            .perform(typeText(ruc), closeSoftKeyboard())
+        onView(AllOf.allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.identificationEditText))))
+            .check(matches(withText("")))
+        onView(withId(R.id.next)).perform(click())
+    }
+
+    @Test
+    fun when_insert_a_invalid_ruc_then_displayed_hint() {
+        val ruc = "000000"
+        initializeScreenToDocumentInsertion()
+        onView(withId(R.id.identificationTypes)).perform(click())
+        Espresso.onData(Matchers.anything()).atPosition(2).perform(click())
+        onView(AllOf.allOf(withId(R.id.input), isDescendantOfA(withId(R.id.identificationEditText))))
+            .perform(typeText(ruc), closeSoftKeyboard())
+        onView(AllOf.allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.identificationEditText))))
+            .check(matches(withText("")))
+        onView(withId(R.id.next)).perform(click())
     }
 
     @Test
@@ -74,7 +126,7 @@ class CardFormActivityMLC: CardFormActivityTest() {
         val other = "168755228"
         initializeScreenToDocumentInsertion()
         onView(withId(R.id.identificationTypes)).perform(click())
-        Espresso.onData(Matchers.anything()).atPosition(1).perform(click())
+        Espresso.onData(Matchers.anything()).atPosition(3).perform(click())
         onView(AllOf.allOf(withId(R.id.input), isDescendantOfA(withId(R.id.identificationEditText))))
             .perform(typeText(other), closeSoftKeyboard())
         onView(AllOf.allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.identificationEditText))))
@@ -84,14 +136,15 @@ class CardFormActivityMLC: CardFormActivityTest() {
 
     @Test
     fun when_insert_a_invalid_other_then_displayed_hint() {
-        val other = "0101"
+        val other = "0"
         initializeScreenToDocumentInsertion()
         onView(withId(R.id.identificationTypes)).perform(click())
-        Espresso.onData(Matchers.anything()).atPosition(1).perform(click())
+        Espresso.onData(Matchers.anything()).atPosition(3).perform(click())
         onView(AllOf.allOf(withId(R.id.input), isDescendantOfA(withId(R.id.identificationEditText))))
             .perform(typeText(other), closeSoftKeyboard())
-        onView(withId(R.id.next)).perform(click())
         onView(AllOf.allOf(withId(R.id.infoInput), isDescendantOfA(withId(R.id.identificationEditText))))
-            .check(matches(withText(INVALID_ID_HINT)))
+            .check(matches(withText("")))
+        onView(withId(R.id.next)).perform(click())
     }
 }
+
