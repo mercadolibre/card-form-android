@@ -1,0 +1,17 @@
+apiVersion: v1alpha
+kind: espresso
+sauce:
+  region: us-west-1
+  concurrency: 10
+  metadata:
+    build: $BITRISE_GIT_BRANCH
+espresso:
+  app: ./cardform/build/outputs/apk/androidTest/debug/cardform-debug-androidTest.apk
+  testApp: ./cardform/build/outputs/apk/androidTest/debug/cardform-debug-androidTest.apk
+suites:
+  - name: "card-form-android espresso suite"
+    emulators:
+      - name: "Android GoogleAPI Emulator"
+        platformVersions:
+          - "11"
+          - "9"
