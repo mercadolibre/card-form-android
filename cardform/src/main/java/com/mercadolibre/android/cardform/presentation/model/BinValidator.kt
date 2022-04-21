@@ -38,7 +38,7 @@ internal class BinValidator() : Parcelable {
     override fun describeContents() = 0
 
     companion object CREATOR : Parcelable.Creator<BinValidator> {
-        private const val BIN_LENGTH = 6
+        private const val BIN_LENGTH = 8
 
         override fun createFromParcel(parcel: Parcel) = BinValidator(parcel)
         override fun newArray(size: Int) = arrayOfNulls<BinValidator?>(size)
