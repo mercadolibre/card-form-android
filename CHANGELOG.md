@@ -1,3 +1,7 @@
+## VERSION 2.4.0
+_28_04_2022_
+- Enhancement - Support for 8-digit bins
+
 ## VERSION 2.3.0
 _09_02_2022_
 - Fix - Adjust the tracks
