@@ -8,8 +8,8 @@ import com.mercadolibre.android.cardform.data.model.body.AssociatedCardBody
 import com.mercadolibre.android.cardform.data.model.body.Features
 import com.mercadolibre.android.cardform.data.model.body.IssuerBody
 import com.mercadolibre.android.cardform.data.model.body.PaymentMethodBody
-import com.mercadolibre.android.cardform.data.model.request.AssociatedCardParam
 import com.mercadolibre.android.cardform.data.service.CardAssociationService
+import com.mercadolibre.android.cardform.domain.model.params.AssociateCardParam
 import kotlinx.coroutines.withContext
 
 internal class CardAssociationRepositoryImpl(
@@ -19,7 +19,7 @@ internal class CardAssociationRepositoryImpl(
     private val contextProvider: CoroutineContextProvider = CoroutineContextProvider()
 ) : CardAssociationRepository {
 
-    override suspend fun associateCard(param: AssociatedCardParam) =
+    override suspend fun associateCard(param: AssociateCardParam) =
         withContext(contextProvider.IO) {
             runCatching {
                 associationService.associateCard(

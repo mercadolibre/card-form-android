@@ -14,18 +14,36 @@ import com.meli.android.carddrawer.configuration.DefaultCardConfiguration
 import com.meli.android.carddrawer.model.CardAnimationType
 import com.meli.android.carddrawer.model.CardDrawerView
 import com.meli.android.carddrawer.model.CardUI
-import com.mercadolibre.android.cardform.*
+import com.mercadolibre.android.cardform.CARD_FORM_EXTRA
+import com.mercadolibre.android.cardform.CardForm
+import com.mercadolibre.android.cardform.EXIT_ANIM_EXTRA
+import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.base.RootFragment
 import com.mercadolibre.android.cardform.data.model.response.CardResultDto
 import com.mercadolibre.android.cardform.di.viewModel
-import com.mercadolibre.android.cardform.presentation.extensions.*
+import com.mercadolibre.android.cardform.presentation.extensions.fadeIn
+import com.mercadolibre.android.cardform.presentation.extensions.fadeOut
+import com.mercadolibre.android.cardform.presentation.extensions.goneDuringAnimation
+import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
+import com.mercadolibre.android.cardform.presentation.extensions.pushDownOut
+import com.mercadolibre.android.cardform.presentation.extensions.pushUpIn
+import com.mercadolibre.android.cardform.presentation.extensions.slideLeftIn
+import com.mercadolibre.android.cardform.presentation.extensions.slideRightIn
+import com.mercadolibre.android.cardform.presentation.extensions.slideRightOut
 import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
 import com.mercadolibre.android.cardform.presentation.helpers.KeyboardHelper
-import com.mercadolibre.android.cardform.presentation.model.*
+import com.mercadolibre.android.cardform.presentation.model.CardDrawerData
+import com.mercadolibre.android.cardform.presentation.model.CardFilledData
+import com.mercadolibre.android.cardform.presentation.model.CardState
 import com.mercadolibre.android.cardform.presentation.model.StateUi.UiLoading
+import com.mercadolibre.android.cardform.presentation.model.UiError
+import com.mercadolibre.android.cardform.presentation.model.UiResult
 import com.mercadolibre.android.cardform.presentation.ui.custom.ProgressFragment
 import com.mercadolibre.android.cardform.presentation.ui.formentry.FormType
+import com.mercadolibre.android.cardform.presentation.utils.JsonUtils
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
+import com.mercadopago.android.px.addons.tokenization.TOKENIZATION_RESPONSE
+import com.mercadopago.android.px.addons.tokenization.TokenizationResponse
 import kotlinx.android.synthetic.main.app_bar.*
 import kotlinx.android.synthetic.main.cf_card.*
 import kotlinx.android.synthetic.main.fragment_card_form.*
@@ -254,6 +272,21 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
                     }
                 }
             }
+
+            tokenDeviceLiveData.nonNullObserve(viewLifecycleOwner) {
+                it.start(this@CardFormFragment, TOKENIZATION_REQUEST_CODE)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == TOKENIZATION_REQUEST_CODE) {
+            var tokenizationResponse: TokenizationResponse? = null
+            data?.getStringExtra(TOKENIZATION_RESPONSE)?.let {
+                tokenizationResponse = JsonUtils.fromJson(it, TokenizationResponse::class.java)
+            }
+            viewModel.onTokenizationResponse(tokenizationResponse)
         }
     }
 
@@ -337,6 +370,7 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
     }
 
     companion object {
+        private const val TOKENIZATION_REQUEST_CODE = 666
         private const val ARG_FROM_FRAGMENT = "from_fragment"
         private const val EXTRA_ANIMATION = "animation"
 

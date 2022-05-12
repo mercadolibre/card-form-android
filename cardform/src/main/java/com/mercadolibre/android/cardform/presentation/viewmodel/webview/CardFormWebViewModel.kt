@@ -5,11 +5,11 @@ import androidx.lifecycle.LiveData
 import com.mercadolibre.android.cardform.CardForm
 import com.mercadolibre.android.cardform.base.BaseViewModel
 import com.mercadolibre.android.cardform.base.getOrElse
-import com.mercadolibre.android.cardform.data.model.request.AssociatedCardParam
 import com.mercadolibre.android.cardform.data.model.request.FinishInscriptionParam
-import com.mercadolibre.android.cardform.domain.AssociatedCardUseCase
+import com.mercadolibre.android.cardform.domain.AssociateCardUseCase
 import com.mercadolibre.android.cardform.domain.FinishInscriptionUseCase
 import com.mercadolibre.android.cardform.domain.InscriptionUseCase
+import com.mercadolibre.android.cardform.domain.model.params.AssociateCardParam
 import com.mercadolibre.android.cardform.presentation.model.AssociationModel
 import com.mercadolibre.android.cardform.presentation.model.ScreenState
 import com.mercadolibre.android.cardform.presentation.model.WebUiState
@@ -37,7 +37,7 @@ private const val TBK_TOKEN_KEY = "TBK_TOKEN"
 internal class CardFormWebViewModel(
     private val inscriptionUseCase: InscriptionUseCase,
     private val finishInscriptionUseCase: FinishInscriptionUseCase,
-    private val associatedCardUseCase: AssociatedCardUseCase,
+    private val associateCardUseCase: AssociateCardUseCase,
     private val tracker: CardFormTracker,
     private val cardFormServiceManager: CardFormServiceManager?,
     private val liveDataProvider: CardFormWebViewLiveDataProvider = CardFormWebViewLiveDataProvider,
@@ -151,9 +151,9 @@ internal class CardFormWebViewModel(
 
     private fun associateCard(model: AssociationModel) {
         CoroutineScope(contextProvider.Default).launch {
-            getCardAssociationId(model)?.let { cardAssociationId ->
+            getCardAssociation(model)?.let { cardAssociation ->
                 withContext(Dispatchers.Main) {
-                    coordinateResultCompletion(cardAssociationId)
+                    coordinateResultCompletion(cardAssociation.id)
                     tracker.trackEvent(
                         SuccessTrack(
                             model.bin,
@@ -176,11 +176,11 @@ internal class CardFormWebViewModel(
         } ?: sendCardResult(cardAssociationId)
     }
 
-    private suspend fun getCardAssociationId(
+    private suspend fun getCardAssociation(
         model: AssociationModel
     ) = run {
-        associatedCardUseCase.execute(
-            AssociatedCardParam(
+        associateCardUseCase.execute(
+            AssociateCardParam(
                 model.cardTokenId,
                 model.paymentMethodId,
                 model.paymentMethodType,

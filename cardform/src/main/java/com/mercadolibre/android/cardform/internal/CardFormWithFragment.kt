@@ -41,14 +41,15 @@ class CardFormWithFragment : CardForm {
         siteId: String,
         flowId: String
     ) : CardForm.Builder(siteId, flowId) {
-        override fun setExcludedTypes(excludedTypes: List<String>) =
-            apply { super.setExcludedTypes(excludedTypes) }
+        override fun setExcludedTypes(excludedTypes: List<String>) = apply { super.setExcludedTypes(excludedTypes) }
 
         override fun setSessionId(sessionId: String) = apply { super.setSessionId(sessionId) }
 
         override fun setThirdPartyCard(acceptThirdPartyCard: Boolean, activateCard: Boolean) = apply {
             super.setThirdPartyCard(acceptThirdPartyCard, activateCard)
         }
+
+        override fun setTokenizationFlowEnabled(enabled: Boolean) = apply { super.setTokenizationFlowEnabled(enabled) }
 
         override fun build() = CardFormWithFragment(this)
 

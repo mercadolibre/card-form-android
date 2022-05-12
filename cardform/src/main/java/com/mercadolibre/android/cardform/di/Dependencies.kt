@@ -2,7 +2,14 @@ package com.mercadolibre.android.cardform.di
 
 import android.content.Context
 import com.mercadolibre.android.cardform.CardForm
-import com.mercadolibre.android.cardform.di.module.*
+import com.mercadolibre.android.cardform.di.module.BehaviourModule
+import com.mercadolibre.android.cardform.di.module.LocalRepositoryModule
+import com.mercadolibre.android.cardform.di.module.NetworkModule
+import com.mercadolibre.android.cardform.di.module.RepositoryModule
+import com.mercadolibre.android.cardform.di.module.ServiceModule
+import com.mercadolibre.android.cardform.di.module.TrackerModule
+import com.mercadolibre.android.cardform.di.module.UseCaseModule
+import com.mercadolibre.android.cardform.di.module.ViewModelModule
 
 internal class Dependencies {
 
@@ -31,11 +38,13 @@ internal class Dependencies {
             cardForm.siteId,
             cardForm.excludedTypes,
             cardForm.flowId,
+            cardForm.sessionId,
             cardForm.cardInfo,
             cardForm.acceptThirdPartyCard,
-            cardForm.activateCard
+            cardForm.activateCard,
+            behaviourModule!!
         )
-        useCaseModule = UseCaseModule(repositoryModule!!)
+        useCaseModule = UseCaseModule(cardForm, repositoryModule!!)
         localPreferences = LocalRepositoryModule(context.applicationContext)
         trackerModule = TrackerModule(
             cardForm.siteId,

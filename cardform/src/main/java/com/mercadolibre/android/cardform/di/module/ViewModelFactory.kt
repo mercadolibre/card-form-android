@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.mercadolibre.android.cardform.data.model.esc.Device
 import com.mercadolibre.android.cardform.presentation.viewmodel.webview.CardFormWebViewModel
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
-import com.mercadolibre.android.cardform.service.CardFormServiceManager
 
 internal class ViewModelFactory(
     private val useCaseModule: UseCaseModule,
@@ -23,11 +22,13 @@ internal class ViewModelFactory(
                 modelClass.isAssignableFrom(InputFormViewModel::class.java) -> {
                     InputFormViewModel(
                         repositoryModule.cardRepository,
-                        useCaseModule.tokenizeUseCase,
+                        useCaseModule.cardTokenUseCase,
                         useCaseModule.cardAssociationUseCase,
                         behaviourModule.escManager,
                         device,
-                        trackerModule.tracker)
+                        trackerModule.tracker,
+                        useCaseModule.tokenDeviceUseCase
+                    )
                 }
                 modelClass.isAssignableFrom(CardFormWebViewModel::class.java) -> {
                     CardFormWebViewModel(
