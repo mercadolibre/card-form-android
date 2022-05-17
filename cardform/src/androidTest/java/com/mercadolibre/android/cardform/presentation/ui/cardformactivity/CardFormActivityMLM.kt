@@ -13,7 +13,7 @@ class CardFormActivityMLM: CardFormActivityTest() {
 
     private val cardFormMLM by lazy {
         CardForm.Builder.withAccessToken(
-            accessToken = "APP_USR-3964778276245137-021513-74efe11fd763bc23f136336969ef6d5b-1074687404",
+            accessToken = "TEST-5229115741788366-021722-19578d91427080828bd3ba3fc2dbf668-1076275106",
             siteId = "MLM",
             flowId = "test_flow"
         ).build()

@@ -26,7 +26,7 @@ class CardFormActivityMLB: CardFormActivityTest() {
 
     private val cardFormMLB by lazy {
         CardForm.Builder.withAccessToken(
-            accessToken = "APP_USR-5678643885350574-120912-cfeba4d23bda459ffc27bd7d74586584-1035879718",
+            accessToken = "TEST-918970358866126-022319-bb39176fa6c5a05476da0269a806886d-1079451593",
             siteId = "MLB",
             flowId = "test_flow"
         ).build()

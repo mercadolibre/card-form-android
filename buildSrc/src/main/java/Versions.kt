@@ -32,6 +32,6 @@ object Versions {
     const val espresso = "3.1.0"
     const val runner = "1.1.0"
     const val extJunit = "1.1.3"
-    const val junit4 = "4.+"
+    const val junit4 = "4.12"
     const val orchestrator = "1.4.1"
 }

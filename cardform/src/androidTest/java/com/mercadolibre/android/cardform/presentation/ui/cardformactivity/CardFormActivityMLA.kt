@@ -26,7 +26,7 @@ class CardFormActivityMLA: CardFormActivityTest() {
 
     private val cardFormMLA by lazy {
         CardForm.Builder.withAccessToken(
-            accessToken = "APP_USR-3671576383500204-072117-d275735575b2b95458be231afc00f14c-506902649",
+            accessToken = "TEST-6769073682501908-051020-5524e0aa728afe7683e6b17b7b31f6b0-818185205",
             siteId = "MLA",
             flowId = "test_flow"
         ).build()

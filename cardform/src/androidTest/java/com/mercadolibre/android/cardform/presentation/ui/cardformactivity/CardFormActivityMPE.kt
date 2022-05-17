@@ -27,7 +27,7 @@ class CardFormActivityMPE: CardFormActivityTest() {
 
     private val cardFormMLC by lazy {
         CardForm.Builder.withAccessToken(
-            accessToken = "APP_USR-4376526476119283-022217-b6fe04f6f0ae0b17068fbe9d0e24c264-1078773957",
+            accessToken = "TEST-3219934226485122-051219-69b74df121c257640ba0afec48576f35-1122769319",
             siteId = "MPE",
             flowId = "test_flow"
         ).build()
