@@ -1,4 +1,8 @@
 ## VERSION 2.4.0
+_30_06_2022_
+- Fix - The supportManagerFragment is changed by the childManagerFragment into CardFormFragment
+
+## VERSION 2.4.0
 _28_04_2022_
 - Enhancement - Support for 8-digit bins
 
