@@ -93,9 +93,11 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        println("TEST BUG ONVIEWCREATED")
 
         cardDrawer = view.findViewById(R.id.cardDrawer)
-
+        println("TEST BUG savedInstance is null? -> $savedInstanceState")
+        println("TEST BUG savedInstance is null? -> ${savedInstanceState == null}")
         if (savedInstanceState == null) {
             viewModel.trackInit()
             cardDrawer.show(object : DefaultCardConfiguration(context!!) {
@@ -302,10 +304,14 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
     }
 
     private fun returnResult(data: CardResultDto, resultCode: Int) {
+        println("TEST BUG returnResult -> ")
+        println("TEST BUG returnResult supportFragmentManager ${activity?.supportFragmentManager}")
         activity?.apply {
+            println("TEST BUG returnResult Fragmentactivity ${this.supportFragmentManager}")
+            println("TEST BUG returnResult Fragmentactivity ${this.supportFragmentManager}")
             if (fromFragment) {
-                childFragmentManager.popBackStackImmediate()
-                getCurrentFragment(childFragmentManager)?.onActivityResult(
+                supportFragmentManager.popBackStackImmediate()
+                getCurrentFragment(supportFragmentManager)?.onActivityResult(
                     requestCode,
                     resultCode,
                     buildResultIntent(data)
