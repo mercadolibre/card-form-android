@@ -14,7 +14,7 @@ object Versions {
 
     const val constraintLayout = "2.0.4"
     const val gradlePlugin = "4.0.1"
-    const val kotlin = "1.3.71"
+    const val kotlin = "1.5.32"
     const val kotlinCoroutines = "1.3.0"
     const val picassoDiskCache = "1.+"
     const val pxAddons = "4.+"
