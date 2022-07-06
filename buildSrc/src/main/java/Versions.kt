@@ -9,7 +9,7 @@ object Versions {
     const val material = "1.0.0"
     const val okHttp = "3.12.10"
     const val sdkVersion = 30
-    const val minSdkVersion = 21
+    const val minSdkVersion = 23
     const val buildTools = "30.0.2"
 
     const val constraintLayout = "2.0.4"
