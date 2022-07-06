@@ -9,12 +9,12 @@ object Versions {
     const val material = "1.0.0"
     const val okHttp = "3.12.10"
     const val sdkVersion = 30
-    const val minSdkVersion = 23
+    const val minSdkVersion = 21
     const val buildTools = "30.0.2"
 
     const val constraintLayout = "2.0.4"
     const val gradlePlugin = "4.0.1"
-    const val kotlin = "1.5.32"
+    const val kotlin = "1.3.71"
     const val kotlinCoroutines = "1.3.0"
     const val picassoDiskCache = "1.+"
     const val pxAddons = "4.+"

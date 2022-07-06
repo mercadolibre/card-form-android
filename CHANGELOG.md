@@ -1,6 +1,6 @@
 ## VERSION 2.4.0
 _30_06_2022_
-- Fix - The supportManagerFragment is changed by the childManagerFragment into CardFormFragment
+- Fix - a delay of 1 second is added to give time to finish the pending transactions in the fragment
 
 ## VERSION 2.4.0
 _28_04_2022_
