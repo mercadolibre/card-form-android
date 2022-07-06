@@ -14,21 +14,43 @@ import com.meli.android.carddrawer.configuration.DefaultCardConfiguration
 import com.meli.android.carddrawer.model.CardAnimationType
 import com.meli.android.carddrawer.model.CardDrawerView
 import com.meli.android.carddrawer.model.CardUI
-import com.mercadolibre.android.cardform.*
+import com.mercadolibre.android.cardform.CARD_FORM_EXTRA
+import com.mercadolibre.android.cardform.CardForm
+import com.mercadolibre.android.cardform.EXIT_ANIM_EXTRA
+import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.base.RootFragment
 import com.mercadolibre.android.cardform.data.model.response.CardResultDto
 import com.mercadolibre.android.cardform.di.viewModel
-import com.mercadolibre.android.cardform.presentation.extensions.*
+import com.mercadolibre.android.cardform.presentation.extensions.fadeIn
+import com.mercadolibre.android.cardform.presentation.extensions.fadeOut
+import com.mercadolibre.android.cardform.presentation.extensions.goneDuringAnimation
+import com.mercadolibre.android.cardform.presentation.extensions.nonNullObserve
+import com.mercadolibre.android.cardform.presentation.extensions.postDelayed
+import com.mercadolibre.android.cardform.presentation.extensions.pushDownOut
+import com.mercadolibre.android.cardform.presentation.extensions.pushUpIn
+import com.mercadolibre.android.cardform.presentation.extensions.slideLeftIn
+import com.mercadolibre.android.cardform.presentation.extensions.slideRightIn
+import com.mercadolibre.android.cardform.presentation.extensions.slideRightOut
 import com.mercadolibre.android.cardform.presentation.factory.ObjectStepFactory
 import com.mercadolibre.android.cardform.presentation.helpers.KeyboardHelper
-import com.mercadolibre.android.cardform.presentation.model.*
+import com.mercadolibre.android.cardform.presentation.model.CardDrawerData
+import com.mercadolibre.android.cardform.presentation.model.CardFilledData
+import com.mercadolibre.android.cardform.presentation.model.CardState
 import com.mercadolibre.android.cardform.presentation.model.StateUi.UiLoading
+import com.mercadolibre.android.cardform.presentation.model.UiError
+import com.mercadolibre.android.cardform.presentation.model.UiResult
 import com.mercadolibre.android.cardform.presentation.ui.custom.ProgressFragment
 import com.mercadolibre.android.cardform.presentation.ui.formentry.FormType
 import com.mercadolibre.android.cardform.presentation.viewmodel.InputFormViewModel
-import kotlinx.android.synthetic.main.app_bar.*
-import kotlinx.android.synthetic.main.cf_card.*
-import kotlinx.android.synthetic.main.fragment_card_form.*
+import kotlinx.android.synthetic.main.app_bar.progress
+import kotlinx.android.synthetic.main.app_bar.toolbar
+import kotlinx.android.synthetic.main.cf_card.cardContainer
+import kotlinx.android.synthetic.main.cf_card.inputViewPager
+import kotlinx.android.synthetic.main.fragment_card_form.appBar
+import kotlinx.android.synthetic.main.fragment_card_form.back
+import kotlinx.android.synthetic.main.fragment_card_form.buttonContainer
+import kotlinx.android.synthetic.main.fragment_card_form.next
+import kotlinx.android.synthetic.main.fragment_card_form.rootCardForm
 
 /**
  * A simple [Fragment] subclass.
@@ -93,11 +115,8 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        println("TEST BUG ONVIEWCREATED")
 
         cardDrawer = view.findViewById(R.id.cardDrawer)
-        println("TEST BUG savedInstance is null? -> $savedInstanceState")
-        println("TEST BUG savedInstance is null? -> ${savedInstanceState == null}")
         if (savedInstanceState == null) {
             viewModel.trackInit()
             cardDrawer.show(object : DefaultCardConfiguration(context!!) {
@@ -304,18 +323,16 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
     }
 
     private fun returnResult(data: CardResultDto, resultCode: Int) {
-        println("TEST BUG returnResult -> ")
-        println("TEST BUG returnResult supportFragmentManager ${activity?.supportFragmentManager}")
         activity?.apply {
-            println("TEST BUG returnResult Fragmentactivity ${this.supportFragmentManager}")
-            println("TEST BUG returnResult Fragmentactivity ${this.supportFragmentManager}")
             if (fromFragment) {
-                supportFragmentManager.popBackStackImmediate()
-                getCurrentFragment(supportFragmentManager)?.onActivityResult(
-                    requestCode,
-                    resultCode,
-                    buildResultIntent(data)
-                )
+                postDelayed((1000L)) {
+                    getCurrentFragment(supportFragmentManager)?.onActivityResult(
+                        requestCode,
+                        resultCode,
+                        buildResultIntent(data)
+                    )
+                    supportFragmentManager.popBackStackImmediate()
+                }
             } else {
                 setResult(resultCode, buildResultIntent(data))
                 finish()
