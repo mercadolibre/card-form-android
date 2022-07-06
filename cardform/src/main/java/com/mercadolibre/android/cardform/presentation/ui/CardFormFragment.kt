@@ -325,8 +325,8 @@ internal class CardFormFragment : RootFragment<InputFormViewModel>() {
     private fun returnResult(data: CardResultDto, resultCode: Int) {
         activity?.apply {
             if (fromFragment) {
-                supportFragmentManager.popBackStackImmediate()
                 postDelayed((1000L)) {
+                    supportFragmentManager.popBackStackImmediate()
                     getCurrentFragment(supportFragmentManager)?.onActivityResult(
                         requestCode,
                         resultCode,
