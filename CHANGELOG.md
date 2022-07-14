@@ -2,7 +2,6 @@
 _14_07_2022_
 - Fix - Fix the bug por illegalStateException
 
-
 ## VERSION 2.4.0
 _28_04_2022_
 - Enhancement - Support for 8-digit bins
