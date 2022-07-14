@@ -26,7 +26,7 @@ object Versions {
     const val mockk = "1.10.0"
     const val coroutinesTest = "1.3.0"
 
-    const val libraryVersion = "2.4.0"
+    const val libraryVersion = "2.4.1"
 
     // Instrumentation Tests
     const val espresso = "3.1.0"
