@@ -1,5 +1,5 @@
 ## VERSION 2.5.0
-_08_94_2022_
+_08_09_2022_
 - Enhancement - Add view binding dependencies
 
 ## VERSION 2.4.0
