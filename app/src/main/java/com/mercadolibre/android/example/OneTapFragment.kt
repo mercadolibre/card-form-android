@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.mercadolibre.android.cardform.internal.CardFormWithFragment
 import com.mercadolibre.android.cardform.internal.LifecycleListener
+import com.mercadolibre.android.example.databinding.FragmentOneTapBinding
 
 /**
  * A simple [Fragment] subclass.
@@ -18,20 +18,21 @@ import com.mercadolibre.android.cardform.internal.LifecycleListener
  */
 class OneTapFragment : Fragment(), LifecycleListener {
 
-    private lateinit var button: Button
+    private var _binding: FragmentOneTapBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_one_tap, container, false)
+        _binding = FragmentOneTapBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        button = view.findViewById(R.id.startAnim)
-        button.setOnClickListener {
+        binding.startAnim.setOnClickListener {
             activity?.apply {
                 CardFormWithFragment.Builder.withAccessToken(
                     "TEST-814372640131976-032220-46f58f2b280832e476f441167b605310-1094281250",

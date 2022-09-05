@@ -1,3 +1,7 @@
+## VERSION 2.5.0
+_08_94_2022_
+- Enhancement - Add view binding dependencies
+
 ## VERSION 2.4.0
 _28_04_2022_
 - Enhancement - Support for 8-digit bins

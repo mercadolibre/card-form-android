@@ -56,6 +56,10 @@ android {
         animationsDisabled = true
         execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
+
+    viewBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -83,6 +87,7 @@ dependencies {
     implementation Dependencies.livedataCore
     implementation Dependencies.viewmodel
     implementation Dependencies.pxAddons
+    implementation Dependencies.lifecycle
 
     testImplementation Dependencies.junit
     testRuntimeOnly Dependencies.junitEngine
