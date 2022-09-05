@@ -24,7 +24,7 @@ class OneTapFragment : Fragment(), LifecycleListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentOneTapBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -50,6 +50,11 @@ class OneTapFragment : Fragment(), LifecycleListener {
                 Toast.makeText(it, result.dataString, Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
