@@ -77,36 +77,10 @@ open class CardFormActivityTest : UIBaseTest() {
 
     @Test
     fun when_insert_card_number_then_complete_the_card_drawer() {
-        val expectedCard = "5067  2686  5051  7446"
+        val expectedCard = "5051 7446"
         onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
             .perform(typeText(CARD_NUMBER_VALID), closeSoftKeyboard())
-        onView(withId(com.meli.android.carddrawer.R.id.cho_card_number)).check(matches(withText(expectedCard)))
-    }
-
-    @Test
-    fun when_insert_card_name_then_complete_the_card_drawer() {
-        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
-            .perform(typeText(CARD_NUMBER_VALID), closeSoftKeyboard())
-        await()
-        onView(withId(R.id.next)).perform(click())
-        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.nameCardEditText))))
-            .perform(typeText(CARD_NAME_VALID), closeSoftKeyboard())
-        onView(withId(com.meli.android.carddrawer.R.id.cho_card_name)).check(matches(withText(CARD_NAME_VALID)))
-    }
-
-    @Test
-    fun when_insert_card_expiration_then_complete_the_card_drawer() {
-        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.numberCardEditText))))
-            .perform(typeText(CARD_NUMBER_VALID), closeSoftKeyboard())
-        await()
-        onView(withId(R.id.next)).perform(click())
-        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.nameCardEditText))))
-            .perform(typeText(CARD_NAME_VALID), closeSoftKeyboard())
-        await()
-        onView(withId(R.id.next)).perform(click())
-        onView(allOf(withId(R.id.input), isDescendantOfA(withId(R.id.expirationEditText))))
-            .perform(typeText(CARD_EXPIRATION_VALID), closeSoftKeyboard())
-        onView(withId(com.meli.android.carddrawer.R.id.cho_card_date)).check(matches(withText("10/29")))
+        onView(withId(com.meli.android.carddrawer.R.id.card_drawer_card_number)).check(matches(withText(expectedCard)))
     }
 
     @Test

@@ -5,9 +5,11 @@ import android.graphics.Color
 import android.os.Parcel
 import android.os.Parcelable
 import com.meli.android.carddrawer.model.CardAnimationType
+import com.meli.android.carddrawer.model.CardNumberStyle
 import com.meli.android.carddrawer.model.CardUI
 import com.mercadolibre.android.cardform.R
 import com.mercadolibre.android.cardform.data.model.response.CardUi
+import com.mercadolibre.android.cardform.presentation.utils.ColorUtils
 
 internal class CardDrawerData(private val cardUi: CardUi) : CardUI, Parcelable {
 
@@ -48,6 +50,16 @@ internal class CardDrawerData(private val cardUi: CardUi) : CardUI, Parcelable {
 
     override fun getBankImageRes() = 0
     override fun getCardLogoImageRes() = 0
+
+    override fun getCardNumberStyle(): CardNumberStyle? {
+        return cardUi.panStyle?.let {
+            CardNumberStyle(
+                ColorUtils.safeParseColor(it.textColor, R.color.andes_text_color_white),
+                ColorUtils.safeParseColor(it.backgroundColor, R.color.andes_gray_550),
+                it.weight
+            )
+        }
+    }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeParcelable(cardUi, flags)

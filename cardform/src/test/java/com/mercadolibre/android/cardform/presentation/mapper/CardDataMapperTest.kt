@@ -40,6 +40,7 @@ internal class CardDataMapperTest {
                     "https://mobile.mercadolibre.com/remote_resources/image/card_drawer_mla_pm_visa_white?density=xhdpi&locale=en",
                     "",
                     IntArray(4) { 4 * (it) },
+                    null,
                     "standard",
                     ArrayList()
                 ),

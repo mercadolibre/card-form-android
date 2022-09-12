@@ -13,6 +13,7 @@ internal data class CardUi (
     val paymentMethodImageUrl : String?,
     var issuerImageUrl : String?,
     var cardPattern : IntArray,
+    val panStyle: PanDisplayInfoDM?,
     val validation: String,
     val extraValidations: ArrayList<Validation>
 ) : Parcelable {
@@ -26,6 +27,7 @@ internal data class CardUi (
         parcel.readString(),
         parcel.readString(),
         parcel.createIntArray()!!,
+        parcel.readParcelable(PanDisplayInfoDM::class.java.classLoader),
         parcel.readString()!!,
         parcel.createTypedArrayList(Validation)!!
     )
@@ -40,6 +42,7 @@ internal data class CardUi (
         parcel.writeString(paymentMethodImageUrl)
         parcel.writeString(issuerImageUrl)
         parcel.writeIntArray(cardPattern)
+        parcel.writeParcelable(panStyle, flags)
         parcel.writeString(validation)
         parcel.writeTypedList(extraValidations)
     }
